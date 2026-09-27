@@ -1,0 +1,64 @@
+# How answers are scored and how every reported statistic is computed (src/eval/). A change
+# here changes reported numbers, so each value is fixed before the runs it applies to.
+
+# BIRD's official evaluator (EX and Soft-F1 for PostgreSQL), used only to check that
+# src/eval reproduces its verdicts (scripts/31_validate_ex.py). Downloaded at one commit,
+# each file pinned by hash; never committed, since the upstream repository has no licence
+# file. Running it needs the `bird-eval` dependency group (the versions its requirements pin).
+official_evaluator:
+  commit: f9d2750c9b53639820c9d47f6d7a5e5025c780ab # bird-bench/mini_dev, 2025-09-19
+  url: https://raw.githubusercontent.com/bird-bench/mini_dev/{commit}/evaluation/{file}
+  dir: data/raw/bird_eval
+  sha256:
+    evaluation_ex.py: da1bbcd4530be83692d7c650c814ea9704bb710d0c953eb75d02ccb38233cf89
+    evaluation_f1.py: ba2700ee09b0c34d7e203788544757e6e6d6c99c0425bb92b3daa3927eee29bf
+    evaluation_utils.py: f6943d249caac5aeaef9bce21d43dbf29dcef85a0c965a76df032a9542f308bf
+  # its runner's time limit per question (prediction and gold together), marked there as
+  # not to be changed
+  meta_time_out_s: 30.0
+  # the altered gold queries both scorers are compared on (src/eval/mutations.py)
+  mutants_per_query: 3
+  mutant_seed: 20260927
+
+# Execution accuracy: the predicted and the gold query run in one read-only transaction, as
+# the official evaluator runs them, with its time limit for the pair.
+execution_accuracy:
+  timeout_s: 30
+  fetch_rows: 5000 # rows per fetch while the prediction streams
+  # Soft-F1 pairs a prediction's distinct rows with the gold's, so it has to keep them all;
+  # above this many (more than six times the largest gold result) it is not computed.
+  soft_f1_max_distinct_rows: 200000
+
+# Intervals: percentile bootstrap over questions; comparisons of two designs resample the
+# same questions for both (paired).
+bootstrap:
+  resamples: 10000
+  confidence: 0.95
+  seed: 20260927
+
+calibration:
+  ece_bins: 10 # equal-width bins; equal-mass bins with the same count are reported too
+
+selective:
+  coverages: [0.8, 0.9] # accuracy reported at these shares of questions answered
+
+# Disjoint question sets, drawn in proportion to each database x difficulty stratum.
+splits:
+  seed: 20260927
+  pilot: 30 # prompts are tuned on these; never used in any reported comparison
+  ablation: 150 # choosing the design; also where confidence is calibrated
+  # the rest (320) is held out: the test split, never used to choose or fit anything
+# the sets' question ids, written by scripts/32_splits.py
+splits_file: results/metrics/splits.json
+
+# The hand-written banking set. Frozen by its hash once every question is reviewed, before
+# any agent sees it; the hash is sha256 of the file with LF line endings.
+own_set:
+  path: own_set/questions.yaml
+  sha256: 83a370fec23883447b983e3be2cbbbba1c1d042bffd5e9160f0ac93251bdc321
+
+# The pre-registration, frozen by its hash before the first scored run. An amendment before
+# that run is dated in the file, and the hash updated; after it, nothing changes.
+preregistration:
+  path: results/metrics/preregistration.md
+  sha256: 8cd0c979c8c082242024070f2df07e17ab0658c4f296ddfc40596d32b3e6deba

@@ -1,0 +1,191 @@
+# Hand-written pairs for checking the project's scoring against BIRD's official evaluator
+# (scripts/31_validate_ex.py), each aimed at one rule of the comparison. `expect` is the verdict
+# the official comparison should give (EX); both scorers must agree on every `edge` case.
+# `divergence` cases are the kinds the project's execution refuses by construction (more than
+# one statement, a statement before the query, another database's table): the official
+# evaluator scores them 1, the project 0. The agent's SQL tool refuses all of them, so no
+# answer can meet them; they are run to show the difference is exactly this.
+
+edge:
+  - id: rows-reordered
+    db: financial
+    gold: SELECT district_id, a2 FROM district ORDER BY district_id
+    predicted: SELECT district_id, a2 FROM district ORDER BY district_id DESC
+    expect: 1
+  - id: rows-repeated
+    db: financial
+    gold: SELECT DISTINCT type FROM disp
+    predicted: SELECT type FROM disp
+    expect: 1
+  - id: rows-repeated-a-million-times
+    db: financial
+    gold: SELECT DISTINCT type FROM trans
+    predicted: SELECT type FROM trans
+    expect: 1
+  - id: many-rows-against-one
+    db: financial
+    gold: SELECT COUNT(*) FROM trans
+    predicted: SELECT trans_id FROM trans
+    expect: 0
+  - id: columns-swapped
+    db: financial
+    gold: SELECT account_id, district_id FROM account
+    predicted: SELECT district_id, account_id FROM account
+    expect: 0
+  - id: extra-column
+    db: financial
+    gold: SELECT account_id FROM account WHERE district_id = 1
+    predicted: SELECT account_id, district_id FROM account WHERE district_id = 1
+    expect: 0
+  - id: column-names-ignored
+    db: financial
+    gold: SELECT COUNT(*) AS n FROM loan
+    predicted: SELECT COUNT(*) AS total FROM loan
+    expect: 1
+  - id: integer-and-real-equal
+    db: financial
+    gold: SELECT COUNT(*) FROM loan
+    predicted: SELECT CAST(COUNT(*) AS REAL) FROM loan
+    expect: 1
+  - id: integer-and-numeric-equal
+    db: financial
+    gold: SELECT COUNT(*) FROM loan
+    predicted: SELECT CAST(COUNT(*) AS NUMERIC) FROM loan
+    expect: 1
+  - id: numeric-and-double-differ
+    db: financial
+    gold: SELECT AVG(amount) FROM loan
+    predicted: SELECT AVG(CAST(amount AS DOUBLE PRECISION)) FROM loan
+    expect: 0
+  - id: trailing-zeros-equal
+    db: financial
+    gold: SELECT ROUND(AVG(amount), 2) FROM loan
+    predicted: SELECT CAST(ROUND(AVG(amount), 2) AS NUMERIC(20, 4)) FROM loan
+    expect: 1
+  - id: rounded-differently
+    db: financial
+    gold: SELECT ROUND(AVG(amount), 2) FROM loan
+    predicted: SELECT ROUND(AVG(amount), 1) FROM loan
+    expect: 0
+  - id: boolean-equals-one
+    db: financial
+    gold: SELECT CASE WHEN COUNT(*) > 0 THEN 1 ELSE 0 END FROM loan
+    predicted: SELECT COUNT(*) > 0 FROM loan
+    expect: 1
+  - id: text-is-not-a-number
+    db: financial
+    gold: SELECT COUNT(*) FROM loan
+    predicted: SELECT CAST(COUNT(*) AS TEXT) FROM loan
+    expect: 0
+  - id: null-is-not-empty-text
+    db: financial
+    gold: SELECT k_symbol FROM "order" WHERE k_symbol = ''
+    predicted: SELECT NULL FROM "order" WHERE k_symbol = ''
+    expect: 0
+  - id: nulls-are-equal
+    db: financial
+    gold: SELECT a12 FROM district WHERE a12 IS NULL
+    predicted: SELECT a15 FROM district WHERE a15 IS NULL
+    expect: 1
+  - id: negative-zero-equals-zero
+    db: financial
+    gold: SELECT CAST(0 AS DOUBLE PRECISION) FROM loan LIMIT 1
+    predicted: SELECT CAST('-0' AS DOUBLE PRECISION) FROM loan LIMIT 1
+    expect: 1
+  - id: nan-equals-nothing
+    db: financial
+    gold: SELECT CAST('NaN' AS DOUBLE PRECISION) FROM loan LIMIT 1
+    predicted: SELECT CAST('NaN' AS DOUBLE PRECISION) FROM loan LIMIT 1
+    expect: 0
+  - id: array-cannot-be-compared
+    db: financial
+    gold: SELECT array_agg(DISTINCT type ORDER BY type) FROM disp
+    predicted: SELECT array_agg(DISTINCT type ORDER BY type) FROM disp
+    expect: 0
+  - id: json-cannot-be-compared
+    db: financial
+    gold: SELECT json_build_object('loans', COUNT(*)) FROM loan
+    predicted: SELECT json_build_object('loans', COUNT(*)) FROM loan
+    expect: 0
+  - id: date-is-not-a-timestamp
+    db: financial
+    gold: SELECT MIN(date) FROM loan
+    predicted: SELECT CAST(MIN(date) AS TIMESTAMP) FROM loan
+    expect: 0
+  - id: date-is-not-text
+    db: financial
+    gold: SELECT MIN(date) FROM loan
+    predicted: SELECT CAST(MIN(date) AS TEXT) FROM loan
+    expect: 0
+  - id: time-zone-aware-is-not-naive
+    db: codebase_community
+    gold: SELECT MIN(creaiondate) FROM posts
+    predicted: SELECT CAST(MIN(creaiondate) AS TIMESTAMP) FROM posts
+    expect: 0
+  - id: both-empty
+    db: financial
+    gold: SELECT account_id FROM account WHERE account_id < 0
+    predicted: SELECT client_id FROM client WHERE client_id < 0
+    expect: 1
+  - id: empty-against-rows
+    db: financial
+    gold: SELECT account_id FROM account WHERE account_id = 1
+    predicted: SELECT account_id FROM account WHERE account_id < 0
+    expect: 0
+  - id: percent-signs-in-literals
+    db: financial
+    gold: SELECT COUNT(*) FROM district WHERE a2 LIKE '%a%'
+    predicted: SELECT COUNT(*) FROM district WHERE a2 LIKE '%a%' OR a2 LIKE '%a'
+    expect: 1
+  - id: trailing-semicolon
+    db: financial
+    gold: SELECT COUNT(*) FROM loan
+    predicted: SELECT COUNT(*) FROM loan;
+    expect: 1
+  - id: leading-comment
+    db: financial
+    gold: SELECT COUNT(*) FROM loan
+    predicted: "-- the number of loans\nSELECT COUNT(*) FROM loan"
+    expect: 1
+  - id: values-instead-of-select
+    db: financial
+    gold: SELECT COUNT(*) FROM loan
+    predicted: VALUES (682)
+    expect: 1
+  - id: empty-prediction
+    db: financial
+    gold: SELECT COUNT(*) FROM loan
+    predicted: ""
+    expect: 0
+  - id: syntax-error
+    db: financial
+    gold: SELECT COUNT(*) FROM loan
+    predicted: SELEC COUNT(*) FROM loan
+    expect: 0
+  - id: runtime-error
+    db: financial
+    gold: SELECT COUNT(*) FROM loan
+    predicted: SELECT COUNT(*) / 0 FROM loan
+    expect: 0
+  - id: over-the-time-limit
+    db: financial
+    gold: SELECT COUNT(*) FROM trans
+    predicted: SELECT COUNT(*) FROM trans AS t1 JOIN trans AS t2 ON t1.account_id <> t2.account_id
+    expect: 0
+
+divergence:
+  - id: two-statements
+    db: financial
+    gold: SELECT COUNT(*) FROM loan
+    predicted: SELECT 1; SELECT COUNT(*) FROM loan
+    expect: 1
+  - id: setting-before-the-query
+    db: financial
+    gold: SELECT COUNT(*) FROM loan
+    predicted: SET search_path = financial; SELECT COUNT(*) FROM loan
+    expect: 1
+  - id: another-databases-table
+    db: financial
+    gold: SELECT COUNT(*) FROM loan
+    predicted: SELECT 682 FROM superhero LIMIT 1
+    expect: 1
