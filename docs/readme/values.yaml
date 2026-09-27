@@ -1,0 +1,13 @@
+# Every number in README.md and TECHNICAL_REPORT.md, by name: the results file it comes from
+# (a path under results/), the field inside it (`/`-separated; list items by index) and its
+# format (`fmt` in scripts/90_readme.py). `expr` is arithmetic over other names;
+# `count_where`, `sum_of` and `mean_of` summarise a list; `pending: true` renders TBD until
+# the result exists. Edit this file or the templates, never the rendered documents.
+
+values: {}
+
+# Decimals and percentages the templates may contain outside a placeholder: version numbers,
+# never results.
+allowed_literals:
+  - "3.12" # the Python version
+  - "4.0" # CC BY-SA 4.0, the licence of the BIRD data

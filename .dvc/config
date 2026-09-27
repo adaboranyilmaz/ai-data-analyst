@@ -1,0 +1,5 @@
+[core]
+    remote = localstore
+    analytics = false
+['remote "localstore"']
+    url = C:/ai-data-analyst-dvcstore
