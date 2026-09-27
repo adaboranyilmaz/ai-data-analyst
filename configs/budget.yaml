@@ -6,6 +6,7 @@ ledger: results/metrics/api_spend.json
 project_cap_usd: 60.0
 phase_caps_usd:
   phase0: 0.0 # scaffolding: no API calls
+  phase1: 0.0 # data and data dictionary: no API calls
 batch_discount: 0.5 # Message Batches: half of every token price
 
 # USD per million tokens, Anthropic first-party list prices from

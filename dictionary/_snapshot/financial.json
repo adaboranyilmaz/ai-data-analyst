@@ -1,0 +1,657 @@
+{
+  "database": "financial",
+  "profiled": true,
+  "tables": {
+    "account": {
+      "rows": 4500,
+      "columns": [
+        {
+          "name": "account_id",
+          "type": "bigint",
+          "nullable": false,
+          "nulls": 0,
+          "distinct": 4500,
+          "min": 1,
+          "max": 11382
+        },
+        {
+          "name": "district_id",
+          "type": "bigint",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 77,
+          "min": 1,
+          "max": 77
+        },
+        {
+          "name": "frequency",
+          "type": "text",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 3,
+          "values": {
+            "POPLATEK MESICNE": 4167,
+            "POPLATEK PO OBRATU": 93,
+            "POPLATEK TYDNE": 240
+          }
+        },
+        {
+          "name": "date",
+          "type": "date",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 1535,
+          "min": "1993-01-01",
+          "max": "1997-12-29"
+        }
+      ]
+    },
+    "card": {
+      "rows": 892,
+      "columns": [
+        {
+          "name": "card_id",
+          "type": "bigint",
+          "nullable": false,
+          "nulls": 0,
+          "distinct": 892,
+          "min": 1,
+          "max": 1247
+        },
+        {
+          "name": "disp_id",
+          "type": "bigint",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 892,
+          "min": 9,
+          "max": 13660
+        },
+        {
+          "name": "type",
+          "type": "text",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 3,
+          "values": {
+            "classic": 659,
+            "gold": 88,
+            "junior": 145
+          }
+        },
+        {
+          "name": "issued",
+          "type": "date",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 607,
+          "min": "1993-11-07",
+          "max": "1998-12-29"
+        }
+      ]
+    },
+    "client": {
+      "rows": 5369,
+      "columns": [
+        {
+          "name": "client_id",
+          "type": "bigint",
+          "nullable": false,
+          "nulls": 0,
+          "distinct": 5369,
+          "min": 1,
+          "max": 13998
+        },
+        {
+          "name": "gender",
+          "type": "text",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 2,
+          "values": {
+            "F": 2645,
+            "M": 2724
+          }
+        },
+        {
+          "name": "birth_date",
+          "type": "date",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 4738,
+          "min": "1911-08-20",
+          "max": "1987-09-27"
+        },
+        {
+          "name": "district_id",
+          "type": "bigint",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 77,
+          "min": 1,
+          "max": 77
+        }
+      ]
+    },
+    "disp": {
+      "rows": 5369,
+      "columns": [
+        {
+          "name": "disp_id",
+          "type": "bigint",
+          "nullable": false,
+          "nulls": 0,
+          "distinct": 5369,
+          "min": 1,
+          "max": 13690
+        },
+        {
+          "name": "client_id",
+          "type": "bigint",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 5369,
+          "min": 1,
+          "max": 13998
+        },
+        {
+          "name": "account_id",
+          "type": "bigint",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 4500,
+          "min": 1,
+          "max": 11382
+        },
+        {
+          "name": "type",
+          "type": "text",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 2,
+          "values": {
+            "DISPONENT": 869,
+            "OWNER": 4500
+          }
+        }
+      ]
+    },
+    "district": {
+      "rows": 77,
+      "columns": [
+        {
+          "name": "district_id",
+          "type": "bigint",
+          "nullable": false,
+          "nulls": 0,
+          "distinct": 77,
+          "min": 1,
+          "max": 77
+        },
+        {
+          "name": "a2",
+          "type": "text",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 77
+        },
+        {
+          "name": "a3",
+          "type": "text",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 8,
+          "values": {
+            "central Bohemia": 12,
+            "east Bohemia": 11,
+            "north Bohemia": 10,
+            "north Moravia": 11,
+            "Prague": 1,
+            "south Bohemia": 8,
+            "south Moravia": 14,
+            "west Bohemia": 10
+          }
+        },
+        {
+          "name": "a4",
+          "type": "text",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 77
+        },
+        {
+          "name": "a5",
+          "type": "text",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 53
+        },
+        {
+          "name": "a6",
+          "type": "text",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 36,
+          "values": {
+            "0": 4,
+            "10": 1,
+            "11": 3,
+            "12": 1,
+            "13": 3,
+            "14": 1,
+            "15": 1,
+            "16": 5,
+            "17": 1,
+            "18": 1,
+            "19": 5,
+            "2": 1,
+            "20": 1,
+            "21": 3,
+            "22": 1,
+            "23": 3,
+            "24": 1,
+            "25": 2,
+            "26": 6,
+            "27": 1,
+            "28": 4,
+            "29": 4,
+            "30": 2,
+            "32": 1,
+            "33": 3,
+            "35": 2,
+            "36": 2,
+            "37": 1,
+            "4": 1,
+            "40": 1,
+            "41": 6,
+            "42": 1,
+            "49": 1,
+            "50": 1,
+            "70": 1,
+            "8": 1
+          }
+        },
+        {
+          "name": "a7",
+          "type": "text",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 17,
+          "values": {
+            "0": 4,
+            "1": 3,
+            "10": 5,
+            "11": 1,
+            "12": 2,
+            "13": 2,
+            "14": 1,
+            "18": 2,
+            "2": 3,
+            "20": 1,
+            "3": 5,
+            "4": 12,
+            "5": 9,
+            "6": 11,
+            "7": 10,
+            "8": 5,
+            "9": 1
+          }
+        },
+        {
+          "name": "a8",
+          "type": "bigint",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 6,
+          "min": 0,
+          "max": 5
+        },
+        {
+          "name": "a9",
+          "type": "bigint",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 11,
+          "min": 1,
+          "max": 11
+        },
+        {
+          "name": "a10",
+          "type": "real",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 70,
+          "min": 33.9,
+          "max": 100.0
+        },
+        {
+          "name": "a11",
+          "type": "bigint",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 76,
+          "min": 8110,
+          "max": 12541
+        },
+        {
+          "name": "a12",
+          "type": "real",
+          "nullable": true,
+          "nulls": 1,
+          "distinct": 41,
+          "min": 0.2,
+          "max": 7.3
+        },
+        {
+          "name": "a13",
+          "type": "real",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 73,
+          "min": 0.43,
+          "max": 9.4
+        },
+        {
+          "name": "a14",
+          "type": "bigint",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 44,
+          "min": 81,
+          "max": 167
+        },
+        {
+          "name": "a15",
+          "type": "bigint",
+          "nullable": true,
+          "nulls": 1,
+          "distinct": 75,
+          "min": 818,
+          "max": 85677
+        },
+        {
+          "name": "a16",
+          "type": "bigint",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 76,
+          "min": 888,
+          "max": 99107
+        }
+      ]
+    },
+    "loan": {
+      "rows": 682,
+      "columns": [
+        {
+          "name": "loan_id",
+          "type": "bigint",
+          "nullable": false,
+          "nulls": 0,
+          "distinct": 682,
+          "min": 4959,
+          "max": 7308
+        },
+        {
+          "name": "account_id",
+          "type": "bigint",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 682,
+          "min": 2,
+          "max": 11362
+        },
+        {
+          "name": "date",
+          "type": "date",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 559,
+          "min": "1993-07-05",
+          "max": "1998-12-08"
+        },
+        {
+          "name": "amount",
+          "type": "bigint",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 645,
+          "min": 4980,
+          "max": 590820
+        },
+        {
+          "name": "duration",
+          "type": "bigint",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 5,
+          "min": 12,
+          "max": 60
+        },
+        {
+          "name": "payments",
+          "type": "real",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 577,
+          "min": 304.0,
+          "max": 9910.0
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 4,
+          "values": {
+            "A": 203,
+            "B": 31,
+            "C": 403,
+            "D": 45
+          }
+        }
+      ]
+    },
+    "order": {
+      "rows": 6471,
+      "columns": [
+        {
+          "name": "order_id",
+          "type": "bigint",
+          "nullable": false,
+          "nulls": 0,
+          "distinct": 6471,
+          "min": 29401,
+          "max": 46338
+        },
+        {
+          "name": "account_id",
+          "type": "bigint",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 3758,
+          "min": 1,
+          "max": 11362
+        },
+        {
+          "name": "bank_to",
+          "type": "text",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 13,
+          "values": {
+            "AB": 519,
+            "CD": 458,
+            "EF": 483,
+            "GH": 487,
+            "IJ": 496,
+            "KL": 500,
+            "MN": 466,
+            "OP": 485,
+            "QR": 531,
+            "ST": 511,
+            "UV": 499,
+            "WX": 515,
+            "YZ": 521
+          }
+        },
+        {
+          "name": "account_to",
+          "type": "bigint",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 6446,
+          "min": 399,
+          "max": 99994199
+        },
+        {
+          "name": "amount",
+          "type": "real",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 4412,
+          "min": 1.0,
+          "max": 14882.0
+        },
+        {
+          "name": "k_symbol",
+          "type": "text",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 5,
+          "values": {
+            "": 1379,
+            "LEASING": 341,
+            "POJISTNE": 532,
+            "SIPO": 3502,
+            "UVER": 717
+          }
+        }
+      ]
+    },
+    "trans": {
+      "rows": 1056320,
+      "columns": [
+        {
+          "name": "trans_id",
+          "type": "bigint",
+          "nullable": false,
+          "nulls": 0,
+          "distinct": 1056320,
+          "min": 1,
+          "max": 3682987
+        },
+        {
+          "name": "account_id",
+          "type": "bigint",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 4500,
+          "min": 1,
+          "max": 11382
+        },
+        {
+          "name": "date",
+          "type": "date",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 2191,
+          "min": "1993-01-01",
+          "max": "1998-12-31"
+        },
+        {
+          "name": "type",
+          "type": "text",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 3,
+          "values": {
+            "PRIJEM": 405083,
+            "VYBER": 16666,
+            "VYDAJ": 634571
+          }
+        },
+        {
+          "name": "operation",
+          "type": "text",
+          "nullable": true,
+          "nulls": 183114,
+          "distinct": 5,
+          "values": {
+            "PREVOD NA UCET": 208283,
+            "PREVOD Z UCTU": 65226,
+            "VKLAD": 156743,
+            "VYBER": 434918,
+            "VYBER KARTOU": 8036
+          }
+        },
+        {
+          "name": "amount",
+          "type": "bigint",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 35890,
+          "min": 0,
+          "max": 87400
+        },
+        {
+          "name": "balance",
+          "type": "bigint",
+          "nullable": true,
+          "nulls": 0,
+          "distinct": 111042,
+          "min": -41126,
+          "max": 209637
+        },
+        {
+          "name": "k_symbol",
+          "type": "text",
+          "nullable": true,
+          "nulls": 481881,
+          "distinct": 8,
+          "values": {
+            " ": 53433,
+            "DUCHOD": 30338,
+            "POJISTNE": 18500,
+            "SANKC. UROK": 1577,
+            "SIPO": 118065,
+            "SLUZBY": 155832,
+            "UROK": 183114,
+            "UVER": 13580
+          }
+        },
+        {
+          "name": "bank",
+          "type": "text",
+          "nullable": true,
+          "nulls": 782812,
+          "distinct": 13,
+          "values": {
+            "AB": 21720,
+            "CD": 19597,
+            "EF": 21293,
+            "GH": 21499,
+            "IJ": 20525,
+            "KL": 21234,
+            "MN": 19623,
+            "OP": 21094,
+            "QR": 22285,
+            "ST": 21711,
+            "UV": 21167,
+            "WX": 20178,
+            "YZ": 21582
+          }
+        },
+        {
+          "name": "account",
+          "type": "bigint",
+          "nullable": true,
+          "nulls": 760931,
+          "distinct": 7665,
+          "min": 0,
+          "max": 99994199
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,712 @@
+# Data dictionary: the BIRD `card_games` database, converted by scripts/14_convert_descriptions.py
+# from BIRD's database description files, without editing their text. Regenerate; do not
+# edit by hand. Derived from BIRD (Li et al., 2023), licensed CC BY-SA 4.0.
+database: card_games
+origin: bird-description
+name: card_games
+sources:
+- BIRD mini-dev database description files (CC BY-SA 4.0)
+tables:
+  cards:
+    bird_file: cards.csv
+    columns:
+      id:
+        bird_name: id
+        name: unique id number identifying the cards
+        data_format: integer
+        status: missing
+      artist:
+        bird_name: artist
+        name: artist
+        description: The name of the artist that illustrated the card art.
+        data_format: text
+      asciiname:
+        bird_name: asciiName
+        name: ascii Name
+        description: The ASCII(opens new window) (Basic/128) code formatted card name with no special
+          unicode characters.
+        data_format: text
+      availability:
+        bird_name: availability
+        name: availability
+        description: A list of the card's available printing types.
+        data_format: text
+        value_description: '"arena", "dreamcast", "mtgo", "paper", "shandalar"'
+      bordercolor:
+        bird_name: borderColor
+        name: border Color
+        description: The color of the card border.
+        data_format: text
+        value_description: '"black", "borderless", "gold", "silver", "white"'
+      cardkingdomfoilid:
+        bird_name: cardKingdomFoilId
+        name: card Kingdom Foil Id
+        description: card Kingdom Foil Id
+        data_format: text
+        value_description: |-
+          commonsense evidence:
+          cardKingdomFoilId, when paired with cardKingdomId that is not Null, is incredibly powerful.
+      cardkingdomid:
+        bird_name: cardKingdomId
+        name: card Kingdom Id
+        description: card Kingdom Id
+        data_format: text
+        value_description: A list of all the colors in the color indicator
+      coloridentity:
+        bird_name: colorIdentity
+        name: color Identity
+        description: A list of all the colors found in manaCost, colorIndicator, and text
+        data_format: text
+      colorindicator:
+        bird_name: colorIndicator
+        name: color Indicator
+        description: A list of all the colors in the color indicator (The symbol prefixed to a card's
+          types).
+        data_format: text
+      colors:
+        bird_name: colors
+        name: colors
+        description: A list of all the colors in manaCost and colorIndicator.
+        data_format: text
+        value_description: Some cards may not have values, such as cards with "Devoid" in its text.
+      convertedmanacost:
+        bird_name: convertedManaCost
+        name: converted Mana Cost
+        description: The converted mana cost of the card. Use the manaValue property.
+        data_format: real
+        value_description: if value is higher, it means that this card cost more converted mana
+      dueldeck:
+        bird_name: duelDeck
+        name: duel Deck
+        description: The indicator for which duel deck the card is in.
+        data_format: text
+      edhrecrank:
+        bird_name: edhrecRank
+        name: rec Rank in edh
+        description: The card rank on EDHRec
+        data_format: integer
+      faceconvertedmanacost:
+        bird_name: faceConvertedManaCost
+        name: face Converted Mana Cost
+        description: The converted mana cost or mana value for the face for either half or part of the
+          card.
+        data_format: real
+        value_description: if value is higher, it means that this card cost more converted mana for the
+          face
+      facename:
+        bird_name: faceName
+        name: face Name
+        description: The name on the face of the card.
+        data_format: text
+      flavorname:
+        bird_name: flavorName
+        name: flavor Name
+        description: The promotional card name printed above the true card name on special cards that
+          has no game function.
+        data_format: text
+        value_description: The promotional card name printed above the true card name on special cards
+          that has no game function.
+      flavortext:
+        bird_name: flavorText
+        name: flavor Text
+        description: The italicized text found below the rules text that has no game function.
+        data_format: text
+        value_description: The italicized text found below the rules text that has no game function.
+      frameeffects:
+        bird_name: frameEffects
+        name: frame Effects
+        description: The visual frame effects.
+        data_format: text
+        value_description: '"colorshifted", "companion", "compasslanddfc", "devoid", "draft", "etched",
+          "extendedart", "fullart", "inverted", "legendary", "lesson", "miracle", "mooneldrazidfc", "nyxtouched",
+          "originpwdfc", "showcase", "snow", "sunmoondfc", "textless", "tombstone", "waxingandwaningmoondfc"'
+      frameversion:
+        bird_name: frameVersion
+        name: frame Version
+        description: The version of the card frame style.
+        data_format: text
+        value_description: '"1993", "1997", "2003", "2015", "future"'
+      hand:
+        bird_name: hand
+        name: hand
+        description: The starting maximum hand size total modifier.
+        data_format: text
+        value_description: |-
+          A + or - character precedes an integer.
+          commonsense evidence:
+          positive maximum hand size: +1, +2, ....
+          negative maximum hand size: -1, ....
+          neural maximum hand size: 0....
+      hasalternativedecklimit:
+        bird_name: hasAlternativeDeckLimit
+        name: has Alternative Deck Limit
+        description: If the card allows a value other than 4 copies in a deck.
+        data_format: integer
+        value_description: '0: disallow 1: allow'
+      hascontentwarning:
+        bird_name: hasContentWarning
+        name: has Content Warning
+        description: If the card marked by Wizards of the Coast (opens new window) for having sensitive
+          content. See this official article (opens new window) for more information.
+        data_format: integer
+        value_description: |-
+          0: doesn't have 1: has sensitve content or Wizards of the Coast
+          commonsense evidence:
+          Cards with this property may have missing or degraded properties and values.
+      hasfoil:
+        bird_name: hasFoil
+        name: has Foil
+        description: If the card can be found in foil
+        data_format: integer
+        value_description: '0: cannot be found 1: can be found'
+      hasnonfoil:
+        bird_name: hasNonFoil
+        name: has Non Foil
+        description: If the card can be found in non-foil
+        data_format: integer
+        value_description: '0: cannot be found 1: can be found'
+      isalternative:
+        bird_name: isAlternative
+        name: is Alternative
+        description: If the card is an alternate variation to an original printing
+        data_format: integer
+        value_description: '0: is not 1: is'
+      isfullart:
+        bird_name: isFullArt
+        name: is Full Art
+        description: If the card has full artwork.
+        data_format: integer
+        value_description: '0: doesn''t have, 1: has full artwork'
+      isonlineonly:
+        bird_name: isOnlineOnly
+        name: is Online Only
+        description: If the card is only available in online game variations.
+        data_format: integer
+        value_description: '0: is not 1: is'
+      isoversized:
+        bird_name: isOversized
+        name: is Oversized
+        description: If the card is oversized.
+        data_format: integer
+        value_description: '0: is not 1: is'
+      ispromo:
+        bird_name: isPromo
+        name: is Promotion
+        description: If the card is a promotional printing.
+        data_format: integer
+        value_description: '0: is not 1: is'
+      isreprint:
+        bird_name: isReprint
+        name: is Reprint
+        description: If the card has been reprinted.
+        data_format: integer
+        value_description: '0: has not 1: has not been'
+      isreserved:
+        bird_name: isReserved
+        name: is Reserved
+        description: 'If the card is on the Magic: The Gathering Reserved List (opens new window)'
+        data_format: integer
+        value_description: If the card is on the Magic, it will appear in The Gathering Reserved List
+      isstarter:
+        bird_name: isStarter
+        name: is Starter
+        description: If the card is found in a starter deck such as Planeswalker/Brawl decks.
+        data_format: integer
+        value_description: '0: is not 1: is'
+      isstoryspotlight:
+        bird_name: isStorySpotlight
+        name: is Story Spotlight
+        description: If the card is a Story Spotlight card.
+        data_format: integer
+        value_description: '0: is not 1: is'
+      istextless:
+        bird_name: isTextless
+        name: is Text less
+        description: If the card does not have a text box.
+        data_format: integer
+        value_description: |-
+          commonsense evidence:
+          0: has a text box;
+          1: doesn't have a text box;
+      istimeshifted:
+        bird_name: isTimeshifted
+        name: is Time shifted
+        description: If the card is time shifted
+        data_format: integer
+        value_description: |-
+          commonsense evidence:
+          If the card is "timeshifted", a feature of certain sets where a card will have a different frameVersion.
+      keywords:
+        bird_name: keywords
+        name: keywords
+        description: A list of keywords found on the card.
+        data_format: text
+      layout:
+        bird_name: layout
+        name: layout
+        description: The type of card layout. For a token card, this will be "token"
+        data_format: text
+      leadershipskills:
+        bird_name: leadershipSkills
+        name: leadership Skills
+        description: A list of formats the card is legal to be a commander in
+        data_format: text
+      life:
+        bird_name: life
+        name: life
+        description: The starting life total modifier. A plus or minus character precedes an integer.
+        data_format: text
+      loyalty:
+        bird_name: loyalty
+        name: loyalty
+        description: The starting loyalty value of the card.
+        data_format: text
+        value_description: Used only on cards with "Planeswalker" in its types. empty means unkown
+      manacost:
+        bird_name: manaCost
+        name: mana Cost
+        description: The mana cost of the card wrapped in brackets for each value.
+        data_format: text
+        value_description: |-
+          commonsense evidence:
+          manaCost is unconverted mana cost
+      mcmid:
+        bird_name: mcmId
+        name: mcmId
+        data_format: text
+        value_description: NOT USEFUL
+        description: NOT USEFUL
+      mcmmetaid:
+        bird_name: mcmMetaId
+        name: mcmMetaId
+        data_format: text
+        value_description: NOT USEFUL
+        description: NOT USEFUL
+      mtgarenaid:
+        bird_name: mtgArenaId
+        name: mtgArenaId
+        data_format: text
+        value_description: NOT USEFUL
+        description: NOT USEFUL
+      mtgjsonv4id:
+        bird_name: mtgjsonV4Id
+        name: mtgjsonV4Id
+        data_format: text
+        value_description: NOT USEFUL
+        description: NOT USEFUL
+      mtgofoilid:
+        bird_name: mtgoFoilId
+        name: mtgoFoilId
+        data_format: text
+        value_description: NOT USEFUL
+        description: NOT USEFUL
+      mtgoid:
+        bird_name: mtgoId
+        name: mtgoId
+        data_format: text
+        value_description: NOT USEFUL
+        description: NOT USEFUL
+      multiverseid:
+        bird_name: multiverseId
+        name: multiverseId
+        data_format: text
+        value_description: NOT USEFUL
+        description: NOT USEFUL
+      name:
+        bird_name: name
+        name: name
+        description: The name of the card.
+        data_format: text
+        value_description: Cards with multiple faces, like "Split" and "Meld" cards are given a delimiter.
+      number:
+        bird_name: number
+        name: number
+        description: The number of the card
+        data_format: text
+      originalreleasedate:
+        bird_name: originalReleaseDate
+        name: originalReleaseDate
+        description: original Release Date
+        data_format: text
+        value_description: The original release date in ISO 8601(opens new window) format for a promotional
+          card printed outside of a cycle window, such as Secret Lair Drop promotions.
+      originaltext:
+        bird_name: originalText
+        name: originalText
+        description: original Text
+        data_format: text
+        value_description: The text on the card as originally printed.
+      originaltype:
+        bird_name: originalType
+        name: originalType
+        description: original Type
+        data_format: text
+        value_description: The type of the card as originally printed. Includes any supertypes and subtypes.
+      otherfaceids:
+        bird_name: otherFaceIds
+        name: otherFaceIds
+        description: other Face Ids
+        data_format: text
+        value_description: A list of card UUID's to this card's counterparts, such as transformed or melded
+          faces.
+      power:
+        bird_name: power
+        name: power
+        description: The power of the card.
+        data_format: text
+        value_description: |-
+          commonsense evidence:
+          ∞ means infinite power
+          null or * refers to unknown power
+      printings:
+        bird_name: printings
+        name: printings
+        description: A list of set printing codes the card was printed in, formatted in uppercase.
+        data_format: text
+      promotypes:
+        bird_name: promoTypes
+        name: promo Types
+        description: A list of promotional types for a card.
+        data_format: text
+        value_description: '"arenaleague", "boosterfun", "boxtopper", "brawldeck", "bundle", "buyabox",
+          "convention", "datestamped", "draculaseries", "draftweekend", "duels", "event", "fnm", "gameday",
+          "gateway", "giftbox", "gilded", "godzillaseries", "instore", "intropack", "jpwalker", "judgegift",
+          "league", "mediainsert", "neonink", "openhouse", "planeswalkerstamped", "playerrewards", "playpromo",
+          "premiereshop", "prerelease", "promopack", "release", "setpromo", "stamped", "textured", "themepack",
+          "thick", "tourney", "wizardsplaynetwork"'
+      purchaseurls:
+        bird_name: purchaseUrls
+        name: purchase Urls
+        description: Links that navigate to websites where the card can be purchased.
+        data_format: text
+      rarity:
+        bird_name: rarity
+        name: rarity
+        description: The card printing rarity.
+        data_format: text
+      scryfallid:
+        bird_name: scryfallId
+        name: scryfallId
+        data_format: text
+        value_description: NOT USEFUL
+        description: NOT USEFUL
+      scryfallillustrationid:
+        bird_name: scryfallIllustrationId
+        name: scryfallIllustrationId
+        data_format: text
+        value_description: NOT USEFUL
+        description: NOT USEFUL
+      scryfalloracleid:
+        bird_name: scryfallOracleId
+        name: scryfallOracleId
+        data_format: text
+        value_description: NOT USEFUL
+        description: NOT USEFUL
+      setcode:
+        bird_name: setCode
+        name: Set Code
+        description: The set printing code that the card is from.
+        data_format: text
+      side:
+        bird_name: side
+        name: side
+        description: The identifier of the card side.
+        data_format: text
+        value_description: |-
+          Used on cards with multiple faces on the same card.
+          commonsense evidence:
+          if this value is empty, then it means this card doesn't have multiple faces on the same card.
+      subtypes:
+        bird_name: subtypes
+        name: subtypes
+        description: A list of card subtypes found after em-dash.
+        data_format: text
+      supertypes:
+        bird_name: supertypes
+        name: super types
+        description: A list of card supertypes found before em-dash.
+        data_format: text
+        value_description: |-
+          commonsense evidence:
+          list of all types should be the union of subtypes and supertypes
+      tcgplayerproductid:
+        bird_name: tcgplayerProductId
+        name: tcg player ProductId
+        data_format: text
+        status: missing
+      text:
+        bird_name: text
+        name: text
+        description: The rules text of the card.
+        data_format: text
+      toughness:
+        bird_name: toughness
+        name: toughness
+        description: The toughness of the card.
+        data_format: text
+      type:
+        bird_name: type
+        name: type
+        description: The type of the card as visible, including any supertypes and subtypes.
+        data_format: text
+        value_description: '"Artifact", "Card", "Conspiracy", "Creature", "Dragon", "Dungeon", "Eaturecray",
+          "Elemental", "Elite", "Emblem", "Enchantment", "Ever", "Goblin", "Hero", "Instant", "Jaguar",
+          "Knights", "Land", "Phenomenon", "Plane", "Planeswalker", "Scariest", "Scheme", "See", "Sorcery",
+          "Sticker", "Summon", "Token", "Tribal", "Vanguard", "Wolf", "You’ll", "instant"'
+      types:
+        bird_name: types
+        name: types
+        description: A list of all card types of the card, including Un‑sets and gameplay variants.
+        data_format: text
+      uuid:
+        bird_name: uuid
+        name: uuid
+        description: The universal unique identifier (v5) generated by MTGJSON. Each entry is unique.
+        data_format: text
+        value_description: NOT USEFUL
+      variations:
+        bird_name: variations
+        name: variations
+        data_format: text
+        status: missing
+      watermark:
+        bird_name: watermark
+        name: watermark
+        description: The name of the watermark on the card.
+        data_format: text
+  foreign_data:
+    bird_file: foreign_data.csv
+    columns:
+      id:
+        bird_name: id
+        name: id
+        description: unique id number identifying this row of data
+        data_format: integer
+      flavortext:
+        bird_name: flavorText
+        name: flavor Text
+        description: The foreign flavor text of the card.
+        data_format: text
+      language:
+        bird_name: language
+        name: language
+        description: The foreign language of card.
+        data_format: text
+      multiverseid:
+        bird_name: multiverseid
+        name: multiverseid
+        description: The foreign multiverse identifier of the card.
+        data_format: integer
+      name:
+        bird_name: name
+        name: name
+        description: The foreign name of the card.
+        data_format: text
+      text:
+        bird_name: text
+        name: text
+        description: The foreign text ruling of the card.
+        data_format: text
+      type:
+        bird_name: type
+        name: type
+        description: The foreign type of the card. Includes any supertypes and subtypes.
+        data_format: text
+      uuid:
+        bird_name: uuid
+        name: uuid
+        data_format: text
+        status: missing
+  legalities:
+    bird_file: legalities.csv
+    columns:
+      id:
+        bird_name: id
+        name: id
+        description: unique id identifying this legality
+        data_format: integer
+      format:
+        bird_name: format
+        name: format
+        description: format of play
+        data_format: text
+        value_description: each value refers to different rules to play
+      status:
+        bird_name: status
+        name: status
+        data_format: text
+        value_description: |-
+          • legal
+          • banned
+          • restricted
+        description: |-
+          • legal
+          • banned
+          • restricted
+      uuid:
+        bird_name: uuid
+        name: uuid
+        data_format: text
+        status: missing
+  rulings:
+    bird_file: rulings.csv
+    columns:
+      id:
+        bird_name: id
+        name: id
+        description: unique id identifying this ruling
+        data_format: integer
+      date:
+        bird_name: date
+        name: date
+        description: date
+        data_format: date
+      text:
+        bird_name: text
+        name: text
+        description: description about this ruling
+        data_format: text
+      uuid:
+        bird_name: uuid
+        name: uuid
+        data_format: text
+        status: missing
+  set_translations:
+    bird_file: set_translations.csv
+    columns:
+      id:
+        bird_name: id
+        name: id
+        description: unique id identifying this set
+        data_format: integer
+      language:
+        bird_name: language
+        name: language
+        description: language of this card
+        data_format: text
+      setcode:
+        bird_name: setCode
+        name: set code
+        description: the set code for this set
+        data_format: text
+      translation:
+        bird_name: translation
+        name: translation
+        description: translation of this card
+        data_format: text
+  sets:
+    bird_file: sets.csv
+    columns:
+      id:
+        bird_name: id
+        name: id
+        description: unique id identifying this set
+        data_format: integer
+      basesetsize:
+        bird_name: baseSetSize
+        name: base Set Size
+        description: The number of cards in the set.
+        data_format: integer
+      block:
+        bird_name: block
+        name: block
+        description: The block name the set was in.
+        data_format: text
+      booster:
+        bird_name: booster
+        name: booster
+        description: A breakdown of possibilities and weights of cards in a booster pack.
+        data_format: text
+      code:
+        bird_name: code
+        name: code
+        description: The set code for the set.
+        data_format: text
+      isfoilonly:
+        bird_name: isFoilOnly
+        name: is Foil Only
+        description: If the set is only available in foil.
+        data_format: integer
+      isforeignonly:
+        bird_name: isForeignOnly
+        name: is Foreign Only
+        description: If the set is available only outside the United States of America.
+        data_format: integer
+      isnonfoilonly:
+        bird_name: isNonFoilOnly
+        name: is Non Foil Only
+        description: If the set is only available in non-foil.
+        data_format: integer
+      isonlineonly:
+        bird_name: isOnlineOnly
+        name: is Online Only
+        description: If the set is only available in online game variations.
+        data_format: integer
+      ispartialpreview:
+        bird_name: isPartialPreview
+        name: is Partial Preview
+        description: If the set is still in preview (spoiled). Preview sets do not have complete data.
+        data_format: integer
+      keyrunecode:
+        bird_name: keyruneCode
+        name: keyrune Code
+        description: The matching Keyrune code for set image icons.
+        data_format: text
+      mcmid:
+        bird_name: mcmId
+        name: magic card market id
+        description: The Magic Card Marketset identifier.
+        data_format: integer
+      mcmidextras:
+        bird_name: mcmIdExtras
+        name: magic card market ID Extras
+        description: The split Magic Card Market set identifier if a set is printed in two sets. This
+          identifier represents the second set's identifier.
+        data_format: integer
+      mcmname:
+        bird_name: mcmName
+        name: magic card market name
+        data_format: text
+        status: missing
+      mtgocode:
+        bird_name: mtgoCode
+        name: magic the gathering online code
+        description: 'The set code for the set as it appears on Magic: The Gathering Online'
+        data_format: text
+        value_description: |-
+          commonsense evidence:
+          if the value is null or empty, then it doesn't appear on Magic: The Gathering Online
+      name:
+        bird_name: name
+        name: name
+        description: The name of the set.
+        data_format: text
+      parentcode:
+        bird_name: parentCode
+        name: parent Code
+        description: The parent set code for set variations like promotions, guild kits, etc.
+        data_format: text
+      releasedate:
+        bird_name: releaseDate
+        name: release Date
+        description: The release date in ISO 8601 format for the set.
+        data_format: date
+      tcgplayergroupid:
+        bird_name: tcgplayerGroupId
+        name: tcg player Group Id
+        description: The group identifier of the set on TCGplayer
+        data_format: integer
+      totalsetsize:
+        bird_name: totalSetSize
+        name: total Set Size
+        description: The total number of cards in the set, including promotional and related supplemental
+          products but excluding Alchemy modifications - however those cards are included in the set itself.
+        data_format: integer
+      type:
+        bird_name: type
+        name: type
+        description: The expansion type of the set.
+        data_format: text
+        value_description: '"alchemy", "archenemy", "arsenal", "box", "commander", "core", "draft_innovation",
+          "duel_deck", "expansion", "from_the_vault", "funny", "masterpiece", "masters", "memorabilia",
+          "planechase", "premium_deck", "promo", "spellbook", "starter", "token", "treasure_chest", "vanguard"'

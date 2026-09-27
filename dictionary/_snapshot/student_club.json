@@ -1,0 +1,286 @@
+{
+  "database": "student_club",
+  "profiled": false,
+  "tables": {
+    "attendance": {
+      "rows": 326,
+      "columns": [
+        {
+          "name": "link_to_event",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "link_to_member",
+          "type": "text",
+          "nullable": false
+        }
+      ]
+    },
+    "budget": {
+      "rows": 52,
+      "columns": [
+        {
+          "name": "budget_id",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "category",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "spent",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "remaining",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "amount",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "event_status",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "link_to_event",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    },
+    "event": {
+      "rows": 42,
+      "columns": [
+        {
+          "name": "event_id",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "event_name",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "event_date",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "type",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "notes",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "location",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    },
+    "expense": {
+      "rows": 32,
+      "columns": [
+        {
+          "name": "expense_id",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "expense_description",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "expense_date",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "cost",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "approved",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "link_to_member",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "link_to_budget",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    },
+    "income": {
+      "rows": 36,
+      "columns": [
+        {
+          "name": "income_id",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "date_received",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "amount",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "source",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "notes",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "link_to_member",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    },
+    "major": {
+      "rows": 113,
+      "columns": [
+        {
+          "name": "major_id",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "major_name",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "department",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "college",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    },
+    "member": {
+      "rows": 33,
+      "columns": [
+        {
+          "name": "member_id",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "first_name",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "last_name",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "email",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "position",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "t_shirt_size",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "phone",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "zip",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "link_to_major",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    },
+    "zip_code": {
+      "rows": 41877,
+      "columns": [
+        {
+          "name": "zip_code",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "type",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "city",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "county",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "state",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "short_state",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    }
+  }
+}

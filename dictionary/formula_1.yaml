@@ -1,0 +1,561 @@
+# Data dictionary: the BIRD `formula_1` database, converted by scripts/14_convert_descriptions.py
+# from BIRD's database description files, without editing their text. Regenerate; do not
+# edit by hand. Derived from BIRD (Li et al., 2023), licensed CC BY-SA 4.0.
+database: formula_1
+origin: bird-description
+name: formula_1
+sources:
+- BIRD mini-dev database description files (CC BY-SA 4.0)
+tables:
+  circuits:
+    bird_file: circuits.csv
+    columns:
+      circuitid:
+        bird_name: circuitId
+        name: circuit Id
+        description: unique identification number of the circuit
+        data_format: integer
+      circuitref:
+        bird_name: circuitRef
+        name: circuit reference name
+        description: circuit reference name
+        data_format: text
+      name:
+        bird_name: name
+        name: name
+        description: full name of circuit
+        data_format: text
+      location:
+        bird_name: location
+        name: location
+        description: location of circuit
+        data_format: text
+      country:
+        bird_name: country
+        name: country
+        description: country of circuit
+        data_format: text
+      lat:
+        bird_name: lat
+        name: latitude
+        description: latitude of location of circuit
+        data_format: real
+      lng:
+        bird_name: lng
+        name: longitude
+        description: longitude of location of circuit
+        data_format: real
+        value_description: |-
+          commonsense evidence:
+          Location coordinates: (lat, lng)
+      alt:
+        bird_name: alt
+        name: alt
+        data_format: integer
+        value_description: not useful
+        description: not useful
+      url:
+        bird_name: url
+        name: url
+        description: url
+        data_format: text
+  constructorresults:
+    bird_file: constructorResults.csv
+    columns:
+      constructorresultsid:
+        bird_name: constructorResultsId
+        name: constructor Results Id
+        description: constructor Results Id
+        data_format: integer
+      raceid:
+        bird_name: raceId
+        name: race Id
+        description: race id
+        data_format: integer
+      constructorid:
+        bird_name: constructorId
+        name: constructor Id
+        description: constructor id
+        data_format: integer
+      points:
+        bird_name: points
+        name: points
+        description: points
+        data_format: real
+      status:
+        bird_name: status
+        name: status
+        description: status
+        data_format: text
+  constructors:
+    bird_file: constructors.csv
+    columns:
+      constructorid:
+        bird_name: constructorId
+        name: constructor Id
+        description: the unique identification number identifying constructors
+        data_format: integer
+      constructorref:
+        bird_name: constructorRef
+        name: Constructor Reference name
+        description: Constructor Reference name
+        data_format: text
+      name:
+        bird_name: name
+        name: name
+        description: full name of the constructor
+        data_format: text
+      nationality:
+        bird_name: nationality
+        name: nationality
+        description: nationality of the constructor
+        data_format: text
+      url:
+        bird_name: url
+        name: url
+        description: the introduction website of the constructor
+        data_format: text
+        value_description: |-
+          commonsense evidence:
+          How to find out the detailed introduction of the constructor: through its url
+  constructorstandings:
+    bird_file: constructorStandings.csv
+    columns:
+      constructorstandingsid:
+        bird_name: constructorStandingsId
+        name: constructor Standings Id
+        description: unique identification of the constructor standing records
+        data_format: integer
+      raceid:
+        bird_name: raceId
+        name: race id
+        description: id number identifying which races
+        data_format: integer
+      constructorid:
+        bird_name: constructorId
+        name: constructor id
+        description: id number identifying which id
+        data_format: integer
+      points:
+        bird_name: points
+        name: points
+        description: how many points acquired in each race
+      position:
+        bird_name: position
+        name: position
+        description: position or track of circuits
+        data_format: integer
+      positiontext:
+        bird_name: positionText
+        name: position text
+        data_format: text
+        value_description: same with position, not quite useful
+        description: same with position, not quite useful
+      wins:
+        bird_name: wins
+        name: wins
+        description: wins
+        data_format: integer
+  drivers:
+    bird_file: drivers.csv
+    columns:
+      driverid:
+        bird_name: driverId
+        name: driver ID
+        description: the unique identification number identifying each driver
+        data_format: integer
+      driverref:
+        bird_name: driverRef
+        name: driver reference name
+        description: driver reference name
+        data_format: text
+      number:
+        bird_name: number
+        name: number
+        description: number
+        data_format: integer
+      code:
+        bird_name: code
+        name: code
+        description: abbreviated code for drivers
+        data_format: text
+        value_description: if "null" or empty, it means it doesn't have code
+      forename:
+        bird_name: forename
+        name: forename
+        description: forename
+        data_format: text
+      surname:
+        bird_name: surname
+        name: surname
+        description: surname
+        data_format: text
+      dob:
+        bird_name: dob
+        name: date of birth
+        description: date of birth
+        data_format: date
+      nationality:
+        bird_name: nationality
+        name: nationality
+        description: nationality of drivers
+        data_format: text
+      url:
+        bird_name: url
+        name: url
+        description: the introduction website of the drivers
+        data_format: text
+  driverstandings:
+    bird_file: driverStandings.csv
+    columns:
+      driverstandingsid:
+        bird_name: driverStandingsId
+        name: driver Standings Id
+        description: the unique identification number identifying driver standing records
+        data_format: integer
+      raceid:
+        bird_name: raceId
+        name: constructor Reference name
+        description: id number identifying which races
+        data_format: integer
+      driverid:
+        bird_name: driverId
+        name: driverId
+        description: id number identifying which drivers
+        data_format: integer
+      points:
+        bird_name: points
+        name: points
+        description: how many points acquired in each race
+        data_format: real
+      position:
+        bird_name: position
+        name: position
+        description: position or track of circuits
+        data_format: integer
+      positiontext:
+        bird_name: positionText
+        name: position text
+        data_format: text
+        value_description: same with position, not quite useful
+        description: same with position, not quite useful
+      wins:
+        bird_name: wins
+        name: wins
+        description: wins
+        data_format: integer
+  laptimes:
+    bird_file: lapTimes.csv
+    columns:
+      raceid:
+        bird_name: raceId
+        name: race ID
+        description: the identification number identifying race
+        data_format: integer
+      driverid:
+        bird_name: driverId
+        name: driver ID
+        description: the identification number identifying each driver
+        data_format: integer
+      lap:
+        bird_name: lap
+        name: lap
+        description: lap number
+        data_format: integer
+      position:
+        bird_name: position
+        name: position
+        description: position or track of circuits
+        data_format: integer
+      time:
+        bird_name: time
+        name: time
+        description: lap time
+        data_format: text
+        value_description: in minutes / seconds / ...
+      milliseconds:
+        bird_name: milliseconds
+        name: milliseconds
+        description: milliseconds
+        data_format: integer
+  pitstops:
+    bird_file: pitStops.csv
+    columns:
+      raceid:
+        bird_name: raceId
+        name: race ID
+        description: the identification number identifying race
+        data_format: integer
+      driverid:
+        bird_name: driverId
+        name: driver ID
+        description: the identification number identifying each driver
+        data_format: integer
+      stop:
+        bird_name: stop
+        name: stop
+        description: stop number
+        data_format: integer
+      lap:
+        bird_name: lap
+        name: lap
+        description: lap number
+        data_format: integer
+      time:
+        bird_name: time
+        name: time
+        description: time
+        data_format: text
+        value_description: exact time
+      duration:
+        bird_name: duration
+        name: duration
+        description: duration time
+        data_format: text
+        value_description: seconds/
+      milliseconds:
+        bird_name: milliseconds
+        name: milliseconds
+        description: milliseconds
+        data_format: integer
+  qualifying:
+    bird_file: qualifying.csv
+    columns:
+      qualifyid:
+        bird_name: qualifyId
+        name: qualify Id
+        description: the unique identification number identifying qualifying
+        data_format: integer
+        value_description: How does F1 Sprint qualifying work? Sprint qualifying is essentially a short-form
+          Grand Prix – a race that is one-third the number of laps of the main event on Sunday. However,
+          the drivers are battling for positions on the grid for the start of Sunday's race.
+      raceid:
+        bird_name: raceId
+        name: race Id
+        description: the identification number identifying each race
+        data_format: integer
+      driverid:
+        bird_name: driverId
+        name: driver Id
+        description: the identification number identifying each driver
+        data_format: integer
+      constructorid:
+        bird_name: constructorId
+        name: constructor id
+        description: constructor Id
+        data_format: integer
+      number:
+        bird_name: number
+        name: number
+        description: number
+        data_format: integer
+      position:
+        bird_name: position
+        name: position
+        description: position or track of circuit
+        data_format: integer
+      q1:
+        bird_name: q1
+        name: qualifying 1
+        description: time in qualifying 1
+        data_format: text
+        value_description: |-
+          in minutes / seconds / ...
+          commonsense evidence:
+          Q1 lap times determine pole position and the order of the front 10 positions on the grid. The slowest driver in Q1 starts 10th, the next starts ninth and so on.
+          All 20 F1 drivers participate in the first period, called Q1, with each trying to set the fastest time possible. Those in the top 15 move on to the next period of qualifying, called Q2. The five slowest drivers are eliminated and will start the race in the last five positions on the grid.
+      q2:
+        bird_name: q2
+        name: qualifying 2
+        description: time in qualifying 2
+        data_format: text
+        value_description: |-
+          in minutes / seconds / ...
+          commonsense evidence:
+          only top 15 in the q1 has the record of q2
+          Q2 is slightly shorter but follows the same format. Drivers try to put down their best times to move on to Q1 as one of the 10 fastest cars. The five outside of the top 10 are eliminated and start the race from 11th to 15th based on their best lap time.
+      q3:
+        bird_name: q3
+        name: qualifying 3
+        description: time in qualifying 3
+        data_format: text
+        value_description: |-
+          in minutes / seconds / ...
+          commonsense evidence:
+          only top 10 in the q2 has the record of q3
+  races:
+    bird_file: races.csv
+    columns:
+      raceid:
+        bird_name: raceId
+        name: race ID
+        description: the unique identification number identifying the race
+        data_format: integer
+      year:
+        bird_name: year
+        name: year
+        description: year
+        data_format: integer
+      round:
+        bird_name: round
+        name: round
+        description: round
+        data_format: integer
+      circuitid:
+        bird_name: circuitId
+        name: Circuit Id
+        description: circuit Id
+        data_format: integer
+      name:
+        bird_name: name
+        name: name
+        description: name of the race
+        data_format: text
+      date:
+        bird_name: date
+        name: date
+        description: duration time
+        data_format: date
+      time:
+        bird_name: time
+        name: time
+        description: time of the location
+        data_format: text
+      url:
+        bird_name: url
+        name: url
+        description: introduction of races
+        data_format: text
+  results:
+    bird_file: results.csv
+    columns:
+      resultid:
+        bird_name: resultId
+        name: Result ID
+        description: the unique identification number identifying race result
+        data_format: integer
+      raceid:
+        bird_name: raceId
+        name: race ID
+        description: the identification number identifying the race
+        data_format: integer
+      driverid:
+        bird_name: driverId
+        name: driver ID
+        description: the identification number identifying the driver
+        data_format: integer
+      constructorid:
+        bird_name: constructorId
+        name: constructor Id
+        description: the identification number identifying which constructors
+        data_format: integer
+      number:
+        bird_name: number
+        name: number
+        description: number
+        data_format: integer
+      grid:
+        bird_name: grid
+        name: grid
+        description: the number identifying the area where cars are set into a grid formation in order
+          to start the race.
+        data_format: integer
+      position:
+        bird_name: position
+        name: position
+        description: The finishing position or track of circuits
+        data_format: integer
+      positiontext:
+        bird_name: positionText
+        name: position text
+        data_format: text
+        value_description: not quite useful
+        description: not quite useful
+      positionorder:
+        bird_name: positionOrder
+        name: position order
+        description: the finishing order of positions
+        data_format: integer
+      points:
+        bird_name: points
+        name: points
+        description: points
+        data_format: real
+      laps:
+        bird_name: laps
+        name: laps
+        description: lap number
+        data_format: integer
+      time:
+        bird_name: time
+        name: time
+        description: finish time
+        data_format: text
+        value_description: |-
+          commonsense evidence:
+          1. if the value exists, it means the driver finished the race.
+          2. Only the time of the champion shows in the format of "minutes: seconds.millionsecond", the time of the other drivers shows as "seconds.millionsecond" , which means their actual time is the time of the champion adding the value in this cell.
+      milliseconds:
+        bird_name: milliseconds
+        name: milliseconds
+        description: the actual finishing time of drivers in milliseconds
+        data_format: integer
+        value_description: the actual finishing time of drivers
+      fastestlap:
+        bird_name: fastestLap
+        name: fastest lap
+        description: fastest lap number
+        data_format: integer
+      rank:
+        bird_name: rank
+        name: rank
+        description: starting rank positioned by fastest lap speed
+        data_format: integer
+      fastestlaptime:
+        bird_name: fastestLapTime
+        name: fastest Lap Time
+        description: fastest Lap Time
+        data_format: text
+        value_description: faster (smaller in the value) "fastestLapTime" leads to higher rank (smaller
+          is higher rank)
+      fastestlapspeed:
+        bird_name: fastestLapSpeed
+        name: fastest Lap Speed
+        description: fastest Lap Speed
+        data_format: text
+        value_description: (km / h)
+      statusid:
+        bird_name: statusId
+        name: status Id
+        description: status ID
+        data_format: integer
+        value_description: its category description appear in the table status
+  seasons:
+    bird_file: seasons.csv
+    columns:
+      year:
+        bird_name: year
+        name: race ID
+        description: the unique identification number identifying the race
+        data_format: integer
+      url:
+        bird_name: url
+        name: url
+        description: website link of season race introduction
+        data_format: text
+  status:
+    bird_file: status.csv
+    columns:
+      statusid:
+        bird_name: statusId
+        name: status ID
+        description: the unique identification number identifying status
+        data_format: integer
+      status:
+        bird_name: status
+        name: status
+        description: full name of status
+        data_format: text
+unmatched_descriptions:
+- table: constructors
+  bird_name: 'wins '

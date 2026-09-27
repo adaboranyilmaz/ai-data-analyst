@@ -1,0 +1,49 @@
+# Where the benchmark data comes from, pinned by hash. scripts/10_fetch_bird.py downloads and
+# verifies it; nothing downstream reads a file whose hash does not match.
+
+bird_minidev:
+  # The databases (PostgreSQL dump) and their column descriptions. The package is dated
+  # 2024-06-20; its databases are current (BIRD's 2025-07 update changed the question files
+  # only), but its question file is not: see `questions` below.
+  package:
+    url: https://bird-bench.oss-cn-beijing.aliyuncs.com/minidev.zip
+    path: data/minidev.zip
+    size_bytes: 800943648
+    sha256: cc48ba16838204e4e214512030cb572eeb5f7bcdd999bae4b9b6ff12ec13b92f
+    md5: 7beb6dab11e65f0fde563e644a1ea319 # the server's ETag
+  members:
+    dump: minidev/MINIDEV_postgresql/BIRD_dev.sql
+    dump_sha256: 31b1da211849d24a57c9af7636da46a5b82fc8a3ca1542bb3ebd8775e9a31cec
+    tables: minidev/MINIDEV/dev_tables.json
+    descriptions: minidev/MINIDEV/dev_databases/{db}/database_description/
+    stale_questions: minidev/MINIDEV/mini_dev_postgresql.json # compared, never used
+  # The question/gold-SQL pairs, PostgreSQL dialect. BIRD names its Hugging Face dataset the
+  # canonical version; it fixes gold SQL and duplicated question ids found in the package's
+  # copy. Pinned to one revision.
+  questions:
+    url: https://huggingface.co/datasets/birdsql/bird_mini_dev/resolve/{revision}/data/mini_dev_pg-00000-of-00001.json
+    revision: f65faf4ae3b638c1fa6df1d3370c8d92c8366301 # 2026-01-18
+    sha256: 7fa740ef9225389cff6c34432120e8325d0ca3008d73db1ae38731234bc10da7
+  # The dump's timestamps (all in codebase_community, `timestamp with time zone`) were written
+  # at UTC+8, and the benchmark's questions and gold SQL use those UTC+8 wall-clock times:
+  # a literal such as '2014-04-23 20:29:39' only matches in a session at UTC+8. The loader
+  # makes this the `bird` database's default time zone. China has had no daylight saving time
+  # since 1991, and the data starts in 2008.
+  time_zone: Asia/Shanghai
+  raw_dir: data/raw/bird_minidev
+  licence: CC BY-SA 4.0
+  citation: >-
+    Li, J., et al. (2023). Can LLM Already Serve as a Database Interface? A BIg Bench for
+    Large-Scale Database Grounded Text-to-SQLs. NeurIPS Datasets and Benchmarks.
+
+# Row counts of the Czech bank tables as published with the data (Berka, P. (1999). Guide to
+# the Financial Data Set. PKDD'99 Discovery Challenge). The loaded database must match.
+financial_published_rows:
+  account: 4500
+  client: 5369
+  disp: 5369
+  order: 6471
+  trans: 1056320
+  loan: 682
+  card: 892
+  district: 77

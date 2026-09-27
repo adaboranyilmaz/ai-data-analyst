@@ -4,7 +4,7 @@
 
 This project builds an AI analyst that answers questions about a bank's database by writing and running SQL. Every answer comes with its evidence and a confidence, and the analyst declines when it is unsure. The project measures whether that confidence can be trusted.
 
-**Status: under construction. Nothing has been measured yet, so every result below is TBD.**
+**Status: under construction. The data and its dictionary are in place; the analyst has not been evaluated yet, so every result below is TBD.**
 
 **Auditable** means that every answer can be traced to the exact SQL, the rows it used and the checks it ran, and that it comes with a calibrated confidence. It does not mean guaranteed correct.
 
@@ -26,8 +26,8 @@ TBD.
 
 The design, being built in stages:
 
-- **The client database.** Real, anonymised data from a Czech bank (1993–1998). It is the standard public relational banking dataset and part of the BIRD benchmark. Its codes are in Czech; translating them into business terms is what an analyst does with any bank's internal codes.
-- **The benchmark.** BIRD mini-dev, a public text-to-SQL benchmark with an expert-written query for every question, so the analyst can be compared with published results.
+- **The client database.** Real, anonymised data from a Czech bank (1993–1998), with {{financial_trans_rows}} transactions. It is the standard public relational banking dataset and part of the BIRD benchmark. Its codes are in Czech; translating them into business terms is what an analyst does with any bank's internal codes. A hand-written data dictionary gives every column an English name, a meaning and a unit, and translates all {{financial_code_values}} code values found in the data.
+- **The benchmark.** BIRD mini-dev, a public text-to-SQL benchmark of {{bird_questions}} questions over {{bird_databases}} databases, with an expert-written query for every question, so the analyst can be compared with published results. All {{gold_executed}} expert queries run on this project's database.
 - **A hand-written banking test set.** Questions written for this project and fixed before the analyst sees them, including ambiguous, unanswerable and false-premise questions. Unlike a public benchmark, they cannot be in any model's training data.
 - **The analyst.** An agent loop built directly on the Anthropic SDK, with tools to explore the schema and run queries. Its database access is read-only twice over: a SQL checker accepts only a single query, and the database role it connects as cannot write.
 - **The evaluation.** How accuracy rises as the analyst declines its least confident answers (a risk–coverage curve), and whether its confidence is calibrated on questions it was not tuned on.
@@ -43,12 +43,13 @@ TBD.
 ## Reproducing the Results
 
 - Needs Python 3.12 with [uv](https://docs.astral.sh/uv/), and Docker.
-- The database runs in Docker. Every model response is cached, so replaying the results costs nothing.
+- The database runs in Docker. The data pipeline downloads the benchmark (about 800 MB), loads it and runs every expert query. Every model response is cached, so replaying the results costs nothing.
 - The technical report has the details.
 
 ```
 uv sync
 docker compose up -d --wait
+uv run dvc repro
 uv run pytest
 ```
 

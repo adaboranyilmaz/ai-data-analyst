@@ -14,6 +14,8 @@ import psycopg
 from psycopg.conninfo import make_conninfo
 
 DB_NAME = "analyst"
+# The BIRD mini-dev benchmark databases, one schema each (loaded by scripts/11_load_bird.py).
+BIRD_DB = "bird"
 AGENT_ROLE = "analyst_ro"
 ADMIN_ROLE = "analyst_admin"
 _PASSWORDS = {  # role -> (environment variable, local default)
@@ -22,17 +24,17 @@ _PASSWORDS = {  # role -> (environment variable, local default)
 }
 
 
-def conninfo(role: str = AGENT_ROLE) -> str:
+def conninfo(role: str = AGENT_ROLE, dbname: str = DB_NAME) -> str:
     var, default = _PASSWORDS[role]
     return make_conninfo(
         host=os.environ.get("ANALYST_DB_HOST") or "127.0.0.1",
         port=os.environ.get("ANALYST_DB_PORT") or "5432",
-        dbname=DB_NAME,
+        dbname=dbname,
         user=role,
         password=os.environ.get(var) or default,
         connect_timeout=5,
     )
 
 
-def connect(role: str = AGENT_ROLE, **kwargs) -> psycopg.Connection:
-    return psycopg.connect(conninfo(role), **kwargs)
+def connect(role: str = AGENT_ROLE, dbname: str = DB_NAME, **kwargs) -> psycopg.Connection:
+    return psycopg.connect(conninfo(role, dbname), **kwargs)

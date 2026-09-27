@@ -4,7 +4,18 @@
 # `count_where`, `sum_of` and `mean_of` summarise a list; `pending: true` renders TBD until
 # the result exists. Edit this file or the templates, never the rendered documents.
 
-values: {}
+values:
+  # the benchmark data and its dictionaries
+  bird_questions: {file: metrics/data_stats.json, path: gold/questions, fmt: int}
+  gold_executed: {file: metrics/data_stats.json, path: gold/executed_ok, fmt: int}
+  gold_excluded: {file: metrics/data_stats.json, path: gold/excluded, fmt: int}
+  bird_databases: {file: metrics/data_stats.json, path: totals/databases, fmt: int}
+  bird_tables: {file: metrics/data_stats.json, path: totals/tables, fmt: int}
+  bird_columns: {file: metrics/data_stats.json, path: totals/columns, fmt: int}
+  bird_columns_described: {file: metrics/data_stats.json, path: totals/columns_described, fmt: int}
+  financial_trans_rows: {file: metrics/data_stats.json, path: financial/row_counts/trans/loaded, fmt: int}
+  financial_code_values: {file: metrics/data_stats.json, path: financial/code_values_present, fmt: int}
+  financial_code_values_translated: {file: metrics/data_stats.json, path: financial/code_values_translated, fmt: int}
 
 # Decimals and percentages the templates may contain outside a placeholder: version numbers,
 # never results.

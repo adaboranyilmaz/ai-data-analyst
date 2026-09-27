@@ -1,0 +1,341 @@
+{
+  "database": "thrombosis_prediction",
+  "profiled": false,
+  "tables": {
+    "examination": {
+      "rows": 106,
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "Examination Date",
+          "type": "date",
+          "nullable": true
+        },
+        {
+          "name": "aCL IgG",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "aCL IgM",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "ana",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "ANA Pattern",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "aCL IgA",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "diagnosis",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "kct",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "rvvt",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "lac",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "symptoms",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "thrombosis",
+          "type": "bigint",
+          "nullable": true
+        }
+      ]
+    },
+    "laboratory": {
+      "rows": 13908,
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "date",
+          "type": "date",
+          "nullable": true
+        },
+        {
+          "name": "got",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "gpt",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "ldh",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "alp",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "tp",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "alb",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "ua",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "un",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "cre",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "T-BIL",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "T-CHO",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "tg",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "cpk",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "glu",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "wbc",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "rbc",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "hgb",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "hct",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "plt",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "pt",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "aptt",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "fg",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "pic",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "tat",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "tat2",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "U-PRO",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "igg",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "iga",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "igm",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "crp",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "ra",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "rf",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "c3",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "c4",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "rnp",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "sm",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "sc170",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "ssa",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "ssb",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "centromea",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "dna",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "DNA-II",
+          "type": "bigint",
+          "nullable": true
+        }
+      ]
+    },
+    "patient": {
+      "rows": 1238,
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "sex",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "birthday",
+          "type": "date",
+          "nullable": true
+        },
+        {
+          "name": "description",
+          "type": "date",
+          "nullable": true
+        },
+        {
+          "name": "First Date",
+          "type": "date",
+          "nullable": true
+        },
+        {
+          "name": "admission",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "diagnosis",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    }
+  }
+}

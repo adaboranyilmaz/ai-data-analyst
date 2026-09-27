@@ -1,0 +1,222 @@
+{
+  "sources": {
+    "package_sha256": "cc48ba16838204e4e214512030cb572eeb5f7bcdd999bae4b9b6ff12ec13b92f",
+    "dump_sha256": "31b1da211849d24a57c9af7636da46a5b82fc8a3ca1542bb3ebd8775e9a31cec",
+    "questions_revision": "f65faf4ae3b638c1fa6df1d3370c8d92c8366301",
+    "questions_sha256": "7fa740ef9225389cff6c34432120e8325d0ca3008d73db1ae38731234bc10da7",
+    "package_questions_vs_pinned": {
+      "stale_questions": 500,
+      "stale_duplicate_ids": [
+        137,
+        138
+      ],
+      "pinned_questions": 500,
+      "removed_ids": [],
+      "changed_sql": 2,
+      "changed_ids": [
+        119,
+        120,
+        879,
+        1322
+      ]
+    }
+  },
+  "totals": {
+    "databases": 11,
+    "tables": 75,
+    "rows": 3898114,
+    "columns": 798,
+    "columns_with_entry": 798,
+    "columns_described": 684
+  },
+  "databases": {
+    "california_schools": {
+      "dictionary": "bird-description",
+      "tables": 3,
+      "rows": 29941,
+      "columns": 89,
+      "columns_with_entry": 89,
+      "columns_described": 82,
+      "dictionary_problems": 0
+    },
+    "card_games": {
+      "dictionary": "bird-description",
+      "tables": 6,
+      "rows": 803445,
+      "columns": 115,
+      "columns_with_entry": 115,
+      "columns_described": 108,
+      "dictionary_problems": 0
+    },
+    "codebase_community": {
+      "dictionary": "bird-description",
+      "tables": 8,
+      "rows": 740646,
+      "columns": 71,
+      "columns_with_entry": 71,
+      "columns_described": 71,
+      "dictionary_problems": 0
+    },
+    "debit_card_specializing": {
+      "dictionary": "bird-description",
+      "tables": 5,
+      "rows": 423050,
+      "columns": 21,
+      "columns_with_entry": 21,
+      "columns_described": 20,
+      "dictionary_problems": 0
+    },
+    "european_football_2": {
+      "dictionary": "bird-description",
+      "tables": 7,
+      "rows": 222796,
+      "columns": 199,
+      "columns_with_entry": 199,
+      "columns_described": 103,
+      "dictionary_problems": 0
+    },
+    "financial": {
+      "dictionary": "hand-written",
+      "tables": 8,
+      "rows": 1079680,
+      "columns": 55,
+      "columns_with_entry": 55,
+      "columns_described": 55,
+      "dictionary_problems": 0
+    },
+    "formula_1": {
+      "dictionary": "bird-description",
+      "tables": 13,
+      "rows": 493257,
+      "columns": 94,
+      "columns_with_entry": 94,
+      "columns_described": 94,
+      "dictionary_problems": 0
+    },
+    "student_club": {
+      "dictionary": "bird-description",
+      "tables": 8,
+      "rows": 42511,
+      "columns": 48,
+      "columns_with_entry": 48,
+      "columns_described": 48,
+      "dictionary_problems": 0
+    },
+    "superhero": {
+      "dictionary": "bird-description",
+      "tables": 10,
+      "rows": 10614,
+      "columns": 31,
+      "columns_with_entry": 31,
+      "columns_described": 31,
+      "dictionary_problems": 0
+    },
+    "thrombosis_prediction": {
+      "dictionary": "bird-description",
+      "tables": 3,
+      "rows": 15252,
+      "columns": 64,
+      "columns_with_entry": 64,
+      "columns_described": 61,
+      "dictionary_problems": 0
+    },
+    "toxicology": {
+      "dictionary": "bird-description",
+      "tables": 4,
+      "rows": 36922,
+      "columns": 11,
+      "columns_with_entry": 11,
+      "columns_described": 11,
+      "dictionary_problems": 0
+    }
+  },
+  "financial": {
+    "row_counts": {
+      "account": {
+        "published": 4500,
+        "loaded": 4500,
+        "match": true
+      },
+      "client": {
+        "published": 5369,
+        "loaded": 5369,
+        "match": true
+      },
+      "disp": {
+        "published": 5369,
+        "loaded": 5369,
+        "match": true
+      },
+      "order": {
+        "published": 6471,
+        "loaded": 6471,
+        "match": true
+      },
+      "trans": {
+        "published": 1056320,
+        "loaded": 1056320,
+        "match": true
+      },
+      "loan": {
+        "published": 682,
+        "loaded": 682,
+        "match": true
+      },
+      "card": {
+        "published": 892,
+        "loaded": 892,
+        "match": true
+      },
+      "district": {
+        "published": 77,
+        "loaded": 77,
+        "match": true
+      }
+    },
+    "row_counts_all_match": true,
+    "code_columns": 9,
+    "code_values_present": 35,
+    "code_values_translated": 35,
+    "code_coverage": 1.0,
+    "columns_with_nulls": 6,
+    "columns_with_nulls_explained": 6
+  },
+  "gold": {
+    "questions": 500,
+    "executed_ok": 500,
+    "execution_rate": 1.0,
+    "status": {
+      "ok": 500
+    },
+    "excluded": 0,
+    "executed_as_admin": 0,
+    "empty_results": [],
+    "per_database": {
+      "california_schools": 30,
+      "card_games": 52,
+      "codebase_community": 49,
+      "debit_card_specializing": 30,
+      "european_football_2": 51,
+      "financial": 32,
+      "formula_1": 66,
+      "student_club": 48,
+      "superhero": 52,
+      "thrombosis_prediction": 50,
+      "toxicology": 40
+    },
+    "per_difficulty": {
+      "challenging": 102,
+      "moderate": 250,
+      "simple": 148
+    },
+    "repeat_run": {
+      "identical": 500
+    },
+    "public_vs_schema_layout": {
+      "identical": 497,
+      "same rows, different order": 3
+    },
+    "same_result_sets_across_runs": true,
+    "total_seconds": 10.8
+  }
+}

@@ -42,4 +42,5 @@ testpaths = ["tests"]
 pythonpath = ["."]
 markers = [
     "db: needs the compose PostgreSQL (`docker compose up -d --wait`); skipped when it is not running, unless ANALYST_REQUIRE_DB=1",
+    "bird: needs the BIRD benchmark loaded and its files in data/raw; skipped without them, unless ANALYST_REQUIRE_BIRD=1",
 ]

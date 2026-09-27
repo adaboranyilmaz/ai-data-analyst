@@ -1,0 +1,230 @@
+# Data dictionary: the BIRD `superhero` database, converted by scripts/14_convert_descriptions.py
+# from BIRD's database description files, without editing their text. Regenerate; do not
+# edit by hand. Derived from BIRD (Li et al., 2023), licensed CC BY-SA 4.0.
+database: superhero
+origin: bird-description
+name: superhero
+sources:
+- BIRD mini-dev database description files (CC BY-SA 4.0)
+tables:
+  alignment:
+    bird_file: alignment.csv
+    columns:
+      id:
+        bird_name: id
+        name: id
+        description: the unique identifier of the alignment
+        data_format: integer
+      alignment:
+        bird_name: alignment
+        name: alignment
+        description: the alignment of the superhero
+        data_format: text
+        value_description: "commonsense evidence:\nAlignment refers to a character's moral and ethical\
+          \ stance and can be used to describe the overall attitude or behavior of a superhero. Some common\
+          \ alignments for superheroes include:\nGood: These superheroes are typically kind, selfless,\
+          \ and dedicated to protecting others and upholding justice. Examples of good alignments include\
+          \ Superman, Wonder Woman, and Spider-Man.\nNeutral: These superheroes may not always prioritize\
+          \ the greater good, but they are not necessarily evil either. They may act in their own self-interest\
+          \ or make decisions based on their own moral code. Examples of neutral alignments include the\
+          \ Hulk and Deadpool.\n\x95\tBad: These superheroes are typically selfish, manipulative, and\
+          \ willing to harm others in pursuit of their own goals. Examples of evil alignments include\
+          \ Lex Luthor and the Joker."
+  attribute:
+    bird_file: attribute.csv
+    columns:
+      id:
+        bird_name: id
+        name: id
+        description: the unique identifier of the attribute
+        data_format: integer
+      attribute_name:
+        bird_name: attribute_name
+        name: attribute name
+        description: the attribute
+        data_format: text
+        value_description: |-
+          commonsense evidence:
+          A superhero's attribute is a characteristic or quality that defines who they are and what they are capable of. This could be a physical trait, such as superhuman strength or the ability to fly, or a personal trait, such as extraordinary intelligence or exceptional bravery.
+  colour:
+    bird_file: colour.csv
+    columns:
+      id:
+        bird_name: id
+        name: id
+        description: the unique identifier of the color
+        data_format: integer
+      colour:
+        bird_name: colour
+        name: colour
+        description: the color of the superhero's skin/eye/hair/etc
+        data_format: text
+  gender:
+    bird_file: gender.csv
+    columns:
+      id:
+        bird_name: id
+        name: id
+        description: the unique identifier of the gender
+        data_format: integer
+      gender:
+        bird_name: gender
+        name: gender
+        description: the gender of the superhero
+        data_format: text
+  hero_attribute:
+    bird_file: hero_attribute.csv
+    columns:
+      hero_id:
+        bird_name: hero_id
+        name: hero id
+        description: |-
+          the id of the hero
+          Maps to superhero(id)
+      attribute_id:
+        bird_name: attribute_id
+        name: attribute id
+        description: |-
+          the id of the attribute
+          Maps to attribute(id)
+      attribute_value:
+        bird_name: attribute_value
+        name: attribute value
+        description: the attribute value
+        value_description: |-
+          commonsense evidence:
+          If a superhero has a higher attribute value on a particular attribute, it means that they are more skilled or powerful in that area compared to other superheroes. For example, if a superhero has a higher attribute value for strength, they may be able to lift heavier objects or deliver more powerful punches than other superheroes.
+  hero_power:
+    bird_file: hero_power.csv
+    columns:
+      hero_id:
+        bird_name: hero_id
+        name: hero id
+        description: |-
+          the id of the hero
+          Maps to superhero(id)
+        data_format: integer
+      power_id:
+        bird_name: power_id
+        name: power id
+        description: |-
+          the id of the power
+          Maps to superpower(id)
+        data_format: integer
+        value_description: |-
+          commonsense evidence:
+          In general, a superhero's attributes provide the foundation for their abilities and help to define who they are, while their powers are the specific abilities that they use to fight crime and protect others.
+  publisher:
+    bird_file: publisher.csv
+    columns:
+      id:
+        bird_name: id
+        name: id
+        description: the unique identifier of the publisher
+        data_format: integer
+      publisher_name:
+        bird_name: publisher_name
+        name: publisher_name
+        description: the name of the publisher
+        data_format: text
+  race:
+    bird_file: race.csv
+    columns:
+      id:
+        bird_name: id
+        name: id
+        description: the unique identifier of the race
+        data_format: integer
+      race:
+        bird_name: race
+        name: race
+        description: the race of the superhero
+        data_format: text
+        value_description: |-
+          commonsense evidence:
+          In the context of superheroes, a superhero's race would refer to the particular group of people that the superhero belongs to base on these physical characteristics
+  superhero:
+    bird_file: superhero.csv
+    columns:
+      id:
+        bird_name: id
+        name: id
+        description: the unique identifier of the superhero
+        data_format: integer
+      superhero_name:
+        bird_name: superhero_name
+        name: superhero name
+        description: the name of the superhero
+        data_format: text
+      full_name:
+        bird_name: full_name
+        name: full name
+        description: the full name of the superhero
+        data_format: text
+        value_description: |-
+          commonsense evidence:
+          The full name of a person typically consists of their given name, also known as their first name or personal name, and their surname, also known as their last name or family name. For example, if someone's given name is "John" and their surname is "Smith," their full name would be "John Smith."
+      gender_id:
+        bird_name: gender_id
+        name: gender id
+        description: the id of the superhero's gender
+        data_format: integer
+      eye_colour_id:
+        bird_name: eye_colour_id
+        name: eye colour id
+        description: the id of the superhero's eye color
+        data_format: integer
+      hair_colour_id:
+        bird_name: hair_colour_id
+        name: hair colour id
+        description: the id of the superhero's hair color
+        data_format: integer
+      skin_colour_id:
+        bird_name: skin_colour_id
+        name: skin colour id
+        description: the id of the superhero's skin color
+        data_format: integer
+      race_id:
+        bird_name: race_id
+        name: race id
+        description: the id of the superhero's race
+        data_format: integer
+      publisher_id:
+        bird_name: publisher_id
+        name: publisher id
+        description: the id of the publisher
+        data_format: integer
+      alignment_id:
+        bird_name: alignment_id
+        name: alignment id
+        description: the id of the superhero's alignment
+        data_format: integer
+      height_cm:
+        bird_name: height_cm
+        name: height cm
+        description: the height of the superhero
+        data_format: integer
+        value_description: |-
+          commonsense evidence:
+          The unit of height is centimeter. If the height_cm is NULL or 0, it means the height of the superhero is missing.
+      weight_kg:
+        bird_name: weight_kg
+        name: weight kg
+        description: the weight of the superhero
+        data_format: integer
+        value_description: |-
+          commonsense evidence:
+          The unit of weight is kilogram. If the weight_kg is NULL or 0, it means the weight of the superhero is missing.
+  superpower:
+    bird_file: superpower.csv
+    columns:
+      id:
+        bird_name: id
+        name: id
+        description: the unique identifier of the superpower
+        data_format: integer
+      power_name:
+        bird_name: power_name
+        name: power name
+        description: the superpower name
+        data_format: text

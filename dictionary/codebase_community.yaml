@@ -1,0 +1,409 @@
+# Data dictionary: the BIRD `codebase_community` database, converted by scripts/14_convert_descriptions.py
+# from BIRD's database description files, without editing their text. Regenerate; do not
+# edit by hand. Derived from BIRD (Li et al., 2023), licensed CC BY-SA 4.0.
+database: codebase_community
+origin: bird-description
+name: codebase_community
+sources:
+- BIRD mini-dev database description files (CC BY-SA 4.0)
+tables:
+  badges:
+    bird_file: badges.csv
+    columns:
+      id:
+        bird_name: Id
+        name: Id
+        description: the badge id
+        data_format: integer
+      userid:
+        bird_name: UserId
+        name: User Id
+        description: the unique id of the user
+        data_format: integer
+      name:
+        bird_name: Name
+        name: Name
+        description: the badge name the user obtained
+        data_format: text
+      date:
+        bird_name: Date
+        name: Date
+        description: the date that the user obtained the badge
+        data_format: datetime
+  comments:
+    bird_file: comments.csv
+    columns:
+      id:
+        bird_name: Id
+        name: Id
+        description: the comment Id
+        data_format: integer
+      postid:
+        bird_name: PostId
+        name: Post Id
+        description: the unique id of the post
+        data_format: integer
+      score:
+        bird_name: Score
+        name: Score
+        description: rating score
+        data_format: integer
+        value_description: |-
+          commonsense evidence:
+          The score is from 0 to 100. The score more than 60 refers that the comment is a positive comment. The score less than 60 refers that the comment is a negative comment.
+      text:
+        bird_name: Text
+        name: Text
+        description: the detailed content of the comment
+        data_format: text
+      creationdate:
+        bird_name: CreationDate
+        name: Creation Date
+        description: the creation date of the comment
+        data_format: datetime
+      userid:
+        bird_name: UserId
+        name: User Id
+        description: the id of the user who post the comment
+        data_format: integer
+      userdisplayname:
+        bird_name: UserDisplayName
+        name: User Display Name
+        description: user's display name
+        data_format: text
+  posthistory:
+    bird_file: postHistory.csv
+    columns:
+      id:
+        bird_name: Id
+        name: Id
+        description: the post history id
+        data_format: integer
+      posthistorytypeid:
+        bird_name: PostHistoryTypeId
+        name: Post History Type Id
+        description: the id of the post history type
+        data_format: integer
+      postid:
+        bird_name: PostId
+        name: Post Id
+        description: the unique id of the post
+        data_format: integer
+      revisionguid:
+        bird_name: RevisionGUID
+        name: Revision GUID
+        description: the revision globally unique id of the post
+        data_format: integer
+      creationdate:
+        bird_name: CreationDate
+        name: Creation Date
+        description: the creation date of the post
+        data_format: datetime
+      userid:
+        bird_name: UserId
+        name: User Id
+        description: the user who post the post
+        data_format: integer
+      text:
+        bird_name: Text
+        name: Text
+        description: the detailed content of the post
+        data_format: text
+      comment:
+        bird_name: Comment
+        name: Comment
+        description: comments of the post
+        data_format: text
+      userdisplayname:
+        bird_name: UserDisplayName
+        name: User Display Name
+        description: user's display name
+        data_format: text
+  postlinks:
+    bird_file: postLinks.csv
+    columns:
+      id:
+        bird_name: Id
+        name: Id
+        description: the post link id
+        data_format: integer
+      creationdate:
+        bird_name: CreationDate
+        name: Creation Date
+        description: the creation date of the post link
+        data_format: datetime
+      postid:
+        bird_name: PostId
+        name: Post Id
+        description: the post id
+        data_format: integer
+      relatedpostid:
+        bird_name: RelatedPostId
+        name: Related Post Id
+        description: the id of the related post
+        data_format: integer
+      linktypeid:
+        bird_name: LinkTypeId
+        name: Link Type Id
+        description: the id of the link type
+        data_format: integer
+  posts:
+    bird_file: posts.csv
+    columns:
+      id:
+        bird_name: Id
+        name: Id
+        description: the post id
+        data_format: integer
+      posttypeid:
+        bird_name: PostTypeId
+        name: Post Type Id
+        description: the id of the post type
+        data_format: integer
+      acceptedanswerid:
+        bird_name: AcceptedAnswerId
+        name: Accepted Answer Id
+        description: the accepted answer id of the post
+        data_format: integer
+      creaiondate:
+        bird_name: CreaionDate
+        name: Creation Date
+        description: the creation date of the post
+        data_format: datetime
+      score:
+        bird_name: Score
+        name: Score
+        description: the score of the post
+        data_format: integer
+      viewcount:
+        bird_name: ViewCount
+        name: View Count
+        description: the view count of the post
+        data_format: integer
+        value_description: |-
+          commonsense evidence:
+          Higher view count means the post has higher popularity
+      body:
+        bird_name: Body
+        name: Body
+        description: the body of the post
+        data_format: text
+      owneruserid:
+        bird_name: OwnerUserId
+        name: Owner User Id
+        description: the id of the owner user
+        data_format: integer
+      lasactivitydate:
+        bird_name: LasActivityDate
+        name: Last Activity Date
+        description: the last activity date
+        data_format: datetime
+      title:
+        bird_name: Title
+        name: Title
+        description: the title of the post
+        data_format: text
+      tags:
+        bird_name: Tags
+        name: Tags
+        description: the tag of the post
+        data_format: text
+      answercount:
+        bird_name: AnswerCount
+        name: Answer Count
+        description: the total number of answers of the post
+        data_format: integer
+      commentcount:
+        bird_name: CommentCount
+        name: Comment Count
+        description: the total number of comments of the post
+        data_format: integer
+      favoritecount:
+        bird_name: FavoriteCount
+        name: Favorite Count
+        description: the total number of favorites of the post
+        data_format: integer
+        value_description: |-
+          commonsense evidence:
+          more favorite count refers to more valuable posts.
+      lasteditoruserid:
+        bird_name: LastEditorUserId
+        name: Last Editor User Id
+        description: the id of the last editor
+        data_format: integer
+      lasteditdate:
+        bird_name: LastEditDate
+        name: Last Edit Date
+        description: the last edit date
+        data_format: datetime
+      communityowneddate:
+        bird_name: CommunityOwnedDate
+        name: Community Owned Date
+        description: the community owned date
+        data_format: datetime
+      parentid:
+        bird_name: ParentId
+        name: ParentId
+        description: the id of the parent post
+        data_format: integer
+        value_description: |-
+          commonsense evidence:
+          If the parent id is null, the post is the root post. Otherwise, the post is the child post of other post.
+      closeddate:
+        bird_name: ClosedDate
+        name: Closed Date
+        description: the closed date of the post
+        data_format: data_format
+        value_description: |-
+          commonsense evidence:
+          if ClosedDate is null or empty, it means this post is not well-finished
+          if CloseDate is not null or empty, it means this post has well-finished.
+      ownerdisplayname:
+        bird_name: OwnerDisplayName
+        name: Owner Display Name
+        description: the display name of the post owner
+        data_format: text
+      lasteditordisplayname:
+        bird_name: LastEditorDisplayName
+        name: Last Editor Display Name
+        description: the display name of the last editor
+        data_format: text
+  tags:
+    bird_file: tags.csv
+    columns:
+      id:
+        bird_name: Id
+        name: Id
+        description: the tag id
+        data_format: integer
+      tagname:
+        bird_name: TagName
+        name: Tag Name
+        description: the name of the tag
+        data_format: text
+      count:
+        bird_name: Count
+        name: Count
+        description: the count of posts that contain this tag
+        data_format: integer
+        value_description: more counts --> this tag is more popular
+      excerptpostid:
+        bird_name: ExcerptPostId
+        name: Excerpt Post Id
+        description: the excerpt post id of the tag
+        data_format: integer
+      wikipostid:
+        bird_name: WikiPostId
+        name: Wiki Post Id
+        description: the wiki post id of the tag
+        data_format: integer
+  users:
+    bird_file: users.csv
+    columns:
+      id:
+        bird_name: Id
+        name: Id
+        description: the user id
+        data_format: integer
+      reputation:
+        bird_name: Reputation
+        name: Reputation
+        description: the user's reputation
+        data_format: integer
+        value_description: |-
+          commonsense evidence:
+          The user with higher reputation has more influence.
+      creationdate:
+        bird_name: CreationDate
+        name: Creation Date
+        description: the creation date of the user account
+        data_format: datetime
+      displayname:
+        bird_name: DisplayName
+        name: Display Name
+        description: the user's display name
+        data_format: text
+      lastaccessdate:
+        bird_name: LastAccessDate
+        name: Last Access Date
+        description: the last access date of the user account
+        data_format: datetime
+      websiteurl:
+        bird_name: WebsiteUrl
+        name: Website Url
+        description: the website url of the user account
+        data_format: text
+      location:
+        bird_name: Location
+        name: Location
+        description: user's location
+        data_format: text
+      aboutme:
+        bird_name: AboutMe
+        name: About Me
+        description: the self introduction of the user
+        data_format: text
+      views:
+        bird_name: Views
+        name: Views
+        description: the number of views
+        data_format: integer
+      upvotes:
+        bird_name: UpVotes
+        name: UpVotes
+        description: the number of upvotes
+        data_format: integer
+      downvotes:
+        bird_name: DownVotes
+        name: DownVotes
+        description: the number of downvotes
+        data_format: integer
+      accountid:
+        bird_name: AccountId
+        name: Account Id
+        description: the unique id of the account
+        data_format: integer
+      age:
+        bird_name: Age
+        name: Age
+        description: user's age
+        data_format: integer
+        value_description: "\x95 teenager: 13-18\n\x95 adult: 19-65\n\x95 elder: > 65"
+      profileimageurl:
+        bird_name: ProfileImageUrl
+        name: Profile Image Url
+        description: the profile image url
+        data_format: text
+  votes:
+    bird_file: votes.csv
+    columns:
+      id:
+        bird_name: Id
+        name: Id
+        description: the vote id
+        data_format: integer
+      postid:
+        bird_name: PostId
+        name: Post Id
+        description: the id of the post that is voted
+        data_format: integer
+      votetypeid:
+        bird_name: VoteTypeId
+        name: Vote Type Id
+        description: the id of the vote type
+        data_format: integer
+      creationdate:
+        bird_name: CreationDate
+        name: Creation Date
+        description: the creation date of the vote
+        data_format: datetime
+      userid:
+        bird_name: UserId
+        name: User Id
+        description: the id of the voter
+        data_format: integer
+      bountyamount:
+        bird_name: BountyAmount
+        name: Bounty Amount
+        description: the amount of bounty
+        data_format: integer

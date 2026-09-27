@@ -1,0 +1,1036 @@
+{
+  "database": "european_football_2",
+  "profiled": false,
+  "tables": {
+    "country": {
+      "rows": 11,
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    },
+    "league": {
+      "rows": 11,
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "country_id",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    },
+    "match": {
+      "rows": 25979,
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "country_id",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "league_id",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "season",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "stage",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "date",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "match_api_id",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "home_team_api_id",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "away_team_api_id",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "home_team_goal",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "away_team_goal",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "home_player_x1",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "home_player_x2",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "home_player_x3",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "home_player_x4",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "home_player_x5",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "home_player_x6",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "home_player_x7",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "home_player_x8",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "home_player_x9",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "home_player_x10",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "home_player_x11",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "away_player_x1",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "away_player_x2",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "away_player_x3",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "away_player_x4",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "away_player_x5",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "away_player_x6",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "away_player_x7",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "away_player_x8",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "away_player_x9",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "away_player_x10",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "away_player_x11",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "home_player_y1",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "home_player_y2",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "home_player_y3",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "home_player_y4",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "home_player_y5",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "home_player_y6",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "home_player_y7",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "home_player_y8",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "home_player_y9",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "home_player_y10",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "home_player_y11",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "away_player_y1",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "away_player_y2",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "away_player_y3",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "away_player_y4",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "away_player_y5",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "away_player_y6",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "away_player_y7",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "away_player_y8",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "away_player_y9",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "away_player_y10",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "away_player_y11",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "home_player_1",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "home_player_2",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "home_player_3",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "home_player_4",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "home_player_5",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "home_player_6",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "home_player_7",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "home_player_8",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "home_player_9",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "home_player_10",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "home_player_11",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "away_player_1",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "away_player_2",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "away_player_3",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "away_player_4",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "away_player_5",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "away_player_6",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "away_player_7",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "away_player_8",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "away_player_9",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "away_player_10",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "away_player_11",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "goal",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "shoton",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "shotoff",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "foulcommit",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "card",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "cross",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "corner",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "possession",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "b365h",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "b365d",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "b365a",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "bwh",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "bwd",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "bwa",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "iwh",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "iwd",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "iwa",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "lbh",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "lbd",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "lba",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "psh",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "psd",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "psa",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "whh",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "whd",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "wha",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "sjh",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "sjd",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "sja",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "vch",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "vcd",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "vca",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "gbh",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "gbd",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "gba",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "bsh",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "bsd",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "bsa",
+          "type": "real",
+          "nullable": true
+        }
+      ]
+    },
+    "player": {
+      "rows": 11060,
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "player_api_id",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "player_name",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "player_fifa_api_id",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "birthday",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "height",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "weight",
+          "type": "bigint",
+          "nullable": true
+        }
+      ]
+    },
+    "player_attributes": {
+      "rows": 183978,
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "player_fifa_api_id",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "player_api_id",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "date",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "overall_rating",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "potential",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "preferred_foot",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "attacking_work_rate",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "defensive_work_rate",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "crossing",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "finishing",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "heading_accuracy",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "short_passing",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "volleys",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "dribbling",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "curve",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "free_kick_accuracy",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "long_passing",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "ball_control",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "acceleration",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "sprint_speed",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "agility",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "reactions",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "balance",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "shot_power",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "jumping",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "stamina",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "strength",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "long_shots",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "aggression",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "interceptions",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "positioning",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "vision",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "penalties",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "marking",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "standing_tackle",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "sliding_tackle",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "gk_diving",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "gk_handling",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "gk_kicking",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "gk_positioning",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "gk_reflexes",
+          "type": "bigint",
+          "nullable": true
+        }
+      ]
+    },
+    "team": {
+      "rows": 299,
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "team_api_id",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "team_fifa_api_id",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "team_long_name",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "team_short_name",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    },
+    "team_attributes": {
+      "rows": 1458,
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "team_fifa_api_id",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "team_api_id",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "date",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "buildupplayspeed",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "buildupplayspeedclass",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "buildupplaydribbling",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "buildupplaydribblingclass",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "buildupplaypassing",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "buildupplaypassingclass",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "buildupplaypositioningclass",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "chancecreationpassing",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "chancecreationpassingclass",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "chancecreationcrossing",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "chancecreationcrossingclass",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "chancecreationshooting",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "chancecreationshootingclass",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "chancecreationpositioningclass",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "defencepressure",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "defencepressureclass",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "defenceaggression",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "defenceaggressionclass",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "defenceteamwidth",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "defenceteamwidthclass",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "defencedefenderlineclass",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    }
+  }
+}

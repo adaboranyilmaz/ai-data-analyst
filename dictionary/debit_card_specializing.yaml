@@ -1,0 +1,133 @@
+# Data dictionary: the BIRD `debit_card_specializing` database, converted by scripts/14_convert_descriptions.py
+# from BIRD's database description files, without editing their text. Regenerate; do not
+# edit by hand. Derived from BIRD (Li et al., 2023), licensed CC BY-SA 4.0.
+database: debit_card_specializing
+origin: bird-description
+name: debit_card_specializing
+sources:
+- BIRD mini-dev database description files (CC BY-SA 4.0)
+tables:
+  customers:
+    bird_file: customers.csv
+    columns:
+      customerid:
+        bird_name: CustomerID
+        name: CustomerID
+        description: identification of the customer
+        data_format: integer
+      segment:
+        bird_name: Segment
+        name: client segment
+        description: client segment
+        data_format: text
+      currency:
+        bird_name: Currency
+        name: Currency
+        description: Currency
+        data_format: text
+  gasstations:
+    bird_file: gasstations.csv
+    columns:
+      gasstationid:
+        bird_name: GasStationID
+        name: Gas Station ID
+        description: Gas Station ID
+        data_format: integer
+      chainid:
+        bird_name: ChainID
+        name: Chain ID
+        description: Chain ID
+        data_format: integer
+      country:
+        bird_name: Country
+        name: Country
+        data_format: text
+        status: missing
+      segment:
+        bird_name: Segment
+        name: chain segment
+        description: chain segment
+        data_format: text
+  products:
+    bird_file: products.csv
+    columns:
+      productid:
+        bird_name: ProductID
+        name: Product ID
+        description: Product ID
+        data_format: integer
+      description:
+        bird_name: Description
+        name: Description
+        description: Description
+        data_format: text
+  transactions_1k:
+    bird_file: transactions_1k.csv
+    columns:
+      transactionid:
+        bird_name: TransactionID
+        name: Transaction ID
+        description: Transaction ID
+        data_format: integer
+      date:
+        bird_name: Date
+        name: Date
+        description: Date
+        data_format: date
+      time:
+        bird_name: Time
+        name: Time
+        description: Time
+        data_format: text
+      customerid:
+        bird_name: CustomerID
+        name: Customer ID
+        description: Customer ID
+        data_format: integer
+      cardid:
+        bird_name: CardID
+        name: Card ID
+        description: Card ID
+        data_format: integer
+      gasstationid:
+        bird_name: GasStationID
+        name: Gas Station ID
+        description: Gas Station ID
+        data_format: integer
+      productid:
+        bird_name: ProductID
+        name: Product ID
+        description: Product ID
+        data_format: integer
+      amount:
+        bird_name: Amount
+        name: Amount
+        description: Amount
+        data_format: integer
+      price:
+        bird_name: Price
+        name: Price
+        description: Price
+        data_format: real
+        value_description: |-
+          commonsense evidence:
+
+          total price = Amount x Price
+  yearmonth:
+    bird_file: yearmonth.csv
+    columns:
+      customerid:
+        bird_name: CustomerID
+        name: Customer ID
+        description: Customer ID
+        data_format: integer
+      date:
+        bird_name: Date
+        name: Date
+        description: Date
+        data_format: text
+      consumption:
+        bird_name: Consumption
+        name: Consumption
+        description: consumption
+        data_format: real

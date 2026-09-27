@@ -1,0 +1,401 @@
+{
+  "database": "codebase_community",
+  "profiled": false,
+  "tables": {
+    "badges": {
+      "rows": 79851,
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "userid",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "date",
+          "type": "timestamp with time zone",
+          "nullable": true
+        }
+      ]
+    },
+    "comments": {
+      "rows": 174285,
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "postid",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "score",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "text",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "creationdate",
+          "type": "timestamp with time zone",
+          "nullable": true
+        },
+        {
+          "name": "userid",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "userdisplayname",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    },
+    "posthistory": {
+      "rows": 303155,
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "posthistorytypeid",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "postid",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "revisionguid",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "creationdate",
+          "type": "timestamp with time zone",
+          "nullable": true
+        },
+        {
+          "name": "userid",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "text",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "comment",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "userdisplayname",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    },
+    "postlinks": {
+      "rows": 11102,
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "creationdate",
+          "type": "timestamp with time zone",
+          "nullable": true
+        },
+        {
+          "name": "postid",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "relatedpostid",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "linktypeid",
+          "type": "bigint",
+          "nullable": true
+        }
+      ]
+    },
+    "posts": {
+      "rows": 91966,
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "posttypeid",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "acceptedanswerid",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "creaiondate",
+          "type": "timestamp with time zone",
+          "nullable": true
+        },
+        {
+          "name": "score",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "viewcount",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "body",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "owneruserid",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "lasactivitydate",
+          "type": "timestamp with time zone",
+          "nullable": true
+        },
+        {
+          "name": "title",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "tags",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "answercount",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "commentcount",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "favoritecount",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "lasteditoruserid",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "lasteditdate",
+          "type": "timestamp with time zone",
+          "nullable": true
+        },
+        {
+          "name": "communityowneddate",
+          "type": "timestamp with time zone",
+          "nullable": true
+        },
+        {
+          "name": "parentid",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "closeddate",
+          "type": "timestamp with time zone",
+          "nullable": true
+        },
+        {
+          "name": "ownerdisplayname",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "lasteditordisplayname",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    },
+    "tags": {
+      "rows": 1032,
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "tagname",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "count",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "excerptpostid",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "wikipostid",
+          "type": "bigint",
+          "nullable": true
+        }
+      ]
+    },
+    "users": {
+      "rows": 40325,
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "reputation",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "creationdate",
+          "type": "timestamp with time zone",
+          "nullable": true
+        },
+        {
+          "name": "displayname",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "lastaccessdate",
+          "type": "timestamp with time zone",
+          "nullable": true
+        },
+        {
+          "name": "websiteurl",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "location",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "aboutme",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "views",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "upvotes",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "downvotes",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "accountid",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "age",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "profileimageurl",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    },
+    "votes": {
+      "rows": 38930,
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "postid",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "votetypeid",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "creationdate",
+          "type": "date",
+          "nullable": true
+        },
+        {
+          "name": "userid",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "bountyamount",
+          "type": "bigint",
+          "nullable": true
+        }
+      ]
+    }
+  }
+}
