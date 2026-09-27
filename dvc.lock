@@ -1,0 +1,229 @@
+schema: '2.0'
+stages:
+  fetch:
+    cmd: uv run python scripts/10_fetch_bird.py
+    deps:
+    - path: configs/datasets.yaml
+      hash: md5
+      md5: 0ecac68240a2586b740e3051bc152061
+      size: 2549
+    - path: data/minidev.zip
+      hash: md5
+      md5: 7beb6dab11e65f0fde563e644a1ea319
+      size: 800943648
+    - path: scripts/10_fetch_bird.py
+      hash: md5
+      md5: 260704a1c2c6f96278e97e50428721df
+      size: 6394
+    - path: src/data/bird.py
+      hash: md5
+      md5: 45e1b5dc7e07059e01bf1a1b9f695183
+      size: 2382
+    outs:
+    - path: data/raw/bird_minidev
+      hash: md5
+      md5: de9ac463b8487b2d6c1b587646cc0ccc.dir
+      size: 518739
+      nfiles: 77
+    - path: results/metrics/bird_sources.json
+      hash: md5
+      md5: 0f5588e14ad20d9bb61e533ad573afc1
+      size: 2169
+  database:
+    cmd:
+    - uv run python scripts/11_load_bird.py load
+    - uv run python scripts/12_run_gold.py --layout public
+    - uv run python scripts/11_load_bird.py split
+    - uv run python scripts/12_run_gold.py --layout schemas
+    deps:
+    - path: configs/datasets.yaml
+      hash: md5
+      md5: 0ecac68240a2586b740e3051bc152061
+      size: 2549
+    - path: configs/gold_exclusions.yaml
+      hash: md5
+      md5: 633b7303c5a1109d03ae853839124eef
+      size: 499
+    - path: data/minidev.zip
+      hash: md5
+      md5: 7beb6dab11e65f0fde563e644a1ea319
+      size: 800943648
+    - path: data/raw/bird_minidev
+      hash: md5
+      md5: de9ac463b8487b2d6c1b587646cc0ccc.dir
+      size: 518739
+      nfiles: 77
+    - path: docker/postgres/init/01_roles.sh
+      hash: md5
+      md5: 08a65a404d80603490edbffda891fa8a
+      size: 2128
+    - path: scripts/11_load_bird.py
+      hash: md5
+      md5: f744e0e65778a19b6ea9241bc328ec5c
+      size: 8272
+    - path: scripts/12_run_gold.py
+      hash: md5
+      md5: 8141eaf3dd6f20aa9ca55fea1f504324
+      size: 10444
+    - path: src/data/bird.py
+      hash: md5
+      md5: 45e1b5dc7e07059e01bf1a1b9f695183
+      size: 2382
+    - path: src/db/connection.py
+      hash: md5
+      md5: 499bb640b62d76a6a8f7ae285be2b93e
+      size: 1392
+    - path: src/db/values.py
+      hash: md5
+      md5: 89b4c48e9a002dd8fb24dcd84d56f716
+      size: 3787
+    outs:
+    - path: data/gold
+      hash: md5
+      md5: b616b08c1cac7dad44768528a771bfc8.dir
+      size: 1001709
+      nfiles: 2
+    - path: results/metrics/bird_load.json
+      hash: md5
+      md5: e4001759d5aeef9f376391ebbedc8d86
+      size: 5177
+    - path: results/metrics/gold_execution.json
+      hash: md5
+      md5: ca9a9015f9409e01f233e775dee4f4d6
+      size: 243001
+    - path: results/metrics/gold_execution_public.json
+      hash: md5
+      md5: 22ab000f104d643131803f37964a6d5b
+      size: 242852
+  snapshot:
+    cmd: uv run python scripts/13_snapshot_schema.py
+    deps:
+    - path: results/metrics/bird_load.json
+      hash: md5
+      md5: e4001759d5aeef9f376391ebbedc8d86
+      size: 5177
+    - path: scripts/13_snapshot_schema.py
+      hash: md5
+      md5: 12c1f5ec375d4c8a0a7d81792dcf7005
+      size: 1654
+    - path: src/dictionary/snapshot.py
+      hash: md5
+      md5: dcd0ce18396ab6b29c4488c9a674ba42
+      size: 3050
+    outs:
+    - path: dictionary/_snapshot
+      hash: md5
+      md5: a2c192d069096e8fe8c0b10683c66e52.dir
+      size: 98885
+      nfiles: 11
+  dictionaries:
+    cmd: uv run python scripts/14_convert_descriptions.py
+    deps:
+    - path: data/raw/bird_minidev
+      hash: md5
+      md5: de9ac463b8487b2d6c1b587646cc0ccc.dir
+      size: 518739
+      nfiles: 77
+    - path: dictionary/_snapshot
+      hash: md5
+      md5: a2c192d069096e8fe8c0b10683c66e52.dir
+      size: 98885
+      nfiles: 11
+    - path: scripts/14_convert_descriptions.py
+      hash: md5
+      md5: 8bd0bd7a2e14ba55e6be5abbb44937f7
+      size: 5067
+    - path: src/dictionary/model.py
+      hash: md5
+      md5: 565dc265f7588bb7652f2a1be02a29ff
+      size: 6975
+    outs:
+    - path: dictionary/california_schools.yaml
+      hash: md5
+      md5: ffa2946c3b98b10a12e1970f2b7a86ae
+      size: 27691
+    - path: dictionary/card_games.yaml
+      hash: md5
+      md5: 947fa59737b936acb03214195217e85c
+      size: 25682
+    - path: dictionary/codebase_community.yaml
+      hash: md5
+      md5: e31335b6ef29ce24604598be687b82d9
+      size: 12382
+    - path: dictionary/debit_card_specializing.yaml
+      hash: md5
+      md5: 09871076a3979c29efc7d66ab3fe9fde
+      size: 3527
+    - path: dictionary/european_football_2.yaml
+      hash: md5
+      md5: ee2876230affc825dceaa8eb494faf82
+      size: 32489
+    - path: dictionary/formula_1.yaml
+      hash: md5
+      md5: 8599cc07f2465995bae5b9e63f180df0
+      size: 17498
+    - path: dictionary/student_club.yaml
+      hash: md5
+      md5: 65d4c83dd65e5413668cb5fc3de669e0
+      size: 10695
+    - path: dictionary/superhero.yaml
+      hash: md5
+      md5: f54c530e871514398f17724a46b3604a
+      size: 8582
+    - path: dictionary/thrombosis_prediction.yaml
+      hash: md5
+      md5: 77cc2d97548fb27e2f6ec9b869eab496
+      size: 13547
+    - path: dictionary/toxicology.yaml
+      hash: md5
+      md5: 5b9b714c3e2ed809323d593645036be0
+      size: 3054
+  data_stats:
+    cmd: uv run python scripts/15_data_stats.py
+    deps:
+    - path: dictionary
+      hash: md5
+      md5: 445b94a8f0ac3f1ccc6ea485179f3009.dir
+      size: 276944
+      nfiles: 24
+    - path: results/metrics/bird_load.json
+      hash: md5
+      md5: e4001759d5aeef9f376391ebbedc8d86
+      size: 5177
+    - path: results/metrics/bird_sources.json
+      hash: md5
+      md5: 0f5588e14ad20d9bb61e533ad573afc1
+      size: 2169
+    - path: results/metrics/gold_execution.json
+      hash: md5
+      md5: ca9a9015f9409e01f233e775dee4f4d6
+      size: 243001
+    - path: scripts/15_data_stats.py
+      hash: md5
+      md5: f2189a603dc8de2b9d527c6077e34661
+      size: 6037
+    - path: src/dictionary/model.py
+      hash: md5
+      md5: 565dc265f7588bb7652f2a1be02a29ff
+      size: 6975
+    outs:
+    - path: results/metrics/data_stats.json
+      hash: md5
+      md5: 3357075ba3d75bf3699c3d1e8cbf7c5e
+      size: 5261
+  download:
+    cmd: uv run python scripts/10_fetch_bird.py --download-only
+    params:
+      configs/datasets.yaml:
+        bird_minidev.package:
+          url: https://bird-bench.oss-cn-beijing.aliyuncs.com/minidev.zip
+          path: data/minidev.zip
+          size_bytes: 800943648
+          sha256: 
+            cc48ba16838204e4e214512030cb572eeb5f7bcdd999bae4b9b6ff12ec13b92f
+          md5: 7beb6dab11e65f0fde563e644a1ea319
+    outs:
+    - path: data/minidev.zip
+      hash: md5
+      md5: 7beb6dab11e65f0fde563e644a1ea319
+      size: 800943648

@@ -1,0 +1,109 @@
+# The data pipeline: fetch the pinned benchmark files, load the database and execute the gold
+# SQL, snapshot the schemas, convert BIRD's descriptions into dictionaries, and summarise.
+# `dvc repro` rebuilds it from data/minidev.zip (`dvc pull`) with the compose PostgreSQL up.
+# Results files are committed to git (cache: false); data outputs go to the DVC cache.
+stages:
+  # The BIRD package, pinned by URL and hash. A stage rather than a .dvc file under data/:
+  # DVC does not look for .dvc files inside a directory that .gitignore covers with `data/*`.
+  # persist: an existing package that still matches its hash is kept, not downloaded again.
+  download:
+    cmd: uv run python scripts/10_fetch_bird.py --download-only
+    params:
+      - configs/datasets.yaml:
+          - bird_minidev.package
+    outs:
+      - data/minidev.zip:
+          persist: true
+
+  fetch:
+    cmd: uv run python scripts/10_fetch_bird.py
+    deps:
+      - scripts/10_fetch_bird.py
+      - src/data/bird.py
+      - configs/datasets.yaml
+      - data/minidev.zip
+    outs:
+      - data/raw/bird_minidev
+      - results/metrics/bird_sources.json:
+          cache: false
+
+  # One stage, because the database is state outside DVC: the gold SQL runs once on the
+  # dump's own layout and again after the tables move into per-database schemas, and the
+  # second run is compared with the first.
+  database:
+    cmd:
+      - uv run python scripts/11_load_bird.py load
+      - uv run python scripts/12_run_gold.py --layout public
+      - uv run python scripts/11_load_bird.py split
+      - uv run python scripts/12_run_gold.py --layout schemas
+    deps:
+      - scripts/11_load_bird.py
+      - scripts/12_run_gold.py
+      - src/data/bird.py
+      - src/db/connection.py
+      - src/db/values.py
+      - configs/datasets.yaml
+      - configs/gold_exclusions.yaml
+      - docker/postgres/init/01_roles.sh
+      - data/minidev.zip
+      - data/raw/bird_minidev
+    outs:
+      - data/gold
+      - results/metrics/bird_load.json:
+          cache: false
+      - results/metrics/gold_execution_public.json:
+          cache: false
+      - results/metrics/gold_execution.json:
+          cache: false
+
+  snapshot:
+    cmd: uv run python scripts/13_snapshot_schema.py
+    deps:
+      - scripts/13_snapshot_schema.py
+      - src/dictionary/snapshot.py
+      - results/metrics/bird_load.json
+    outs:
+      - dictionary/_snapshot:
+          cache: false
+
+  dictionaries:
+    cmd: uv run python scripts/14_convert_descriptions.py
+    deps:
+      - scripts/14_convert_descriptions.py
+      - src/dictionary/model.py
+      - data/raw/bird_minidev
+      - dictionary/_snapshot
+    outs:
+      - dictionary/california_schools.yaml:
+          cache: false
+      - dictionary/card_games.yaml:
+          cache: false
+      - dictionary/codebase_community.yaml:
+          cache: false
+      - dictionary/debit_card_specializing.yaml:
+          cache: false
+      - dictionary/european_football_2.yaml:
+          cache: false
+      - dictionary/formula_1.yaml:
+          cache: false
+      - dictionary/student_club.yaml:
+          cache: false
+      - dictionary/superhero.yaml:
+          cache: false
+      - dictionary/thrombosis_prediction.yaml:
+          cache: false
+      - dictionary/toxicology.yaml:
+          cache: false
+
+  data_stats:
+    cmd: uv run python scripts/15_data_stats.py
+    deps:
+      - scripts/15_data_stats.py
+      - src/dictionary/model.py
+      - dictionary
+      - results/metrics/bird_sources.json
+      - results/metrics/bird_load.json
+      - results/metrics/gold_execution.json
+    outs:
+      - results/metrics/data_stats.json:
+          cache: false

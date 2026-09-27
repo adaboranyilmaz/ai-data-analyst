@@ -1,5 +1,7 @@
 [core]
     remote = localstore
     analytics = false
+[cache]
+    type = hardlink
 ['remote "localstore"']
     url = C:/ai-data-analyst-dvcstore

@@ -1,0 +1,541 @@
+{
+  "database": "formula_1",
+  "profiled": false,
+  "tables": {
+    "circuits": {
+      "rows": 72,
+      "columns": [
+        {
+          "name": "circuitid",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "circuitref",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "location",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "country",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "lat",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "lng",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "alt",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "url",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    },
+    "constructorresults": {
+      "rows": 11082,
+      "columns": [
+        {
+          "name": "constructorresultsid",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "raceid",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "constructorid",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "points",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    },
+    "constructors": {
+      "rows": 208,
+      "columns": [
+        {
+          "name": "constructorid",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "constructorref",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "nationality",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "url",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    },
+    "constructorstandings": {
+      "rows": 11836,
+      "columns": [
+        {
+          "name": "constructorstandingsid",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "raceid",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "constructorid",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "points",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "position",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "positiontext",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "wins",
+          "type": "bigint",
+          "nullable": true
+        }
+      ]
+    },
+    "drivers": {
+      "rows": 840,
+      "columns": [
+        {
+          "name": "driverid",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "driverref",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "number",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "code",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "forename",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "surname",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "dob",
+          "type": "date",
+          "nullable": true
+        },
+        {
+          "name": "nationality",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "url",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    },
+    "driverstandings": {
+      "rows": 31578,
+      "columns": [
+        {
+          "name": "driverstandingsid",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "raceid",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "driverid",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "points",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "position",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "positiontext",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "wins",
+          "type": "bigint",
+          "nullable": true
+        }
+      ]
+    },
+    "laptimes": {
+      "rows": 400524,
+      "columns": [
+        {
+          "name": "raceid",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "driverid",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "lap",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "position",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "time",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "milliseconds",
+          "type": "bigint",
+          "nullable": true
+        }
+      ]
+    },
+    "pitstops": {
+      "rows": 5815,
+      "columns": [
+        {
+          "name": "raceid",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "driverid",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "stop",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "lap",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "time",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "duration",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "milliseconds",
+          "type": "bigint",
+          "nullable": true
+        }
+      ]
+    },
+    "qualifying": {
+      "rows": 6967,
+      "columns": [
+        {
+          "name": "qualifyid",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "raceid",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "driverid",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "constructorid",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "number",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "position",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "q1",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "q2",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "q3",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    },
+    "races": {
+      "rows": 954,
+      "columns": [
+        {
+          "name": "raceid",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "year",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "round",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "circuitid",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "name",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "date",
+          "type": "date",
+          "nullable": true
+        },
+        {
+          "name": "time",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "url",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    },
+    "results": {
+      "rows": 23179,
+      "columns": [
+        {
+          "name": "resultid",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "raceid",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "driverid",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "constructorid",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "number",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "grid",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "position",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "positiontext",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "positionorder",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "points",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "laps",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "time",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "milliseconds",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "fastestlap",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "rank",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "fastestlaptime",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "fastestlapspeed",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "statusid",
+          "type": "bigint",
+          "nullable": true
+        }
+      ]
+    },
+    "seasons": {
+      "rows": 68,
+      "columns": [
+        {
+          "name": "year",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "url",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    },
+    "status": {
+      "rows": 134,
+      "columns": [
+        {
+          "name": "statusid",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "status",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    }
+  }
+}

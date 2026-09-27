@@ -1,0 +1,81 @@
+{
+  "database": "toxicology",
+  "profiled": false,
+  "tables": {
+    "atom": {
+      "rows": 9111,
+      "columns": [
+        {
+          "name": "atom_id",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "molecule_id",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "element",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    },
+    "bond": {
+      "rows": 9156,
+      "columns": [
+        {
+          "name": "bond_id",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "molecule_id",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "bond_type",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    },
+    "connected": {
+      "rows": 18312,
+      "columns": [
+        {
+          "name": "atom_id",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "atom_id2",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "bond_id",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    },
+    "molecule": {
+      "rows": 343,
+      "columns": [
+        {
+          "name": "molecule_id",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "label",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    }
+  }
+}

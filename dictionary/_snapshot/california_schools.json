@@ -1,0 +1,466 @@
+{
+  "database": "california_schools",
+  "profiled": false,
+  "tables": {
+    "frpm": {
+      "rows": 9986,
+      "columns": [
+        {
+          "name": "cdscode",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "Academic Year",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "County Code",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "District Code",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "School Code",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "County Name",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "District Name",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "School Name",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "District Type",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "School Type",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "Educational Option Type",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "NSLP Provision Status",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "Charter School (Y/N)",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "Charter School Number",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "Charter Funding Type",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "irc",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "Low Grade",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "High Grade",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "Enrollment (K-12)",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "Free Meal Count (K-12)",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "Percent (%) Eligible Free (K-12)",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "FRPM Count (K-12)",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "Percent (%) Eligible FRPM (K-12)",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "Enrollment (Ages 5-17)",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "Free Meal Count (Ages 5-17)",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "Percent (%) Eligible Free (Ages 5-17)",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "FRPM Count (Ages 5-17)",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "Percent (%) Eligible FRPM (Ages 5-17)",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "2013-14 CALPADS Fall 1 Certification Status",
+          "type": "bigint",
+          "nullable": true
+        }
+      ]
+    },
+    "satscores": {
+      "rows": 2269,
+      "columns": [
+        {
+          "name": "cds",
+          "type": "text",
+          "nullable": false
+        },
+        {
+          "name": "rtype",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "sname",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "dname",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "cname",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "enroll12",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "numtsttakr",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "avgscrread",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "avgscrmath",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "avgscrwrite",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "numge1500",
+          "type": "bigint",
+          "nullable": true
+        }
+      ]
+    },
+    "schools": {
+      "rows": 17686,
+      "columns": [
+        {
+          "name": "cdscode",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "ncesdist",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "ncesschool",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "statustype",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "county",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "district",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "school",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "street",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "streetabr",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "city",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "zip",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "state",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "mailstreet",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "mailstrabr",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "mailcity",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "mailzip",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "mailstate",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "phone",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "ext",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "website",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "opendate",
+          "type": "date",
+          "nullable": true
+        },
+        {
+          "name": "closeddate",
+          "type": "date",
+          "nullable": true
+        },
+        {
+          "name": "charter",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "charternum",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "fundingtype",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "doc",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "doctype",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "soc",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "soctype",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "edopscode",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "edopsname",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "eilcode",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "eilname",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "gsoffered",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "gsserved",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "virtual",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "magnet",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "latitude",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "longitude",
+          "type": "real",
+          "nullable": true
+        },
+        {
+          "name": "admfname1",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "admlname1",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "admemail1",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "admfname2",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "admlname2",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "admemail2",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "admfname3",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "admlname3",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "admemail3",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "lastupdate",
+          "type": "date",
+          "nullable": true
+        }
+      ]
+    }
+  }
+}

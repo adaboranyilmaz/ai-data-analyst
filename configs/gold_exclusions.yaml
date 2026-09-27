@@ -1,0 +1,10 @@
+# Benchmark questions left out of every evaluation, each with the reason and the date it was
+# approved. Gold SQL is never edited: a gold query that fails for a reason in this project's
+# environment (a timeout, a resource limit, a missing grant) is fixed in the environment; one
+# that fails for any other reason is listed here. Excluded questions are still executed and
+# recorded by scripts/12_run_gold.py.
+#
+#   - question_id: 123
+#     reason: "..."
+#     approved: "YYYY-MM-DD"
+exclusions: []

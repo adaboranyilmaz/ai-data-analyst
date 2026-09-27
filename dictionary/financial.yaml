@@ -1,0 +1,494 @@
+# Data dictionary: the Czech bank database ("financial", PKDD'99), as loaded from BIRD.
+# Hand-written from the data set's published guide (Berka 1999), BIRD's column descriptions
+# and a profile of the loaded data (dictionary/_snapshot/financial.json). It describes
+# columns, codes and quirks; it contains no benchmark questions or answers.
+# Format: dictionary/README.md.
+
+database: financial
+origin: hand-written
+name: Czech bank (PKDD'99 financial data set)
+description: >-
+  Real, anonymised data from a Czech bank covering 1993-1998: accounts, their owners and
+  authorised users, transactions, standing orders, loans and cards, plus demographic data on
+  the 77 districts where clients live and branches are located. Accounts were opened between
+  1993-01-01 and 1997-12-29; the transaction history runs to 1998-12-31. Codes are Czech
+  banking terms; money is in Czech koruna.
+sources:
+  - Berka, P. (1999). Guide to the Financial Data Set. PKDD'99 Discovery Challenge.
+  - BIRD mini-dev database description files for `financial` (CC BY-SA 4.0).
+  - Profile of the loaded data (dictionary/_snapshot/financial.json).
+glossary:
+  PRIJEM: "příjem: income, money in"
+  VYDAJ: "výdaj: expenditure, money out"
+  VYBER: "výběr: withdrawal"
+  VKLAD: "vklad: deposit"
+  PREVOD: "převod: transfer"
+  UCET / UCTU: "účet: account"
+  KARTOU: "kartou: by card"
+  POPLATEK: "poplatek: fee, here the statement charge that defines statement frequency"
+  UROK: "úrok: interest"
+  UVER: "úvěr: loan"
+quirks:
+  - >-
+    Money columns are Czech koruna (CZK). BIRD's description files label several of them
+    "USD"; that label is wrong: the source is a Czech bank, and the magnitudes (e.g. district
+    average salaries of 8,110-12,541) are koruna.
+  - >-
+    In the original data, dates were YYMMDD numbers and a client's sex and birth date were
+    packed into one `birth_number`. BIRD decoded both: dates are DATE columns, and `client`
+    has `gender` and `birth_date` instead of `birth_number`
+    (src/dictionary/birth_number.py implements the original rule).
+  - Table `order` has a reserved SQL word as its name and must be quoted ("order").
+
+tables:
+  account:
+    name: Accounts
+    description: One bank account, with the branch that holds it and how often it gets statements.
+    grain: one row per account
+    primary_key: [account_id]
+    joins:
+      - {to: district, on: account.district_id = district.district_id, cardinality: many-to-one, meaning: the branch's district}
+      - {to: disp, on: account.account_id = disp.account_id, cardinality: one-to-many, meaning: the people who may use the account (one owner, at most one other user)}
+      - {to: trans, on: account.account_id = trans.account_id, cardinality: one-to-many, meaning: the account's transactions}
+      - {to: order, on: account.account_id = "order".account_id, cardinality: one-to-many, meaning: the account's standing orders}
+      - {to: loan, on: account.account_id = loan.account_id, cardinality: one-to-zero-or-one, meaning: the account's loan, if any (at most one per account)}
+    columns:
+      account_id:
+        name: Account ID
+        kind: identifier
+        description: Identifies the account. Not consecutive (1-11382 for 4,500 accounts).
+      district_id:
+        name: Branch district
+        kind: identifier
+        references: district.district_id
+        description: >-
+          District of the branch that holds the account. Not necessarily the district the
+          client lives in (that is client.district_id).
+      frequency:
+        name: Statement frequency
+        kind: code
+        description: How often statements are issued for the account.
+        codes:
+          POPLATEK MESICNE: monthly statements
+          POPLATEK TYDNE: weekly statements
+          POPLATEK PO OBRATU: a statement after every transaction
+      date:
+        name: Opening date
+        kind: date
+        description: Date the account was opened (1993-01-01 to 1997-12-29).
+        encoding: YYMMDD number in the original data; a DATE here.
+
+  client:
+    name: Clients
+    description: A person who owns or may use one or more accounts.
+    grain: one row per client
+    primary_key: [client_id]
+    joins:
+      - {to: district, on: client.district_id = district.district_id, cardinality: many-to-one, meaning: the district the client lives in}
+      - {to: disp, on: client.client_id = disp.client_id, cardinality: one-to-one, meaning: the client's disposition (in this data every client has exactly one)}
+    columns:
+      client_id:
+        name: Client ID
+        kind: identifier
+        description: Identifies the client. Not consecutive (1-13998 for 5,369 clients).
+      gender:
+        name: Sex
+        kind: code
+        description: The client's sex, as decoded from the original birth number.
+        codes:
+          F: female
+          M: male
+        encoding: >-
+          Decoded by BIRD from the original birth_number, whose month is increased by 50 for
+          women (YYMM+50DD); see the database-level quirks.
+      birth_date:
+        name: Date of birth
+        kind: date
+        description: The client's date of birth (1911-08-20 to 1987-09-27).
+        encoding: Decoded by BIRD from the original birth_number (YYMMDD for men, YYMM+50DD for women).
+        quirks:
+          - The data has no reference date for ages; the history ends 1998-12-31.
+      district_id:
+        name: Home district
+        kind: identifier
+        references: district.district_id
+        description: >-
+          District where the client lives. BIRD's description calls it "location of branch";
+          per the data set's guide it is the client's address.
+
+  disp:
+    name: Dispositions (who may use which account)
+    description: >-
+      Links a client to an account and states their right on it: the owner, or a user the
+      owner has authorised (Czech "disponent"). Only the owner can set up standing orders and
+      apply for a loan.
+    grain: one row per client-account pair
+    primary_key: [disp_id]
+    joins:
+      - {to: client, on: disp.client_id = client.client_id, cardinality: many-to-one, meaning: the person}
+      - {to: account, on: disp.account_id = account.account_id, cardinality: many-to-one, meaning: the account}
+      - {to: card, on: disp.disp_id = card.disp_id, cardinality: one-to-zero-or-one, meaning: the card issued on this disposition, if any}
+    columns:
+      disp_id:
+        name: Disposition ID
+        kind: identifier
+        description: Identifies the client-account link.
+      client_id:
+        name: Client
+        kind: identifier
+        references: client.client_id
+        description: The client. Each client appears in exactly one disposition in this data.
+      account_id:
+        name: Account
+        kind: identifier
+        references: account.account_id
+        description: >-
+          The account. Every account has exactly one OWNER; 869 accounts also have one
+          DISPONENT.
+      type:
+        name: Right on the account
+        kind: code
+        description: Whether the client owns the account or is authorised to use it.
+        codes:
+          OWNER: owner of the account
+          DISPONENT: authorised user (not the owner)
+        quirks:
+          - BIRD's description also lists "USER"; the data has no such value.
+
+  order:
+    name: Standing orders
+    description: A permanent payment order set up on an account (a recurring debit).
+    grain: one row per standing order
+    primary_key: [order_id]
+    joins:
+      - {to: account, on: '"order".account_id = account.account_id', cardinality: many-to-one, meaning: the paying account}
+    columns:
+      order_id:
+        name: Order ID
+        kind: identifier
+        description: Identifies the standing order.
+      account_id:
+        name: Paying account
+        kind: identifier
+        references: account.account_id
+        description: The account the order debits.
+      bank_to:
+        name: Recipient's bank
+        kind: label
+        description: >-
+          Two-letter code of the recipient's bank (13 codes, AB to YZ). The codes are
+          anonymised: no bank names are published for them.
+      account_to:
+        name: Recipient's account
+        kind: identifier
+        description: >-
+          The recipient's account number at their bank; not a key into this database's
+          account table.
+      amount:
+        name: Order amount
+        kind: quantity
+        unit: CZK
+        description: Amount debited each time the order is paid.
+      k_symbol:
+        name: Payment purpose
+        kind: code
+        description: What the standing order pays for.
+        codes:
+          POJISTNE: insurance premium
+          SIPO: household payment (SIPO, the Czech consolidated payment for rent, utilities and similar)
+          LEASING: leasing payment
+          UVER: loan repayment
+          "": no purpose recorded (an empty string, not NULL)
+        quirks:
+          - >-
+            35 of the 717 UVER (loan repayment) orders are on accounts that have no loan in
+            this database.
+
+  trans:
+    name: Transactions
+    description: One transaction on an account, credit or debit, with the balance after it.
+    grain: one row per transaction
+    primary_key: [trans_id]
+    joins:
+      - {to: account, on: trans.account_id = account.account_id, cardinality: many-to-one, meaning: the account}
+    columns:
+      trans_id:
+        name: Transaction ID
+        kind: identifier
+        description: Identifies the transaction.
+      account_id:
+        name: Account
+        kind: identifier
+        references: account.account_id
+        description: The account the transaction is on.
+      date:
+        name: Transaction date
+        kind: date
+        description: Date of the transaction (1993-01-01 to 1998-12-31).
+        encoding: YYMMDD number in the original data; a DATE here.
+      type:
+        name: Direction
+        kind: code
+        description: Whether money came into the account or went out.
+        codes:
+          PRIJEM: credit (money in)
+          VYDAJ: debit (money out)
+          VYBER: >-
+            debit: a withdrawal (every such row has operation VYBER and no purpose). Not in
+            the published code list, which names only PRIJEM and VYDAJ.
+        quirks:
+          - >-
+            Amounts are never negative: the direction is in this column, so money out is
+            VYDAJ or VYBER, and a net flow needs a sign derived from it.
+      operation:
+        name: Mode
+        kind: code
+        description: How the transaction was made.
+        codes:
+          VKLAD: cash deposit
+          PREVOD Z UCTU: incoming transfer from another bank (collection)
+          VYBER: withdrawal (in cash, per the data set's guide; see quirks)
+          PREVOD NA UCET: outgoing transfer to another bank (remittance)
+          VYBER KARTOU: card withdrawal
+        null_meaning: >-
+          No mode recorded. Missing exactly for the interest credits: every row with k_symbol
+          UROK has no operation, and no other row lacks one.
+        quirks:
+          - >-
+            VYBER is not only cash: the bank's own charges are recorded with it too. Every
+            statement fee (k_symbol SLUZBY) and every penalty interest charge (SANKC. UROK) has
+            operation VYBER, as do some SIPO and insurance debits. Cash withdrawals are the
+            VYBER rows with no purpose (k_symbol NULL or a single space).
+      amount:
+        name: Amount
+        kind: quantity
+        unit: CZK
+        description: Amount of the transaction, always zero or positive (the direction is in `type`).
+      balance:
+        name: Balance after
+        kind: quantity
+        unit: CZK
+        description: Account balance after the transaction; can be negative (overdrawn).
+      k_symbol:
+        name: Transaction purpose
+        kind: code
+        description: What the transaction was for, when recorded.
+        codes:
+          POJISTNE: insurance premium
+          SLUZBY: statement fee (payment for services)
+          UROK: interest credited
+          SANKC. UROK: >-
+            penalty interest for a negative balance (the balance right after the charge is
+            negative in 739 of the 1,577 rows)
+          SIPO: household payment (SIPO)
+          DUCHOD: old-age pension credited
+          UVER: loan repayment
+          " ": no purpose recorded (a single space, distinct from NULL)
+        null_meaning: No purpose recorded (NULL; the data also uses a single space for this).
+      bank:
+        name: Partner's bank
+        kind: label
+        description: >-
+          Two-letter code of the other party's bank for transfers (anonymised, as in
+          order.bank_to; the same 13 codes).
+        null_meaning: >-
+          No partner bank. NULL for every transaction that is not a transfer (deposits,
+          withdrawals, card withdrawals, interest and fees) and for one outgoing transfer.
+      account:
+        name: Partner's account
+        kind: identifier
+        description: >-
+          The other party's account number at their bank; not a key into this database's
+          account table.
+        null_meaning: No partner account.
+        quirks:
+          - 21,881 rows have partner account 0 and no partner bank.
+
+  loan:
+    name: Loans
+    description: A loan granted on an account (at most one per account), with how it is being repaid.
+    grain: one row per loan
+    primary_key: [loan_id]
+    joins:
+      - {to: account, on: loan.account_id = account.account_id, cardinality: one-to-one, meaning: the account the loan was granted on}
+    columns:
+      loan_id:
+        name: Loan ID
+        kind: identifier
+        description: Identifies the loan.
+      account_id:
+        name: Account
+        kind: identifier
+        references: account.account_id
+        description: The account the loan was granted on.
+      date:
+        name: Grant date
+        kind: date
+        description: Date the loan was granted (1993-07-05 to 1998-12-08).
+        encoding: YYMMDD number in the original data; a DATE here.
+      amount:
+        name: Loan amount
+        kind: quantity
+        unit: CZK
+        description: >-
+          Amount granted. Equals duration x payments for every loan: the monthly instalments
+          add up exactly to this amount. The data shows no interest separately.
+      duration:
+        name: Duration
+        kind: quantity
+        unit: months
+        description: Length of the loan (12, 24, 36, 48 or 60 months).
+      payments:
+        name: Monthly instalment
+        kind: quantity
+        unit: CZK per month
+        description: The monthly repayment.
+        quirks:
+          - BIRD's description gives its unit as "month"; it is an amount of money per month.
+      status:
+        name: Repayment status
+        kind: code
+        description: Whether the loan contract has finished and whether it has been repaid as agreed.
+        codes:
+          A: contract finished, no problems
+          B: contract finished, loan not paid
+          C: contract running, OK so far
+          D: contract running, client in debt
+
+  card:
+    name: Cards
+    description: A payment card issued on a disposition (to an account's owner or user).
+    grain: one row per card
+    primary_key: [card_id]
+    joins:
+      - {to: disp, on: card.disp_id = disp.disp_id, cardinality: one-to-one, meaning: the disposition (and through it the client and account) the card was issued on}
+    columns:
+      card_id:
+        name: Card ID
+        kind: identifier
+        description: Identifies the card.
+      disp_id:
+        name: Disposition
+        kind: identifier
+        references: disp.disp_id
+        description: >-
+          The disposition the card was issued on. In this data every card is on an OWNER
+          disposition, and no disposition has more than one card.
+      type:
+        name: Card class
+        kind: code
+        description: The card's class.
+        codes:
+          junior: junior card
+          classic: standard card
+          gold: gold (premium) card
+      issued:
+        name: Issue date
+        kind: date
+        description: Date the card was issued (1993-11-07 to 1998-12-29).
+        encoding: YYMMDD number in the original data; a DATE here.
+
+  district:
+    name: Districts
+    description: >-
+      Public demographic data for each of the 77 districts: where branches are and where
+      clients live. Columns A2-A16 keep their original cryptic names.
+    grain: one row per district
+    primary_key: [district_id]
+    joins:
+      - {to: account, on: district.district_id = account.district_id, cardinality: one-to-many, meaning: accounts held at a branch in the district}
+      - {to: client, on: district.district_id = client.district_id, cardinality: one-to-many, meaning: clients living in the district}
+    columns:
+      district_id:
+        name: District ID
+        kind: identifier
+        description: Identifies the district (A1 in the original data), 1-77.
+      a2:
+        name: District name
+        kind: label
+        description: Name of the district (Czech place names, e.g. Hl.m. Praha for Prague).
+      a3:
+        name: Region
+        kind: label
+        description: >-
+          The region the district belongs to, in English (8 regions: Prague, central, south,
+          west, north and east Bohemia, south and north Moravia).
+      a4:
+        name: Inhabitants
+        kind: quantity
+        unit: people
+        description: Number of inhabitants.
+        quirks:
+          - Stored as text; cast it to a number before arithmetic or numeric comparison.
+      a5:
+        name: Municipalities under 500 inhabitants
+        kind: quantity
+        unit: municipalities
+        description: Number of municipalities with fewer than 500 inhabitants.
+        quirks:
+          - Stored as text; cast it to a number before arithmetic or numeric comparison.
+      a6:
+        name: Municipalities of 500-1,999
+        kind: quantity
+        unit: municipalities
+        description: Number of municipalities with 500-1,999 inhabitants.
+        quirks:
+          - Stored as text; cast it to a number before arithmetic or numeric comparison.
+      a7:
+        name: Municipalities of 2,000-9,999
+        kind: quantity
+        unit: municipalities
+        description: Number of municipalities with 2,000-9,999 inhabitants.
+        quirks:
+          - Stored as text; cast it to a number before arithmetic or numeric comparison.
+      a8:
+        name: Municipalities of 10,000 or more
+        kind: quantity
+        unit: municipalities
+        description: Number of municipalities with 10,000 or more inhabitants.
+      a9:
+        name: Cities
+        kind: quantity
+        unit: cities
+        description: Number of cities in the district.
+        quirks:
+          - BIRD's description calls this column "not useful"; the data set's guide defines it as the number of cities.
+      a10:
+        name: Urban population share
+        kind: quantity
+        unit: percent
+        description: Share of the district's inhabitants living in urban areas (33.9-100).
+      a11:
+        name: Average salary
+        kind: quantity
+        unit: CZK
+        description: >-
+          Average salary in the district (8,110-12,541). The guide does not say over what
+          period; the magnitudes match monthly wages in the mid-1990s Czech Republic.
+      a12:
+        name: Unemployment rate 1995
+        kind: quantity
+        unit: percent
+        description: Unemployment rate in 1995.
+        null_meaning: Not recorded (one district, Jesenik).
+      a13:
+        name: Unemployment rate 1996
+        kind: quantity
+        unit: percent
+        description: Unemployment rate in 1996.
+      a14:
+        name: Entrepreneurs per 1,000
+        kind: quantity
+        unit: entrepreneurs per 1,000 inhabitants
+        description: Number of entrepreneurs per 1,000 inhabitants.
+      a15:
+        name: Crimes 1995
+        kind: quantity
+        unit: crimes
+        description: Number of crimes committed in 1995.
+        null_meaning: Not recorded (one district, Jesenik).
+      a16:
+        name: Crimes 1996
+        kind: quantity
+        unit: crimes
+        description: Number of crimes committed in 1996.

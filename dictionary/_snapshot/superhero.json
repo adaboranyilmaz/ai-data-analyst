@@ -1,0 +1,211 @@
+{
+  "database": "superhero",
+  "profiled": false,
+  "tables": {
+    "alignment": {
+      "rows": 4,
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "alignment",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    },
+    "attribute": {
+      "rows": 6,
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "attribute_name",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    },
+    "colour": {
+      "rows": 35,
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "colour",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    },
+    "gender": {
+      "rows": 3,
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "gender",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    },
+    "hero_attribute": {
+      "rows": 3738,
+      "columns": [
+        {
+          "name": "hero_id",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "attribute_id",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "attribute_value",
+          "type": "bigint",
+          "nullable": true
+        }
+      ]
+    },
+    "hero_power": {
+      "rows": 5825,
+      "columns": [
+        {
+          "name": "hero_id",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "power_id",
+          "type": "bigint",
+          "nullable": true
+        }
+      ]
+    },
+    "publisher": {
+      "rows": 25,
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "publisher_name",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    },
+    "race": {
+      "rows": 61,
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "race",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    },
+    "superhero": {
+      "rows": 750,
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "superhero_name",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "full_name",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "gender_id",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "eye_colour_id",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "hair_colour_id",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "skin_colour_id",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "race_id",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "publisher_id",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "alignment_id",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "height_cm",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "weight_kg",
+          "type": "bigint",
+          "nullable": true
+        }
+      ]
+    },
+    "superpower": {
+      "rows": 167,
+      "columns": [
+        {
+          "name": "id",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "power_name",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    }
+  }
+}

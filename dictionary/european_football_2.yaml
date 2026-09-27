@@ -1,0 +1,1046 @@
+# Data dictionary: the BIRD `european_football_2` database, converted by scripts/14_convert_descriptions.py
+# from BIRD's database description files, without editing their text. Regenerate; do not
+# edit by hand. Derived from BIRD (Li et al., 2023), licensed CC BY-SA 4.0.
+database: european_football_2
+origin: bird-description
+name: european_football_2
+sources:
+- BIRD mini-dev database description files (CC BY-SA 4.0)
+tables:
+  country:
+    bird_file: Country.csv
+    columns:
+      id:
+        bird_name: id
+        name: id
+        description: the unique id for countries
+        data_format: integer
+      name:
+        bird_name: name
+        name: name
+        description: country name
+        data_format: text
+  league:
+    bird_file: League.csv
+    columns:
+      id:
+        bird_name: id
+        name: id
+        description: the unique id for leagues
+        data_format: integer
+      country_id:
+        bird_name: country_id
+        name: country id
+        description: the unique id for countries
+        data_format: integer
+      name:
+        bird_name: name
+        name: name
+        description: league name
+        data_format: text
+  match:
+    bird_file: Match.csv
+    columns:
+      id:
+        bird_name: id
+        name: id
+        description: the unique id for matches
+        data_format: integer
+      country_id:
+        bird_name: country_id
+        name: country id
+        description: country id
+        data_format: integer
+      league_id:
+        bird_name: league_id
+        name: league id
+        description: league id
+        data_format: integer
+      season:
+        bird_name: season
+        name: season
+        description: the season of the match
+        data_format: text
+      stage:
+        bird_name: stage
+        name: stage
+        description: the stage of the match
+        data_format: integer
+      date:
+        bird_name: date
+        name: date
+        description: the date of the match
+        data_format: text
+        value_description: e.g. 2008-08-17 00:00:00
+      match_api_id:
+        bird_name: match_api_id
+        name: match api id
+        description: the id of the match api
+        data_format: integer
+      home_team_api_id:
+        bird_name: home_team_api_id
+        name: home team api id
+        description: the id of the home team api
+        data_format: integer
+      away_team_api_id:
+        bird_name: away_team_api_id
+        name: away team api id
+        description: the id of the away team api
+        data_format: integer
+      home_team_goal:
+        bird_name: home_team_goal
+        name: home team goal
+        description: the goal of the home team
+        data_format: integer
+      away_team_goal:
+        bird_name: away_team_goal
+        name: away team goal
+        description: the goal of the away team
+        data_format: integer
+      home_player_x1:
+        bird_name: home_player_X1
+        name: home_player_X1
+        status: missing
+      home_player_x2:
+        bird_name: home_player_X2
+        name: home_player_X2
+        status: missing
+      home_player_x3:
+        bird_name: home_player_X3
+        name: home_player_X3
+        status: missing
+      home_player_x4:
+        bird_name: home_player_X4
+        name: home_player_X4
+        status: missing
+      home_player_x5:
+        bird_name: home_player_X5
+        name: home_player_X5
+        status: missing
+      home_player_x6:
+        bird_name: home_player_X6
+        name: home_player_X6
+        status: missing
+      home_player_x7:
+        bird_name: home_player_X7
+        name: home_player_X7
+        status: missing
+      home_player_x8:
+        bird_name: home_player_X8
+        name: home_player_X8
+        status: missing
+      home_player_x9:
+        bird_name: home_player_X9
+        name: home_player_X9
+        status: missing
+      home_player_x10:
+        bird_name: home_player_X10
+        name: home_player_X10
+        status: missing
+      home_player_x11:
+        bird_name: home_player_X11
+        name: home_player_X11
+        status: missing
+      away_player_x1:
+        bird_name: away_player_X1
+        name: away_player_X1
+        status: missing
+      away_player_x2:
+        bird_name: away_player_X2
+        name: away_player_X2
+        status: missing
+      away_player_x3:
+        bird_name: away_player_X3
+        name: away_player_X3
+        status: missing
+      away_player_x4:
+        bird_name: away_player_X4
+        name: away_player_X4
+        status: missing
+      away_player_x5:
+        bird_name: away_player_X5
+        name: away_player_X5
+        status: missing
+      away_player_x6:
+        bird_name: away_player_X6
+        name: away_player_X6
+        status: missing
+      away_player_x7:
+        bird_name: away_player_X7
+        name: away_player_X7
+        status: missing
+      away_player_x8:
+        bird_name: away_player_X8
+        name: away_player_X8
+        status: missing
+      away_player_x9:
+        bird_name: away_player_X9
+        name: away_player_X9
+        status: missing
+      away_player_x10:
+        bird_name: away_player_X10
+        name: away_player_X10
+        status: missing
+      away_player_x11:
+        bird_name: away_player_X11
+        name: away_player_X11
+        status: missing
+      home_player_y1:
+        bird_name: home_player_Y1
+        name: home_player_Y1
+        status: missing
+      home_player_y2:
+        bird_name: home_player_Y2
+        name: home_player_Y2
+        status: missing
+      home_player_y3:
+        bird_name: home_player_Y3
+        name: home_player_Y3
+        status: missing
+      home_player_y4:
+        bird_name: home_player_Y4
+        name: home_player_Y4
+        status: missing
+      home_player_y5:
+        bird_name: home_player_Y5
+        name: home_player_Y5
+        status: missing
+      home_player_y6:
+        bird_name: home_player_Y6
+        name: home_player_Y6
+        status: missing
+      home_player_y7:
+        bird_name: home_player_Y7
+        name: home_player_Y7
+        status: missing
+      home_player_y8:
+        bird_name: home_player_Y8
+        name: home_player_Y8
+        status: missing
+      home_player_y9:
+        bird_name: home_player_Y9
+        name: home_player_Y9
+        status: missing
+      home_player_y10:
+        bird_name: home_player_Y10
+        name: home_player_Y10
+        status: missing
+      home_player_y11:
+        bird_name: home_player_Y11
+        name: home_player_Y11
+        status: missing
+      away_player_y1:
+        bird_name: away_player_Y1
+        name: away_player_Y1
+        status: missing
+      away_player_y2:
+        bird_name: away_player_Y2
+        name: away_player_Y2
+        status: missing
+      away_player_y3:
+        bird_name: away_player_Y3
+        name: away_player_Y3
+        status: missing
+      away_player_y4:
+        bird_name: away_player_Y4
+        name: away_player_Y4
+        status: missing
+      away_player_y5:
+        bird_name: away_player_Y5
+        name: away_player_Y5
+        status: missing
+      away_player_y6:
+        bird_name: away_player_Y6
+        name: away_player_Y6
+        status: missing
+      away_player_y7:
+        bird_name: away_player_Y7
+        name: away_player_Y7
+        status: missing
+      away_player_y8:
+        bird_name: away_player_Y8
+        name: away_player_Y8
+        status: missing
+      away_player_y9:
+        bird_name: away_player_Y9
+        name: away_player_Y9
+        status: missing
+      away_player_y10:
+        bird_name: away_player_Y10
+        name: away_player_Y10
+        status: missing
+      away_player_y11:
+        bird_name: away_player_Y11
+        name: away_player_Y11
+        status: missing
+      home_player_1:
+        bird_name: home_player_1
+        name: home_player_1
+        status: missing
+      home_player_2:
+        bird_name: home_player_2
+        name: home_player_2
+        status: missing
+      home_player_3:
+        bird_name: home_player_3
+        name: home_player_3
+        status: missing
+      home_player_4:
+        bird_name: home_player_4
+        name: home_player_4
+        status: missing
+      home_player_5:
+        bird_name: home_player_5
+        name: home_player_5
+        status: missing
+      home_player_6:
+        bird_name: home_player_6
+        name: home_player_6
+        status: missing
+      home_player_7:
+        bird_name: home_player_7
+        name: home_player_7
+        status: missing
+      home_player_8:
+        bird_name: home_player_8
+        name: home_player_8
+        status: missing
+      home_player_9:
+        bird_name: home_player_9
+        name: home_player_9
+        status: missing
+      home_player_10:
+        bird_name: home_player_10
+        name: home_player_10
+        status: missing
+      home_player_11:
+        bird_name: home_player_11
+        name: home_player_11
+        status: missing
+      away_player_1:
+        bird_name: away_player_1
+        name: away_player_1
+        status: missing
+      away_player_2:
+        bird_name: away_player_2
+        name: away_player_2
+        status: missing
+      away_player_3:
+        bird_name: away_player_3
+        name: away_player_3
+        status: missing
+      away_player_4:
+        bird_name: away_player_4
+        name: away_player_4
+        status: missing
+      away_player_5:
+        bird_name: away_player_5
+        name: away_player_5
+        status: missing
+      away_player_6:
+        bird_name: away_player_6
+        name: away_player_6
+        status: missing
+      away_player_7:
+        bird_name: away_player_7
+        name: away_player_7
+        status: missing
+      away_player_8:
+        bird_name: away_player_8
+        name: away_player_8
+        status: missing
+      away_player_9:
+        bird_name: away_player_9
+        name: away_player_9
+        status: missing
+      away_player_10:
+        bird_name: away_player_10
+        name: away_player_10
+        status: missing
+      away_player_11:
+        bird_name: away_player_11
+        name: away_player_11
+        status: missing
+      goal:
+        bird_name: goal
+        name: goal
+        description: the goal of the match
+        data_format: text
+      shoton:
+        bird_name: shoton
+        name: shot on
+        description: the shot on goal of the match
+        data_format: text
+        value_description: |-
+          commonsense reasoning:
+          A shot on goal is a shot that enters the goal or would have entered the goal if it had not been blocked by the goalkeeper or another defensive player.
+      shotoff:
+        bird_name: shotoff
+        name: shot off
+        description: the shot off goal of the match, which is the opposite of shot on
+        data_format: text
+      foulcommit:
+        bird_name: foulcommit
+        name: foul commit
+        description: the fouls occurred in the match
+        data_format: text
+      card:
+        bird_name: card
+        name: card
+        description: the cards given in the match
+        data_format: text
+      cross:
+        bird_name: cross
+        name: cross
+        description: Balls sent into the opposition team's area from a wide position in the match
+        data_format: text
+      corner:
+        bird_name: corner
+        name: corner
+        description: Ball goes out of play for a corner kick in the match
+        data_format: text
+      possession:
+        bird_name: possession
+        name: possession
+        description: The duration from a player taking over the ball in the match
+        data_format: text
+      b365h:
+        bird_name: B365H
+        name: B365H
+        status: missing
+      b365d:
+        bird_name: B365D
+        name: B365D
+        status: missing
+      b365a:
+        bird_name: B365A
+        name: B365A
+        status: missing
+      bwh:
+        bird_name: BWH
+        name: BWH
+        status: missing
+      bwd:
+        bird_name: BWD
+        name: BWD
+        status: missing
+      bwa:
+        bird_name: BWA
+        name: BWA
+        status: missing
+      iwh:
+        bird_name: IWH
+        name: IWH
+        status: missing
+      iwd:
+        bird_name: IWD
+        name: IWD
+        status: missing
+      iwa:
+        bird_name: IWA
+        name: IWA
+        status: missing
+      lbh:
+        bird_name: LBH
+        name: LBH
+        status: missing
+      lbd:
+        bird_name: LBD
+        name: LBD
+        status: missing
+      lba:
+        bird_name: LBA
+        name: LBA
+        status: missing
+      psh:
+        bird_name: PSH
+        name: PSH
+        status: missing
+      psd:
+        bird_name: PSD
+        name: PSD
+        status: missing
+      psa:
+        bird_name: PSA
+        name: PSA
+        status: missing
+      whh:
+        bird_name: WHH
+        name: WHH
+        status: missing
+      whd:
+        bird_name: WHD
+        name: WHD
+        status: missing
+      wha:
+        bird_name: WHA
+        name: WHA
+        status: missing
+      sjh:
+        bird_name: SJH
+        name: SJH
+        status: missing
+      sjd:
+        bird_name: SJD
+        name: SJD
+        status: missing
+      sja:
+        bird_name: SJA
+        name: SJA
+        status: missing
+      vch:
+        bird_name: VCH
+        name: VCH
+        status: missing
+      vcd:
+        bird_name: VCD
+        name: VCD
+        status: missing
+      vca:
+        bird_name: VCA
+        name: VCA
+        status: missing
+      gbh:
+        bird_name: GBH
+        name: GBH
+        status: missing
+      gbd:
+        bird_name: GBD
+        name: GBD
+        status: missing
+      gba:
+        bird_name: GBA
+        name: GBA
+        status: missing
+      bsh:
+        bird_name: BSH
+        name: BSH
+        status: missing
+      bsd:
+        bird_name: BSD
+        name: BSD
+        status: missing
+      bsa:
+        bird_name: BSA
+        name: BSA
+        status: missing
+  player:
+    bird_file: Player.csv
+    columns:
+      id:
+        bird_name: id
+        name: id
+        description: the unique id for players
+        data_format: integer
+      player_api_id:
+        bird_name: player_api_id
+        name: player api id
+        description: the id of the player api
+        data_format: integer
+      player_name:
+        bird_name: player_name
+        name: player name
+        description: player name
+        data_format: text
+      player_fifa_api_id:
+        bird_name: player_fifa_api_id
+        name: player federation international football association api id
+        description: the id of the player fifa api
+        data_format: integer
+      birthday:
+        bird_name: birthday
+        name: birthday
+        description: the player's birthday
+        data_format: text
+        value_description: |-
+          e.g. 1992-02-29 00:00:00
+          commonsense reasoning:
+          Player A is older than player B means that A's birthday is earlier than B's
+      height:
+        bird_name: height
+        name: height
+        description: the player's height
+        data_format: integer
+      weight:
+        bird_name: weight
+        name: weight
+        description: the player's weight
+        data_format: integer
+  player_attributes:
+    bird_file: Player_Attributes.csv
+    columns:
+      id:
+        bird_name: id
+        name: id
+        description: the unique id for players
+        data_format: integer
+      player_fifa_api_id:
+        bird_name: player_fifa_api_id
+        name: player federation international football association api id
+        description: the id of the player fifa api
+        data_format: integer
+      player_api_id:
+        bird_name: player_api_id
+        name: player api id
+        description: the id of the player api
+        data_format: integer
+      date:
+        bird_name: date
+        name: date
+        description: date
+        data_format: text
+        value_description: e.g. 2016-02-18 00:00:00
+      overall_rating:
+        bird_name: overall_rating
+        name: overall_rating
+        description: the overall rating of the player
+        data_format: integer
+        value_description: |-
+          commonsense reasoning:
+          The rating is between 0-100 which is calculated by FIFA.
+           Higher overall rating means the player has a stronger overall strength.
+      potential:
+        bird_name: potential
+        name: potential
+        description: potential of the player
+        data_format: integer
+        value_description: |-
+          commonsense reasoning:
+          The potential score is between 0-100 which is calculated by FIFA.
+           Higher potential score means that the player has more potential
+      preferred_foot:
+        bird_name: preferred_foot
+        name: preferred foot
+        description: the player's preferred foot when attacking
+        data_format: text
+        value_description: right/ left
+      attacking_work_rate:
+        bird_name: attacking_work_rate
+        name: attacking work rate
+        description: the player's attacking work rate
+        data_format: text
+        value_description: |-
+          commonsense reasoning:
+          • high: implies that the player is going to be in all of your attack moves
+          • medium: implies that the player will select the attack actions he will join in
+          • low: remain in his position while the team attacks
+      defensive_work_rate:
+        bird_name: defensive_work_rate
+        name: defensive_work_rate
+        description: the player's defensive work rate
+        data_format: text
+        value_description: |-
+          commonsense reasoning:
+          • high: remain in his position and defense while the team attacks
+          • medium: implies that the player will select the defensive actions he will join in
+          • low: implies that the player is going to be in all of your attack moves instead of defensing
+      crossing:
+        bird_name: crossing
+        name: crossing
+        description: the player's crossing score
+        data_format: integer
+        value_description: |-
+          commonsense reasoning:
+          Cross is a long pass into the opponent's goal towards the header of sixth-yard teammate.
+           The crossing score is between 0-100 which measures the tendency/frequency of crosses in the box.
+           Higher potential score means that the player performs better in crossing actions.
+      finishing:
+        bird_name: finishing
+        name: finishing
+        description: the player's finishing rate
+        data_format: integer
+        value_description: 0-100 which is calculated by FIFA
+      heading_accuracy:
+        bird_name: heading_accuracy
+        name: heading accuracy
+        description: the player's heading accuracy
+        data_format: integer
+        value_description: 0-100 which is calculated by FIFA
+      short_passing:
+        bird_name: short_passing
+        name: short passing
+        description: the player's short passing score
+        data_format: integer
+        value_description: 0-100 which is calculated by FIFA
+      volleys:
+        bird_name: volleys
+        name: volleys
+        description: the player's volley score
+        data_format: integer
+        value_description: 0-100 which is calculated by FIFA
+      dribbling:
+        bird_name: dribbling
+        name: dribbling
+        description: the player's dribbling score
+        data_format: integer
+        value_description: 0-100 which is calculated by FIFA
+      curve:
+        bird_name: curve
+        name: curve
+        description: the player's curve score
+        data_format: integer
+        value_description: 0-100 which is calculated by FIFA
+      free_kick_accuracy:
+        bird_name: free_kick_accuracy
+        name: free kick accuracy
+        description: the player's free kick accuracy
+        data_format: integer
+        value_description: 0-100 which is calculated by FIFA
+      long_passing:
+        bird_name: long_passing
+        name: long passing
+        description: the player's long passing score
+        data_format: integer
+        value_description: 0-100 which is calculated by FIFA
+      ball_control:
+        bird_name: ball_control
+        name: ball control
+        description: the player's ball control score
+        data_format: integer
+        value_description: 0-100 which is calculated by FIFA
+      acceleration:
+        bird_name: acceleration
+        name: acceleration
+        description: the player's acceleration score
+        data_format: integer
+        value_description: 0-100 which is calculated by FIFA
+      sprint_speed:
+        bird_name: sprint_speed
+        name: sprint speed
+        description: the player's sprint speed
+        data_format: integer
+        value_description: 0-100 which is calculated by FIFA
+      agility:
+        bird_name: agility
+        name: agility
+        description: the player's agility
+        data_format: integer
+        value_description: 0-100 which is calculated by FIFA
+      reactions:
+        bird_name: reactions
+        name: reactions
+        description: the player's reactions score
+        data_format: integer
+        value_description: 0-100 which is calculated by FIFA
+      balance:
+        bird_name: balance
+        name: balance
+        description: the player's balance score
+        data_format: integer
+        value_description: 0-100 which is calculated by FIFA
+      shot_power:
+        bird_name: shot_power
+        name: shot power
+        description: the player's shot power
+        data_format: integer
+        value_description: 0-100 which is calculated by FIFA
+      jumping:
+        bird_name: jumping
+        name: jumping
+        description: the player's jumping score
+        data_format: integer
+        value_description: 0-100 which is calculated by FIFA
+      stamina:
+        bird_name: stamina
+        name: stamina
+        description: the player's stamina score
+        data_format: integer
+        value_description: 0-100 which is calculated by FIFA
+      strength:
+        bird_name: strength
+        name: strength
+        description: the player's strength score
+        data_format: integer
+        value_description: 0-100 which is calculated by FIFA
+      long_shots:
+        bird_name: long_shots
+        name: long shots
+        description: the player's long shots score
+        data_format: integer
+        value_description: 0-100 which is calculated by FIFA
+      aggression:
+        bird_name: aggression
+        name: aggression
+        description: the player's aggression score
+        data_format: integer
+        value_description: 0-100 which is calculated by FIFA
+      interceptions:
+        bird_name: interceptions
+        name: interceptions
+        description: the player's interceptions score
+        data_format: integer
+        value_description: 0-100 which is calculated by FIFA
+      positioning:
+        bird_name: positioning
+        name: positioning
+        description: |-
+          the player's
+          positioning score
+        data_format: integer
+        value_description: 0-100 which is calculated by FIFA
+      vision:
+        bird_name: vision
+        name: vision
+        description: the player's vision score
+        data_format: integer
+        value_description: 0-100 which is calculated by FIFA
+      penalties:
+        bird_name: penalties
+        name: penalties
+        description: the player's penalties score
+        data_format: integer
+        value_description: 0-100 which is calculated by FIFA
+      marking:
+        bird_name: marking
+        name: marking
+        description: the player's markingscore
+        data_format: integer
+        value_description: 0-100 which is calculated by FIFA
+      standing_tackle:
+        bird_name: standing_tackle
+        name: standing tackle
+        description: the player's standing tackle score
+        data_format: integer
+        value_description: 0-100 which is calculated by FIFA
+      sliding_tackle:
+        bird_name: sliding_tackle
+        name: sliding tackle
+        description: the player's sliding tackle score
+        data_format: integer
+        value_description: 0-100 which is calculated by FIFA
+      gk_diving:
+        bird_name: gk_diving
+        name: goalkeep diving
+        description: the player's goalkeep diving score
+        data_format: integer
+        value_description: 0-100 which is calculated by FIFA
+      gk_handling:
+        bird_name: gk_handling
+        name: goalkeep handling
+        description: the player's goalkeep diving score
+        data_format: integer
+        value_description: 0-100 which is calculated by FIFA
+      gk_kicking:
+        bird_name: gk_kicking
+        name: goalkeep kicking
+        description: the player's goalkeep kicking score
+        data_format: integer
+        value_description: 0-100 which is calculated by FIFA
+      gk_positioning:
+        bird_name: gk_positioning
+        name: goalkeep positioning
+        description: the player's goalkeep positioning score
+        data_format: integer
+        value_description: 0-100 which is calculated by FIFA
+      gk_reflexes:
+        bird_name: gk_reflexes
+        name: goalkeep reflexes
+        description: the player's goalkeep reflexes score
+        data_format: integer
+        value_description: 0-100 which is calculated by FIFA
+  team:
+    bird_file: Team.csv
+    columns:
+      id:
+        bird_name: id
+        name: id
+        description: the unique id for teams
+        data_format: integer
+      team_api_id:
+        bird_name: team_api_id
+        name: team api id
+        description: the id of the team api
+        data_format: integer
+      team_fifa_api_id:
+        bird_name: team_fifa_api_id
+        name: team federation international football association api id
+        description: the id of the team fifa api
+        data_format: integer
+      team_long_name:
+        bird_name: team_long_name
+        name: team long name
+        description: the team's long name
+        data_format: text
+      team_short_name:
+        bird_name: team_short_name
+        name: team short name
+        description: the team's short name
+        data_format: text
+  team_attributes:
+    bird_file: Team_Attributes.csv
+    columns:
+      id:
+        bird_name: id
+        name: id
+        description: the unique id for teams
+        data_format: integer
+      team_fifa_api_id:
+        bird_name: team_fifa_api_id
+        name: team federation international football association api id
+        description: the id of the team fifa api
+        data_format: integer
+      team_api_id:
+        bird_name: team_api_id
+        name: team api id
+        description: the id of the team api
+        data_format: integer
+      date:
+        bird_name: date
+        name: date
+        description: Date
+        data_format: text
+        value_description: e.g. 2010-02-22 00:00:00
+      buildupplayspeed:
+        bird_name: buildUpPlaySpeed
+        name: build Up Play Speed
+        description: the speed in which attacks are put together
+        data_format: integer
+        value_description: the score which is between 1-00 to measure the team's attack speed
+      buildupplayspeedclass:
+        bird_name: buildUpPlaySpeedClass
+        name: build Up Play Speed Class
+        description: the speed class
+        data_format: text
+        value_description: |-
+          commonsense reasoning:
+          • Slow: 1-33
+          • Balanced: 34-66
+          • Fast: 66-100
+      buildupplaydribbling:
+        bird_name: buildUpPlayDribbling
+        name: build Up Play Dribbling
+        description: the tendency/ frequency of dribbling
+        data_format: integer
+      buildupplaydribblingclass:
+        bird_name: buildUpPlayDribblingClass
+        name: build Up Play Dribbling Class
+        description: the dribbling class
+        data_format: text
+        value_description: |-
+          commonsense reasoning:
+          • Little: 1-33
+          • Normal: 34-66
+          • Lots: 66-100
+      buildupplaypassing:
+        bird_name: buildUpPlayPassing
+        name: build Up Play Passing
+        description: affects passing distance and support from teammates
+        data_format: integer
+      buildupplaypassingclass:
+        bird_name: buildUpPlayPassingClass
+        name: build Up Play Passing Class
+        description: the passing class
+        data_format: text
+        value_description: |-
+          commonsense reasoning:
+          • Short: 1-33
+          • Mixed: 34-66
+          • Long: 66-100
+      buildupplaypositioningclass:
+        bird_name: buildUpPlayPositioningClass
+        name: build Up Play Positioning Class
+        description: A team's freedom of movement in the 1st two thirds of the pitch
+        data_format: text
+        value_description: Organised / Free Form
+      chancecreationpassing:
+        bird_name: chanceCreationPassing
+        name: chance Creation Passing
+        description: Amount of risk in pass decision and run support
+        data_format: integer
+      chancecreationpassingclass:
+        bird_name: chanceCreationPassingClass
+        name: chance Creation Passing Class
+        description: the chance creation passing class
+        data_format: text
+        value_description: |-
+          commonsense reasoning:
+          • Safe: 1-33
+          • Normal: 34-66
+          • Risky: 66-100
+      chancecreationcrossing:
+        bird_name: chanceCreationCrossing
+        name: chance Creation Crossing
+        description: The tendency / frequency of crosses into the box
+        data_format: integer
+      chancecreationcrossingclass:
+        bird_name: chanceCreationCrossingClass
+        name: chance Creation Crossing Class
+        description: the chance creation crossing class
+        data_format: text
+        value_description: |-
+          commonsense reasoning:
+          • Little: 1-33
+          • Normal: 34-66
+          • Lots: 66-100
+      chancecreationshooting:
+        bird_name: chanceCreationShooting
+        name: chance Creation Shooting
+        description: The tendency / frequency of shots taken
+        data_format: integer
+      chancecreationshootingclass:
+        bird_name: chanceCreationShootingClass
+        name: chance Creation Shooting Class
+        description: the chance creation shooting class
+        data_format: text
+        value_description: |-
+          commonsense reasoning:
+          • Little: 1-33
+          • Normal: 34-66
+          • Lots: 66-100
+      chancecreationpositioningclass:
+        bird_name: chanceCreationPositioningClass
+        name: chance Creation Positioning Class
+        description: A team’s freedom of movement in the final third of the pitch
+        data_format: text
+        value_description: Organised / Free Form
+      defencepressure:
+        bird_name: defencePressure
+        name: defence Pressure
+        description: Affects how high up the pitch the team will start pressuring
+        data_format: integer
+      defencepressureclass:
+        bird_name: defencePressureClass
+        name: defence Pressure Class
+        description: the defence pressure class
+        data_format: text
+        value_description: |-
+          commonsense reasoning:
+          • Deep: 1-33
+          • Medium: 34-66
+          • High: 66-100
+      defenceaggression:
+        bird_name: defenceAggression
+        name: defence Aggression
+        description: Affect the team’s approach to tackling the ball possessor
+        data_format: integer
+      defenceaggressionclass:
+        bird_name: defenceAggressionClass
+        name: defence Aggression Class
+        description: the defence aggression class
+        data_format: text
+        value_description: |-
+          commonsense reasoning:
+          • Contain: 1-33
+          • Press: 34-66
+          • Double: 66-100
+      defenceteamwidth:
+        bird_name: defenceTeamWidth
+        name: defence Team Width
+        description: Affects how much the team will shift to the ball side
+        data_format: integer
+      defenceteamwidthclass:
+        bird_name: defenceTeamWidthClass
+        name: defence Team Width Class
+        description: the defence team width class
+        data_format: text
+        value_description: |-
+          commonsense reasoning:
+          • Narrow: 1-33
+          • Normal: 34-66
+          • Wide: 66-100
+      defencedefenderlineclass:
+        bird_name: defenceDefenderLineClass
+        name: defence Defender Line Class
+        description: Affects the shape and strategy of the defence
+        data_format: text
+        value_description: Cover/ Offside Trap

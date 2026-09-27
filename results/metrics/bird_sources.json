@@ -1,0 +1,86 @@
+{
+  "package": {
+    "url": "https://bird-bench.oss-cn-beijing.aliyuncs.com/minidev.zip",
+    "size_bytes": 800943648,
+    "sha256": "cc48ba16838204e4e214512030cb572eeb5f7bcdd999bae4b9b6ff12ec13b92f"
+  },
+  "dump": {
+    "member": "minidev/MINIDEV_postgresql/BIRD_dev.sql",
+    "bytes": 1001882533,
+    "sha256": "31b1da211849d24a57c9af7636da46a5b82fc8a3ca1542bb3ebd8775e9a31cec"
+  },
+  "questions": {
+    "url": "https://huggingface.co/datasets/birdsql/bird_mini_dev/resolve/f65faf4ae3b638c1fa6df1d3370c8d92c8366301/data/mini_dev_pg-00000-of-00001.json",
+    "revision": "f65faf4ae3b638c1fa6df1d3370c8d92c8366301",
+    "sha256": "7fa740ef9225389cff6c34432120e8325d0ca3008d73db1ae38731234bc10da7",
+    "count": 500,
+    "per_database": {
+      "california_schools": 30,
+      "card_games": 52,
+      "codebase_community": 49,
+      "debit_card_specializing": 30,
+      "european_football_2": 51,
+      "financial": 32,
+      "formula_1": 66,
+      "student_club": 48,
+      "superhero": 52,
+      "thrombosis_prediction": 50,
+      "toxicology": 40
+    },
+    "per_difficulty": {
+      "challenging": 102,
+      "moderate": 250,
+      "simple": 148
+    }
+  },
+  "description_files": {
+    "california_schools": 3,
+    "card_games": 6,
+    "codebase_community": 8,
+    "debit_card_specializing": 5,
+    "european_football_2": 7,
+    "financial": 8,
+    "formula_1": 13,
+    "student_club": 8,
+    "superhero": 10,
+    "thrombosis_prediction": 3,
+    "toxicology": 4
+  },
+  "package_questions_vs_pinned": {
+    "stale_questions": 500,
+    "stale_duplicate_ids": [
+      137,
+      138
+    ],
+    "pinned_questions": 500,
+    "removed_ids": [],
+    "changed": [
+      {
+        "question_id": 119,
+        "db_id": "financial",
+        "change": "added"
+      },
+      {
+        "question_id": 120,
+        "db_id": "financial",
+        "change": "added"
+      },
+      {
+        "question_id": 879,
+        "db_id": "formula_1",
+        "fields": [
+          "SQL"
+        ]
+      },
+      {
+        "question_id": 1322,
+        "db_id": "student_club",
+        "fields": [
+          "SQL"
+        ]
+      }
+    ],
+    "changed_sql": 2
+  },
+  "licence": "CC BY-SA 4.0"
+}

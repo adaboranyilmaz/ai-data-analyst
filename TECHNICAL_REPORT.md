@@ -5,7 +5,7 @@
 
 The short, plain-language version is the [README](README.md).
 
-**Status: under construction. Nothing has been measured yet; every result is TBD.**
+**Status: under construction. The data layer is in place; the analyst has not been evaluated, so every result is TBD.**
 
 ## Abstract
 
@@ -13,7 +13,15 @@ Text-to-SQL systems are usually judged by accuracy alone: how often the query th
 
 ## Data
 
-The demo database is the Czech bank data of the PKDD'99 discovery challenge (Berka, 1999), included in BIRD as its `financial` database: real, anonymised accounts, clients, transactions, loans and cards from 1993 to 1998, with Czech codes and encoded fields. The benchmark is BIRD mini-dev (Li et al., 2023), loaded from its PostgreSQL release. A hand-written banking test set, fixed before any agent sees it, covers standard, multi-step, ambiguous, unanswerable, false-premise and causal questions. Row counts and file hashes: TBD.
+The demo database is the Czech bank data of the PKDD'99 discovery challenge (Berka, 1999), included in BIRD as its `financial` database: real, anonymised accounts, clients, transactions, loans and cards from 1993 to 1998, with Czech codes and encoded fields. The benchmark is BIRD mini-dev (Li et al., 2023): 500 questions over 11 databases (75 tables, 798 columns). A hand-written banking test set, fixed before any agent sees it, covers standard, multi-step, ambiguous, unanswerable, false-premise and causal questions.
+
+The databases come from BIRD's PostgreSQL dump, loaded into PostgreSQL 16 with one schema per database; the questions and their expert SQL come from BIRD's Hugging Face release, which BIRD names canonical, pinned to one revision. The older copy of the questions inside the download package lists two questions twice and misses two others, and two of its expert queries differ from the current ones. Every source file is pinned by hash. The Czech bank tables match the row counts published with the data, table by table (1,056,320 transactions).
+
+Every expert query was executed as the analyst's read-only role: 500 of 500 ran, and 0 were excluded. Each ran twice, and again after the tables moved into per-database schemas; every result set was the same each time. That holds only for serial execution: with PostgreSQL's parallel workers, a floating-point sum adds its terms in a different order on each run, and two expert answers (a sum and an average over a single-precision column) changed from run to run, one of them in its fifth significant digit. The expert queries therefore run without parallel workers, and the analyst's queries will run the same way. The time zone matters too: the dump's timestamps were written at UTC+8, and the benchmark's questions and expert SQL use those local times, so the database runs in that zone; in UTC, five expert answers differ, two of them empty.
+
+The Czech bank has a hand-written data dictionary: English names, meanings, units, join paths, known quirks, and translations of all 35 Czech code values present in the data, checked by tests against the data. Profiling found what neither the published guide nor BIRD's descriptions say: a third transaction type (`VYBER`, a withdrawal), the bank's own fees and penalty interest booked under the operation the guide calls a cash withdrawal, two spellings of "no purpose" (NULL and a single space), district statistics stored as text, and money labelled in dollars in BIRD's descriptions although it is in Czech koruna. For the other ten databases, BIRD's own column descriptions are converted unchanged into the same format; 684 of the 798 columns across all eleven databases have a description.
+
+<sub>Source: `results/metrics/data_stats.json`, `results/metrics/bird_sources.json`, `results/metrics/gold_execution.json`</sub>
 
 ## Method
 

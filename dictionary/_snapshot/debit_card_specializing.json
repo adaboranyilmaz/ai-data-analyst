@@ -1,0 +1,136 @@
+{
+  "database": "debit_card_specializing",
+  "profiled": false,
+  "tables": {
+    "customers": {
+      "rows": 32461,
+      "columns": [
+        {
+          "name": "customerid",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "segment",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "currency",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    },
+    "gasstations": {
+      "rows": 5716,
+      "columns": [
+        {
+          "name": "gasstationid",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "chainid",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "country",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "segment",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    },
+    "products": {
+      "rows": 591,
+      "columns": [
+        {
+          "name": "productid",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "description",
+          "type": "text",
+          "nullable": true
+        }
+      ]
+    },
+    "transactions_1k": {
+      "rows": 1000,
+      "columns": [
+        {
+          "name": "transactionid",
+          "type": "bigint",
+          "nullable": false
+        },
+        {
+          "name": "date",
+          "type": "date",
+          "nullable": true
+        },
+        {
+          "name": "time",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "customerid",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "cardid",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "gasstationid",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "productid",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "amount",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "price",
+          "type": "real",
+          "nullable": true
+        }
+      ]
+    },
+    "yearmonth": {
+      "rows": 383282,
+      "columns": [
+        {
+          "name": "customerid",
+          "type": "bigint",
+          "nullable": true
+        },
+        {
+          "name": "date",
+          "type": "text",
+          "nullable": true
+        },
+        {
+          "name": "consumption",
+          "type": "real",
+          "nullable": true
+        }
+      ]
+    }
+  }
+}

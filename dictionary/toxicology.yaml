@@ -1,0 +1,91 @@
+# Data dictionary: the BIRD `toxicology` database, converted by scripts/14_convert_descriptions.py
+# from BIRD's database description files, without editing their text. Regenerate; do not
+# edit by hand. Derived from BIRD (Li et al., 2023), licensed CC BY-SA 4.0.
+database: toxicology
+origin: bird-description
+name: toxicology
+sources:
+- BIRD mini-dev database description files (CC BY-SA 4.0)
+tables:
+  atom:
+    bird_file: atom.csv
+    columns:
+      atom_id:
+        bird_name: atom_id
+        name: atom id
+        description: the unique id of atoms
+        data_format: text
+      molecule_id:
+        bird_name: molecule_id
+        name: molecule id
+        description: identifying the molecule to which the atom belongs
+        data_format: text
+        value_description: |-
+          commonsense evidence:
+          TRXXX_i represents ith atom of molecule TRXXX
+      element:
+        bird_name: element
+        name: element
+        description: the element of the toxicology
+        data_format: text
+        value_description: "\x95 cl: chlorine\n\x95 c: carbon\n\x95 h: hydrogen\n\x95 o: oxygen\n\x95\
+          \ s: sulfur\n\x95 n: nitrogen\n\x95 p: phosphorus\n\x95 na: sodium\n\x95 br: bromine\n\x95 f:\
+          \ fluorine\n\x95 i: iodine\n\x95 sn: Tin\n\x95 pb: lead\n\x95 te: tellurium\n\x95 ca: Calcium"
+  bond:
+    bird_file: bond.csv
+    columns:
+      bond_id:
+        bird_name: bond_id
+        name: bond_id
+        description: unique id representing bonds
+        data_format: text
+        value_description: |-
+          TRxxx_A1_A2:
+          TRXXX refers to which molecule
+          A1 and A2 refers to which atom
+      molecule_id:
+        bird_name: molecule_id
+        name: molecule_id
+        description: identifying the molecule in which the bond appears
+        data_format: text
+      bond_type:
+        bird_name: bond_type
+        name: bond_type
+        description: type of the bond
+        data_format: text
+        value_description: "commonsense evidence:\n\x93-\x94: single bond\n'=': double bond\n'#': triple\
+          \ bond"
+  connected:
+    bird_file: connected.csv
+    columns:
+      atom_id:
+        bird_name: atom_id
+        name: atom id
+        description: id of the first atom
+        data_format: text
+      atom_id2:
+        bird_name: atom_id2
+        name: atom id 2
+        description: id of the second atom
+        data_format: text
+      bond_id:
+        bird_name: bond_id
+        name: bond id
+        description: bond id representing bond between two atoms
+        data_format: text
+  molecule:
+    bird_file: molecule.csv
+    columns:
+      molecule_id:
+        bird_name: molecule_id
+        name: molecule id
+        description: unique id of molecule
+        data_format: text
+        value_description: |-
+          "+" --> this molecule / compound is carcinogenic
+          '-' this molecule is not / compound carcinogenic
+      label:
+        bird_name: label
+        name: label
+        description: whether this molecule is carcinogenic or not
+        data_format: text
