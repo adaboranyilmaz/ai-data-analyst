@@ -1,0 +1,31 @@
+# --- secrets ---
+.env
+
+# --- data: database dumps, benchmark files and model-response caches ---
+# DVC-tracked or rebuilt, never in git; only the DVC pointer files are committed.
+data/*
+!data/.gitkeep
+!data/*.dvc
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.pytest_cache/
+.ruff_cache/
+
+# --- MLflow: the local store is rebuilt from the committed results files ---
+mlruns/
+mlflow.db
+mlartifacts/
+
+# --- OS / editor ---
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# --- build ---
+build/
+dist/
