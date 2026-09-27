@@ -1,1 +1,1 @@
-"""Database access: connection settings, and (later) the guarded read-only execution layer."""
+"""Database access: connection settings, the query guard, and read-only execution."""

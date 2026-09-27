@@ -5,7 +5,7 @@
 
 This project builds an AI analyst that answers questions about a bank's database by writing and running SQL. Every answer comes with its evidence and a confidence, and the analyst declines when it is unsure. The project measures whether that confidence can be trusted.
 
-**Status: under construction. The data and its dictionary are in place; the analyst has not been evaluated yet, so every result below is TBD.**
+**Status: under construction. The data, its dictionary and the analyst's guarded database tools are in place; the analyst itself has not been evaluated yet, so its results below are TBD.**
 
 **Auditable** means that every answer can be traced to the exact SQL, the rows it used and the checks it ran, and that it comes with a calibrated confidence. It does not mean guaranteed correct.
 
@@ -30,12 +30,33 @@ The design, being built in stages:
 - **The client database.** Real, anonymised data from a Czech bank (1993–1998), with 1,056,320 transactions. It is the standard public relational banking dataset and part of the BIRD benchmark. Its codes are in Czech; translating them into business terms is what an analyst does with any bank's internal codes. A hand-written data dictionary gives every column an English name, a meaning and a unit, and translates all 35 code values found in the data.
 - **The benchmark.** BIRD mini-dev, a public text-to-SQL benchmark of 500 questions over 11 databases, with an expert-written query for every question, so the analyst can be compared with published results. All 500 expert queries run on this project's database.
 - **A hand-written banking test set.** Questions written for this project and fixed before the analyst sees them, including ambiguous, unanswerable and false-premise questions. Unlike a public benchmark, they cannot be in any model's training data.
-- **The analyst.** An agent loop built directly on the Anthropic SDK, with tools to explore the schema and run queries. Its database access is read-only twice over: a SQL checker accepts only a single query, and the database role it connects as cannot write.
+- **The analyst.** An agent loop built directly on the Anthropic SDK, with tools to list and describe tables, look at sample rows, run queries and check chart designs.
+- **Two independent guards on the database.** A SQL checker accepts only a single read-only query over the analyst's own tables. Separately, the database itself runs every query under a role that can read that one database's tables and nothing else, and stops it at a time limit. Each guard is tested on its own against the same attacks (see Results).
 - **The evaluation.** How accuracy rises as the analyst declines its least confident answers (a risk–coverage curve), and whether its confidence is calibrated on questions it was not tuned on.
 
 ## Results
 
-TBD.
+**The analyst's accuracy and confidence:** TBD.
+
+**The database guards.** A suite of 95 attacks tried to change data, run a hidden second statement, disguise SQL with comments or look-alike characters, read settings, files and other databases' tables, change session settings, tie up the server, and do what a planted instruction in the data asks. Each guard ran the suite with the other switched off:
+
+| Kind of attack | Attacks | Stopped by the checker alone | By the database alone | By the role's privileges alone |
+|---|---|---|---|---|
+| Destructive statements | 20 | 20 | 20 | 20 |
+| Several statements in one | 7 | 7 | 7 | 7 |
+| Comment and unicode obfuscation | 19 | 19 | 18 (+1 names listed) | 18 (+1 names listed) |
+| Catalog, file and network snooping | 22 | 22 | 19 (+3 names listed) | 19 (+3 names listed) |
+| Another database's tables | 4 | 4 | 4 | 4 |
+| Changing session settings | 8 | 8 | 8 | 8 |
+| Resource exhaustion | 12 | 12 | 12 | 12 |
+| What a planted instruction asks for | 3 | 3 | 3 | 3 |
+
+<sub>Source: `results/metrics/security_suite.json` (one run)</sub>
+
+- No attack got past either guard on its own (0 breaches), apart from listing table names, below.
+- For runaway queries, "stopped" means cut off by the time and row limits, which stay on whichever guard is switched off. No checker can tell an expensive query from a legitimate one, so these queries are contained, not refused.
+- The database cannot hide the names of its tables from a user who can connect. Only the checker stops the 4 queries that list them; the data behind the names stays out of reach.
+- All 500 expert queries of the benchmark pass the checker, and return exactly the same rows through the analyst's tools.
 
 ## Try It
 
@@ -56,7 +77,8 @@ uv run pytest
 
 ## Limitations
 
-- Work in progress: no part of the evaluation has run yet.
+- Work in progress: the analyst has not been evaluated yet.
+- The security results are from one run of a fixed set of attacks. They show that each guard stops these attacks, not that no other attack exists.
 - BIRD's questions are public and may be in the models' training data. The hand-written banking set exists to check for that.
 
 ## Dependencies
@@ -68,6 +90,8 @@ uv run pytest
 | Anthropic Python SDK | the analyst's model calls |
 | Ollama | a free local model for comparison |
 | psycopg | database access from Python |
+| sqlglot | the SQL checker's parser |
+| jsonschema, Vega-Lite schema | checking the analyst's chart designs |
 | MLflow, DVC | experiment tracking and data versioning |
 
 <sub>Source: `pyproject.toml`, `docker-compose.yml`</sub>

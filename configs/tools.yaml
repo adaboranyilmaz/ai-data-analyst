@@ -1,0 +1,16 @@
+# Limits of the agent's database tools (src/tools/). The agent's limits bound what one tool call
+# can cost and how much of a result reaches the model; what the model is shown may be tuned
+# later, the safety limits below it may not be raised. Evaluation executes the agent's final
+# SQL with the evaluation limits, which fit every gold result (the largest has 29,936 rows).
+agent:
+  max_rows: 100 # rows returned to the agent; the total is counted on the server
+  timeout_s: 15 # enforced by the client: the role could lift a server-side timeout
+  max_cell_chars: 300 # longer text values are cut, with a marker saying how much was cut
+evaluation:
+  max_rows: 50000
+  timeout_s: 300
+sample_rows:
+  default_rows: 5
+  max_rows: 20
+chart:
+  max_spec_chars: 20000

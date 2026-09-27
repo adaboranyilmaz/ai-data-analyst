@@ -1,5 +1,6 @@
 # The data pipeline: fetch the pinned benchmark files, load the database and execute the gold
-# SQL, snapshot the schemas, convert BIRD's descriptions into dictionaries, and summarise.
+# SQL, snapshot the schemas, convert BIRD's descriptions into dictionaries, and summarise;
+# then harden the databases, run the security suite and check the agent's tools.
 # `dvc repro` rebuilds it from data/minidev.zip (`dvc pull`) with the compose PostgreSQL up.
 # Results files are committed to git (cache: false); data outputs go to the DVC cache.
 stages:
@@ -106,4 +107,59 @@ stages:
       - results/metrics/gold_execution.json
     outs:
       - results/metrics/data_stats.json:
+          cache: false
+
+  # Hardening lives in the databases' catalogs, outside DVC; its record is the audit. It
+  # reruns after a reload of the benchmark (bird_load.json), which recreates the `bird`
+  # database and its tables.
+  harden:
+    cmd: uv run python scripts/20_harden_db.py
+    deps:
+      - scripts/20_harden_db.py
+      - src/db/hardening.py
+      - src/db/hardening.sql
+      - src/db/security_fixtures.sql
+      - src/db/connection.py
+      - dictionary/_snapshot
+      - results/metrics/bird_load.json
+    outs:
+      - results/metrics/db_hardening.json:
+          cache: false
+
+  security:
+    cmd: uv run python scripts/21_security_suite.py --require-bird
+    deps:
+      - scripts/21_security_suite.py
+      - src/db/security_suite.py
+      - src/db/guard.py
+      - src/db/execute.py
+      - src/db/hardening.py
+      - src/tools/sql.py
+      - configs/security_attacks.yaml
+      - results/metrics/db_hardening.json
+    outs:
+      - results/metrics/security_suite.json:
+          cache: false
+
+  tool_check:
+    cmd: uv run python scripts/22_tool_check.py
+    deps:
+      - scripts/22_tool_check.py
+      - src/db/guard.py
+      - src/db/execute.py
+      - src/db/hardening.py
+      - src/tools/sql.py
+      - src/tools/schema.py
+      - src/tools/chart.py
+      - src/tools/definitions.py
+      - src/tools/toolbox.py
+      - src/tools/schemas/vega-lite-v6.4.3.schema.json.gz
+      - configs/tools.yaml
+      - configs/datasets.yaml
+      - dictionary
+      - data/raw/bird_minidev
+      - results/metrics/gold_execution.json
+      - results/metrics/db_hardening.json
+    outs:
+      - results/metrics/tool_check.json:
           cache: false

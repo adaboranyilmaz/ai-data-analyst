@@ -1,0 +1,50 @@
+{
+  "runs": 1,
+  "guard": {
+    "gold_queries": 500,
+    "accepted": 500,
+    "refused": [],
+    "changed_on_acceptance": []
+  },
+  "execution": {
+    "limits": {
+      "max_rows": 50000,
+      "timeout_s": 300
+    },
+    "same_result_as_gold": 500,
+    "different": []
+  },
+  "charts_valid": 500,
+  "latency": {
+    "describe_table": {
+      "calls": 75,
+      "p50_ms": 0.03,
+      "p95_ms": 0.09,
+      "max_ms": 0.17
+    },
+    "list_tables": {
+      "calls": 11,
+      "p50_ms": 0.02,
+      "p95_ms": 0.05,
+      "max_ms": 0.05
+    },
+    "run_sql": {
+      "calls": 500,
+      "p50_ms": 9.5,
+      "p95_ms": 83.43,
+      "max_ms": 316.13
+    },
+    "sample_rows": {
+      "calls": 75,
+      "p50_ms": 17.05,
+      "p95_ms": 711.98,
+      "max_ms": 2018.97
+    },
+    "validate_chart": {
+      "calls": 500,
+      "p50_ms": 0.79,
+      "p95_ms": 1.27,
+      "max_ms": 14.12
+    }
+  }
+}
