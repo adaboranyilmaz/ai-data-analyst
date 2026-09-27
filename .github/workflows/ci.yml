@@ -1,6 +1,6 @@
-# Lint, unit tests, the database-role tests against the compose PostgreSQL, DVC status and the
-# README check, on every pull request and on main. No step can call a model API: there is no
-# key, and replay-only mode turns any cache miss into an error.
+# Lint, unit tests, the database-role tests and the security suite against the compose
+# PostgreSQL, DVC status and the README check, on every pull request and on main. No step can
+# call a model API: there is no key, and replay-only mode turns any cache miss into an error.
 name: CI
 
 on:
@@ -36,6 +36,8 @@ jobs:
           uv run ruff format --check .
       - name: Start PostgreSQL
         run: docker compose up -d --wait
+      - name: Harden the database (closed system functions and views, schema roles)
+        run: uv run python scripts/20_harden_db.py --no-results
       - name: Tests (the database tests may not skip)
         env:
           ANALYST_REQUIRE_DB: "1"

@@ -17,6 +17,26 @@ values:
   financial_code_values: {file: metrics/data_stats.json, path: financial/code_values_present, fmt: int}
   financial_code_values_translated: {file: metrics/data_stats.json, path: financial/code_values_translated, fmt: int}
 
+  # the safe execution layer: database hardening, the security suite, the tools
+  hardened_functions: {file: metrics/db_hardening.json, path: databases/bird/functions_closed, fmt: int}
+  hardened_views: {file: metrics/db_hardening.json, path: databases/bird/views_closed, fmt: int}
+  schema_roles: {file: metrics/db_hardening.json, path: databases/bird/schema_roles/roles, fmt: int}
+  security_attacks: {file: metrics/security_suite.json, path: attacks, fmt: int}
+  security_names_listed: {file: metrics/security_suite.json, path: summary/database/documented_exception, fmt: int}
+  security_parser_breach: {file: metrics/security_suite.json, path: summary/parser/breach, fmt: int}
+  security_database_breach: {file: metrics/security_suite.json, path: summary/database/breach, fmt: int}
+  security_privileges_breach: {file: metrics/security_suite.json, path: summary/privileges/breach, fmt: int}
+  security_breaches: {expr: security_parser_breach + security_database_breach + security_privileges_breach, fmt: int}
+  security_timeout: {file: metrics/security_suite.json, path: settings/timeout_s, fmt: int}
+  guard_gold_accepted: {file: metrics/tool_check.json, path: guard/accepted, fmt: int}
+  tools_gold_reproduced: {file: metrics/tool_check.json, path: execution/same_result_as_gold, fmt: int}
+  run_sql_p50_ms: {file: metrics/tool_check.json, path: latency/run_sql/p50_ms, fmt: f0}
+  run_sql_p95_ms: {file: metrics/tool_check.json, path: latency/run_sql/p95_ms, fmt: f0}
+  run_sql_calls: {file: metrics/tool_check.json, path: latency/run_sql/calls, fmt: int}
+  sample_rows_p50_ms: {file: metrics/tool_check.json, path: latency/sample_rows/p50_ms, fmt: f0}
+  sample_rows_max_ms: {file: metrics/tool_check.json, path: latency/sample_rows/max_ms, fmt: int}
+  validate_chart_p50_ms: {file: metrics/tool_check.json, path: latency/validate_chart/p50_ms, fmt: f1}
+
 # Decimals and percentages the templates may contain outside a placeholder: version numbers,
 # never results.
 allowed_literals:

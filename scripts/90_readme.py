@@ -206,7 +206,7 @@ def resolve_values(spec: dict) -> dict[str, str]:
 
 # --------------------------------------------------------------------------------------
 # Tables: each a function returning Markdown built from results files, registered with
-# @table and placed with {{table:<function name>}}. None yet.
+# @table and placed with {{table:<function name>}}.
 
 TABLES: dict[str, Any] = {}
 
@@ -220,6 +220,46 @@ def md(header: list[str], rows: list[list[str]], source: str) -> str:
     lines = ["| " + " | ".join(header) + " |", "|" + "|".join("---" for _ in header) + "|"]
     lines += ["| " + " | ".join(r) + " |" for r in rows]
     return "\n".join(lines) + f"\n\n<sub>Source: {source}</sub>"
+
+
+SECURITY_CATEGORIES = {
+    "destructive": "Destructive statements",
+    "multi_statement": "Several statements in one",
+    "obfuscation": "Comment and unicode obfuscation",
+    "catalog_snooping": "Catalog, file and network snooping",
+    "confinement": "Another database's tables",
+    "session": "Changing session settings",
+    "resource_exhaustion": "Resource exhaustion",
+    "prompt_injection": "What a planted instruction asks for",
+}
+
+
+@table
+def security_suite() -> str:
+    """Attacks per category, and how many each layer stopped on its own."""
+    suite = load("metrics/security_suite.json")
+    modes = ("parser", "database", "privileges")
+    rows = []
+    for key, label in SECURITY_CATEGORIES.items():
+        recs = [r for r in suite["records"] if r["category"] == key]
+        cells = []
+        for mode in modes:
+            outcomes = [r["modes"][mode]["outcome"] for r in recs]
+            stopped = sum(o in ("rejected", "denied", "contained", "no_effect") for o in outcomes)
+            shown = outcomes.count("disclosed")
+            cells.append(f"{stopped}" + (f" (+{shown} names listed)" if shown else ""))
+        rows.append([label, str(len(recs)), *cells])
+    return md(
+        [
+            "Kind of attack",
+            "Attacks",
+            "Stopped by the checker alone",
+            "By the database alone",
+            "By the role's privileges alone",
+        ],
+        rows,
+        "`results/metrics/security_suite.json` (one run)",
+    )
 
 
 # --------------------------------------------------------------------------------------

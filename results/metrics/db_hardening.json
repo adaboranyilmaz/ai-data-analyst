@@ -1,0 +1,31 @@
+{
+  "databases": {
+    "template1": {
+      "functions_closed": 73,
+      "functions_open": [],
+      "views_closed": 9,
+      "views_open": []
+    },
+    "analyst": {
+      "functions_closed": 73,
+      "functions_open": [],
+      "views_closed": 9,
+      "views_open": [],
+      "schema_roles": {
+        "roles": 1,
+        "problems": []
+      }
+    },
+    "bird": {
+      "functions_closed": 73,
+      "functions_open": [],
+      "views_closed": 9,
+      "views_open": [],
+      "schema_roles": {
+        "roles": 11,
+        "problems": []
+      }
+    }
+  },
+  "all_closed": true
+}
