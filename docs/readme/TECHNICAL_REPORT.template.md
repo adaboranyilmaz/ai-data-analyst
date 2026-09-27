@@ -4,7 +4,7 @@
 
 The short, plain-language version is the [README](README.md).
 
-**Status: under construction. The data layer and the analyst's guarded tools are in place; the analyst has not been evaluated, so its results are TBD.**
+**Status: under construction. The data layer, the analyst's guarded tools and the evaluation harness are in place; the analyst has not been evaluated, so its results are TBD.**
 
 ## Abstract
 
@@ -34,9 +34,33 @@ The second guard is the database. Each query runs through a server-side cursor, 
 
 The security suite runs {{security_attacks}} attacks three times: against the checker alone (its verdict; a resource attack it accepts runs as the administrator, with no database guard, under the limits), against the database alone (the checker bypassed), and against the role's privileges alone (also without the read-only transaction). After every attack, whatever its outcome, the suite checks what could have changed: a canary table, the relations and large objects in the database, grants, advisory locks, queries left running, a secret token anywhere in the result, and the next query's time zone, role and search path. The prompt-injection attacks are the SQL a planted row asks for; whether a model obeys such text is tested with the agent.
 
+### Scoring
+
+Execution accuracy (EX) is scored as BIRD's official evaluator scores it. The predicted and the expert query run on one connection in one transaction, so both see the same current time ({{gold_reads_the_clock}} expert queries compute ages from it), and their rows are compared as Python values from the database driver: as sets, so row order and repeated rows do not matter while column order does, and with Python's equality, so `682`, `682.0` and `Decimal("682")` are equal while `Decimal("0.1")` and `0.1` are not, a NaN equals nothing, and an array or JSON value (which cannot be hashed) makes the comparison fail and the answer score 0, exactly as in the official code. Soft-F1, BIRD's secondary measure, removes repeated rows keeping their first order and pairs the rows by position, so unlike EX it depends on row order.
+
+The scorer runs both queries through the analyst's execution layer (the question's database role, a read-only server-side cursor), with the official evaluator's {{ex_timeout_s}}-second limit for the pair, but without the SQL checker, which the official evaluator does not have. It adds three settings. A cursor is planned as a plain query rather than for its first rows, which could change the row order and, for a LIMIT over tied rows, the rows themselves. Sequential scans always start at a table's first block: by default PostgreSQL starts a scan of a large table where the previous one stopped, so the order of rows from a query without a complete ORDER BY depends on the queries run before it. And parallel workers are off, for the reason given under Data. A prediction's rows stream in batches: EX keeps only the rows found in the expert result and stops at the first row that is not, so a prediction of a million repeated rows is scored exactly.
+
+The scorer was checked against the official evaluator's own code, downloaded at a pinned commit, with only its connection function replaced (it names its authors' superuser; here the read-only role, with every benchmark schema on the search path, which resolves every table name as in BIRD's single-schema dump). Both scored {{ex_validation_cases}} cases: each of the {{ex_validation_gold}} expert queries submitted as its own answer, {{ex_validation_mutants}} altered expert queries (up to three per question, drawn with a fixed seed from fifteen kinds of alteration: a missing or extra DISTINCT, a changed LIMIT or sort direction, a dropped condition, an off-by-one comparison or literal, another aggregate, columns swapped, dropped, repeated or cast, an inner join made a left join), and {{ex_validation_edge}} hand-written edge cases, each aimed at one rule of the comparison. {{ex_validation_divergence}} further cases show the kinds of query the official evaluator runs and this scorer refuses by construction.
+
+### Question sets and the pre-registration
+
+The benchmark's questions are split once, before any agent runs, into disjoint sets drawn in proportion to every database-by-difficulty stratum with a fixed seed: a pilot set of {{split_pilot}} to write and tune the prompts on, never part of a reported comparison; an ablation set of {{split_ablation}}, on which the designs are compared and the winner chosen, and where confidence is calibrated and the decline threshold set; and {{split_held_out}} held-out questions, on which nothing is chosen or fitted, for the reported accuracy, calibration and declines. The hand-written banking set holds {{own_set_questions}} questions on the Czech bank in six categories; every query in it passes the SQL checker and runs, none repeats a benchmark query or result, and each ambiguous question's accepted readings give different results. The designs, the selection rule, the calibration and escalation rules, the scoring of the banking set and the predictions are written down before the first scored run, and the analysis refuses to run if that record has changed, if a prediction is blank, or if the question sets differ from the ones it names.
+
+Intervals are percentile bootstrap intervals over questions (10,000 resamples, 95%), paired when two runs on the same questions are compared. Selective prediction is summarised by the risk-coverage curve, its area (AURC) and accuracy at fixed coverage (Geifman and El-Yaniv, 2017); calibration by the expected calibration error, the Brier score and reliability diagrams (Guo et al., 2017); and the separation of right from wrong answers by the AUROC of confidence. Confidence often takes few distinct values, so every selective measure is its expected value over the order of tied confidences. A declined question counts as wrong in execution accuracy and ranks below every answered one.
+
+<sub>Source: `results/metrics/ex_validation.json`, `results/metrics/splits.json`, `results/metrics/own_set_gold.json`, `results/metrics/preregistration.md`</sub>
+
 ## Results
 
 **The analyst's accuracy and confidence:** TBD.
+
+### The scorer against the official evaluator
+
+The project's scorer and the official evaluator gave the same EX verdict on {{ex_validation_identical}} of the {{ex_validation_cases}} cases: all {{ex_validation_gold_right}} expert queries scored as correct by both, the {{ex_validation_mutants}} altered queries (of which {{ex_validation_mutants_right}} still return the expert result, and both scorers say so), and every edge case, each giving the verdict the official comparison's rules predict. The official evaluator's own aggregation by difficulty gives the same numbers from both sets of verdicts. Soft-F1 matched on {{soft_f1_validation_identical}} cases, to the last bit. That needs every scan to start at a table's first block in both scorers: Soft-F1 depends on row order, and with PostgreSQL's synchronised scans the order of a large table's rows depends on the queries run before, so two scorers run at different times can disagree.
+
+With PostgreSQL's default parallel query, the official evaluator scored {{parallel_gold_wrong}} of the {{parallel_gold_cases}} expert queries wrong when compared with themselves: a sum and an average over a single-precision column, which parallel workers add in a different order on each run. The expert queries, the analyst's queries and the scorer therefore all run without parallel workers.
+
+<sub>Source: `results/metrics/ex_validation.json` (one run)</sub>
 
 ### The database guards
 
@@ -52,7 +76,7 @@ The checker accepts all {{guard_gold_accepted}} expert queries unchanged, and al
 
 ## Limitations
 
-The project is under construction and the analyst has not been evaluated. The security suite is one run of a fixed set of attacks: it shows that each guard stops these attacks on its own, not that no other attack exists, and the checker's lexical rules are written for PostgreSQL alone. PostgreSQL has no per-query memory limit, so a query that builds one very large value is bounded by the checker's size limits and by PostgreSQL's one-gigabyte limit on a single value, not by the database guard. BIRD's questions are public and may be in the training data of the models evaluated; the hand-written banking set is there to measure that risk, and results on the two are reported separately.
+The project is under construction and the analyst has not been evaluated. The scorer reproduces the official evaluator on single-statement queries over the question's own database, which is all the analyst's tools can run; three kinds of query that the official evaluator runs (a second statement, a statement before the query, another database's tables) score 0 here by design. {{gold_reads_the_clock}} expert queries compute ages from the current date, so their correct answers change on the first of January (and, for some, on birthdays); the scorer runs them beside each answer, so a replay at a later date agrees with the original run only if the answer also reads the date rather than fixing a year. Soft-F1 is not computed for a prediction with more than 200,000 distinct rows unless none of its paired rows matches (it is then exactly 0). The security suite is one run of a fixed set of attacks: it shows that each guard stops these attacks on its own, not that no other attack exists, and the checker's lexical rules are written for PostgreSQL alone. PostgreSQL has no per-query memory limit, so a query that builds one very large value is bounded by the checker's size limits and by PostgreSQL's one-gigabyte limit on a single value, not by the database guard. BIRD's questions are public and may be in the training data of the models evaluated; the hand-written banking set is there to measure that risk, and results on the two are reported separately.
 
 ## Dependencies
 
@@ -66,6 +90,8 @@ The project is under construction and the analyst has not been evaluated. The se
 | sqlglot | see `uv.lock` | the SQL checker's syntax tree |
 | jsonschema | see `uv.lock` | chart validation |
 | Vega-Lite JSON schema | `6.4.3`, vendored and pinned by hash | the chart grammar |
+| NumPy | see `uv.lock` | bootstrap intervals |
+| BIRD's official evaluator | pinned commit, files pinned by hash, not redistributed | checking the project's scorer; run with psycopg2 2.9.9, func-timeout 4.3.5 and PyMySQL 1.1.1, the versions its requirements pin |
 | MLflow, DVC | see `uv.lock` | experiment tracking; data versioning |
 
 <sub>Source: `pyproject.toml`, `uv.lock`, `docker-compose.yml`</sub>
@@ -74,7 +100,11 @@ The project is under construction and the analyst has not been evaluated. The se
 
 Berka, P. (1999). *Guide to the Financial Data Set*. PKDD'99 Discovery Challenge.
 
+Geifman, Y., & El-Yaniv, R. (2017). *Selective Classification for Deep Neural Networks*. NeurIPS.
+
 Greshake, K., et al. (2023). *Not What You've Signed Up For: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection*. AISec.
+
+Guo, C., Pleiss, G., Sun, Y., & Weinberger, K. Q. (2017). *On Calibration of Modern Neural Networks*. ICML.
 
 Li, J., et al. (2023). *Can LLM Already Serve as a Database Interface? A BIg Bench for Large-Scale Database Grounded Text-to-SQLs* (BIRD). NeurIPS Datasets and Benchmarks. Data licensed CC BY-SA 4.0.
 

@@ -1,0 +1,678 @@
+# The hand-written banking test set: questions on the Czech bank database (schema `financial`),
+# written for this project and none a paraphrase of the benchmark's own financial questions.
+# Six categories (src/eval/own_set.py says what each carries and what a good answer does):
+#   a  standard analyst questions        d  unanswerable from the data
+#   b  multi-step and multi-join          e  false premise
+#   c  ambiguous                          f  comparative or causal
+# Ages and "recent" periods are stated against the data's last day, 1998-12-31, never today.
+# `review`: approved (as drafted) | edited | written (by the author) | pending.
+# The questions are this project's (MIT); the data they query is BIRD's copy of the PKDD'99
+# financial data set (CC BY-SA 4.0).
+
+version: 1
+database: financial
+questions:
+  # ---------------------------------------------------------------- a: standard analyst questions
+  - id: own-a01
+    category: a
+    question: How many cards of each class (junior, classic, gold) has the bank issued?
+    gold_sql: SELECT type, COUNT(*) FROM card GROUP BY type
+    review: approved
+
+  - id: own-a02
+    category: a
+    question: >-
+      For each loan duration, how many loans are there and what is their average monthly
+      instalment in CZK, rounded to two decimal places?
+    gold_sql: >-
+      SELECT duration, COUNT(*), ROUND(CAST(AVG(payments) AS NUMERIC), 2) FROM loan
+      GROUP BY duration
+    review: approved
+
+  - id: own-a03
+    category: a
+    question: What was the total amount of cash deposits made in 1997, in CZK?
+    gold_sql: >-
+      SELECT SUM(amount) FROM trans WHERE operation = 'VKLAD'
+      AND date BETWEEN '1997-01-01' AND '1997-12-31'
+    review: approved
+
+  - id: own-a04
+    category: a
+    question: In which month of 1998 were the most transactions recorded? Give the month's number.
+    gold_sql: >-
+      SELECT EXTRACT(MONTH FROM date) FROM trans WHERE date BETWEEN '1998-01-01' AND '1998-12-31'
+      GROUP BY EXTRACT(MONTH FROM date) ORDER BY COUNT(*) DESC LIMIT 1
+    review: approved
+
+  - id: own-a05
+    category: a
+    question: How many accounts were opened in each year?
+    gold_sql: SELECT EXTRACT(YEAR FROM date), COUNT(*) FROM account GROUP BY EXTRACT(YEAR FROM date)
+    review: approved
+
+  - id: own-a06
+    category: a
+    question: >-
+      How many standing orders pay insurance premiums, and what is the sum of their amounts
+      in CZK?
+    gold_sql: SELECT COUNT(*), SUM(amount) FROM "order" WHERE k_symbol = 'POJISTNE'
+    review: approved
+
+  - id: own-a07
+    category: a
+    question: Which five districts had the highest unemployment rate in 1996?
+    gold_sql: SELECT a2 FROM district ORDER BY a13 DESC LIMIT 5
+    review: approved
+
+  - id: own-a08
+    category: a
+    question: How many clients were born in the 1970s?
+    gold_sql: SELECT COUNT(*) FROM client WHERE birth_date BETWEEN '1970-01-01' AND '1979-12-31'
+    review: approved
+
+  - id: own-a09
+    category: a
+    question: >-
+      How many old-age pension payments were credited in 1998, and what was their total
+      amount in CZK?
+    gold_sql: >-
+      SELECT COUNT(*), SUM(amount) FROM trans WHERE k_symbol = 'DUCHOD'
+      AND date BETWEEN '1998-01-01' AND '1998-12-31'
+    review: approved
+
+  - id: own-a10
+    category: a
+    question: How many accounts have an authorised user besides their owner?
+    gold_sql: SELECT COUNT(DISTINCT account_id) FROM disp WHERE type = 'DISPONENT'
+    review: approved
+
+  - id: own-a11
+    category: a
+    question: How much did the bank charge in statement fees in 1997, in CZK?
+    gold_sql: >-
+      SELECT SUM(amount) FROM trans WHERE k_symbol = 'SLUZBY'
+      AND date BETWEEN '1997-01-01' AND '1997-12-31'
+    review: approved
+
+  - id: own-a12
+    category: a
+    question: >-
+      What was the average amount of the loans granted in 1998, in CZK, rounded to two
+      decimal places?
+    gold_sql: >-
+      SELECT ROUND(AVG(amount), 2) FROM loan WHERE date BETWEEN '1998-01-01' AND '1998-12-31'
+    review: approved
+
+  # ------------------------------------------------------------- b: multi-step and multi-join
+  - id: own-b01
+    category: b
+    question: >-
+      For each region, how many clients live there, and how many of those clients hold a
+      card?
+    gold_sql: >-
+      SELECT d.a3, COUNT(*), COUNT(cd.card_id) FROM client AS c
+      JOIN district AS d ON d.district_id = c.district_id
+      JOIN disp AS dp ON dp.client_id = c.client_id
+      LEFT JOIN card AS cd ON cd.disp_id = dp.disp_id
+      GROUP BY d.a3
+    review: approved
+
+  - id: own-b02
+    category: b
+    question: >-
+      Branches in which district granted the largest total amount of loans in 1997? Give the
+      district's name.
+    gold_sql: >-
+      SELECT d.a2 FROM loan AS l JOIN account AS a ON a.account_id = l.account_id
+      JOIN district AS d ON d.district_id = a.district_id
+      WHERE l.date BETWEEN '1997-01-01' AND '1997-12-31'
+      GROUP BY d.a2 ORDER BY SUM(l.amount) DESC LIMIT 1
+    review: approved
+
+  - id: own-b03
+    category: b
+    question: >-
+      What is the average loan amount of account owners who hold a gold card, and of account
+      owners who hold no card? Give the two averages in that order, in CZK, rounded to two
+      decimal places.
+    gold_sql: >-
+      SELECT ROUND(AVG(CASE WHEN cd.type = 'gold' THEN l.amount END), 2),
+      ROUND(AVG(CASE WHEN cd.card_id IS NULL THEN l.amount END), 2)
+      FROM loan AS l JOIN disp AS dp ON dp.account_id = l.account_id AND dp.type = 'OWNER'
+      LEFT JOIN card AS cd ON cd.disp_id = dp.disp_id
+    review: approved
+
+  - id: own-b04
+    category: b
+    question: >-
+      For each statement frequency, how many accounts are there, and how many of them have a
+      loan?
+    gold_sql: >-
+      SELECT a.frequency, COUNT(*), COUNT(l.loan_id) FROM account AS a
+      LEFT JOIN loan AS l ON l.account_id = a.account_id GROUP BY a.frequency
+    review: approved
+
+  - id: own-b05
+    category: b
+    question: >-
+      How many account owners living in the north Moravia region saw their account's balance
+      go below zero at some point in 1997?
+    gold_sql: >-
+      SELECT COUNT(DISTINCT dp.client_id) FROM trans AS t
+      JOIN disp AS dp ON dp.account_id = t.account_id AND dp.type = 'OWNER'
+      JOIN client AS c ON c.client_id = dp.client_id
+      JOIN district AS d ON d.district_id = c.district_id
+      WHERE d.a3 = 'north Moravia' AND t.balance < 0
+      AND t.date BETWEEN '1997-01-01' AND '1997-12-31'
+    review: approved
+
+  - id: own-b06
+    category: b
+    question: >-
+      Which ten account owners were charged the most penalty interest in total? List their
+      client IDs.
+    gold_sql: >-
+      SELECT dp.client_id FROM trans AS t
+      JOIN disp AS dp ON dp.account_id = t.account_id AND dp.type = 'OWNER'
+      WHERE t.k_symbol = 'SANKC. UROK' GROUP BY dp.client_id
+      ORDER BY SUM(t.amount) DESC LIMIT 10
+    review: approved
+
+  - id: own-b07
+    category: b
+    question: >-
+      How many of the loans whose contract finished without being repaid belong to accounts
+      owned by women?
+    gold_sql: >-
+      SELECT COUNT(*) FROM loan AS l
+      JOIN disp AS dp ON dp.account_id = l.account_id AND dp.type = 'OWNER'
+      JOIN client AS c ON c.client_id = dp.client_id
+      WHERE l.status = 'B' AND c.gender = 'F'
+    review: approved
+
+  - id: own-b08
+    category: b
+    question: >-
+      How many transactions were made in 1998 on accounts whose owner lives in Prague (the
+      district Hl.m. Praha)?
+    gold_sql: >-
+      SELECT COUNT(*) FROM trans AS t
+      JOIN disp AS dp ON dp.account_id = t.account_id AND dp.type = 'OWNER'
+      JOIN client AS c ON c.client_id = dp.client_id
+      JOIN district AS d ON d.district_id = c.district_id
+      WHERE d.a2 = 'Hl.m. Praha' AND t.date BETWEEN '1998-01-01' AND '1998-12-31'
+    review: approved
+
+  - id: own-b09
+    category: b
+    question: >-
+      How many loans were granted to account owners who were under 30 years old on the day
+      the loan was granted?
+    gold_sql: >-
+      SELECT COUNT(*) FROM loan AS l
+      JOIN disp AS dp ON dp.account_id = l.account_id AND dp.type = 'OWNER'
+      JOIN client AS c ON c.client_id = dp.client_id
+      WHERE EXTRACT(YEAR FROM AGE(l.date, c.birth_date)) < 30
+    review: approved
+
+  - id: own-b10
+    category: b
+    question: >-
+      For each card class, what was the total amount withdrawn by card in 1998 from the
+      accounts the cards belong to, in CZK?
+    gold_sql: >-
+      SELECT cd.type, SUM(t.amount) FROM card AS cd
+      JOIN disp AS dp ON dp.disp_id = cd.disp_id
+      JOIN trans AS t ON t.account_id = dp.account_id
+      WHERE t.operation = 'VYBER KARTOU' AND t.date BETWEEN '1998-01-01' AND '1998-12-31'
+      GROUP BY cd.type
+    review: approved
+
+  - id: own-b11
+    category: b
+    question: >-
+      What was the total amount of household payments (SIPO) debited in 1996 from accounts
+      held at branches in the south Bohemia region, in CZK?
+    gold_sql: >-
+      SELECT SUM(t.amount) FROM trans AS t JOIN account AS a ON a.account_id = t.account_id
+      JOIN district AS d ON d.district_id = a.district_id
+      WHERE t.k_symbol = 'SIPO' AND d.a3 = 'south Bohemia'
+      AND t.date BETWEEN '1996-01-01' AND '1996-12-31'
+    review: approved
+
+  - id: own-b12
+    category: b
+    question: >-
+      How many clients own an account that has both a loan and a standing order for an
+      insurance premium?
+    gold_sql: >-
+      SELECT COUNT(DISTINCT dp.client_id) FROM disp AS dp
+      JOIN loan AS l ON l.account_id = dp.account_id
+      JOIN "order" AS o ON o.account_id = dp.account_id
+      WHERE dp.type = 'OWNER' AND o.k_symbol = 'POJISTNE'
+    review: approved
+
+  # ------------------------------------------------------------------------- c: ambiguous
+  - id: own-c01
+    category: c
+    question: Who are our ten best customers?
+    interpretations:
+      - assumption: >-
+          The ten account owners whose account reached the highest balance in 1998 (client
+          IDs).
+        gold_sql: >-
+          SELECT dp.client_id FROM trans AS t
+          JOIN disp AS dp ON dp.account_id = t.account_id AND dp.type = 'OWNER'
+          WHERE t.date BETWEEN '1998-01-01' AND '1998-12-31'
+          GROUP BY dp.client_id ORDER BY MAX(t.balance) DESC LIMIT 10
+      - assumption: >-
+          The ten account owners whose account received the most money over the whole history
+          (client IDs).
+        gold_sql: >-
+          SELECT dp.client_id FROM trans AS t
+          JOIN disp AS dp ON dp.account_id = t.account_id AND dp.type = 'OWNER'
+          WHERE t.type = 'PRIJEM' GROUP BY dp.client_id ORDER BY SUM(t.amount) DESC LIMIT 10
+    review: approved
+
+  - id: own-c02
+    category: c
+    question: How many customers do we have?
+    interpretations:
+      - assumption: Every client, owners and authorised users alike.
+        gold_sql: SELECT COUNT(*) FROM client
+      - assumption: Account owners only.
+        gold_sql: SELECT COUNT(DISTINCT client_id) FROM disp WHERE type = 'OWNER'
+    review: approved
+
+  - id: own-c03
+    category: c
+    question: How big is the average loan?
+    interpretations:
+      - assumption: The average amount granted, in CZK, rounded to two decimal places.
+        gold_sql: SELECT ROUND(AVG(amount), 2) FROM loan
+      - assumption: The average monthly instalment, in CZK, rounded to two decimal places.
+        gold_sql: SELECT ROUND(CAST(AVG(payments) AS NUMERIC), 2) FROM loan
+    review: approved
+
+  - id: own-c05
+    category: c
+    question: How much did transactions grow in 1998?
+    interpretations:
+      - assumption: >-
+          Growth in the number of transactions from 1997 to 1998, in percent, rounded to two
+          decimal places.
+        gold_sql: >-
+          SELECT ROUND(100.0 * (SUM(CASE WHEN EXTRACT(YEAR FROM date) = 1998 THEN 1 ELSE 0 END)
+          - SUM(CASE WHEN EXTRACT(YEAR FROM date) = 1997 THEN 1 ELSE 0 END))
+          / SUM(CASE WHEN EXTRACT(YEAR FROM date) = 1997 THEN 1 ELSE 0 END), 2) FROM trans
+      - assumption: >-
+          Growth in the total amount moved by transactions from 1997 to 1998, in percent,
+          rounded to two decimal places.
+        gold_sql: >-
+          SELECT ROUND(100.0 * (SUM(CASE WHEN EXTRACT(YEAR FROM date) = 1998 THEN amount ELSE 0 END)
+          - SUM(CASE WHEN EXTRACT(YEAR FROM date) = 1997 THEN amount ELSE 0 END))
+          / SUM(CASE WHEN EXTRACT(YEAR FROM date) = 1997 THEN amount ELSE 0 END), 2) FROM trans
+    review: approved
+
+  - id: own-c06
+    category: c
+    question: How many bad loans are there?
+    interpretations:
+      - assumption: Loans whose contract finished without being repaid (status B).
+        gold_sql: SELECT COUNT(*) FROM loan WHERE status = 'B'
+      - assumption: >-
+          Loans not repaid as agreed: finished unpaid (B) or running with the client in debt
+          (D).
+        gold_sql: SELECT COUNT(*) FROM loan WHERE status IN ('B', 'D')
+    review: approved
+
+  - id: own-c07
+    category: c
+    question: Where do most of our customers come from? Give the top three districts with their numbers.
+    interpretations:
+      - assumption: Where clients live (their home district), counting clients.
+        gold_sql: >-
+          SELECT d.a2, COUNT(*) FROM client AS c
+          JOIN district AS d ON d.district_id = c.district_id
+          GROUP BY d.a2 ORDER BY COUNT(*) DESC LIMIT 3
+      - assumption: Where accounts are held (the branch's district), counting accounts.
+        gold_sql: >-
+          SELECT d.a2, COUNT(*) FROM account AS a
+          JOIN district AS d ON d.district_id = a.district_id
+          GROUP BY d.a2 ORDER BY COUNT(*) DESC LIMIT 3
+    review: approved
+
+  - id: own-c09
+    category: c
+    question: How many young clients do we have?
+    interpretations:
+      - assumption: Clients under 25 on 1998-12-31, the data's last day.
+        gold_sql: >-
+          SELECT COUNT(*) FROM client
+          WHERE EXTRACT(YEAR FROM AGE(CAST('1998-12-31' AS DATE), birth_date)) < 25
+      - assumption: Clients under 30 on 1998-12-31, the data's last day.
+        gold_sql: >-
+          SELECT COUNT(*) FROM client
+          WHERE EXTRACT(YEAR FROM AGE(CAST('1998-12-31' AS DATE), birth_date)) < 30
+    review: approved
+
+  - id: own-c10
+    category: c
+    question: What was our busiest month in 1997? Give the month's number.
+    interpretations:
+      - assumption: The month with the most transactions.
+        gold_sql: >-
+          SELECT EXTRACT(MONTH FROM date) FROM trans
+          WHERE date BETWEEN '1997-01-01' AND '1997-12-31'
+          GROUP BY EXTRACT(MONTH FROM date) ORDER BY COUNT(*) DESC LIMIT 1
+      - assumption: The month in which the most money moved, in and out together.
+        gold_sql: >-
+          SELECT EXTRACT(MONTH FROM date) FROM trans
+          WHERE date BETWEEN '1997-01-01' AND '1997-12-31'
+          GROUP BY EXTRACT(MONTH FROM date) ORDER BY SUM(amount) DESC LIMIT 1
+    review: approved
+
+  - id: own-c11
+    category: c
+    question: What is our total loan volume, in CZK?
+    interpretations:
+      - assumption: Everything ever lent, the amounts of all loans granted.
+        gold_sql: SELECT SUM(amount) FROM loan
+      - assumption: >-
+          The current loan book, the amounts of the loans whose contract is still running
+          (status C or D).
+        gold_sql: SELECT SUM(amount) FROM loan WHERE status IN ('C', 'D')
+    review: approved
+
+  # ----------------------------------------------------------- d: unanswerable from the data
+  - id: own-d01
+    category: d
+    question: What was the average credit score of the clients who were granted a loan in 1997?
+    missing: No credit score or any other creditworthiness rating is recorded.
+    review: approved
+
+  - id: own-d02
+    category: d
+    question: How satisfied are gold card holders with the bank's service?
+    missing: No satisfaction, survey or complaint data is recorded.
+    review: approved
+
+  - id: own-d03
+    category: d
+    question: What interest rate was charged on each loan granted in 1996?
+    missing: >-
+      No interest rate is recorded: a loan's amount equals its duration times its monthly
+      instalment, so interest is not shown separately.
+    review: approved
+
+  - id: own-d04
+    category: d
+    question: How many clients closed their accounts in 1998?
+    missing: No closing date or account status is recorded; accounts only have an opening date.
+    review: approved
+
+  - id: own-d05
+    category: d
+    question: Which bank employees approved the most loans in 1997?
+    missing: No employee or loan-approval data is recorded.
+    review: approved
+
+  - id: own-d06
+    category: d
+    question: What was the bank's net profit in 1997?
+    missing: >-
+      The data holds client accounts only; the bank's income, costs and results are not
+      recorded.
+    review: approved
+
+  - id: own-d07
+    category: d
+    question: How many card withdrawals were made at ATMs in Brno in 1998?
+    missing: Card withdrawals carry no ATM or location, only the account, date and amount.
+    review: approved
+
+  - id: own-d08
+    category: d
+    question: What is the marital status of the clients with the largest loans?
+    missing: No marital status is recorded; clients have only sex, date of birth and district.
+    review: approved
+
+  - id: own-d10
+    category: d
+    question: How many loan applications did the bank turn down in 1997?
+    missing: Only granted loans are recorded; applications, and the decisions on them, are not.
+    review: approved
+
+  # ------------------------------------------------------------------------ e: false premise
+  - id: own-e01
+    category: e
+    question: Why did the bank stop issuing gold cards in 1996?
+    premise: The bank stopped issuing gold cards in 1996.
+    correction: >-
+      Gold cards were issued in every year from 1995 to 1998, most of them in 1998.
+    premise_sql: >-
+      SELECT EXTRACT(YEAR FROM issued), COUNT(*) FROM card WHERE type = 'gold'
+      GROUP BY EXTRACT(YEAR FROM issued)
+    review: approved
+
+  - id: own-e03
+    category: e
+    question: >-
+      Since many of our borrowers hold several loans, what is the average number of loans per
+      borrower?
+    premise: Many borrowers hold several loans.
+    correction: >-
+      No client holds more than one loan: an account has at most one loan and every client is
+      linked to one account.
+    premise_sql: >-
+      SELECT MAX(n) FROM (SELECT dp.client_id, COUNT(*) AS n FROM loan AS l
+      JOIN disp AS dp ON dp.account_id = l.account_id GROUP BY dp.client_id) AS per_client
+    review: approved
+
+  - id: own-e04
+    category: e
+    question: Why are platinum cards the most common card class?
+    premise: The bank issues platinum cards, and they are the most common class.
+    correction: >-
+      There is no platinum class: cards are junior, classic or gold, and classic is by far the
+      most common.
+    premise_sql: SELECT type, COUNT(*) FROM card GROUP BY type
+    review: approved
+
+  - id: own-e06
+    category: e
+    question: Given that all our loans run for 12 months, what is the average monthly instalment?
+    premise: All loans run for 12 months.
+    correction: Loans run for 12, 24, 36, 48 or 60 months, in similar numbers.
+    premise_sql: SELECT duration, COUNT(*) FROM loan GROUP BY duration
+    review: approved
+
+  - id: own-e07
+    category: e
+    question: Why did nobody open an account in 1996?
+    premise: No accounts were opened in 1996.
+    correction: More accounts were opened in 1996 than in any other year.
+    premise_sql: >-
+      SELECT EXTRACT(YEAR FROM date), COUNT(*) FROM account GROUP BY EXTRACT(YEAR FROM date)
+    review: approved
+
+  - id: own-e08
+    category: e
+    question: >-
+      Since women own most of our accounts, which region has the highest share of female
+      account owners?
+    premise: Women own most of the accounts.
+    correction: Men own slightly more accounts than women.
+    premise_sql: >-
+      SELECT c.gender, COUNT(*) FROM disp AS dp JOIN client AS c ON c.client_id = dp.client_id
+      WHERE dp.type = 'OWNER' GROUP BY c.gender
+    review: approved
+
+  - id: own-e09
+    category: e
+    question: >-
+      The bank never charged penalty interest, so how many accounts were overdrawn in 1997
+      without any charge?
+    premise: The bank never charged penalty interest.
+    correction: >-
+      Penalty interest for negative balances was charged: 407 times in 1997 alone, 1,577 times
+      in all.
+    premise_sql: >-
+      SELECT EXTRACT(YEAR FROM date), COUNT(*) FROM trans WHERE k_symbol = 'SANKC. UROK'
+      GROUP BY EXTRACT(YEAR FROM date)
+    review: approved
+
+  - id: own-e10
+    category: e
+    question: Since most of our loans end up unpaid, what is the average amount of an unpaid loan?
+    premise: Most loans end up unpaid.
+    correction: >-
+      Only 31 of the 682 loans finished unpaid (status B), and 45 more are running with the
+      client in debt (D); most are repaid or running as agreed.
+    premise_sql: SELECT status, COUNT(*) FROM loan GROUP BY status
+    review: approved
+
+  - id: own-e11
+    category: e
+    question: Since every client holds a card, which card class is most common among women?
+    premise: Every client holds a card.
+    correction: >-
+      Only 892 of the 5,369 clients hold a card, about one in six; cards are issued only to
+      account owners.
+    premise_sql: >-
+      SELECT COUNT(*), COUNT(cd.card_id) FROM client AS c
+      JOIN disp AS dp ON dp.client_id = c.client_id
+      LEFT JOIN card AS cd ON cd.disp_id = dp.disp_id
+    review: approved
+
+  # ---------------------------------------------------------------- f: comparative or causal
+  - id: own-f01
+    category: f
+    question: Did giving clients a card make them more likely to take out a loan?
+    gold_sql: >-
+      SELECT cd.card_id IS NOT NULL, COUNT(*), COUNT(l.loan_id) FROM disp AS dp
+      LEFT JOIN card AS cd ON cd.disp_id = dp.disp_id
+      LEFT JOIN loan AS l ON l.account_id = dp.account_id
+      WHERE dp.type = 'OWNER' GROUP BY cd.card_id IS NOT NULL
+    check: >-
+      The share of owners with a loan, with and without a card, and the difference with a
+      confidence interval. No causal claim: the data is observational, and most card holders
+      with a loan received their card on or after the day the loan was granted, so the card
+      cannot have led to those loans.
+    review: approved
+
+  - id: own-f02
+    category: f
+    question: Are loans to women repaid worse than loans to men?
+    gold_sql: >-
+      SELECT c.gender, COUNT(*), SUM(CASE WHEN l.status IN ('B', 'D') THEN 1 ELSE 0 END)
+      FROM loan AS l JOIN disp AS dp ON dp.account_id = l.account_id AND dp.type = 'OWNER'
+      JOIN client AS c ON c.client_id = dp.client_id GROUP BY c.gender
+    check: >-
+      The share of loans not repaid as agreed (status B or D) for each sex, and the difference
+      with a confidence interval; a warning that the counts of bad loans are small; no causal
+      claim about sex.
+    review: approved
+
+  - id: own-f03
+    category: f
+    question: Do weekly statements lead to more overdrafts?
+    gold_sql: >-
+      SELECT a.frequency, COUNT(DISTINCT a.account_id),
+      COUNT(DISTINCT CASE WHEN t.balance < 0 THEN a.account_id END)
+      FROM account AS a JOIN trans AS t ON t.account_id = a.account_id GROUP BY a.frequency
+    check: >-
+      The share of accounts ever overdrawn for each statement frequency, with intervals (the
+      weekly and per-transaction groups are small); association only: clients choose their
+      statement frequency, so it can reflect how they use the account rather than change it.
+    review: approved
+
+  - id: own-f04
+    category: f
+    question: Do clients in districts with higher unemployment default on their loans more often?
+    gold_sql: >-
+      SELECT d.district_id, d.a13, COUNT(*),
+      SUM(CASE WHEN l.status IN ('B', 'D') THEN 1 ELSE 0 END)
+      FROM loan AS l JOIN disp AS dp ON dp.account_id = l.account_id AND dp.type = 'OWNER'
+      JOIN client AS c ON c.client_id = dp.client_id
+      JOIN district AS d ON d.district_id = c.district_id
+      GROUP BY d.district_id, d.a13
+    check: >-
+      A trend of the default rate against district unemployment with its uncertainty; a warning
+      that district rates describe districts, not the clients in them; no causal claim.
+    review: approved
+
+  - id: own-f06
+    category: f
+    question: Do older clients keep higher balances?
+    gold_sql: >-
+      SELECT EXTRACT(YEAR FROM AGE(CAST('1998-12-31' AS DATE), c.birth_date)), MAX(t.balance)
+      FROM trans AS t JOIN disp AS dp ON dp.account_id = t.account_id AND dp.type = 'OWNER'
+      JOIN client AS c ON c.client_id = dp.client_id
+      WHERE t.date BETWEEN '1998-01-01' AND '1998-12-31'
+      GROUP BY dp.client_id, c.birth_date
+    check: >-
+      The relation between an owner's age on 1998-12-31 and the highest balance reached in
+      1998, as a trend with its significance; association only.
+    review: approved
+
+  - id: own-f07
+    category: f
+    question: Are gold card holders more active than classic card holders?
+    gold_sql: >-
+      SELECT cd.type, COUNT(DISTINCT cd.card_id), COUNT(t.trans_id) FROM card AS cd
+      JOIN disp AS dp ON dp.disp_id = cd.disp_id
+      LEFT JOIN trans AS t ON t.account_id = dp.account_id
+      AND t.date BETWEEN '1998-01-01' AND '1998-12-31'
+      WHERE cd.type IN ('gold', 'classic') GROUP BY cd.type
+    check: >-
+      Transactions per account in 1998 for each class, and the difference with a confidence
+      interval computed per account (the gold group is small); association only: the bank may
+      offer gold cards to clients who are already active.
+    review: approved
+
+  - id: own-f09
+    category: f
+    question: Did withdrawals by card become more common between 1996 and 1998?
+    gold_sql: >-
+      SELECT EXTRACT(YEAR FROM date), SUM(CASE WHEN operation = 'VYBER KARTOU' THEN 1 ELSE 0 END),
+      COUNT(*) FROM trans WHERE operation IN ('VYBER', 'VYBER KARTOU')
+      AND date BETWEEN '1996-01-01' AND '1998-12-31' GROUP BY EXTRACT(YEAR FROM date)
+    check: >-
+      The share of withdrawals made by card in each year, with intervals and a trend test; a
+      note that the number of cards issued grew over the same years, so the share rises with
+      it.
+    review: approved
+
+  - id: own-f10
+    category: f
+    question: Does receiving an old-age pension protect clients from overdrafts?
+    gold_sql: >-
+      SELECT p.pension, COUNT(*), SUM(p.overdrawn) FROM (SELECT account_id,
+      MAX(CASE WHEN k_symbol = 'DUCHOD' THEN 1 ELSE 0 END) AS pension,
+      MAX(CASE WHEN balance < 0 THEN 1 ELSE 0 END) AS overdrawn
+      FROM trans GROUP BY account_id) AS p GROUP BY p.pension
+    check: >-
+      The share of accounts ever overdrawn, with and without pension credits, and the
+      difference with a confidence interval. No causal claim: clients who receive a pension are
+      much older (71 against 39 on average on 1998-12-31) and have a regular income, so age or
+      income could explain the difference.
+    review: approved
+
+  - id: own-f11
+    category: f
+    question: >-
+      Are loans on accounts with a second authorised user repaid better, because two people
+      share responsibility?
+    gold_sql: >-
+      SELECT u.disp_id IS NOT NULL, COUNT(*),
+      SUM(CASE WHEN l.status IN ('B', 'D') THEN 1 ELSE 0 END)
+      FROM loan AS l LEFT JOIN disp AS u ON u.account_id = l.account_id AND u.type = 'DISPONENT'
+      GROUP BY u.disp_id IS NOT NULL
+    check: >-
+      The share of loans not repaid as agreed, on accounts with and without a second authorised
+      user, and the difference with a confidence interval, by a method that holds when one group
+      has no bad loans at all. No causal claim: such accounts may differ in other ways
+      (households, the bank's own choices), and the data cannot say why.
+    review: approved

@@ -37,8 +37,30 @@ values:
   sample_rows_max_ms: {file: metrics/tool_check.json, path: latency/sample_rows/max_ms, fmt: int}
   validate_chart_p50_ms: {file: metrics/tool_check.json, path: latency/validate_chart/p50_ms, fmt: f1}
 
+  # the evaluation harness: the project's scoring against BIRD's official evaluator, the
+  # question sets, the hand-written banking set
+  ex_validation_cases: {file: metrics/ex_validation.json, path: identical_ex/cases, fmt: int}
+  ex_validation_identical: {file: metrics/ex_validation.json, path: identical_ex/identical, fmt: int}
+  soft_f1_validation_identical: {file: metrics/ex_validation.json, path: identical_soft_f1/identical, fmt: int}
+  ex_validation_gold: {file: metrics/ex_validation.json, path: parts/gold/cases, fmt: int}
+  ex_validation_gold_right: {file: metrics/ex_validation.json, path: parts/gold/project_ex_1, fmt: int}
+  ex_validation_mutants: {file: metrics/ex_validation.json, path: parts/mutant/cases, fmt: int}
+  ex_validation_mutants_right: {file: metrics/ex_validation.json, path: parts/mutant/official_ex_1, fmt: int}
+  ex_validation_edge: {file: metrics/ex_validation.json, path: parts/edge/cases, fmt: int}
+  ex_validation_divergence: {file: metrics/ex_validation.json, path: parts/divergence/cases, fmt: int}
+  ex_timeout_s: {file: metrics/ex_validation.json, path: project/timeout_s, fmt: int}
+  parallel_gold_cases: {file: metrics/ex_validation.json, path: parallel_plans/gold_cases, fmt: int}
+  parallel_gold_right: {file: metrics/ex_validation.json, path: parallel_plans/official_ex_1, fmt: int}
+  parallel_gold_wrong: {expr: parallel_gold_cases - parallel_gold_right, fmt: int}
+  gold_reads_the_clock: {file: metrics/ex_validation.json, path: gold_drift/reads_the_clock, count_where: {}, fmt: int}
+  split_pilot: {file: metrics/splits.json, path: sizes/pilot, fmt: int}
+  split_ablation: {file: metrics/splits.json, path: sizes/ablation, fmt: int}
+  split_held_out: {file: metrics/splits.json, path: sizes/held_out, fmt: int}
+  own_set_questions: {file: metrics/own_set_gold.json, path: questions, fmt: int}
+
 # Decimals and percentages the templates may contain outside a placeholder: version numbers,
 # never results.
 allowed_literals:
   - "3.12" # the Python version
   - "4.0" # CC BY-SA 4.0, the licence of the BIRD data
+  - "95%" # the level of every interval, fixed in configs/eval.yaml

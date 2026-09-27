@@ -4,7 +4,7 @@
 
 This project builds an AI analyst that answers questions about a bank's database by writing and running SQL. Every answer comes with its evidence and a confidence, and the analyst declines when it is unsure. The project measures whether that confidence can be trusted.
 
-**Status: under construction. The data, its dictionary and the analyst's guarded database tools are in place; the analyst itself has not been evaluated yet, so its results below are TBD.**
+**Status: under construction. The data, its dictionary, the analyst's guarded database tools and the evaluation that will score it are in place; the analyst itself has not been evaluated yet, so its results below are TBD.**
 
 **Auditable** means that every answer can be traced to the exact SQL, the rows it used and the checks it ran, and that it comes with a calibrated confidence. It does not mean guaranteed correct.
 
@@ -28,14 +28,22 @@ The design, being built in stages:
 
 - **The client database.** Real, anonymised data from a Czech bank (1993–1998), with {{financial_trans_rows}} transactions. It is the standard public relational banking dataset and part of the BIRD benchmark. Its codes are in Czech; translating them into business terms is what an analyst does with any bank's internal codes. A hand-written data dictionary gives every column an English name, a meaning and a unit, and translates all {{financial_code_values}} code values found in the data.
 - **The benchmark.** BIRD mini-dev, a public text-to-SQL benchmark of {{bird_questions}} questions over {{bird_databases}} databases, with an expert-written query for every question, so the analyst can be compared with published results. All {{gold_executed}} expert queries run on this project's database.
-- **A hand-written banking test set.** Questions written for this project and fixed before the analyst sees them, including ambiguous, unanswerable and false-premise questions. Unlike a public benchmark, they cannot be in any model's training data.
+- **A hand-written banking test set.** {{own_set_questions}} questions written for this project and fixed before the analyst sees them, including ambiguous, unanswerable and false-premise questions. Unlike a public benchmark, they cannot be in any model's training data.
 - **The analyst.** An agent loop built directly on the Anthropic SDK, with tools to list and describe tables, look at sample rows, run queries and check chart designs.
 - **Two independent guards on the database.** A SQL checker accepts only a single read-only query over the analyst's own tables. Separately, the database itself runs every query under a role that can read that one database's tables and nothing else, and stops it at a time limit. Each guard is tested on its own against the same attacks (see Results).
-- **The evaluation.** How accuracy rises as the analyst declines its least confident answers (a risk–coverage curve), and whether its confidence is calibrated on questions it was not tuned on.
+- **The evaluation.** Accuracy is scored exactly as BIRD's official evaluator scores it, checked against the official code query by query (see Results). Beyond accuracy: how accuracy rises as the analyst declines its least confident answers (a risk–coverage curve), and whether its confidence is calibrated on questions it was not tuned on. The benchmark's questions are split once, before any run: {{split_pilot}} to write the prompts on, {{split_ablation}} to choose the design and calibrate confidence on, and {{split_held_out}} held out for the reported results. How the design will be chosen, and what is expected, is written down before the first run.
 
 ## Results
 
 **The analyst's accuracy and confidence:** TBD.
+
+**Checking the scorer.** Before scoring the analyst, the project's scoring was run beside BIRD's official evaluator on {{ex_validation_cases}} test queries: the {{ex_validation_gold}} expert queries themselves, {{ex_validation_mutants}} expert queries altered on purpose (a missing DISTINCT, a flipped sort, a dropped filter, a cast to another type) and {{ex_validation_edge}} hand-written edge cases.
+
+- The two gave the same verdict on {{ex_validation_identical}} of the {{ex_validation_cases}}, including the {{ex_validation_mutants_right}} altered queries that still return the right rows. The secondary score (Soft-F1) matched to the last digit on {{soft_f1_validation_identical}}.
+- Three kinds of query that the official evaluator runs are refused here by design: a second statement, a setting changed before the query, and another database's tables. The analyst's own tools refuse them before they run, so no answer of the analyst can meet them.
+- With PostgreSQL's default parallel query switched on, the official evaluator scored {{parallel_gold_wrong}} of the {{parallel_gold_cases}} expert queries wrong against themselves: their floating-point sums came out differently on each run. Every query here runs without it.
+
+<sub>Source: `results/metrics/ex_validation.json` (one run)</sub>
 
 **The database guards.** A suite of {{security_attacks}} attacks tried to change data, run a hidden second statement, disguise SQL with comments or look-alike characters, read settings, files and other databases' tables, change session settings, tie up the server, and do what a planted instruction in the data asks. Each guard ran the suite with the other switched off:
 
@@ -66,6 +74,7 @@ uv run pytest
 ## Limitations
 
 - Work in progress: the analyst has not been evaluated yet.
+- {{gold_reads_the_clock}} of the benchmark's expert queries compute ages from today's date, so their correct answers change over time. The scorer runs them beside each answer, but a stored answer that fixed a year can go out of date.
 - The security results are from one run of a fixed set of attacks. They show that each guard stops these attacks, not that no other attack exists.
 - BIRD's questions are public and may be in the models' training data. The hand-written banking set exists to check for that.
 
@@ -80,6 +89,7 @@ uv run pytest
 | psycopg | database access from Python |
 | sqlglot | the SQL checker's parser |
 | jsonschema, Vega-Lite schema | checking the analyst's chart designs |
+| NumPy | bootstrap intervals |
 | MLflow, DVC | experiment tracking and data versioning |
 
 <sub>Source: `pyproject.toml`, `docker-compose.yml`</sub>

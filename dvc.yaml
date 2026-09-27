@@ -1,6 +1,8 @@
 # The data pipeline: fetch the pinned benchmark files, load the database and execute the gold
 # SQL, snapshot the schemas, convert BIRD's descriptions into dictionaries, and summarise;
-# then harden the databases, run the security suite and check the agent's tools.
+# then harden the databases, run the security suite and check the agent's tools; then check the
+# project's scoring against BIRD's official evaluator, split the questions into fixed sets, and
+# execute the hand-written banking set.
 # `dvc repro` rebuilds it from data/minidev.zip (`dvc pull`) with the compose PostgreSQL up.
 # Results files are committed to git (cache: false); data outputs go to the DVC cache.
 stages:
@@ -162,4 +164,75 @@ stages:
       - results/metrics/db_hardening.json
     outs:
       - results/metrics/tool_check.json:
+          cache: false
+
+  # BIRD's official evaluator at its pinned commit, each file checked against its hash. Only
+  # ex_validation runs it; it is not committed (the upstream repository has no licence file).
+  bird_eval:
+    cmd: uv run python scripts/30_fetch_bird_eval.py
+    deps:
+      - scripts/30_fetch_bird_eval.py
+    params:
+      - configs/eval.yaml:
+          - official_evaluator.commit
+          - official_evaluator.url
+          - official_evaluator.sha256
+    outs:
+      - data/raw/bird_eval
+
+  # The project's scoring against the official evaluator's, case by case: the gold queries,
+  # altered gold queries and hand-written edge cases. Needs the `bird-eval` dependency group.
+  ex_validation:
+    cmd: uv run --group bird-eval python scripts/31_validate_ex.py
+    deps:
+      - scripts/31_validate_ex.py
+      - src/eval/ex.py
+      - src/eval/execution.py
+      - src/eval/official.py
+      - src/eval/mutations.py
+      - src/db/execute.py
+      - src/db/values.py
+      - configs/ex_edge_cases.yaml
+      - data/raw/bird_eval
+      - data/raw/bird_minidev
+      - results/metrics/gold_execution.json
+      - results/metrics/db_hardening.json
+    params:
+      - configs/eval.yaml:
+          - official_evaluator
+          - execution_accuracy
+    outs:
+      - data/eval_validation
+      - results/metrics/ex_validation.json:
+          cache: false
+
+  # The pilot, ablation and held-out question sets, fixed before any agent runs.
+  splits:
+    cmd: uv run python scripts/32_splits.py
+    deps:
+      - scripts/32_splits.py
+      - src/eval/splits.py
+      - data/raw/bird_minidev
+    params:
+      - configs/eval.yaml:
+          - splits
+    outs:
+      - results/metrics/splits.json:
+          cache: false
+
+  # Every query of the hand-written banking set through the guard and the agent's execution
+  # path; fails if one is refused, fails, returns nothing, or repeats the benchmark.
+  own_set_gold:
+    cmd: uv run python scripts/33_own_set_gold.py
+    deps:
+      - scripts/33_own_set_gold.py
+      - src/eval/own_set.py
+      - own_set/questions.yaml
+      - src/db/guard.py
+      - src/db/execute.py
+      - results/metrics/gold_execution.json
+      - results/metrics/db_hardening.json
+    outs:
+      - data/own_set
+      - results/metrics/own_set_gold.json:
           cache: false

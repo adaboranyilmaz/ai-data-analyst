@@ -378,3 +378,180 @@ stages:
       hash: md5
       md5: dd5cf31bb6dcec18cd4e634e7fe4be10
       size: 891
+  bird_eval:
+    cmd: uv run python scripts/30_fetch_bird_eval.py
+    deps:
+    - path: scripts/30_fetch_bird_eval.py
+      hash: md5
+      md5: 542afbe57d9a514f871be413d08a720f
+      size: 1681
+    params:
+      configs/eval.yaml:
+        official_evaluator.commit: f9d2750c9b53639820c9d47f6d7a5e5025c780ab
+        official_evaluator.sha256:
+          evaluation_ex.py: 
+            da1bbcd4530be83692d7c650c814ea9704bb710d0c953eb75d02ccb38233cf89
+          evaluation_f1.py: 
+            ba2700ee09b0c34d7e203788544757e6e6d6c99c0425bb92b3daa3927eee29bf
+          evaluation_utils.py: 
+            f6943d249caac5aeaef9bce21d43dbf29dcef85a0c965a76df032a9542f308bf
+        official_evaluator.url: 
+          https://raw.githubusercontent.com/bird-bench/mini_dev/{commit}/evaluation/{file}
+    outs:
+    - path: data/raw/bird_eval
+      hash: md5
+      md5: 893c26061d3ab4b66d99e6635f0a35bd.dir
+      size: 16922
+      nfiles: 3
+  ex_validation:
+    cmd: uv run --group bird-eval python scripts/31_validate_ex.py
+    deps:
+    - path: configs/ex_edge_cases.yaml
+      hash: md5
+      md5: e153817ff601f287c516321b7476f36e
+      size: 6631
+    - path: data/raw/bird_eval
+      hash: md5
+      md5: 893c26061d3ab4b66d99e6635f0a35bd.dir
+      size: 16922
+      nfiles: 3
+    - path: data/raw/bird_minidev
+      hash: md5
+      md5: de9ac463b8487b2d6c1b587646cc0ccc.dir
+      size: 518739
+      nfiles: 77
+    - path: results/metrics/db_hardening.json
+      hash: md5
+      md5: a0759c5f1dbc7ef0e9c27ff8f523d12d
+      size: 588
+    - path: results/metrics/gold_execution.json
+      hash: md5
+      md5: ca9a9015f9409e01f233e775dee4f4d6
+      size: 243001
+    - path: scripts/31_validate_ex.py
+      hash: md5
+      md5: d7d61d6afb813c910d0401409abfe219
+      size: 12678
+    - path: src/db/execute.py
+      hash: md5
+      md5: 57c0fc77ed43edf172224617f29aa8a9
+      size: 9452
+    - path: src/db/values.py
+      hash: md5
+      md5: 89b4c48e9a002dd8fb24dcd84d56f716
+      size: 3787
+    - path: src/eval/ex.py
+      hash: md5
+      md5: 9f0752f7c7b227976d897f5e154defd8
+      size: 7036
+    - path: src/eval/execution.py
+      hash: md5
+      md5: 340381e9b7a1d9c551f6d7fcc3618d04
+      size: 9476
+    - path: src/eval/mutations.py
+      hash: md5
+      md5: ed05fee3995065879c5e87cf8b5b5911
+      size: 7650
+    - path: src/eval/official.py
+      hash: md5
+      md5: 56b93fc7f8f1e50fc5f1f0e0af72e855
+      size: 3913
+    params:
+      configs/eval.yaml:
+        execution_accuracy:
+          timeout_s: 30
+          fetch_rows: 5000
+          soft_f1_max_distinct_rows: 200000
+        official_evaluator:
+          commit: f9d2750c9b53639820c9d47f6d7a5e5025c780ab
+          url: 
+            https://raw.githubusercontent.com/bird-bench/mini_dev/{commit}/evaluation/{file}
+          dir: data/raw/bird_eval
+          sha256:
+            evaluation_ex.py: 
+              da1bbcd4530be83692d7c650c814ea9704bb710d0c953eb75d02ccb38233cf89
+            evaluation_f1.py: 
+              ba2700ee09b0c34d7e203788544757e6e6d6c99c0425bb92b3daa3927eee29bf
+            evaluation_utils.py: 
+              f6943d249caac5aeaef9bce21d43dbf29dcef85a0c965a76df032a9542f308bf
+          meta_time_out_s: 30.0
+          mutants_per_query: 3
+          mutant_seed: 20260927
+    outs:
+    - path: data/eval_validation
+      hash: md5
+      md5: eac8551c0e1fb4d9b1c3d67be8f415ab.dir
+      size: 1201480
+      nfiles: 2
+    - path: results/metrics/ex_validation.json
+      hash: md5
+      md5: 11f5b819e18b88c77d166f91761dc453
+      size: 224812
+  splits:
+    cmd: uv run python scripts/32_splits.py
+    deps:
+    - path: data/raw/bird_minidev
+      hash: md5
+      md5: de9ac463b8487b2d6c1b587646cc0ccc.dir
+      size: 518739
+      nfiles: 77
+    - path: scripts/32_splits.py
+      hash: md5
+      md5: fdfdb1c0cc57e250f57a546cd13d881d
+      size: 1818
+    - path: src/eval/splits.py
+      hash: md5
+      md5: 2db510152903cd9d95ca2fb1f78c029a
+      size: 3261
+    params:
+      configs/eval.yaml:
+        splits:
+          seed: 20260927
+          pilot: 30
+          ablation: 150
+    outs:
+    - path: results/metrics/splits.json
+      hash: md5
+      md5: 8fb712fd3a959d31ac6aacc79f7b50c2
+      size: 9712
+  own_set_gold:
+    cmd: uv run python scripts/33_own_set_gold.py
+    deps:
+    - path: own_set/questions.yaml
+      hash: md5
+      md5: 29495a4f896ae0ac76df919eff032ad3
+      size: 27926
+    - path: results/metrics/db_hardening.json
+      hash: md5
+      md5: a0759c5f1dbc7ef0e9c27ff8f523d12d
+      size: 588
+    - path: results/metrics/gold_execution.json
+      hash: md5
+      md5: ca9a9015f9409e01f233e775dee4f4d6
+      size: 243001
+    - path: scripts/33_own_set_gold.py
+      hash: md5
+      md5: 2f456a8565983a44310657b0fedb08dd
+      size: 7630
+    - path: src/db/execute.py
+      hash: md5
+      md5: 57c0fc77ed43edf172224617f29aa8a9
+      size: 9452
+    - path: src/db/guard.py
+      hash: md5
+      md5: d1ac663da0810f236a13f1f98d0026c3
+      size: 15204
+    - path: src/eval/own_set.py
+      hash: md5
+      md5: 739d06d4de65b499085be9ff0fbd06ed
+      size: 5104
+    outs:
+    - path: data/own_set
+      hash: md5
+      md5: fbbb7d3748e2a6d182939441c477bdfa.dir
+      size: 51144
+      nfiles: 2
+    - path: results/metrics/own_set_gold.json
+      hash: md5
+      md5: acc15257a7a9633b88792f4cd6899b6a
+      size: 20972
