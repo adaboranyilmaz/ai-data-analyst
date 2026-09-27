@@ -1,0 +1,196 @@
+{
+  "created_utc": "2026-09-27T16:30:03+00:00",
+  "ollama_version": "0.34.4",
+  "gpu": "NVIDIA GeForce RTX 3050 Laptop GPU, 4096 MiB",
+  "config": {
+    "min_context": 8192,
+    "probe_context": 8192,
+    "max_tokens": 512,
+    "options": {
+      "temperature": 0,
+      "seed": 0
+    }
+  },
+  "selection_rule": "Among the candidates measured that list the `tools` capability and run entirely on the GPU at min_context tokens or more, choose the highest share of probe questions answered with a valid tool call; break ties by the largest context that still runs entirely on the GPU, then by the least GPU memory at min_context. While any candidate is not yet downloaded, the choice is provisional.",
+  "probe_system_prompt": "You are a data analyst with read-only access to a shop database with two tables: customers(id, name, city) and orders(id, customer_id, amount, ordered_at). Answer the user's question by calling exactly one of your tools.",
+  "probe_tools": [
+    "list_tables",
+    "describe_table",
+    "run_sql"
+  ],
+  "candidates": {
+    "qwen2.5:3b-instruct": {
+      "status": "measured",
+      "digest": "357c53fb659c5076de1d65ccb0b397446227b71a42be9d1603d46168015c9e4b",
+      "capabilities": [
+        "completion",
+        "tools"
+      ],
+      "parameter_size": "3.1B",
+      "quantization": "Q4_K_M",
+      "max_context": 32768,
+      "license_first_line": "Qwen RESEARCH LICENSE AGREEMENT",
+      "gpu_fit": [
+        {
+          "num_ctx": 4096,
+          "context_reported": 4096,
+          "size_mib": 2059,
+          "gpu_mib": 2059,
+          "on_gpu": true
+        },
+        {
+          "num_ctx": 8192,
+          "context_reported": 8192,
+          "size_mib": 2207,
+          "gpu_mib": 2207,
+          "on_gpu": true
+        },
+        {
+          "num_ctx": 16384,
+          "context_reported": 16384,
+          "size_mib": 2794,
+          "gpu_mib": 2216,
+          "on_gpu": false
+        },
+        {
+          "num_ctx": 32768,
+          "context_reported": 32768,
+          "size_mib": 3396,
+          "gpu_mib": 2271,
+          "on_gpu": false
+        }
+      ],
+      "max_context_on_gpu": 8192,
+      "probes": [
+        {
+          "question": "Which tables are in the database?",
+          "expected_tool": "list_tables",
+          "tool_calls": [
+            {
+              "type": "tool_use",
+              "id": "call_0",
+              "name": "list_tables",
+              "input": {}
+            }
+          ],
+          "text": "",
+          "valid_call": true,
+          "expected_tool_called": true,
+          "output_tokens": 16,
+          "tokens_per_s": 65.5,
+          "cache_key": "ebbe3279f5ff3b915cea4d7b4a443c3baf6b53ac0a7d2113bffe2241b5b69971",
+          "from_cache": false
+        },
+        {
+          "question": "What columns does the orders table have?",
+          "expected_tool": "describe_table",
+          "tool_calls": [
+            {
+              "type": "tool_use",
+              "id": "call_0",
+              "name": "describe_table",
+              "input": {
+                "table": "orders"
+              }
+            }
+          ],
+          "text": "",
+          "valid_call": true,
+          "expected_tool_called": true,
+          "output_tokens": 20,
+          "tokens_per_s": 74.0,
+          "cache_key": "7d70f1a9b958820a4f623148d9f9b1575ae6eb306c31f31f3514d2689c4edc49",
+          "from_cache": false
+        },
+        {
+          "question": "How many customers are there?",
+          "expected_tool": "run_sql",
+          "tool_calls": [
+            {
+              "type": "tool_use",
+              "id": "call_0",
+              "name": "run_sql",
+              "input": {
+                "sql": "SELECT COUNT(id) as customer_count FROM customers;"
+              }
+            }
+          ],
+          "text": "",
+          "valid_call": true,
+          "expected_tool_called": true,
+          "output_tokens": 29,
+          "tokens_per_s": 72.1,
+          "cache_key": "58e62401443b8f7a86a067ec2ba3de7982a96290645863f8fa835252d65e6dec",
+          "from_cache": false
+        },
+        {
+          "question": "What is the total order amount per city?",
+          "expected_tool": "run_sql",
+          "tool_calls": [
+            {
+              "type": "tool_use",
+              "id": "call_0",
+              "name": "run_sql",
+              "input": {
+                "sql": "SELECT c.city, SUM(o.amount) as total_order_amount FROM customers c JOIN orders o ON c.id = o.customer_id GROUP BY c.city"
+              }
+            }
+          ],
+          "text": "",
+          "valid_call": true,
+          "expected_tool_called": true,
+          "output_tokens": 48,
+          "tokens_per_s": 71.7,
+          "cache_key": "704f5e3e200eec17a2afb8ef82264c65981f8e481f3959b98aa9808deaf7f106",
+          "from_cache": false
+        },
+        {
+          "question": "Show the five largest orders.",
+          "expected_tool": "run_sql",
+          "tool_calls": [
+            {
+              "type": "tool_use",
+              "id": "call_0",
+              "name": "run_sql",
+              "input": {
+                "sql": "SELECT id, amount, ordered_at FROM orders ORDER BY amount DESC LIMIT 5"
+              }
+            }
+          ],
+          "text": "",
+          "valid_call": true,
+          "expected_tool_called": true,
+          "output_tokens": 35,
+          "tokens_per_s": 71.9,
+          "cache_key": "580964ff6175240e0bd6f2f3853f5e2974c13cb2c4f907d849eb365302b71134",
+          "from_cache": false
+        }
+      ],
+      "n_probes": 5,
+      "n_valid_calls": 5,
+      "valid_call_rate": 1.0,
+      "n_expected_tool": 5
+    },
+    "llama3.2:3b": {
+      "status": "not_downloaded"
+    },
+    "qwen2.5-coder:3b": {
+      "status": "not_downloaded"
+    },
+    "phi4-mini": {
+      "status": "not_downloaded"
+    }
+  },
+  "selection": {
+    "selected": "qwen2.5:3b-instruct",
+    "provisional": true,
+    "eligible": [
+      "qwen2.5:3b-instruct"
+    ],
+    "not_downloaded": [
+      "llama3.2:3b",
+      "qwen2.5-coder:3b",
+      "phi4-mini"
+    ]
+  }
+}

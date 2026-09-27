@@ -1,0 +1,19 @@
+# The free local-model arm: the candidates and the rule that chooses between them, fixed
+# before any candidate is measured (scripts/00_local_model_check.py). Each candidate is an
+# instruct model of about 3-4B parameters at 4-bit; the script never downloads one.
+candidates:
+  - qwen2.5:3b-instruct
+  - llama3.2:3b
+  - qwen2.5-coder:3b
+  - phi4-mini
+context_sizes: [4096, 8192, 16384, 32768] # loaded at each, up to the model's own maximum
+min_context: 8192
+probe_context: 8192
+max_tokens: 512
+options: { temperature: 0, seed: 0 }
+selection_rule: >-
+  Among the candidates measured that list the `tools` capability and run entirely on the GPU
+  at min_context tokens or more, choose the highest share of probe questions answered with a
+  valid tool call; break ties by the largest context that still runs entirely on the GPU,
+  then by the least GPU memory at min_context. While any candidate is not yet downloaded,
+  the choice is provisional.

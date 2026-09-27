@@ -1,0 +1,19 @@
+# API spend: the ledger file, the caps and the prices the ledger charges (src/llm/ledger.py).
+# A phase can spend up to its own cap, and all phases together up to the project cap. A phase
+# missing from phase_caps_usd cannot make a single paid call: each phase's cap is set after
+# its counted dry run, before its first paid call.
+ledger: results/metrics/api_spend.json
+project_cap_usd: 60.0
+phase_caps_usd:
+  phase0: 0.0 # scaffolding: no API calls
+batch_discount: 0.5 # Message Batches: half of every token price
+
+# USD per million tokens, Anthropic first-party list prices from
+# https://platform.claude.com/docs/en/about-claude/pricing. Cache writes cost 1.25x the input
+# price for the 5-minute lifetime and 2x for 1 hour; cache reads 0.1x, except 0.05x on
+# Claude Opus 5.5.
+prices_as_of: "2026-09-27"
+prices_usd_per_mtok:
+  claude-sonnet-5: { input: 2.00, output: 10.00, cache_write_5m: 2.50, cache_write_1h: 4.00, cache_read: 0.20 }
+  claude-haiku-4-5: { input: 1.00, output: 5.00, cache_write_5m: 1.25, cache_write_1h: 2.00, cache_read: 0.10 }
+  claude-opus-5-5: { input: 4.00, output: 20.00, cache_write_5m: 5.00, cache_write_1h: 8.00, cache_read: 0.20 }

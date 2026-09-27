@@ -1,0 +1,29 @@
+# PostgreSQL 16 for the analyst. The agent connects as `analyst_ro`, a role that can only read
+# (docker/postgres/init/01_roles.sh); `analyst_admin` owns the data and loads it.
+#   docker compose up -d --wait        # start, and wait until it accepts connections
+#   docker compose down                # stop (add -v to delete the data volume)
+# Passwords come from .env; empty values fall back to the local-only defaults below. The port
+# is bound to 127.0.0.1 only, and the data is a public benchmark.
+services:
+  postgres:
+    image: postgres:16.15
+    environment:
+      POSTGRES_USER: analyst_admin
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-analyst-local-admin}
+      POSTGRES_DB: analyst
+      ANALYST_RO_PASSWORD: ${ANALYST_RO_PASSWORD:-analyst-local-ro}
+    ports:
+      - "127.0.0.1:${ANALYST_DB_PORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./docker/postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      # Over TCP: during first-time initialisation the server listens on its Unix socket only,
+      # so a socket check would report ready before the init scripts have finished.
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U analyst_admin -d analyst"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+volumes:
+  pgdata:
