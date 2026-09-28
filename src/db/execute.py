@@ -11,10 +11,14 @@ holds even for a query no checker has seen:
 - **The schema's own privileges.** Each transaction switches to the target's schema role,
   which can read that schema and nothing else (src/db/hardening.py).
 - **Settings fixed per call.** Each transaction sets its own `search_path`, time zone,
-  statement timeout, parallel-worker limit and string-literal rules with `SET LOCAL`, so
-  nothing a previous query did to the session carries over. Results depend on two of them:
-  the benchmark's timestamps were written at UTC+8, and parallel workers make floating-point
-  sums and averages add their terms in a different order on every run. Statements are never
+  statement timeout, parallel-worker limit, scan start and string-literal rules with
+  `SET LOCAL`, so nothing a previous query did to the session carries over. Results depend on
+  three of them: the benchmark's timestamps were written at UTC+8; parallel workers make
+  floating-point sums and averages add their terms in a different order on every run; and a
+  synchronized sequential scan of a large table starts where the previous scan of it stopped,
+  so without a complete ORDER BY the rows come back in an order (and, under a LIMIT, a
+  selection) that depends on the queries run before. Every scan here starts at the table's
+  first block, so a replayed run gets the same rows in the same order. Statements are never
   prepared, so each is planned under these settings.
 - **A time limit enforced by the client.** The role can switch off its own statement timeout,
   so a timer cancels the query from the client side when the limit runs out.
@@ -221,6 +225,7 @@ class ReadOnlyExecutor:
             ("search_path", self.target.schema),
             ("TimeZone", self.target.time_zone),
             ("max_parallel_workers_per_gather", "0"),
+            ("synchronize_seqscans", "off"),
             # a backslash in '...' is an ordinary character, as the query guard assumes
             ("standard_conforming_strings", "on"),
         ):

@@ -215,8 +215,8 @@
       "project_soft_f1": "0.0",
       "outcome": "error",
       "error_kind": "multiple_statements",
-      "project_seconds": 0.0074,
-      "official_seconds": 0.049,
+      "project_seconds": 0.0075,
+      "official_seconds": 0.043,
       "gold_set_hash": null
     },
     {
@@ -231,8 +231,8 @@
       "project_soft_f1": "0.0",
       "outcome": "error",
       "error_kind": "syntax_error",
-      "project_seconds": 0.0073,
-      "official_seconds": 0.03,
+      "project_seconds": 0.0079,
+      "official_seconds": 0.049,
       "gold_set_hash": null
     },
     {
@@ -247,8 +247,8 @@
       "project_soft_f1": "0.0",
       "outcome": "error",
       "error_kind": "sql_error",
-      "project_seconds": 0.0073,
-      "official_seconds": 0.03,
+      "project_seconds": 0.008,
+      "official_seconds": 0.026,
       "gold_set_hash": null
     }
   ],
@@ -265,8 +265,8 @@
       "project_soft_f1": "0.012987012987012988",
       "outcome": "ok",
       "error_kind": null,
-      "project_seconds": 0.0097,
-      "official_seconds": 0.059,
+      "project_seconds": 0.0105,
+      "official_seconds": 0.044,
       "gold_set_hash": "8f0ae611fb468edfac1531b5cf83109e4ff35a9003d287dc62cc8c3c16909345"
     },
     {
@@ -281,8 +281,8 @@
       "project_soft_f1": "0.0",
       "outcome": "ok",
       "error_kind": null,
-      "project_seconds": 0.0152,
-      "official_seconds": 0.033,
+      "project_seconds": 0.0151,
+      "official_seconds": 0.052,
       "gold_set_hash": "9d6e95242afd02fb79728e5b66acb85f03a661f73f5fe4dca88d758d37c3a01b"
     },
     {
@@ -297,8 +297,8 @@
       "project_soft_f1": "0.3333333333333333",
       "outcome": "ok",
       "error_kind": null,
-      "project_seconds": 0.8645,
-      "official_seconds": 1.246,
+      "project_seconds": 0.9722,
+      "official_seconds": 1.201,
       "gold_set_hash": "f9a32f843b2178eca294c68fd08e41be486ab59d04e21ced5d8f3c55afefeb36"
     },
     {
@@ -313,8 +313,8 @@
       "project_soft_f1": "0.0",
       "outcome": "ok",
       "error_kind": null,
-      "project_seconds": 0.1885,
-      "official_seconds": 1.341,
+      "project_seconds": 0.2025,
+      "official_seconds": 1.318,
       "gold_set_hash": "53b0fe75196070b6040d0c32ad8fb6a2a1ee07fff033bb4ee4214cf148ebe62e"
     },
     {
@@ -329,8 +329,8 @@
       "project_soft_f1": "1.0",
       "outcome": "ok",
       "error_kind": null,
-      "project_seconds": 0.0283,
-      "official_seconds": 0.044,
+      "project_seconds": 0.0303,
+      "official_seconds": 0.067,
       "gold_set_hash": "21beff313f90453f706b96e06fe588bbc76a34f35ccfe59ab48e69f7c3076b43"
     },
     {
@@ -345,8 +345,8 @@
       "project_soft_f1": "0.6666666666666666",
       "outcome": "ok",
       "error_kind": null,
-      "project_seconds": 0.0118,
-      "official_seconds": 0.03,
+      "project_seconds": 0.0119,
+      "official_seconds": 0.029,
       "gold_set_hash": "52d5caced58fdb04b0fd2242492d7d773ee2ac6e4d7799605431ce69fa3edb98"
     },
     {
@@ -361,8 +361,8 @@
       "project_soft_f1": "1.0",
       "outcome": "ok",
       "error_kind": null,
-      "project_seconds": 0.0089,
-      "official_seconds": 0.049,
+      "project_seconds": 0.0088,
+      "official_seconds": 0.025,
       "gold_set_hash": "549ffeacb78466c237f61742dac418b900f19525d5dd1a3594c34e053a52607c"
     },
     {
@@ -377,8 +377,8 @@
       "project_soft_f1": "1.0",
       "outcome": "ok",
       "error_kind": null,
-      "project_seconds": 0.0093,
-      "official_seconds": 0.06,
+      "project_seconds": 0.0089,
+      "official_seconds": 0.037,
       "gold_set_hash": "549ffeacb78466c237f61742dac418b900f19525d5dd1a3594c34e053a52607c"
     },
     {
@@ -393,8 +393,8 @@
       "project_soft_f1": "1.0",
       "outcome": "ok",
       "error_kind": null,
-      "project_seconds": 0.0085,
-      "official_seconds": 0.043,
+      "project_seconds": 0.0088,
+      "official_seconds": 0.025,
       "gold_set_hash": "549ffeacb78466c237f61742dac418b900f19525d5dd1a3594c34e053a52607c"
     },
     {
@@ -409,8 +409,8 @@
       "project_soft_f1": "0.0",
       "outcome": "ok",
       "error_kind": null,
-      "project_seconds": 0.0083,
-      "official_seconds": 0.065,
+      "project_seconds": 0.0088,
+      "official_seconds": 0.025,
       "gold_set_hash": "fea1bfc640bd974dec64ede36f649f73f5e49d1105836d56415c0ff7fbcc8b75"
     },
     {
@@ -425,8 +425,8 @@
       "project_soft_f1": "1.0",
       "outcome": "ok",
       "error_kind": null,
-      "project_seconds": 0.0083,
-      "official_seconds": 0.047,
+      "project_seconds": 0.0089,
+      "official_seconds": 0.05,
       "gold_set_hash": "9ffc8cff260680e486307b66ff9534dd43edbedbafa4538ecdcb135329e29d44"
     },
     {
@@ -441,8 +441,8 @@
       "project_soft_f1": "0.0",
       "outcome": "ok",
       "error_kind": null,
-      "project_seconds": 0.0082,
-      "official_seconds": 0.047,
+      "project_seconds": 0.0092,
+      "official_seconds": 0.025,
       "gold_set_hash": "9ffc8cff260680e486307b66ff9534dd43edbedbafa4538ecdcb135329e29d44"
     },
     {
@@ -457,8 +457,8 @@
       "project_soft_f1": "1.0",
       "outcome": "ok",
       "error_kind": null,
-      "project_seconds": 0.0081,
-      "official_seconds": 0.048,
+      "project_seconds": 0.0095,
+      "official_seconds": 0.064,
       "gold_set_hash": "acc07b62f23f458923737c4cd4a66bd05d1e71eb4f384003baaf2dcc760d6349"
     },
     {
@@ -473,8 +473,8 @@
       "project_soft_f1": "0.0",
       "outcome": "ok",
       "error_kind": null,
-      "project_seconds": 0.0081,
-      "official_seconds": 0.032,
+      "project_seconds": 0.0105,
+      "official_seconds": 0.024,
       "gold_set_hash": "549ffeacb78466c237f61742dac418b900f19525d5dd1a3594c34e053a52607c"
     },
     {
@@ -489,8 +489,8 @@
       "project_soft_f1": "0.0",
       "outcome": "ok",
       "error_kind": null,
-      "project_seconds": 0.015,
-      "official_seconds": 0.043,
+      "project_seconds": 0.0151,
+      "official_seconds": 0.027,
       "gold_set_hash": "7c077ca2308714493d07163e1033c4282bd869ff6d477b3e77408587f95e2930"
     },
     {
@@ -505,8 +505,8 @@
       "project_soft_f1": "1.0",
       "outcome": "ok",
       "error_kind": null,
-      "project_seconds": 0.0091,
-      "official_seconds": 0.027,
+      "project_seconds": 0.0094,
+      "official_seconds": 0.029,
       "gold_set_hash": "161a1bfffa621be8ff92c3a770b613a877f77c8a2d865342c10988ae7f72aa6b"
     },
     {
@@ -521,8 +521,8 @@
       "project_soft_f1": "1.0",
       "outcome": "ok",
       "error_kind": null,
-      "project_seconds": 0.0087,
-      "official_seconds": 0.027,
+      "project_seconds": 0.0215,
+      "official_seconds": 0.035,
       "gold_set_hash": "79130b7f3059036b60c128b48a447d938f351fdd490e4d9c0007b419d5de0ec1"
     },
     {
@@ -537,8 +537,8 @@
       "project_soft_f1": "0.0",
       "outcome": "ok",
       "error_kind": null,
-      "project_seconds": 0.0087,
-      "official_seconds": 0.027,
+      "project_seconds": 0.0112,
+      "official_seconds": 0.023,
       "gold_set_hash": "81ad11aaa1bc9d6b0e78eef49f696a1fc56a03906377fb80896649d97778027b"
     },
     {
@@ -553,8 +553,8 @@
       "project_soft_f1": "0.0",
       "outcome": "comparison_error",
       "error_kind": null,
-      "project_seconds": 0.0071,
-      "official_seconds": 0.058,
+      "project_seconds": 0.0112,
+      "official_seconds": 0.048,
       "gold_set_hash": null
     },
     {
@@ -569,8 +569,8 @@
       "project_soft_f1": "0.0",
       "outcome": "comparison_error",
       "error_kind": null,
-      "project_seconds": 0.0066,
-      "official_seconds": 0.027,
+      "project_seconds": 0.008,
+      "official_seconds": 0.025,
       "gold_set_hash": null
     },
     {
@@ -585,8 +585,8 @@
       "project_soft_f1": "0.0",
       "outcome": "ok",
       "error_kind": null,
-      "project_seconds": 0.0089,
-      "official_seconds": 0.027,
+      "project_seconds": 0.0124,
+      "official_seconds": 0.048,
       "gold_set_hash": "3806b86949190cedbfbc9615e5890416f637a1838b0452ea9d79e5daa490f374"
     },
     {
@@ -601,8 +601,8 @@
       "project_soft_f1": "0.0",
       "outcome": "ok",
       "error_kind": null,
-      "project_seconds": 0.0084,
-      "official_seconds": 0.054,
+      "project_seconds": 0.0121,
+      "official_seconds": 0.026,
       "gold_set_hash": "3806b86949190cedbfbc9615e5890416f637a1838b0452ea9d79e5daa490f374"
     },
     {
@@ -617,8 +617,8 @@
       "project_soft_f1": "0.0",
       "outcome": "ok",
       "error_kind": null,
-      "project_seconds": 0.0555,
-      "official_seconds": 0.123,
+      "project_seconds": 0.0658,
+      "official_seconds": 0.113,
       "gold_set_hash": "f4748f8034f48cdbd31baee3e5ec7cf6d42446be0da0f7a4885ad84b2bb77357"
     },
     {
@@ -633,8 +633,8 @@
       "project_soft_f1": "1.0",
       "outcome": "ok",
       "error_kind": null,
-      "project_seconds": 0.0084,
-      "official_seconds": 0.063,
+      "project_seconds": 0.0085,
+      "official_seconds": 0.043,
       "gold_set_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     },
     {
@@ -649,8 +649,8 @@
       "project_soft_f1": "0.0",
       "outcome": "ok",
       "error_kind": null,
-      "project_seconds": 0.008,
-      "official_seconds": 0.029,
+      "project_seconds": 0.0082,
+      "official_seconds": 0.025,
       "gold_set_hash": "acc07b62f23f458923737c4cd4a66bd05d1e71eb4f384003baaf2dcc760d6349"
     },
     {
@@ -665,8 +665,8 @@
       "project_soft_f1": "1.0",
       "outcome": "ok",
       "error_kind": null,
-      "project_seconds": 0.0096,
-      "official_seconds": 0.045,
+      "project_seconds": 0.0084,
+      "official_seconds": 0.025,
       "gold_set_hash": "816587f97ae1801f736997ff735f0cc98e3e7735926a8c178a66c038fffacde2"
     },
     {
@@ -681,8 +681,8 @@
       "project_soft_f1": "1.0",
       "outcome": "ok",
       "error_kind": null,
-      "project_seconds": 0.0105,
-      "official_seconds": 0.047,
+      "project_seconds": 0.0085,
+      "official_seconds": 0.024,
       "gold_set_hash": "549ffeacb78466c237f61742dac418b900f19525d5dd1a3594c34e053a52607c"
     },
     {
@@ -697,8 +697,8 @@
       "project_soft_f1": "1.0",
       "outcome": "ok",
       "error_kind": null,
-      "project_seconds": 0.0098,
-      "official_seconds": 0.061,
+      "project_seconds": 0.0087,
+      "official_seconds": 0.055,
       "gold_set_hash": "549ffeacb78466c237f61742dac418b900f19525d5dd1a3594c34e053a52607c"
     },
     {
@@ -714,7 +714,7 @@
       "outcome": "ok",
       "error_kind": null,
       "project_seconds": 0.0088,
-      "official_seconds": 0.043,
+      "official_seconds": 0.025,
       "gold_set_hash": "549ffeacb78466c237f61742dac418b900f19525d5dd1a3594c34e053a52607c"
     },
     {
@@ -729,8 +729,8 @@
       "project_soft_f1": "0.0",
       "outcome": "error",
       "error_kind": "syntax_error",
-      "project_seconds": 0.007,
-      "official_seconds": 0.023,
+      "project_seconds": 0.0069,
+      "official_seconds": 0.049,
       "gold_set_hash": null
     },
     {
@@ -745,8 +745,8 @@
       "project_soft_f1": "0.0",
       "outcome": "error",
       "error_kind": "syntax_error",
-      "project_seconds": 0.007,
-      "official_seconds": 0.024,
+      "project_seconds": 0.0073,
+      "official_seconds": 0.062,
       "gold_set_hash": null
     },
     {
@@ -761,8 +761,8 @@
       "project_soft_f1": "0.0",
       "outcome": "error",
       "error_kind": "sql_error",
-      "project_seconds": 0.0082,
-      "official_seconds": 0.025,
+      "project_seconds": 0.0083,
+      "official_seconds": 0.062,
       "gold_set_hash": null
     },
     {
@@ -777,8 +777,8 @@
       "project_soft_f1": "0.0",
       "outcome": "timeout",
       "error_kind": null,
-      "project_seconds": 30.0153,
-      "official_seconds": 60.237,
+      "project_seconds": 30.0389,
+      "official_seconds": 60.236,
       "gold_set_hash": null
     }
   ],

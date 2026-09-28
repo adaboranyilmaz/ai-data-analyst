@@ -39,7 +39,7 @@
       ],
       "rows": 3,
       "set_hash": "a25e9fed0e09940dee2f783fe887afbf9194494cd91ac6e0d577914bc59794b8",
-      "seconds": 0.0235
+      "seconds": 0.0208
     },
     {
       "question_id": "own-a02",
@@ -61,7 +61,7 @@
       ],
       "rows": 5,
       "set_hash": "af94cadc6e8ea5480b83c9386676901d057df0a8279ad6f13c195ea0698c1e31",
-      "seconds": 0.0068
+      "seconds": 0.0072
     },
     {
       "question_id": "own-a03",
@@ -75,7 +75,7 @@
       ],
       "rows": 1,
       "set_hash": "d16312ce585e1987f2742cba772b980fc0b52b2f10c3aad2eec51935ffbf15ae",
-      "seconds": 0.1241
+      "seconds": 0.0788
     },
     {
       "question_id": "own-a04",
@@ -89,7 +89,7 @@
       ],
       "rows": 1,
       "set_hash": "aa7d9b9f8aa68d88eb777eb0f296c4ac0503ebcfeb511b158e05dc9a58539254",
-      "seconds": 0.1302
+      "seconds": 0.1612
     },
     {
       "question_id": "own-a05",
@@ -107,7 +107,7 @@
       ],
       "rows": 5,
       "set_hash": "08a891b3293bf43f03fa4b2532511042caf5f51c39481beff4ef1421aa5fd9d7",
-      "seconds": 0.0079
+      "seconds": 0.0212
     },
     {
       "question_id": "own-a06",
@@ -125,7 +125,7 @@
       ],
       "rows": 1,
       "set_hash": "f170279e9b5d37d1029c0b05326e37f67a5bbb3e627455169c01aab3c5dd5054",
-      "seconds": 0.0065
+      "seconds": 0.0071
     },
     {
       "question_id": "own-a07",
@@ -139,7 +139,7 @@
       ],
       "rows": 5,
       "set_hash": "57f7f8677935222eb017fe0f23a0debb0aa8d4783847a4d8dd13346ce9636697",
-      "seconds": 0.0062
+      "seconds": 0.0068
     },
     {
       "question_id": "own-a08",
@@ -153,7 +153,7 @@
       ],
       "rows": 1,
       "set_hash": "e2b57ad8962f49bf1c7eb95fe01361e62f68e4c79a12769b6d2e8852b3ad4457",
-      "seconds": 0.0064
+      "seconds": 0.0063
     },
     {
       "question_id": "own-a09",
@@ -171,7 +171,7 @@
       ],
       "rows": 1,
       "set_hash": "081cf2137f3a8ccfd6701b15858ec11203fd5a636df34edab4d701b258b38971",
-      "seconds": 0.0875
+      "seconds": 0.0787
     },
     {
       "question_id": "own-a10",
@@ -185,7 +185,7 @@
       ],
       "rows": 1,
       "set_hash": "e762d7d70cff57bf61ec2bf5e13524ffcf6255625f1c332c6902caa36255385c",
-      "seconds": 0.0067
+      "seconds": 0.0159
     },
     {
       "question_id": "own-a11",
@@ -199,7 +199,7 @@
       ],
       "rows": 1,
       "set_hash": "8d07e880ca3a6e09cb55c5f4af760ab5550a83a7cf8c631e36438143b75fce3b",
-      "seconds": 0.0892
+      "seconds": 0.1091
     },
     {
       "question_id": "own-a12",
@@ -213,7 +213,7 @@
       ],
       "rows": 1,
       "set_hash": "7890ebea3a83991e9e5ccfb195c5141939c24331dc7a1e3609d260fd3d1ca3ae",
-      "seconds": 0.0063
+      "seconds": 0.0066
     },
     {
       "question_id": "own-b01",
@@ -235,7 +235,7 @@
       ],
       "rows": 8,
       "set_hash": "8adf632c8dd9b9cfedd8d4936b7dc1e882d365c2fc9cde1f67dda316bcb5170b",
-      "seconds": 0.0109
+      "seconds": 0.0097
     },
     {
       "question_id": "own-b02",
@@ -249,7 +249,7 @@
       ],
       "rows": 1,
       "set_hash": "2b6d59c6892d35deedc01f08a12d9af1553aaf5197a3d3187de72b6a5afb2d78",
-      "seconds": 0.0076
+      "seconds": 0.0071
     },
     {
       "question_id": "own-b03",
@@ -267,7 +267,7 @@
       ],
       "rows": 1,
       "set_hash": "820ba9e8b3a9197c416e63c6f3178e39bafb75d6dcc7746a838da5ebd9c28035",
-      "seconds": 0.0072
+      "seconds": 0.0071
     },
     {
       "question_id": "own-b04",
@@ -289,7 +289,7 @@
       ],
       "rows": 3,
       "set_hash": "4c5f0e460313214a19446be71bbcba0771e1675bdf9be5851a47f803566f9d90",
-      "seconds": 0.0078
+      "seconds": 0.0074
     },
     {
       "question_id": "own-b05",
@@ -303,7 +303,7 @@
       ],
       "rows": 1,
       "set_hash": "c7b4f8484e3cca790e4a3f782eeb718f339e1640b2c991743255daa8dfcdc67c",
-      "seconds": 0.0818
+      "seconds": 0.0743
     },
     {
       "question_id": "own-b06",
@@ -317,7 +317,7 @@
       ],
       "rows": 10,
       "set_hash": "977dbb53e1258fc6d2ad3e3013bc7fc674eb0a2217dcd7ac6c0c14255eafe083",
-      "seconds": 0.0825
+      "seconds": 0.0814
     },
     {
       "question_id": "own-b07",
@@ -331,7 +331,7 @@
       ],
       "rows": 1,
       "set_hash": "275833d9a885824432f31affecec70375616cf7a601aac3439791acddb2a66df",
-      "seconds": 0.0068
+      "seconds": 0.0119
     },
     {
       "question_id": "own-b08",
@@ -345,7 +345,7 @@
       ],
       "rows": 1,
       "set_hash": "f304e4a03158e025282e76ee9ec62656e011d254aead0988486734b2c700863b",
-      "seconds": 0.0796
+      "seconds": 0.101
     },
     {
       "question_id": "own-b09",
@@ -359,7 +359,7 @@
       ],
       "rows": 1,
       "set_hash": "65c457f6b5eda82587e0079ea49191168d5b550b07ba9eb6bf52e987e2f91888",
-      "seconds": 0.0087
+      "seconds": 0.0081
     },
     {
       "question_id": "own-b10",
@@ -377,7 +377,7 @@
       ],
       "rows": 3,
       "set_hash": "501d84fce3076f6cff7a2eadb4223d421e1eb940dfc6b8fce22a341c8b233f5e",
-      "seconds": 0.0742
+      "seconds": 0.0738
     },
     {
       "question_id": "own-b11",
@@ -391,7 +391,7 @@
       ],
       "rows": 1,
       "set_hash": "681ebc68629755d5a6d90d711acbf13e45008fb172d6456752d1c12d071a86c3",
-      "seconds": 0.0872
+      "seconds": 0.0826
     },
     {
       "question_id": "own-b12",
@@ -405,7 +405,7 @@
       ],
       "rows": 1,
       "set_hash": "5c392634949a20010a181fdaf33d6d68552af3c9d7d95f6b08c14c50f5ae9185",
-      "seconds": 0.0136
+      "seconds": 0.0084
     },
     {
       "question_id": "own-c01",
@@ -419,7 +419,7 @@
       ],
       "rows": 10,
       "set_hash": "b83974ebb3683a7f88404affad26aef0e0887842b9402b62dd0d98f594038327",
-      "seconds": 0.1345
+      "seconds": 0.1235
     },
     {
       "question_id": "own-c01",
@@ -433,7 +433,7 @@
       ],
       "rows": 10,
       "set_hash": "730400e0da5cdc369276e3477f391346b3b0f53f48202dbdd88b7a8fe456c0c4",
-      "seconds": 0.158
+      "seconds": 0.1787
     },
     {
       "question_id": "own-c02",
@@ -447,7 +447,7 @@
       ],
       "rows": 1,
       "set_hash": "7c2968b09475943faf347044cbdfe62c9d0b1ba1a0761afad6f263a04c4a2453",
-      "seconds": 0.0064
+      "seconds": 0.0066
     },
     {
       "question_id": "own-c02",
@@ -461,7 +461,7 @@
       ],
       "rows": 1,
       "set_hash": "deb1ff81d3e0a22f391fd6590873db614432dac9022847510038e74433627aa3",
-      "seconds": 0.0067
+      "seconds": 0.0065
     },
     {
       "question_id": "own-c03",
@@ -475,7 +475,7 @@
       ],
       "rows": 1,
       "set_hash": "9ffc8cff260680e486307b66ff9534dd43edbedbafa4538ecdcb135329e29d44",
-      "seconds": 0.0059
+      "seconds": 0.0061
     },
     {
       "question_id": "own-c03",
@@ -489,7 +489,7 @@
       ],
       "rows": 1,
       "set_hash": "5e0e0b4a6dba8b00dfba36ab55858eaabe52451d2ff4dfc83a2b8fdb64ae23f8",
-      "seconds": 0.0065
+      "seconds": 0.0063
     },
     {
       "question_id": "own-c05",
@@ -503,7 +503,7 @@
       ],
       "rows": 1,
       "set_hash": "481aa92eca6b969a857b99a782fd9f857b4eabedce9112572d144cfe67b26266",
-      "seconds": 0.2201
+      "seconds": 0.245
     },
     {
       "question_id": "own-c05",
@@ -517,7 +517,7 @@
       ],
       "rows": 1,
       "set_hash": "98234f1e4993911d8a71170c8678042037a4571a1a88615eb317500d7e616f47",
-      "seconds": 0.2328
+      "seconds": 0.2373
     },
     {
       "question_id": "own-c06",
@@ -531,7 +531,7 @@
       ],
       "rows": 1,
       "set_hash": "51c228b6c30d52a96e61891d5bbfb8a411df62223f2d6e03fb596ad17c73e255",
-      "seconds": 0.0064
+      "seconds": 0.0065
     },
     {
       "question_id": "own-c06",
@@ -545,7 +545,7 @@
       ],
       "rows": 1,
       "set_hash": "99e540e052d0bba9cb65dbaf0f0c550a33cb28d8d6500f0c356cc548ae5bd702",
-      "seconds": 0.0057
+      "seconds": 0.0064
     },
     {
       "question_id": "own-c07",
@@ -563,7 +563,7 @@
       ],
       "rows": 3,
       "set_hash": "ea5ed0ad7f41be3f0c0af0500a748e18125f3ce64289188cd1c6657883db6cc6",
-      "seconds": 0.0073
+      "seconds": 0.0074
     },
     {
       "question_id": "own-c07",
@@ -581,7 +581,7 @@
       ],
       "rows": 3,
       "set_hash": "83f5c81fd1b6a1c6a51baa90acf97227d5bf117f8fb4885fbd3d0daa1ac5d023",
-      "seconds": 0.0069
+      "seconds": 0.0075
     },
     {
       "question_id": "own-c09",
@@ -595,7 +595,7 @@
       ],
       "rows": 1,
       "set_hash": "d459e9a9f5b3ba9c2bb4507712b4fa76e117ddfa3f49a093c1fde1863d01f51e",
-      "seconds": 0.0075
+      "seconds": 0.008
     },
     {
       "question_id": "own-c09",
@@ -609,7 +609,7 @@
       ],
       "rows": 1,
       "set_hash": "c303cd24737ed69d0b3515a3ff87ea3549a0fc22b8203555d6da80d9f9910779",
-      "seconds": 0.0077
+      "seconds": 0.0078
     },
     {
       "question_id": "own-c10",
@@ -623,7 +623,7 @@
       ],
       "rows": 1,
       "set_hash": "aa7d9b9f8aa68d88eb777eb0f296c4ac0503ebcfeb511b158e05dc9a58539254",
-      "seconds": 0.1227
+      "seconds": 0.1191
     },
     {
       "question_id": "own-c10",
@@ -637,7 +637,7 @@
       ],
       "rows": 1,
       "set_hash": "5891c87099cd853bfac554aabb617f1491a43b4d1aae24bbcb8c3373ffae3b4a",
-      "seconds": 0.1255
+      "seconds": 0.1329
     },
     {
       "question_id": "own-c11",
@@ -651,7 +651,7 @@
       ],
       "rows": 1,
       "set_hash": "2cadc0e18c552b0dd75726857efb371553f78ebae6a67435d4d29a1ecd70c974",
-      "seconds": 0.0061
+      "seconds": 0.0066
     },
     {
       "question_id": "own-c11",
@@ -665,7 +665,7 @@
       ],
       "rows": 1,
       "set_hash": "b3673ecd1259c3be1c09767917ee6f334e654ea837039b18b516078a7322a707",
-      "seconds": 0.0059
+      "seconds": 0.0065
     },
     {
       "question_id": "own-e01",
@@ -683,7 +683,7 @@
       ],
       "rows": 4,
       "set_hash": "a060d620fa1961c590f86a9989e88818fd5b685a960d48ac085188c3ecb139fd",
-      "seconds": 0.0058
+      "seconds": 0.0064
     },
     {
       "question_id": "own-e03",
@@ -697,7 +697,7 @@
       ],
       "rows": 1,
       "set_hash": "acc07b62f23f458923737c4cd4a66bd05d1e71eb4f384003baaf2dcc760d6349",
-      "seconds": 0.0068
+      "seconds": 0.007
     },
     {
       "question_id": "own-e04",
@@ -715,7 +715,7 @@
       ],
       "rows": 3,
       "set_hash": "a25e9fed0e09940dee2f783fe887afbf9194494cd91ac6e0d577914bc59794b8",
-      "seconds": 0.0058
+      "seconds": 0.0065
     },
     {
       "question_id": "own-e06",
@@ -733,7 +733,7 @@
       ],
       "rows": 5,
       "set_hash": "4ca8953180b4f5cdae3d8c77aac4e458b1ac444e5fe061bd064dfe394488324a",
-      "seconds": 0.0057
+      "seconds": 0.0063
     },
     {
       "question_id": "own-e07",
@@ -751,7 +751,7 @@
       ],
       "rows": 5,
       "set_hash": "08a891b3293bf43f03fa4b2532511042caf5f51c39481beff4ef1421aa5fd9d7",
-      "seconds": 0.0076
+      "seconds": 0.0079
     },
     {
       "question_id": "own-e08",
@@ -787,7 +787,7 @@
       ],
       "rows": 6,
       "set_hash": "156da211ccb6dcbef73f7f70340714107dab3073ea633da995d28c28d5616fec",
-      "seconds": 0.0748
+      "seconds": 0.0932
     },
     {
       "question_id": "own-e10",
@@ -805,7 +805,7 @@
       ],
       "rows": 4,
       "set_hash": "bc384471b5e6784ee2e51698afd3f8dcd7e2c2814e6b9c4fc5c1979e2e42e743",
-      "seconds": 0.007
+      "seconds": 0.0069
     },
     {
       "question_id": "own-e11",
@@ -823,7 +823,7 @@
       ],
       "rows": 1,
       "set_hash": "91974f21442f70390cd8c86c4a401546239ec5ab8655c2497a365b2fea782ba7",
-      "seconds": 0.0082
+      "seconds": 0.0085
     },
     {
       "question_id": "own-f01",
@@ -845,7 +845,7 @@
       ],
       "rows": 2,
       "set_hash": "8db40efb6643f8e2e2767ac6eaf60180246f6535f2c434af03c4a0dcd8297769",
-      "seconds": 0.0079
+      "seconds": 0.0088
     },
     {
       "question_id": "own-f02",
@@ -889,7 +889,7 @@
       ],
       "rows": 3,
       "set_hash": "db33c98c8171852c98f009e2ddc875ac1df74a1585bcb092539ddc465b38004a",
-      "seconds": 0.9915
+      "seconds": 0.7446
     },
     {
       "question_id": "own-f04",
@@ -915,7 +915,7 @@
       ],
       "rows": 77,
       "set_hash": "ee9be509a867b99cb0396b9048e21086f4b2ef63118c273cb813dfeea7148203",
-      "seconds": 0.0097
+      "seconds": 0.0125
     },
     {
       "question_id": "own-f06",
@@ -933,7 +933,7 @@
       ],
       "rows": 4492,
       "set_hash": "9af2cdcae1426eb24ff37c8d3de283afd09f829625886f705522da4e277cd858",
-      "seconds": 0.1398
+      "seconds": 0.1374
     },
     {
       "question_id": "own-f07",
@@ -955,7 +955,7 @@
       ],
       "rows": 2,
       "set_hash": "c0e2ff93cb6c240955c5505e3dcf162ae0bc4735e71e9238f640d4cd2664b0e8",
-      "seconds": 0.1019
+      "seconds": 0.1187
     },
     {
       "question_id": "own-f09",
@@ -977,7 +977,7 @@
       ],
       "rows": 3,
       "set_hash": "9183697baaab601ad05cd36547c4936d2855cbc1eda3682a4ca0a6c293a670d3",
-      "seconds": 0.2096
+      "seconds": 0.1842
     },
     {
       "question_id": "own-f10",
@@ -999,7 +999,7 @@
       ],
       "rows": 2,
       "set_hash": "8f6df73001c60cca698cc53355c18250ecb4b484d5fc7644dea32ce63dbdadd8",
-      "seconds": 0.1784
+      "seconds": 0.1783
     },
     {
       "question_id": "own-f11",
@@ -1021,7 +1021,7 @@
       ],
       "rows": 2,
       "set_hash": "be7170a96974c0d3249204d6209690585c7c5dd8641903153e346e42829c981a",
-      "seconds": 0.009
+      "seconds": 0.008
     }
   ]
 }
