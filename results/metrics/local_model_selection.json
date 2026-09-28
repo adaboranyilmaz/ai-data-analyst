@@ -1,5 +1,5 @@
 {
-  "created_utc": "2026-09-27T16:30:03+00:00",
+  "created_utc": "2026-09-28T08:30:09+00:00",
   "ollama_version": "0.34.4",
   "gpu": "NVIDIA GeForce RTX 3050 Laptop GPU, 4096 MiB",
   "config": {
@@ -79,7 +79,7 @@
           "output_tokens": 16,
           "tokens_per_s": 65.5,
           "cache_key": "ebbe3279f5ff3b915cea4d7b4a443c3baf6b53ac0a7d2113bffe2241b5b69971",
-          "from_cache": false
+          "from_cache": true
         },
         {
           "question": "What columns does the orders table have?",
@@ -100,7 +100,7 @@
           "output_tokens": 20,
           "tokens_per_s": 74.0,
           "cache_key": "7d70f1a9b958820a4f623148d9f9b1575ae6eb306c31f31f3514d2689c4edc49",
-          "from_cache": false
+          "from_cache": true
         },
         {
           "question": "How many customers are there?",
@@ -121,7 +121,7 @@
           "output_tokens": 29,
           "tokens_per_s": 72.1,
           "cache_key": "58e62401443b8f7a86a067ec2ba3de7982a96290645863f8fa835252d65e6dec",
-          "from_cache": false
+          "from_cache": true
         },
         {
           "question": "What is the total order amount per city?",
@@ -142,7 +142,7 @@
           "output_tokens": 48,
           "tokens_per_s": 71.7,
           "cache_key": "704f5e3e200eec17a2afb8ef82264c65981f8e481f3959b98aa9808deaf7f106",
-          "from_cache": false
+          "from_cache": true
         },
         {
           "question": "Show the five largest orders.",
@@ -163,7 +163,7 @@
           "output_tokens": 35,
           "tokens_per_s": 71.9,
           "cache_key": "580964ff6175240e0bd6f2f3853f5e2974c13cb2c4f907d849eb365302b71134",
-          "from_cache": false
+          "from_cache": true
         }
       ],
       "n_probes": 5,
@@ -172,25 +172,384 @@
       "n_expected_tool": 5
     },
     "llama3.2:3b": {
-      "status": "not_downloaded"
+      "status": "measured",
+      "digest": "a80c4f17acd55265feec403c7aef86be0c25983ab279d83f3bcd3abbcb5b8b72",
+      "capabilities": [
+        "completion",
+        "tools"
+      ],
+      "parameter_size": "3.2B",
+      "quantization": "Q4_K_M",
+      "max_context": 131072,
+      "license_first_line": "LLAMA 3.2 COMMUNITY LICENSE AGREEMENT",
+      "gpu_fit": [
+        {
+          "num_ctx": 4096,
+          "context_reported": 4096,
+          "size_mib": 2776,
+          "gpu_mib": 2227,
+          "on_gpu": false
+        },
+        {
+          "num_ctx": 8192,
+          "context_reported": 8192,
+          "size_mib": 3236,
+          "gpu_mib": 2191,
+          "on_gpu": false
+        },
+        {
+          "num_ctx": 16384,
+          "context_reported": 16384,
+          "size_mib": 4188,
+          "gpu_mib": 2157,
+          "on_gpu": false
+        },
+        {
+          "num_ctx": 32768,
+          "context_reported": 32768,
+          "size_mib": 6108,
+          "gpu_mib": 2247,
+          "on_gpu": false
+        }
+      ],
+      "max_context_on_gpu": 0,
+      "probes": [
+        {
+          "question": "Which tables are in the database?",
+          "expected_tool": "list_tables",
+          "tool_calls": [
+            {
+              "type": "tool_use",
+              "id": "call_0",
+              "name": "list_tables",
+              "input": {}
+            }
+          ],
+          "text": "",
+          "valid_call": true,
+          "expected_tool_called": true,
+          "output_tokens": 11,
+          "tokens_per_s": 45.1,
+          "cache_key": "570c3c1c86dfffa6b15c6a96c473d12fe03f92c38cbaeb9d9c122d953ad6954b",
+          "from_cache": false
+        },
+        {
+          "question": "What columns does the orders table have?",
+          "expected_tool": "describe_table",
+          "tool_calls": [
+            {
+              "type": "tool_use",
+              "id": "call_0",
+              "name": "describe_table",
+              "input": {
+                "table": "orders"
+              }
+            }
+          ],
+          "text": "",
+          "valid_call": true,
+          "expected_tool_called": true,
+          "output_tokens": 13,
+          "tokens_per_s": 46.8,
+          "cache_key": "01789f15c76d12d3f4738fef3ecba2759f225a42a5ec33ba29d4fd2bee4b6973",
+          "from_cache": false
+        },
+        {
+          "question": "How many customers are there?",
+          "expected_tool": "run_sql",
+          "tool_calls": [
+            {
+              "type": "tool_use",
+              "id": "call_0",
+              "name": "run_sql",
+              "input": {
+                "sql": "SELECT COUNT(*) FROM customers"
+              }
+            }
+          ],
+          "text": "",
+          "valid_call": true,
+          "expected_tool_called": true,
+          "output_tokens": 17,
+          "tokens_per_s": 46.0,
+          "cache_key": "7afd9cb35cb8a7f7eb17fd008c9df1a885c4b8502b6897fa25188bdfd65989c1",
+          "from_cache": false
+        },
+        {
+          "question": "What is the total order amount per city?",
+          "expected_tool": "run_sql",
+          "tool_calls": [
+            {
+              "type": "tool_use",
+              "id": "call_0",
+              "name": "run_sql",
+              "input": {
+                "sql": "SELECT city, SUM(amount) AS total_amount FROM orders GROUP BY city"
+              }
+            }
+          ],
+          "text": "",
+          "valid_call": true,
+          "expected_tool_called": true,
+          "output_tokens": 26,
+          "tokens_per_s": 44.8,
+          "cache_key": "2535b8c14b3d45daecd9bd320be1857bbfc1bdd9a1d987a06e19bd55ec0f5e85",
+          "from_cache": false
+        },
+        {
+          "question": "Show the five largest orders.",
+          "expected_tool": "run_sql",
+          "tool_calls": [
+            {
+              "type": "tool_use",
+              "id": "call_0",
+              "name": "run_sql",
+              "input": {
+                "sql": "SELECT * FROM orders ORDER BY amount DESC LIMIT 5"
+              }
+            }
+          ],
+          "text": "",
+          "valid_call": true,
+          "expected_tool_called": true,
+          "output_tokens": 23,
+          "tokens_per_s": 45.1,
+          "cache_key": "43643ab117cfa19325061040cf4e4c906f3e62532da991b608f55ad4b492dbb8",
+          "from_cache": false
+        }
+      ],
+      "n_probes": 5,
+      "n_valid_calls": 5,
+      "valid_call_rate": 1.0,
+      "n_expected_tool": 5
     },
     "qwen2.5-coder:3b": {
-      "status": "not_downloaded"
+      "status": "measured",
+      "digest": "f72c60cabf6237b07f6e632b2c48d533cef25eda2efbd34bed21c5e9c01e6225",
+      "capabilities": [
+        "completion",
+        "tools",
+        "insert"
+      ],
+      "parameter_size": "3.1B",
+      "quantization": "Q4_K_M",
+      "max_context": 32768,
+      "license_first_line": "Qwen RESEARCH LICENSE AGREEMENT",
+      "gpu_fit": [
+        {
+          "num_ctx": 4096,
+          "context_reported": 4096,
+          "size_mib": 2059,
+          "gpu_mib": 2059,
+          "on_gpu": true
+        },
+        {
+          "num_ctx": 8192,
+          "context_reported": 8192,
+          "size_mib": 2207,
+          "gpu_mib": 2207,
+          "on_gpu": true
+        },
+        {
+          "num_ctx": 16384,
+          "context_reported": 16384,
+          "size_mib": 2794,
+          "gpu_mib": 2274,
+          "on_gpu": false
+        },
+        {
+          "num_ctx": 32768,
+          "context_reported": 32768,
+          "size_mib": 3396,
+          "gpu_mib": 2265,
+          "on_gpu": false
+        }
+      ],
+      "max_context_on_gpu": 8192,
+      "probes": [
+        {
+          "question": "Which tables are in the database?",
+          "expected_tool": "list_tables",
+          "tool_calls": [],
+          "text": "{\"name\": \"list_tables\", \"arguments\": {}}",
+          "valid_call": false,
+          "expected_tool_called": false,
+          "output_tokens": 13,
+          "tokens_per_s": 65.3,
+          "cache_key": "4443d4f9508746958dd032fb3ac92e6637473c0585024214d4b8c6ce2c3416ac",
+          "from_cache": false
+        },
+        {
+          "question": "What columns does the orders table have?",
+          "expected_tool": "describe_table",
+          "tool_calls": [],
+          "text": "{\"name\": \"describe_table\", \"arguments\": {\"table\": \"orders\"}}",
+          "valid_call": false,
+          "expected_tool_called": false,
+          "output_tokens": 17,
+          "tokens_per_s": 74.6,
+          "cache_key": "9bce7f6f42e9e6c3b47dc6c39366aedeac7bd86db6f521939c46351289e52382",
+          "from_cache": false
+        },
+        {
+          "question": "How many customers are there?",
+          "expected_tool": "run_sql",
+          "tool_calls": [],
+          "text": "{\"name\": \"run_sql\", \"arguments\": {\"sql\": \"SELECT COUNT(*) FROM customers\"}}",
+          "valid_call": false,
+          "expected_tool_called": false,
+          "output_tokens": 21,
+          "tokens_per_s": 73.1,
+          "cache_key": "a99165525f7b1d6d9b55a90aaf4ac7e13ead156bd0c80c62f2bd71801c23f2c6",
+          "from_cache": false
+        },
+        {
+          "question": "What is the total order amount per city?",
+          "expected_tool": "run_sql",
+          "tool_calls": [],
+          "text": "{\"name\": \"run_sql\", \"arguments\": {\"sql\": \"SELECT city, SUM(amount) as total_amount FROM orders JOIN customers ON orders.customer_id = customers.id GROUP BY city\"}}",
+          "valid_call": false,
+          "expected_tool_called": false,
+          "output_tokens": 39,
+          "tokens_per_s": 72.0,
+          "cache_key": "ddc845936489d1bfe3684f674b69d382d3b4a4d39a02fd51042cb445d71b43a9",
+          "from_cache": false
+        },
+        {
+          "question": "Show the five largest orders.",
+          "expected_tool": "run_sql",
+          "tool_calls": [],
+          "text": "{\"name\": \"run_sql\", \"arguments\": {\"sql\": \"SELECT id, customer_id, amount, ordered_at FROM orders ORDER BY amount DESC LIMIT 5\"}}",
+          "valid_call": false,
+          "expected_tool_called": false,
+          "output_tokens": 35,
+          "tokens_per_s": 72.0,
+          "cache_key": "4d83cce31ab9250ef3d07da6d67c34a375816e7bac99d05bab7e9623d11c7893",
+          "from_cache": false
+        }
+      ],
+      "n_probes": 5,
+      "n_valid_calls": 0,
+      "valid_call_rate": 0.0,
+      "n_expected_tool": 0
     },
     "phi4-mini": {
-      "status": "not_downloaded"
+      "status": "measured",
+      "digest": "78fad5d182a7c33065e153a5f8ba210754207ba9d91973f57dffa7f487363753",
+      "capabilities": [
+        "completion",
+        "tools"
+      ],
+      "parameter_size": "3.8B",
+      "quantization": "Q4_K_M",
+      "max_context": 131072,
+      "license_first_line": "Microsoft.",
+      "gpu_fit": [
+        {
+          "num_ctx": 4096,
+          "context_reported": 4096,
+          "size_mib": 3475,
+          "gpu_mib": 2215,
+          "on_gpu": false
+        },
+        {
+          "num_ctx": 8192,
+          "context_reported": 8192,
+          "size_mib": 4011,
+          "gpu_mib": 2230,
+          "on_gpu": false
+        },
+        {
+          "num_ctx": 16384,
+          "context_reported": 16384,
+          "size_mib": 5056,
+          "gpu_mib": 2207,
+          "on_gpu": false
+        },
+        {
+          "num_ctx": 32768,
+          "context_reported": 32768,
+          "size_mib": 7232,
+          "gpu_mib": 2225,
+          "on_gpu": false
+        }
+      ],
+      "max_context_on_gpu": 0,
+      "probes": [
+        {
+          "question": "Which tables are in the database?",
+          "expected_tool": "list_tables",
+          "tool_calls": [],
+          "text": "{ \"type\": \"function\", \"function\": {\"name\": \"list_tables\", \"description\": \"List the tables in the database.\", \"parameters\": {} } }",
+          "valid_call": false,
+          "expected_tool_called": false,
+          "output_tokens": 35,
+          "tokens_per_s": 32.1,
+          "cache_key": "f00162367ae916dbb354b2504f1ab83c9b7669cfcecfb4ba78edbfb6585f1410",
+          "from_cache": false
+        },
+        {
+          "question": "What columns does the orders table have?",
+          "expected_tool": "describe_table",
+          "tool_calls": [],
+          "text": "Sure, I can help with that. I will call the function to describe the columns of the orders table.\n\n[{\"type\":\"function\",\"function\":{\"name\":\"describe_table\",\"function\":{\"name\":\"describe_table\",\"description\":\"Show the columns of one table and their types.\",\"parameters\":{\"type\":\"object\",\"required\":[\"table\"],\"properties\":{\"table\":{\"type\":\"string\",\"description\":\"the table's name\"}}}}}]",
+          "valid_call": false,
+          "expected_tool_called": false,
+          "output_tokens": 83,
+          "tokens_per_s": 29.7,
+          "cache_key": "5f04564133bfb04eefca4602482ef4d129db17da77329ed41eb3161924c3ecb2",
+          "from_cache": false
+        },
+        {
+          "question": "How many customers are there?",
+          "expected_tool": "run_sql",
+          "tool_calls": [],
+          "text": "To find out the number of customers, I will use the `count` SQL function on the `customers` table. I will run the following SQL SELECT statement:\n\n```sql\nSELECT COUNT(*) AS NumberOfCustomers FROM customers;\n```",
+          "valid_call": false,
+          "expected_tool_called": false,
+          "output_tokens": 48,
+          "tokens_per_s": 29.9,
+          "cache_key": "4d2cbebcb893f44b7bef8777b931456b1d5a127550b43f1daaafd64c0446ece3",
+          "from_cache": false
+        },
+        {
+          "question": "What is the total order amount per city?",
+          "expected_tool": "run_sql",
+          "tool_calls": [],
+          "text": "[{\"type\":\"function\",\"function\":{\"name\":\"run_sql\",\"description\":\"Run one read-only SQL SELECT statement and return the rows.\",\"parameters\":{\"type\":\"object\",\"required\":[\"sql\"],\"properties\":{\"sql\":{\"type\":\"string\",\"description\":\"a single SELECT statement\"}}}}}]",
+          "valid_call": false,
+          "expected_tool_called": false,
+          "output_tokens": 56,
+          "tokens_per_s": 27.7,
+          "cache_key": "ecb4f2f4776c441bd407abb78b1ffb7d4a1d10a36247bd074b22cacc1b988c2c",
+          "from_cache": false
+        },
+        {
+          "question": "Show the five largest orders.",
+          "expected_tool": "run_sql",
+          "tool_calls": [],
+          "text": "{  \n \"type\": \"run_sql\",  \n \"function\": \"run_sql\",  \n \"function\": \"run_sql\",  \n \"function\": \"run_sql\",  \n \"function\": \"run_sql\",  \n \"function\": \"run_sql\",  \n \"parameters\": {  \n \"sql\": \"SELECT amount FROM orders ORDER BY amount DESC LIMIT 5;\"  \n }  \n}",
+          "valid_call": false,
+          "expected_tool_called": false,
+          "output_tokens": 76,
+          "tokens_per_s": 27.8,
+          "cache_key": "905c3e0200a3a564136b0b65a798e6bd8a9a597815859f7909f9f9a19dcc6c08",
+          "from_cache": false
+        }
+      ],
+      "n_probes": 5,
+      "n_valid_calls": 0,
+      "valid_call_rate": 0.0,
+      "n_expected_tool": 0
     }
   },
   "selection": {
     "selected": "qwen2.5:3b-instruct",
-    "provisional": true,
+    "provisional": false,
     "eligible": [
+      "qwen2.5-coder:3b",
       "qwen2.5:3b-instruct"
     ],
-    "not_downloaded": [
-      "llama3.2:3b",
-      "qwen2.5-coder:3b",
-      "phi4-mini"
-    ]
+    "not_downloaded": []
   }
 }

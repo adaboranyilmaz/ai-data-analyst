@@ -85,6 +85,11 @@ PROBES = [  # (question, the tool a correct first step calls)
 ]
 
 
+def tagged(model: str) -> str:
+    """The name as Ollama lists it: a name without a tag means the `latest` tag."""
+    return model if ":" in model else f"{model}:latest"
+
+
 def valid_call(call: dict[str, Any]) -> bool:
     tool = next((t for t in TOOLS if t["name"] == call["name"]), None)
     args = call.get("input")
@@ -132,7 +137,7 @@ def model_facts(client: Any, model: str, digests: dict[str, str]) -> dict[str, A
     info = show.modelinfo or {}
     max_ctx = next((v for k, v in info.items() if k.endswith(".context_length")), None)
     return {
-        "digest": digests.get(model),
+        "digest": digests.get(tagged(model)),
         "capabilities": list(show.capabilities or []),
         "parameter_size": show.details.parameter_size if show.details else None,
         "quantization": show.details.quantization_level if show.details else None,
@@ -147,7 +152,7 @@ def gpu_fit(client: Any, model: str, sizes: list[int]) -> list[dict[str, Any]]:
     rows = []
     for n in sizes:
         client.generate(model=model, prompt="", options={"num_ctx": n}, keep_alive="1m")
-        loaded = next((m for m in client.ps().models if model in (m.model, m.name)), None)
+        loaded = next((m for m in client.ps().models if tagged(model) in (m.model, m.name)), None)
         if loaded is None:
             raise RuntimeError(f"{model} did not appear in `ollama ps` after loading")
         rows.append(
@@ -239,7 +244,7 @@ def main() -> None:
 
     candidates: dict[str, dict[str, Any]] = {}
     for model in cfg["candidates"]:
-        if model not in digests:
+        if tagged(model) not in digests:
             candidates[model] = {"status": "not_downloaded"}
             print(f"{model}: not downloaded, skipped")
             continue

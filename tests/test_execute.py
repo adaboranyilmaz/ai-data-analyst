@@ -5,9 +5,10 @@ from __future__ import annotations
 
 import time
 
+import psycopg
 import pytest
 
-from src.db.connection import DB_NAME
+from src.db.connection import ADMIN_ROLE, BIRD_DB, DB_NAME, connect
 from src.db.execute import Limits, QueryError, ReadOnlyExecutor, Target
 from src.db.hardening import SECURITY_SCHEMA, schema_role
 
@@ -76,6 +77,37 @@ def test_settings_are_the_targets_on_every_call(ex):
     with ReadOnlyExecutor(Target(DB_NAME, SECURITY_SCHEMA, "Asia/Shanghai", TARGET.role)) as e2:
         assert e2.execute(hour, LIMITS).rows == [(8,)]
     assert ex.execute("SELECT count(*) FROM numbers", LIMITS).rows == [(10_000,)]  # search_path
+
+
+def test_every_scan_starts_at_the_first_block(ex):
+    # current_setting() is closed to the role, so the setting is read with SHOW inside the
+    # executor's own transaction, after its per-call settings
+    conn = ex._connection()
+    with conn.transaction():
+        ex._set_local(conn, LIMITS)
+        assert conn.execute("SHOW synchronize_seqscans").fetchone() == ("off",)
+        raise psycopg.Rollback
+
+
+@pytest.mark.bird
+def test_rows_do_not_depend_on_another_sessions_scan(bird_ready):
+    """By default a scan of a large table joins a scan already under way, mid-table: a LIMIT
+    without ORDER BY then returns other rows. `trans` (about 100 MB) is large enough for
+    PostgreSQL to synchronize scans of it with the default shared_buffers."""
+    from src.tools.toolbox import benchmark_target
+
+    query = "SELECT trans_id FROM trans LIMIT 3"
+    with ReadOnlyExecutor(benchmark_target("financial")) as e:
+        alone = e.execute(query, LIMITS).rows
+        with connect(ADMIN_ROLE, BIRD_DB) as other, connect(ADMIN_ROLE, BIRD_DB) as plain:
+            for conn in (other, plain):
+                conn.execute("SET search_path = financial")
+                conn.execute("SET max_parallel_workers_per_gather = 0")
+            with other.transaction(), other.cursor(name="midway") as cur:
+                cur.execute("SELECT trans_id FROM trans")
+                cur.fetchmany(400_000)  # a scan under way, a good part into the table
+                assert plain.execute(query).fetchall() != alone  # the default joins it
+                assert e.execute(query, LIMITS).rows == alone  # the executor does not
 
 
 @pytest.mark.parametrize(

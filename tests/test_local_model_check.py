@@ -34,6 +34,11 @@ def test_valid_call(call, valid):
     assert check.valid_call(call) is valid
 
 
+def test_a_name_without_a_tag_is_the_latest():
+    assert check.tagged("phi4-mini") == "phi4-mini:latest"
+    assert check.tagged("llama3.2:3b") == "llama3.2:3b"
+
+
 def measured(rate: float, max_ctx: int, gpu_mib: int) -> dict:
     return {
         "status": "measured",

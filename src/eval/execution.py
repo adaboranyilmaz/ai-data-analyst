@@ -6,18 +6,15 @@ through the agent's execution layer (src/db/execute.py): the question's schema r
 read-only transaction that is always rolled back, a server-side cursor (one query, nothing
 else), the fixed session settings, and a time limit enforced by the client, here for the pair
 as a whole (the official evaluator's 30 s). No query guard: the official evaluator has none,
-and the database layer contains any query on its own, as the security suite shows.
+and the database layer contains any query on its own, as the security suite shows. Among the
+fixed settings, every sequential scan starts at the table's first block: Soft-F1 pairs rows by
+position, so it needs the row order not to depend on the queries run before.
 
-Three differences from the agent's execution:
+Two differences from the agent's execution:
 - `cursor_tuple_fraction = 1`. A cursor is otherwise planned to return its first tenth of rows
   quickly, which can change the plan and with it the row order and, for a LIMIT over tied
   rows, which rows come back. At 1 it is planned as the plain query the official evaluator
   runs.
-- `synchronize_seqscans = off`. By default a sequential scan of a large table starts where the
-  previous scan of it stopped, so a query without a complete ORDER BY returns its rows in an
-  order that depends on the queries run before it: Soft-F1, which pairs rows by position,
-  then changes from run to run, and so can the rows a LIMIT keeps. Off, every scan starts at
-  the table's first block.
 - No row limit. The prediction streams through `PredictionStream` (src/eval/ex.py) in batches;
   memory stays bounded by the gold result for EX.
 
@@ -146,7 +143,6 @@ class PairExecutor(ReadOnlyExecutor):
             with conn.transaction():
                 self._set_local(conn, Limits(max_rows=0, timeout_s=s.timeout_s))
                 conn.execute("SET LOCAL cursor_tuple_fraction = 1")
-                conn.execute("SET LOCAL synchronize_seqscans = off")
                 timer.start()
                 try:
                     with conn.cursor(name=GOLD_CURSOR) as cur:

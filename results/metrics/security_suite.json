@@ -106,17 +106,17 @@
         "parser": {
           "outcome": "rejected",
           "detail": "only a SELECT query is allowed, not DROP",
-          "seconds": 0.008
+          "seconds": 0.007
         },
         "database": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"DROP\"",
-          "seconds": 0.014
+          "seconds": 0.03
         },
         "privileges": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"DROP\"",
-          "seconds": 0.013
+          "seconds": 0.031
         }
       }
     },
@@ -135,12 +135,12 @@
         "database": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"DELETE\"",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"DELETE\"",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -154,17 +154,17 @@
         "parser": {
           "outcome": "rejected",
           "detail": "only a SELECT query is allowed, not UPDATE",
-          "seconds": 0.0
+          "seconds": 0.001
         },
         "database": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"UPDATE\"",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"UPDATE\"",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -183,12 +183,12 @@
         "database": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"INSERT\"",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"INSERT\"",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -207,12 +207,12 @@
         "database": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"TRUNCATE\"",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"TRUNCATE\"",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -231,12 +231,12 @@
         "database": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"ALTER\"",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"ALTER\"",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -250,7 +250,7 @@
         "parser": {
           "outcome": "rejected",
           "detail": "only a SELECT query is allowed, not CREATE",
-          "seconds": 0.001
+          "seconds": 0.0
         },
         "database": {
           "outcome": "denied",
@@ -274,7 +274,7 @@
         "parser": {
           "outcome": "rejected",
           "detail": "only a SELECT query is allowed, not CREATE",
-          "seconds": 0.001
+          "seconds": 0.0
         },
         "database": {
           "outcome": "denied",
@@ -284,7 +284,7 @@
         "privileges": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"CREATE\"",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -303,12 +303,12 @@
         "database": {
           "outcome": "denied",
           "detail": "syntax_error: SELECT ... INTO is not allowed here",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
           "detail": "syntax_error: SELECT ... INTO is not allowed here",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -322,17 +322,17 @@
         "parser": {
           "outcome": "rejected",
           "detail": "DELETE is not allowed inside a query; table role_check.canary: only tables of security_check",
-          "seconds": 0.002
+          "seconds": 0.001
         },
         "database": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for schema role_check",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for schema role_check",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -356,7 +356,7 @@
         "privileges": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for schema role_check",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -370,17 +370,17 @@
         "parser": {
           "outcome": "rejected",
           "detail": "FOR UPDATE / FOR SHARE is not allowed",
-          "seconds": 0.0
+          "seconds": 0.001
         },
         "database": {
           "outcome": "denied",
           "detail": "read_only: cannot execute SELECT FOR UPDATE in a read-only transaction",
-          "seconds": 0.005
+          "seconds": 0.01
         },
         "privileges": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for table numbers",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -399,12 +399,12 @@
         "database": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"GRANT\"",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"GRANT\"",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -423,7 +423,7 @@
         "database": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"DO\"",
-          "seconds": 0.005
+          "seconds": 0.013
         },
         "privileges": {
           "outcome": "denied",
@@ -447,12 +447,12 @@
         "database": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for function lo_create",
-          "seconds": 0.008
+          "seconds": 0.007
         },
         "privileges": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for function lo_create",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -471,12 +471,12 @@
         "database": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for function lo_from_bytea",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for function lo_from_bytea",
-          "seconds": 0.006
+          "seconds": 0.007
         }
       }
     },
@@ -490,17 +490,17 @@
         "parser": {
           "outcome": "rejected",
           "detail": "only a SELECT query is allowed, not COPY",
-          "seconds": 0.0
+          "seconds": 0.001
         },
         "database": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"COPY\"",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"COPY\"",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -519,7 +519,7 @@
         "database": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"COPY\"",
-          "seconds": 0.006
+          "seconds": 0.005
         },
         "privileges": {
           "outcome": "denied",
@@ -543,12 +543,12 @@
         "database": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"CREATE\"",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"CREATE\"",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -567,7 +567,7 @@
         "database": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"VACUUM\"",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
@@ -591,12 +591,12 @@
         "database": {
           "outcome": "denied",
           "detail": "multiple_statements: cannot insert multiple commands into a prepared statement",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
           "detail": "multiple_statements: cannot insert multiple commands into a prepared statement",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -615,7 +615,7 @@
         "database": {
           "outcome": "denied",
           "detail": "multiple_statements: cannot insert multiple commands into a prepared statement",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
@@ -639,7 +639,7 @@
         "database": {
           "outcome": "denied",
           "detail": "multiple_statements: cannot insert multiple commands into a prepared statement",
-          "seconds": 0.006
+          "seconds": 0.005
         },
         "privileges": {
           "outcome": "denied",
@@ -663,12 +663,12 @@
         "database": {
           "outcome": "denied",
           "detail": "multiple_statements: cannot insert multiple commands into a prepared statement",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
           "detail": "multiple_statements: cannot insert multiple commands into a prepared statement",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -692,7 +692,7 @@
         "privileges": {
           "outcome": "denied",
           "detail": "multiple_statements: cannot insert multiple commands into a prepared statement",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -711,12 +711,12 @@
         "database": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"BEGIN\"",
-          "seconds": 0.005
+          "seconds": 0.007
         },
         "privileges": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"BEGIN\"",
-          "seconds": 0.006
+          "seconds": 0.005
         }
       }
     },
@@ -735,7 +735,7 @@
         "database": {
           "outcome": "denied",
           "detail": "multiple_statements: cannot insert multiple commands into a prepared statement",
-          "seconds": 0.005
+          "seconds": 0.007
         },
         "privileges": {
           "outcome": "denied",
@@ -759,12 +759,12 @@
         "database": {
           "outcome": "no_effect",
           "detail": "ran as a harmless query (1 rows); nothing changed",
-          "seconds": 0.007
+          "seconds": 0.009
         },
         "privileges": {
           "outcome": "no_effect",
           "detail": "ran as a harmless query (1 rows); nothing changed",
-          "seconds": 0.007
+          "seconds": 0.011
         }
       }
     },
@@ -783,12 +783,12 @@
         "database": {
           "outcome": "denied",
           "detail": "multiple_statements: cannot insert multiple commands into a prepared statement",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
           "detail": "multiple_statements: cannot insert multiple commands into a prepared statement",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -812,7 +812,7 @@
         "privileges": {
           "outcome": "no_effect",
           "detail": "ran as a harmless query (1 rows); nothing changed",
-          "seconds": 0.006
+          "seconds": 0.009
         }
       }
     },
@@ -855,12 +855,12 @@
         "database": {
           "outcome": "denied",
           "detail": "multiple_statements: cannot insert multiple commands into a prepared statement",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
           "detail": "multiple_statements: cannot insert multiple commands into a prepared statement",
-          "seconds": 0.006
+          "seconds": 0.005
         }
       }
     },
@@ -879,12 +879,12 @@
         "database": {
           "outcome": "denied",
           "detail": "multiple_statements: cannot insert multiple commands into a prepared statement",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
           "detail": "multiple_statements: cannot insert multiple commands into a prepared statement",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -903,7 +903,7 @@
         "database": {
           "outcome": "denied",
           "detail": "multiple_statements: cannot insert multiple commands into a prepared statement",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
@@ -932,7 +932,7 @@
         "privileges": {
           "outcome": "denied",
           "detail": "multiple_statements: cannot insert multiple commands into a prepared statement",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -951,7 +951,7 @@
         "database": {
           "outcome": "denied",
           "detail": "multiple_statements: cannot insert multiple commands into a prepared statement",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
@@ -975,12 +975,12 @@
         "database": {
           "outcome": "denied",
           "detail": "syntax_error: trailing junk after numeric literal at or near \"1；\"",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
           "detail": "syntax_error: trailing junk after numeric literal at or near \"1；\"",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -994,17 +994,17 @@
         "parser": {
           "outcome": "rejected",
           "detail": "only one statement is allowed; invisible or control character U+200B outside a quoted string",
-          "seconds": 0.0
+          "seconds": 0.001
         },
         "database": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"​\"",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"​\"",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -1023,12 +1023,12 @@
         "database": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"ＤＲＯＰ\"",
-          "seconds": 0.005
+          "seconds": 0.012
         },
         "privileges": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"ＤＲＯＰ\"",
-          "seconds": 0.006
+          "seconds": 0.005
         }
       }
     },
@@ -1047,7 +1047,7 @@
         "database": {
           "outcome": "denied",
           "detail": "multiple_statements: cannot insert multiple commands into a prepared statement",
-          "seconds": 0.004
+          "seconds": 0.007
         },
         "privileges": {
           "outcome": "denied",
@@ -1076,7 +1076,7 @@
         "privileges": {
           "outcome": "no_effect",
           "detail": "ran as a harmless query (1 rows); nothing changed",
-          "seconds": 0.006
+          "seconds": 0.007
         }
       }
     },
@@ -1095,7 +1095,7 @@
         "database": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for table secret",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
@@ -1119,12 +1119,12 @@
         "database": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for function pg_sleep",
-          "seconds": 0.006
+          "seconds": 0.005
         },
         "privileges": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for function pg_sleep",
-          "seconds": 0.006
+          "seconds": 0.005
         }
       }
     },
@@ -1143,12 +1143,12 @@
         "database": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for function pg_sleep",
-          "seconds": 0.016
+          "seconds": 0.007
         },
         "privileges": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for function pg_sleep",
-          "seconds": 0.006
+          "seconds": 0.007
         }
       }
     },
@@ -1167,12 +1167,12 @@
         "database": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for function pg_sleep",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for function pg_sleep",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -1191,12 +1191,12 @@
         "database": {
           "outcome": "disclosed",
           "detail": "returned 1 rows of object names",
-          "seconds": 0.006
+          "seconds": 0.008
         },
         "privileges": {
           "outcome": "disclosed",
           "detail": "returned 1 rows of object names",
-          "seconds": 0.007
+          "seconds": 0.008
         }
       }
     },
@@ -1215,12 +1215,12 @@
         "database": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for table secret",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for table secret",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -1239,12 +1239,12 @@
         "database": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for table secret",
-          "seconds": 0.006
+          "seconds": 0.008
         },
         "privileges": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for table secret",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -1263,12 +1263,12 @@
         "database": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for function query_to_xml",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for function query_to_xml",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -1287,7 +1287,7 @@
         "database": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for view pg_settings",
-          "seconds": 0.005
+          "seconds": 0.007
         },
         "privileges": {
           "outcome": "denied",
@@ -1311,7 +1311,7 @@
         "database": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for function current_setting",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
@@ -1335,12 +1335,12 @@
         "database": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for view pg_stat_activity",
-          "seconds": 0.006
+          "seconds": 0.007
         },
         "privileges": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for view pg_stat_activity",
-          "seconds": 0.007
+          "seconds": 0.008
         }
       }
     },
@@ -1359,12 +1359,12 @@
         "database": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for view pg_roles",
-          "seconds": 0.005
+          "seconds": 0.007
         },
         "privileges": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for view pg_roles",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -1388,7 +1388,7 @@
         "privileges": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for table pg_db_role_setting",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -1407,12 +1407,12 @@
         "database": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for table pg_authid",
-          "seconds": 0.005
+          "seconds": 0.007
         },
         "privileges": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for table pg_authid",
-          "seconds": 0.005
+          "seconds": 0.007
         }
       }
     },
@@ -1431,12 +1431,12 @@
         "database": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for view pg_shadow",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for view pg_shadow",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -1460,7 +1460,7 @@
         "privileges": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for view pg_hba_file_rules",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -1479,12 +1479,12 @@
         "database": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for function version",
-          "seconds": 0.005
+          "seconds": 0.008
         },
         "privileges": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for function version",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -1503,7 +1503,7 @@
         "database": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for function inet_server_addr",
-          "seconds": 0.004
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
@@ -1532,7 +1532,7 @@
         "privileges": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for function pg_read_file",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -1551,12 +1551,12 @@
         "database": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for function pg_ls_dir",
-          "seconds": 0.005
+          "seconds": 0.008
         },
         "privileges": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for function pg_ls_dir",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -1575,12 +1575,12 @@
         "database": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for function pg_stat_file",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for function pg_stat_file",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -1599,12 +1599,12 @@
         "database": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for function lo_import",
-          "seconds": 0.006
+          "seconds": 0.005
         },
         "privileges": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for function lo_import",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -1623,12 +1623,12 @@
         "database": {
           "outcome": "denied",
           "detail": "sql_error: function dblink(unknown, unknown) does not exist",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
           "detail": "sql_error: function dblink(unknown, unknown) does not exist",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -1647,12 +1647,12 @@
         "database": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"COPY\"",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"COPY\"",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -1676,7 +1676,7 @@
         "privileges": {
           "outcome": "disclosed",
           "detail": "returned 6 rows of object names",
-          "seconds": 0.006
+          "seconds": 0.007
         }
       }
     },
@@ -1695,12 +1695,12 @@
         "database": {
           "outcome": "disclosed",
           "detail": "returned 72 rows of object names",
-          "seconds": 0.007
+          "seconds": 0.009
         },
         "privileges": {
           "outcome": "disclosed",
           "detail": "returned 72 rows of object names",
-          "seconds": 0.007
+          "seconds": 0.008
         }
       }
     },
@@ -1719,12 +1719,12 @@
         "database": {
           "outcome": "disclosed",
           "detail": "returned 100 rows of object names",
-          "seconds": 0.01
+          "seconds": 0.02
         },
         "privileges": {
           "outcome": "disclosed",
           "detail": "returned 100 rows of object names",
-          "seconds": 0.01
+          "seconds": 0.012
         }
       }
     },
@@ -1738,12 +1738,12 @@
         "parser": {
           "outcome": "rejected",
           "detail": "table role_check.canary: only tables of security_check",
-          "seconds": 0.001
+          "seconds": 0.0
         },
         "database": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for schema role_check",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
@@ -1762,17 +1762,17 @@
         "parser": {
           "outcome": "rejected",
           "detail": "table public.anything: only tables of security_check",
-          "seconds": 0.001
+          "seconds": 0.0
         },
         "database": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for schema public",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for schema public",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -1791,12 +1791,12 @@
         "database": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"SET\"",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"SET\"",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -1815,12 +1815,12 @@
         "database": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for function set_config",
-          "seconds": 0.005
+          "seconds": 0.007
         },
         "privileges": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for function set_config",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -1839,12 +1839,12 @@
         "database": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for function set_config",
-          "seconds": 0.005
+          "seconds": 0.007
         },
         "privileges": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for function set_config",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -1863,7 +1863,7 @@
         "database": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for function set_config",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
@@ -1887,12 +1887,12 @@
         "database": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"SET\"",
-          "seconds": 0.004
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"SET\"",
-          "seconds": 0.004
+          "seconds": 0.007
         }
       }
     },
@@ -1911,12 +1911,12 @@
         "database": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"SET\"",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"SET\"",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -1935,7 +1935,7 @@
         "database": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"SET\"",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
@@ -1959,12 +1959,12 @@
         "database": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"RESET\"",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"RESET\"",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -1983,12 +1983,12 @@
         "database": {
           "outcome": "contained",
           "detail": "timeout: canceling statement due to user request",
-          "seconds": 3.027
+          "seconds": 3.017
         },
         "privileges": {
           "outcome": "contained",
           "detail": "timeout: canceling statement due to user request",
-          "seconds": 3.038
+          "seconds": 3.019
         }
       }
     },
@@ -2007,12 +2007,12 @@
         "database": {
           "outcome": "contained",
           "detail": "timeout: canceling statement due to user request",
-          "seconds": 3.011
+          "seconds": 3.024
         },
         "privileges": {
           "outcome": "contained",
           "detail": "timeout: canceling statement due to user request",
-          "seconds": 3.015
+          "seconds": 3.033
         }
       }
     },
@@ -2026,17 +2026,17 @@
         "parser": {
           "outcome": "contained",
           "detail": "timeout: canceling statement due to user request",
-          "seconds": 3.033
+          "seconds": 3.03
         },
         "database": {
           "outcome": "contained",
           "detail": "timeout: canceling statement due to user request",
-          "seconds": 3.018
+          "seconds": 3.01
         },
         "privileges": {
           "outcome": "contained",
           "detail": "timeout: canceling statement due to user request",
-          "seconds": 3.013
+          "seconds": 3.017
         }
       }
     },
@@ -2049,18 +2049,18 @@
       "modes": {
         "parser": {
           "outcome": "contained",
-          "detail": "row limit: 100 rows in 2.42 s",
-          "seconds": 2.417
+          "detail": "row limit: 100 rows in 2.80 s",
+          "seconds": 2.805
         },
         "database": {
           "outcome": "contained",
-          "detail": "row limit: 100 rows in 2.37 s",
-          "seconds": 2.367
+          "detail": "row limit: 100 rows in 2.80 s",
+          "seconds": 2.803
         },
         "privileges": {
           "outcome": "contained",
-          "detail": "row limit: 100 rows in 2.55 s",
-          "seconds": 2.555
+          "detail": "row limit: 100 rows in 2.73 s",
+          "seconds": 2.733
         }
       }
     },
@@ -2074,12 +2074,12 @@
         "parser": {
           "outcome": "contained",
           "detail": "timeout: canceling statement due to user request",
-          "seconds": 3.028
+          "seconds": 3.033
         },
         "database": {
           "outcome": "contained",
           "detail": "timeout: canceling statement due to user request",
-          "seconds": 3.038
+          "seconds": 3.023
         },
         "privileges": {
           "outcome": "contained",
@@ -2103,7 +2103,7 @@
         "database": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for function pg_sleep",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
@@ -2127,12 +2127,12 @@
         "database": {
           "outcome": "contained",
           "detail": "timeout: canceling statement due to user request",
-          "seconds": 3.036
+          "seconds": 3.031
         },
         "privileges": {
           "outcome": "contained",
           "detail": "timeout: canceling statement due to user request",
-          "seconds": 3.029
+          "seconds": 3.045
         }
       }
     },
@@ -2151,12 +2151,12 @@
         "database": {
           "outcome": "contained",
           "detail": "resource_limit: temporary file size exceeds temp_file_limit (262144kB)",
-          "seconds": 1.053
+          "seconds": 1.189
         },
         "privileges": {
           "outcome": "contained",
           "detail": "resource_limit: temporary file size exceeds temp_file_limit (262144kB)",
-          "seconds": 1.007
+          "seconds": 1.24
         }
       }
     },
@@ -2170,17 +2170,17 @@
         "parser": {
           "outcome": "rejected",
           "detail": "repeat() needs a literal count of at most 10,000",
-          "seconds": 0.001
+          "seconds": 0.0
         },
         "database": {
           "outcome": "contained",
-          "detail": "finished within the limits: 1 rows in 0.57 s",
-          "seconds": 0.568
+          "detail": "finished within the limits: 1 rows in 0.66 s",
+          "seconds": 0.657
         },
         "privileges": {
           "outcome": "contained",
-          "detail": "finished within the limits: 1 rows in 0.57 s",
-          "seconds": 0.574
+          "detail": "finished within the limits: 1 rows in 0.62 s",
+          "seconds": 0.618
         }
       }
     },
@@ -2199,12 +2199,12 @@
         "database": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for function pg_advisory_lock",
-          "seconds": 0.006
+          "seconds": 0.007
         },
         "privileges": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for function pg_advisory_lock",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -2223,7 +2223,7 @@
         "database": {
           "outcome": "denied",
           "detail": "syntax_error: syntax error at or near \"DROP\"",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
@@ -2271,12 +2271,12 @@
         "database": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for table secret",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for table secret",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -2295,12 +2295,12 @@
         "database": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for schema formula_1",
-          "seconds": 0.014
+          "seconds": 0.034
         },
         "privileges": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for schema formula_1",
-          "seconds": 0.014
+          "seconds": 0.033
         }
       }
     },
@@ -2319,12 +2319,12 @@
         "database": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for schema formula_1",
-          "seconds": 0.005
+          "seconds": 0.006
         },
         "privileges": {
           "outcome": "denied",
           "detail": "permission_denied: permission denied for schema formula_1",
-          "seconds": 0.005
+          "seconds": 0.006
         }
       }
     },
@@ -2338,17 +2338,17 @@
         "parser": {
           "outcome": "contained",
           "detail": "timeout: canceling statement due to user request",
-          "seconds": 3.067
+          "seconds": 3.048
         },
         "database": {
           "outcome": "contained",
           "detail": "timeout: canceling statement due to user request",
-          "seconds": 3.029
+          "seconds": 3.041
         },
         "privileges": {
           "outcome": "contained",
           "detail": "timeout: canceling statement due to user request",
-          "seconds": 3.028
+          "seconds": 3.037
         }
       }
     },
@@ -2362,17 +2362,17 @@
         "parser": {
           "outcome": "contained",
           "detail": "row limit: 100 rows in 3.04 s",
-          "seconds": 3.037
+          "seconds": 3.039
         },
         "database": {
           "outcome": "contained",
-          "detail": "row limit: 100 rows in 3.03 s",
-          "seconds": 3.034
+          "detail": "row limit: 100 rows in 3.04 s",
+          "seconds": 3.041
         },
         "privileges": {
           "outcome": "contained",
           "detail": "row limit: 100 rows in 3.04 s",
-          "seconds": 3.039
+          "seconds": 3.04
         }
       }
     }

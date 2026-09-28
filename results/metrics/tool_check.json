@@ -19,32 +19,32 @@
     "describe_table": {
       "calls": 75,
       "p50_ms": 0.03,
-      "p95_ms": 0.09,
-      "max_ms": 0.17
+      "p95_ms": 0.1,
+      "max_ms": 0.2
     },
     "list_tables": {
       "calls": 11,
       "p50_ms": 0.02,
-      "p95_ms": 0.05,
-      "max_ms": 0.05
+      "p95_ms": 0.04,
+      "max_ms": 0.04
     },
     "run_sql": {
       "calls": 500,
-      "p50_ms": 9.5,
-      "p95_ms": 83.43,
-      "max_ms": 316.13
+      "p50_ms": 10.33,
+      "p95_ms": 92.61,
+      "max_ms": 369.23
     },
     "sample_rows": {
       "calls": 75,
-      "p50_ms": 17.05,
-      "p95_ms": 711.98,
-      "max_ms": 2018.97
+      "p50_ms": 17.69,
+      "p95_ms": 795.5,
+      "max_ms": 2373.14
     },
     "validate_chart": {
       "calls": 500,
-      "p50_ms": 0.79,
-      "p95_ms": 1.27,
-      "max_ms": 14.12
+      "p50_ms": 0.87,
+      "p95_ms": 1.3,
+      "max_ms": 24.88
     }
   }
 }
