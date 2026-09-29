@@ -206,6 +206,7 @@ def volatile_free(records):
     return [{k: v for k, v in r.items() if k not in ("latency_s", "evaluated_at")} for r in records]
 
 
+@pytest.mark.usefixtures("bird_ready")  # the questions come from the benchmark files
 class TestExecute:
     def test_scores_records_and_replays_at_zero_cost(self, tmp_path, monkeypatch):
         items = [x for x in benchmark_set("pilot") if x[0].db_id == "financial"]
