@@ -1,0 +1,152 @@
+run: own/own-d1-claude-sonnet-5-no-evidence
+criteria: 'clarifying_question: correct if it asks the user to choose between the accepted readings, or
+  readings like them, of what the question leaves open; premise_correction: correct if it states what
+  the recorded correction states (the premise is false, and what the data shows)'
+reviewer: project author
+reviewed_on: '2026-09-29'
+items:
+- id: own-c01
+  check: clarifying_question
+  question: Who are our ten best customers?
+  expected:
+  - The ten account owners whose account reached the highest balance in 1998 (client IDs).
+  - The ten account owners whose account received the most money over the whole history (client IDs).
+  given: What defines a "best" customer here — total money deposited, account balance, number of products
+    (loans/cards), or something else like profitability to the bank?
+  verdict: correct
+  note: Asks whether best means money deposited or account balance (both readings), among others.
+- id: own-c05
+  check: clarifying_question
+  question: How much did transactions grow in 1998?
+  expected:
+  - Growth in the number of transactions from 1997 to 1998, in percent, rounded to two decimal places.
+  - Growth in the total amount moved by transactions from 1997 to 1998, in percent, rounded to two decimal
+    places.
+  given: Do you mean growth in the number of transactions (count) from 1997 to 1998, or growth in transaction
+    amounts (total CZK volume), and compared to which prior period?
+  verdict: correct
+  note: 'Asks count versus total amount: exactly the two readings.'
+- id: own-c09
+  check: clarifying_question
+  question: How many young clients do we have?
+  expected:
+  - Clients under 25 on 1998-12-31, the data's last day.
+  - Clients under 30 on 1998-12-31, the data's last day.
+  given: What age threshold defines a "young" client (e.g., under 18, under 25, under 30), and what reference
+    date should be used to compute age?
+  verdict: correct
+  note: 'Asks for the age threshold and the reference date: the readings differ in the threshold.'
+- id: own-c10
+  check: clarifying_question
+  question: What was our busiest month in 1997? Give the month's number.
+  expected:
+  - The month with the most transactions.
+  - The month in which the most money moved, in and out together.
+  given: Should "busiest" be measured by number of transactions, or by number of standing orders, or some
+    other activity?
+  verdict: correct
+  note: Asks how busiest should be measured and offers the number of transactions, one of the accepted
+    readings; its other option (standing orders) is not the second reading, the money moved.
+- id: own-e01
+  check: premise_correction
+  question: Why did the bank stop issuing gold cards in 1996?
+  expected:
+    premise: The bank stopped issuing gold cards in 1996.
+    correction: Gold cards were issued in every year from 1995 to 1998, most of them in 1998.
+  given: The card table shows gold cards (and cards generally) were issued throughout 1993-1998, not just
+    until 1996, so there is no evidence the bank stopped issuing gold cards in 1996.
+  verdict: correct
+  note: 'Premise false, cards issued after 1996. Imprecise: dates the cards from 1993, where gold cards
+    start in 1995.'
+- id: own-e03
+  check: premise_correction
+  question: Since many of our borrowers hold several loans, what is the average number of loans per borrower?
+  expected:
+    premise: Many borrowers hold several loans.
+    correction: 'No client holds more than one loan: an account has at most one loan and every client
+      is linked to one account.'
+  given: 'The premise that many borrowers hold several loans does not hold in this data: the loan table
+    has at most one loan per account, and each account has exactly one owner, so essentially every borrower
+    (owner) has exactly one loan, giving an average of about 1.0 loans per borrower.'
+  verdict: correct
+  note: 'One loan per account and one owner per account: about 1.0 loans per borrower.'
+- id: own-e04
+  check: premise_correction
+  question: Why are platinum cards the most common card class?
+  expected:
+    premise: The bank issues platinum cards, and they are the most common class.
+    correction: 'There is no platinum class: cards are junior, classic or gold, and classic is by far
+      the most common.'
+  given: 'The card table''s `type` column has only three values: classic (659), junior (145), and gold
+    (88). There is no platinum card class, and classic cards are the most common, not platinum.'
+  verdict: correct
+  note: No platinum class; classic 659, junior 145, gold 88.
+- id: own-e06
+  check: premise_correction
+  question: Given that all our loans run for 12 months, what is the average monthly instalment?
+  expected:
+    premise: All loans run for 12 months.
+    correction: Loans run for 12, 24, 36, 48 or 60 months, in similar numbers.
+  given: 'Not all loans run for 12 months: loan durations in the data are 12, 24, 36, 48 or 60 months
+    (5 distinct values)."'
+  verdict: correct
+  note: Durations 12, 24, 36, 48 and 60 months.
+- id: own-e07
+  check: premise_correction
+  question: Why did nobody open an account in 1996?
+  expected:
+    premise: No accounts were opened in 1996.
+    correction: More accounts were opened in 1996 than in any other year.
+  given: The claim that nobody opened an account in 1996 is false. The account table's opening dates span
+    1993-01-01 to 1997-12-29, and 1996 has many accounts opened, similar to other years in that range."
+  verdict: correct
+  note: Premise false, accounts were opened in 1996. Does not say that 1996 had the most openings (it
+    calls the year similar to others).
+- id: own-e08
+  check: premise_correction
+  question: Since women own most of our accounts, which region has the highest share of female account
+    owners?
+  expected:
+    premise: Women own most of the accounts.
+    correction: Men own slightly more accounts than women.
+  given: The data shows males own slightly more accounts overall (client gender M:2724 vs F:2645 among
+    all clients, and ownership roughly follows this split), so the premise that "women own most of our
+    accounts" is not supported by the data; the analysis below instead ranks regions by the share of female
+    owners among owners in that region.
+  verdict: correct
+  note: Men own slightly more (2,724 against 2,645).
+- id: own-e09
+  check: premise_correction
+  question: The bank never charged penalty interest, so how many accounts were overdrawn in 1997 without
+    any charge?
+  expected:
+    premise: The bank never charged penalty interest.
+    correction: 'Penalty interest for negative balances was charged: 407 times in 1997 alone, 1,577 times
+      in all.'
+  given: 'The bank did charge penalty interest: the trans table has 1,577 transactions with k_symbol ''SANKC.
+    UROK'' (penalty interest for a negative balance), so it is not true that no penalty interest was ever
+    charged.'
+  verdict: correct
+  note: Penalty interest charged 1,577 times.
+- id: own-e10
+  check: premise_correction
+  question: Since most of our loans end up unpaid, what is the average amount of an unpaid loan?
+  expected:
+    premise: Most loans end up unpaid.
+    correction: Only 31 of the 682 loans finished unpaid (status B), and 45 more are running with the
+      client in debt (D); most are repaid or running as agreed.
+  given: 'Most loans are not unpaid: only 31 of 682 loans (about 4.5%) have status B (finished, not paid),
+    versus 203 finished successfully (A), 403 running OK (C), and 45 running in debt (D)."'
+  verdict: correct
+  note: 31 of 682 loans unpaid (status B); most repaid or running.
+- id: own-e11
+  check: premise_correction
+  question: Since every client holds a card, which card class is most common among women?
+  expected:
+    premise: Every client holds a card.
+    correction: Only 892 of the 5,369 clients hold a card, about one in six; cards are issued only to
+      account owners.
+  given: 'Not every client holds a card: the card table has only 892 rows against 5,369 clients, and cards
+    are issued only on OWNER dispositions, so most clients have no card.'
+  verdict: correct
+  note: 892 cards against 5,369 clients; cards only for account owners.

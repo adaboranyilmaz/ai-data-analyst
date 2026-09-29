@@ -11,6 +11,7 @@ license-files = ["LICENSE"]
 dependencies = [
     "anthropic>=1.8.0",
     "jsonschema>=4.26",
+    "opentelemetry-sdk>=1.45",
     "psycopg[binary]>=3.2",
     "pyyaml>=6.0",
     "sqlglot>=30.20",

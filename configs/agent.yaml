@@ -1,0 +1,132 @@
+# The agent (src/agent/): its prompts, the models it runs on, the five designs and what the model
+# is shown. The designs' steps and budgets follow the pre-registration
+# (results/metrics/preregistration.md); a change here changes what is measured.
+
+# Versioned prompt files; each run records the sha256 of every prompt it used.
+prompts:
+  single_shot: prompts/single_shot_v3.md # design 1
+  agent: prompts/agent_v3.md # designs 2-5
+  narrow: prompts/narrow_v1.md # design 5's schema-narrowing call
+
+# Per model: the backend, the output budget per call and the request parameters, all part of
+# every request's cache key. Claude Sonnet 5 thinks unless told not to, so thinking is switched
+# off; Claude Haiku 4.5 does not think by default and runs at the API's default sampling
+# settings (temperature 1.0); the local model runs at temperature 0 with a fixed seed, with a
+# context large enough for the largest full schema (the part above what fits on the GPU runs on
+# the CPU).
+models:
+  claude-sonnet-5:
+    backend: anthropic
+    max_tokens: 2048
+    params: { thinking: { type: disabled } }
+    prompt_cache: true
+  claude-haiku-4-5:
+    backend: anthropic
+    max_tokens: 2048
+    params: {}
+    prompt_cache: true
+  qwen2.5:3b-instruct:
+    backend: ollama
+    max_tokens: 1024
+    params: { options: { temperature: 0, seed: 0, num_ctx: 32768 } }
+    prompt_cache: false
+
+# The designs, each adding one step to the one before.
+designs:
+  d1: { tools: [], samples: 1, narrow: false, max_tool_calls: 0, resubmits: 0 }
+  d2:
+    tools: [list_tables, describe_table, sample_rows]
+    samples: 1
+    narrow: false
+    max_tool_calls: 10
+    resubmits: 0
+  d3:
+    tools: [list_tables, describe_table, sample_rows, run_sql]
+    samples: 1
+    narrow: false
+    max_tool_calls: 15
+    resubmits: 2 # a refused, failing, timed-out or empty submission goes back to the model
+  d4:
+    tools: [list_tables, describe_table, sample_rows, run_sql]
+    samples: 3 # the first sample is design 3's run: the same request, served from the cache
+    narrow: false
+    max_tool_calls: 15
+    resubmits: 2
+  d5:
+    tools: [list_tables, describe_table, sample_rows, run_sql]
+    samples: 3
+    narrow: true
+    max_tool_calls: 15
+    resubmits: 2
+
+# Replies without a tool call that the loop answers with a reminder before giving up; model
+# calls a run may make at most, whatever else happens (a backstop against loops).
+reminders: 1
+max_model_calls: 24
+
+# What the model is shown. Up to `agent.max_rows` rows are fetched (configs/tools.yaml); the
+# model sees the first `rows_shown`, with the total. Timings are never shown: they differ on
+# every run, and would change the next request and so its cache key.
+presentation:
+  rows_shown: 20
+
+# The automatic checks on an answer's result (design 4 and 5's confidence halves when one
+# fails; every design's record carries them).
+checks:
+  max_rows: 1000 # more rows than this is flagged
+  timeout_s: 30 # the final SQL is re-run for the checks with the scorer's time limit
+
+# How runs call the models: `direct` calls, `workers` questions at a time; or `batch`, where
+# each round of every open conversation goes out as one Message Batch at half price.
+run:
+  workers: 4
+  batch_poll_seconds: 30
+
+# The runs of each stage, run by scripts/42_run_stage.py (and replayed by the pipeline). Arms in
+# batch mode run together, one set of batches per round; direct arms run one after another.
+# `limit`: only the set's first N questions (the pilot's checks of the designs not tuned there).
+# An arm may set its own `set` and `evidence`, and name its design `winner`: the design chosen
+# on the ablation set (results/metrics/ablation.json). An arm the ablation stage already ran is
+# not repeated.
+stages:
+  pilot:
+    set: pilot
+    evidence: true
+    arms:
+      - { model: claude-sonnet-5, design: d1, mode: direct }
+      - { model: claude-sonnet-5, design: d3, mode: direct }
+      - { model: claude-sonnet-5, design: d2, mode: direct, limit: 5 }
+      - { model: claude-sonnet-5, design: d4, mode: direct, limit: 5 }
+      - { model: claude-sonnet-5, design: d5, mode: direct, limit: 5 }
+      - { model: claude-haiku-4-5, design: d1, mode: direct, limit: 3 }
+      - { model: claude-haiku-4-5, design: d3, mode: direct, limit: 3 }
+      - { model: claude-haiku-4-5, design: d2, mode: batch, limit: 2 }
+  ablation:
+    set: ablation
+    evidence: true
+    arms:
+      - { model: claude-sonnet-5, design: d1, mode: batch }
+      - { model: claude-sonnet-5, design: d2, mode: batch }
+      - { model: claude-sonnet-5, design: d3, mode: batch }
+      - { model: claude-sonnet-5, design: d4, mode: batch }
+      - { model: claude-sonnet-5, design: d5, mode: batch }
+      - { model: claude-haiku-4-5, design: d1, mode: batch }
+      - { model: claude-haiku-4-5, design: d3, mode: batch }
+      - { model: qwen2.5:3b-instruct, design: d1, mode: direct }
+      - { model: qwen2.5:3b-instruct, design: d2, mode: direct }
+      - { model: qwen2.5:3b-instruct, design: d3, mode: direct }
+  # The winner: on all 500 questions with evidence (the ablation set's answers come from the
+  # ablation stage's responses), on the ablation set without evidence, and with Claude Haiku 4.5.
+  main:
+    set: all
+    evidence: true
+    arms:
+      - { model: claude-sonnet-5, design: winner, mode: batch }
+      - { model: claude-sonnet-5, design: winner, mode: batch, set: ablation, evidence: false }
+      - { model: claude-haiku-4-5, design: winner, mode: batch, set: ablation }
+  # The winner on the hand-written banking set (no evidence: the set has no hints).
+  own:
+    set: own
+    evidence: false
+    arms:
+      - { model: claude-sonnet-5, design: winner, mode: batch }

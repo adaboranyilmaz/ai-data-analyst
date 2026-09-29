@@ -1,0 +1,521 @@
+{
+  "note": "one run; intervals are 95% bootstrap over questions",
+  "design": "d1",
+  "model": "claude-sonnet-5",
+  "run": {
+    "questions": 60,
+    "declined": 12,
+    "scored_questions": 42,
+    "execution_accuracy": {
+      "estimate": 0.5952380952380952,
+      "low": 0.4523809523809524,
+      "high": 0.7380952380952381,
+      "confidence": 0.95,
+      "resamples": 10000,
+      "undefined": 0
+    },
+    "soft_f1": {
+      "estimate": 0.6421049188906333,
+      "low": 0.5124694749694749,
+      "high": 0.7669642857142858,
+      "confidence": 0.95,
+      "resamples": 10000,
+      "undefined": 0
+    },
+    "soft_f1_not_computed": 0,
+    "by_db_id": {
+      "financial": {
+        "questions": 42,
+        "execution_accuracy": {
+          "estimate": 0.5952380952380952,
+          "low": 0.4523809523809524,
+          "high": 0.7380952380952381,
+          "confidence": 0.95,
+          "resamples": 10000,
+          "undefined": 0
+        }
+      }
+    },
+    "by_difficulty": {},
+    "selective": {
+      "aurc": {
+        "estimate": 0.1616460916639953,
+        "low": 0.06592741715856613,
+        "high": 0.30099011568908235,
+        "confidence": 0.95,
+        "resamples": 10000,
+        "undefined": 0
+      },
+      "e_aurc": {
+        "estimate": 0.06092265648234764,
+        "low": 0.010030196434433519,
+        "high": 0.13789206973367135,
+        "confidence": 0.95,
+        "resamples": 10000,
+        "undefined": 0
+      },
+      "accuracy_at_80": {
+        "estimate": 0.7352941176470589,
+        "low": 0.5588235294117647,
+        "high": 0.8823529411764706,
+        "confidence": 0.95,
+        "resamples": 10000,
+        "undefined": 0
+      },
+      "accuracy_at_90": {
+        "estimate": 0.6578947368421053,
+        "low": 0.5,
+        "high": 0.8157894736842105,
+        "confidence": 0.95,
+        "resamples": 10000,
+        "undefined": 0
+      },
+      "curve": {
+        "coverage": [
+          0.023809523809523808,
+          0.047619047619047616,
+          0.07142857142857142,
+          0.09523809523809523,
+          0.11904761904761904,
+          0.14285714285714285,
+          0.16666666666666666,
+          0.19047619047619047,
+          0.21428571428571427,
+          0.23809523809523808,
+          0.2619047619047619,
+          0.2857142857142857,
+          0.30952380952380953,
+          0.3333333333333333,
+          0.35714285714285715,
+          0.38095238095238093,
+          0.40476190476190477,
+          0.42857142857142855,
+          0.4523809523809524,
+          0.47619047619047616,
+          0.5,
+          0.5238095238095238,
+          0.5476190476190477,
+          0.5714285714285714,
+          0.5952380952380952,
+          0.6190476190476191,
+          0.6428571428571429,
+          0.6666666666666666,
+          0.6904761904761905,
+          0.7142857142857143,
+          0.7380952380952381,
+          0.7619047619047619,
+          0.7857142857142857,
+          0.8095238095238095,
+          0.8333333333333334,
+          0.8571428571428571,
+          0.8809523809523809,
+          0.9047619047619048,
+          0.9285714285714286,
+          0.9523809523809523,
+          0.9761904761904762,
+          1.0
+        ],
+        "risk": [
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.1111111111111111,
+          0.1,
+          0.09090909090909091,
+          0.09999999999999999,
+          0.10769230769230768,
+          0.1142857142857143,
+          0.12000000000000001,
+          0.125,
+          0.12941176470588237,
+          0.13333333333333333,
+          0.1368421052631579,
+          0.13999999999999999,
+          0.14285714285714285,
+          0.18181818181818182,
+          0.17391304347826086,
+          0.16666666666666666,
+          0.16,
+          0.15384615384615385,
+          0.14814814814814814,
+          0.14285714285714285,
+          0.1724137931034483,
+          0.2,
+          0.21505376344086022,
+          0.22916666666666666,
+          0.24242424242424243,
+          0.2647058823529412,
+          0.2857142857142857,
+          0.3055555555555556,
+          0.32432432432432434,
+          0.34210526315789475,
+          0.358974358974359,
+          0.375,
+          0.3902439024390244,
+          0.40476190476190477
+        ]
+      }
+    },
+    "calibration": {
+      "declines_at_zero": 0,
+      "ece": {
+        "estimate": 0.15880952380952376,
+        "low": 0.1140476190476191,
+        "high": 0.29452976190476177,
+        "confidence": 0.95,
+        "resamples": 10000,
+        "undefined": 0
+      },
+      "ece_equal_mass": {
+        "estimate": 0.24214285714285713,
+        "low": 0.12856547619047615,
+        "high": 0.3388095238095238,
+        "confidence": 0.95,
+        "resamples": 10000,
+        "undefined": 0
+      },
+      "brier": {
+        "estimate": 0.17577857142857148,
+        "low": 0.1103569642857143,
+        "high": 0.2476557738095238,
+        "confidence": 0.95,
+        "resamples": 10000,
+        "undefined": 0
+      },
+      "auroc": {
+        "estimate": 0.8847058823529412,
+        "low": 0.761024109162896,
+        "high": 0.9765509259259259,
+        "confidence": 0.95,
+        "resamples": 10000,
+        "undefined": 0
+      },
+      "reliability": [
+        {
+          "n": 2,
+          "mean_confidence": 0.25,
+          "accuracy": 0.0,
+          "range": [
+            0.2,
+            0.3
+          ]
+        },
+        {
+          "n": 2,
+          "mean_confidence": 0.42500000000000004,
+          "accuracy": 0.0,
+          "range": [
+            0.4,
+            0.5
+          ]
+        },
+        {
+          "n": 5,
+          "mean_confidence": 0.55,
+          "accuracy": 0.0,
+          "range": [
+            0.5,
+            0.6
+          ]
+        },
+        {
+          "n": 3,
+          "mean_confidence": 0.6,
+          "accuracy": 0.3333333333333333,
+          "range": [
+            0.6,
+            0.7
+          ]
+        },
+        {
+          "n": 8,
+          "mean_confidence": 0.7375,
+          "accuracy": 0.75,
+          "range": [
+            0.7,
+            0.8
+          ]
+        },
+        {
+          "n": 11,
+          "mean_confidence": 0.8454545454545453,
+          "accuracy": 0.7272727272727273,
+          "range": [
+            0.8,
+            0.9
+          ]
+        },
+        {
+          "n": 11,
+          "mean_confidence": 0.9427272727272726,
+          "accuracy": 0.9090909090909091,
+          "range": [
+            0.9,
+            1.0
+          ]
+        }
+      ],
+      "reliability_equal_mass": [
+        {
+          "n": 4,
+          "mean_confidence": 0.3375,
+          "accuracy": 0.0
+        },
+        {
+          "n": 5,
+          "mean_confidence": 0.55,
+          "accuracy": 0.0
+        },
+        {
+          "n": 5,
+          "mean_confidence": 0.64,
+          "accuracy": 0.2
+        },
+        {
+          "n": 6,
+          "mean_confidence": 0.75,
+          "accuracy": 1.0
+        },
+        {
+          "n": 1,
+          "mean_confidence": 0.8,
+          "accuracy": 0.0
+        },
+        {
+          "n": 10,
+          "mean_confidence": 0.85,
+          "accuracy": 0.8
+        },
+        {
+          "n": 3,
+          "mean_confidence": 0.9066666666666667,
+          "accuracy": 0.6666666666666666
+        },
+        {
+          "n": 6,
+          "mean_confidence": 0.9500000000000001,
+          "accuracy": 1.0
+        },
+        {
+          "n": 2,
+          "mean_confidence": 0.975,
+          "accuracy": 1.0
+        }
+      ]
+    },
+    "cost": {
+      "total_usd": 0.23670100000000002,
+      "per_question_usd": 0.003945016666666667,
+      "per_correct_answer_usd": {
+        "estimate": 0.006895744000000001,
+        "low": 0.005223754032258065,
+        "high": 0.00967704605263158,
+        "confidence": 0.95,
+        "resamples": 10000,
+        "undefined": 0
+      }
+    },
+    "latency_s": {
+      "p50": null,
+      "p95": null,
+      "not_measured": "model calls were batched; a batched call has no latency"
+    },
+    "steps_mean": 1.0,
+    "tool_calls_mean": 0.0,
+    "errors_by_kind": {},
+    "score_outcomes": {
+      "not_scored": 18,
+      "ok": 42
+    }
+  },
+  "categories": {
+    "a": {
+      "name": "standard",
+      "questions": 12,
+      "declined": 0,
+      "success": {
+        "estimate": 0.8333333333333334,
+        "low": 0.5833333333333334,
+        "high": 1.0,
+        "confidence": 0.95,
+        "resamples": 10000,
+        "undefined": 0
+      }
+    },
+    "b": {
+      "name": "multi-step",
+      "questions": 12,
+      "declined": 0,
+      "success": {
+        "estimate": 0.9166666666666666,
+        "low": 0.75,
+        "high": 1.0,
+        "confidence": 0.95,
+        "resamples": 10000,
+        "undefined": 0
+      }
+    },
+    "c": {
+      "name": "ambiguous",
+      "questions": 9,
+      "declined": 0,
+      "success": {
+        "estimate": 0.8888888888888888,
+        "low": 0.6666666666666666,
+        "high": 1.0,
+        "confidence": 0.95,
+        "resamples": 10000,
+        "undefined": 0
+      },
+      "reviewed_success": {
+        "estimate": 0.8888888888888888,
+        "low": 0.6666666666666666,
+        "high": 1.0,
+        "confidence": 0.95,
+        "resamples": 10000,
+        "undefined": 0
+      }
+    },
+    "d": {
+      "name": "unanswerable",
+      "questions": 9,
+      "declined": 9,
+      "success": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0,
+        "confidence": 0.95,
+        "resamples": 10000,
+        "undefined": 0
+      }
+    },
+    "e": {
+      "name": "false premise",
+      "questions": 9,
+      "declined": 3,
+      "success": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0,
+        "confidence": 0.95,
+        "resamples": 10000,
+        "undefined": 0
+      },
+      "reviewed_success": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0,
+        "confidence": 0.95,
+        "resamples": 10000,
+        "undefined": 0
+      }
+    },
+    "f": {
+      "name": "comparative or causal",
+      "questions": 9,
+      "declined": 0
+    }
+  },
+  "not_called_for_ab": {
+    "note": "standard and multi-step questions: clear, with a true premise",
+    "declined": {
+      "estimate": 0.0,
+      "low": 0.0,
+      "high": 0.0,
+      "confidence": 0.95,
+      "resamples": 10000,
+      "undefined": 0
+    },
+    "clarifying_question": {
+      "estimate": 0.041666666666666664,
+      "low": 0.0,
+      "high": 0.125,
+      "confidence": 0.95,
+      "resamples": 10000,
+      "undefined": 0
+    },
+    "premise_correction": {
+      "estimate": 0.0,
+      "low": 0.0,
+      "high": 0.0,
+      "confidence": 0.95,
+      "resamples": 10000,
+      "undefined": 0
+    }
+  },
+  "review": {
+    "file": "results/reviews/own_set_review.yaml",
+    "done": true,
+    "criteria": "clarifying_question: correct if it asks the user to choose between the accepted readings, or readings like them, of what the question leaves open; premise_correction: correct if it states what the recorded correction states (the premise is false, and what the data shows)",
+    "reviewer": "project author",
+    "reviewed_on": "2026-09-29",
+    "checked": 13
+  },
+  "cost_per_correct": [
+    {
+      "model": "claude-sonnet-5",
+      "design": "d1",
+      "set": "own",
+      "questions": 60,
+      "execution_accuracy": 0.5952380952380952,
+      "cost_per_question_usd": 0.003945016666666667,
+      "cost_per_correct_answer_usd": 0.006895744000000001,
+      "total_usd": 0.23670100000000002
+    }
+  ],
+  "predictions": {
+    "P12": {
+      "claim": "EX of the winner on the banking set's standard and multi-step questions, against its held-out benchmark EX",
+      "prediction": "65-85% on the standard and multi-step questions, above the held-out benchmark EX",
+      "standard_and_multi_step_ex": {
+        "estimate": 0.875,
+        "low": 0.75,
+        "high": 1.0,
+        "confidence": 0.95,
+        "resamples": 10000,
+        "undefined": 0
+      },
+      "held_out_benchmark_ex": {
+        "estimate": 0.60625,
+        "low": 0.553125,
+        "high": 0.659375,
+        "confidence": 0.95,
+        "resamples": 10000,
+        "undefined": 0
+      }
+    },
+    "P13": {
+      "claim": "Success on the banking set's ambiguous, unanswerable and false-premise questions",
+      "prediction": "ambiguous 40-70%, unanswerable 60-90%, false premise 40-75%",
+      "ambiguous": {
+        "estimate": 0.8888888888888888,
+        "low": 0.6666666666666666,
+        "high": 1.0,
+        "confidence": 0.95,
+        "resamples": 10000,
+        "undefined": 0
+      },
+      "unanswerable": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0,
+        "confidence": 0.95,
+        "resamples": 10000,
+        "undefined": 0
+      },
+      "false_premise": {
+        "estimate": 1.0,
+        "low": 1.0,
+        "high": 1.0,
+        "confidence": 0.95,
+        "resamples": 10000,
+        "undefined": 0
+      }
+    }
+  }
+}

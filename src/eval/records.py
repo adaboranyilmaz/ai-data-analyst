@@ -38,6 +38,7 @@ SCORE_OUTCOMES = [
     "comparison_error",
     "gold_error",
     "not_scored",
+    "refused",  # the query guard refuses the final SQL: wrong without being run
 ]
 _STRING_OR_NULL = {"type": ["string", "null"]}
 _COUNT = {"type": "integer", "minimum": 0}

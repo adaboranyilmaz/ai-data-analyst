@@ -61,4 +61,4 @@ own_set:
 # that run is dated in the file, and the hash updated; after it, nothing changes.
 preregistration:
   path: results/metrics/preregistration.md
-  sha256: 8cd0c979c8c082242024070f2df07e17ab0658c4f296ddfc40596d32b3e6deba
+  sha256: 98ed630a04d5a3af67bd347f995b0f560aea355ebb11fc5566e363ea0b708e5b

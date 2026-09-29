@@ -58,9 +58,63 @@ values:
   split_held_out: {file: metrics/splits.json, path: sizes/held_out, fmt: int}
   own_set_questions: {file: metrics/own_set_gold.json, path: questions, fmt: int}
 
+  # the analyst: the design comparison (ablation set, with evidence)
+  abl_sonnet_d1_ex: {file: metrics/ablation.json, path: runs/claude-sonnet-5/d1/execution_accuracy/estimate, fmt: pct1}
+  abl_sonnet_d3_ex: {file: metrics/ablation.json, path: runs/claude-sonnet-5/d3/execution_accuracy/estimate, fmt: pct1}
+  abl_sonnet_d4_ex: {file: metrics/ablation.json, path: runs/claude-sonnet-5/d4/execution_accuracy/estimate, fmt: pct1}
+  abl_sonnet_d1_cost_q: {file: metrics/ablation.json, path: runs/claude-sonnet-5/d1/cost/per_question_usd, fmt: usd4}
+  abl_d1_minus_d3: {file: metrics/ablation.json, path: pairs/d1 - d3/execution_accuracy/estimate, fmt: pp1}
+  abl_d1_minus_d3_ci: {file: metrics/ablation.json, path: pairs/d1 - d3/execution_accuracy, fmt: ppiv1}
+  abl_d4_minus_d3: {file: metrics/ablation.json, path: predictions/P04/d4_minus_d3/estimate, fmt: pp1}
+  abl_d4_minus_d3_ci: {file: metrics/ablation.json, path: predictions/P04/d4_minus_d3, fmt: ppiv1}
+  abl_haiku_d1_ex: {file: metrics/ablation.json, path: runs/claude-haiku-4-5/d1/execution_accuracy/estimate, fmt: pct1}
+  abl_haiku_d3_ex: {file: metrics/ablation.json, path: runs/claude-haiku-4-5/d3/execution_accuracy/estimate, fmt: pct1}
+  abl_local_d1_ex: {file: metrics/ablation.json, path: runs/qwen2.5:3b-instruct/d1/execution_accuracy/estimate, fmt: pct1}
+  abl_local_d3_ex: {file: metrics/ablation.json, path: runs/qwen2.5:3b-instruct/d3/execution_accuracy/estimate, fmt: pct1}
+
+  # the winning design on the benchmark (held-out set: the headline)
+  held_ex: {file: metrics/benchmark_main.json, path: winner/held_out/execution_accuracy/estimate, fmt: pct1}
+  held_ex_ci: {file: metrics/benchmark_main.json, path: winner/held_out/execution_accuracy, fmt: pctiv1}
+  held_questions: {file: metrics/benchmark_main.json, path: winner/held_out/questions, fmt: int}
+  all_ex: {file: metrics/benchmark_main.json, path: winner/all/execution_accuracy/estimate, fmt: pct1}
+  held_auroc: {file: metrics/benchmark_main.json, path: winner/held_out/calibration/auroc/estimate, fmt: f2}
+  held_auroc_ci: {file: metrics/benchmark_main.json, path: winner/held_out/calibration/auroc, fmt: civ2}
+  held_ece: {file: metrics/benchmark_main.json, path: winner/held_out/calibration/ece/estimate, fmt: f2}
+  held_brier: {file: metrics/benchmark_main.json, path: winner/held_out/calibration/brier/estimate, fmt: f3}
+  held_aurc: {file: metrics/benchmark_main.json, path: winner/held_out/selective/aurc/estimate, fmt: f3}
+  held_acc_at_80: {file: metrics/benchmark_main.json, path: winner/held_out/selective/accuracy_at_80/estimate, fmt: pct1}
+  held_simple_ex: {file: metrics/benchmark_main.json, path: winner/held_out/by_difficulty/simple/execution_accuracy/estimate, fmt: pct1}
+  held_challenging_ex: {file: metrics/benchmark_main.json, path: winner/held_out/by_difficulty/challenging/execution_accuracy/estimate, fmt: pct1}
+  held_cost_correct: {file: metrics/benchmark_main.json, path: winner/held_out/cost/per_correct_answer_usd/estimate, fmt: usd4}
+  noev_ex: {file: metrics/benchmark_main.json, path: without_evidence/ablation/execution_accuracy/estimate, fmt: pct1}
+  evidence_gain: {file: metrics/benchmark_main.json, path: evidence_minus_no_evidence/execution_accuracy/estimate, fmt: pp1}
+  evidence_gain_ci: {file: metrics/benchmark_main.json, path: evidence_minus_no_evidence/execution_accuracy, fmt: ppiv1}
+  haiku_minus_sonnet_d1: {file: metrics/benchmark_main.json, path: haiku_minus_sonnet/execution_accuracy/estimate, fmt: pp1}
+  # the same differences as unsigned points, for prose that says which way they go
+  evidence_gain_pts: {expr: evidence_gain * 100, fmt: f1}
+  abl_d1_minus_d3_pts: {expr: abl_d1_minus_d3 * 100, fmt: f1}
+  haiku_behind_pts: {expr: -haiku_minus_sonnet_d1 * 100, fmt: f1}
+
+  # the winning design on the hand-written banking set
+  own_ab_ex: {file: metrics/own_set.json, path: predictions/P12/standard_and_multi_step_ex/estimate, fmt: pct1}
+  own_ab_ex_ci: {file: metrics/own_set.json, path: predictions/P12/standard_and_multi_step_ex, fmt: pctiv1}
+  own_c_success: {file: metrics/own_set.json, path: categories/c/success/estimate, fmt: pct1}
+  own_c_reviewed: {file: metrics/own_set.json, path: categories/c/reviewed_success/estimate, fmt: pct1}
+  own_d_success: {file: metrics/own_set.json, path: categories/d/success/estimate, fmt: pct1}
+  own_e_success: {file: metrics/own_set.json, path: categories/e/success/estimate, fmt: pct1}
+  own_e_reviewed: {file: metrics/own_set.json, path: categories/e/reviewed_success/estimate, fmt: pct1}
+  own_clarify_ab: {file: metrics/own_set.json, path: not_called_for_ab/clarifying_question/estimate, fmt: pct1}
+  own_reviewed: {file: metrics/own_set.json, path: review/checked, fmt: int}
+
+  # what it cost, and the replay
+  phase4_usd: {file: metrics/api_spend.json, path: by_phase/phase4/usd, fmt: usd2}
+  replay_runs: {file: metrics/replay_check.json, path: runs, count_where: {}, fmt: int}
+  replay_records: {file: metrics/replay_check.json, path: runs, sum_of: records, fmt: int}
+
 # Decimals and percentages the templates may contain outside a placeholder: version numbers,
 # never results.
 allowed_literals:
   - "3.12" # the Python version
   - "4.0" # CC BY-SA 4.0, the licence of the BIRD data
+  - "4.5" # Claude Haiku 4.5, a model's version
   - "95%" # the level of every interval, fixed in configs/eval.yaml

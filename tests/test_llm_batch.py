@@ -119,6 +119,26 @@ class TestBatchRunner:
         assert led._reserved == pytest.approx(0.0)
         assert pending_records(tmp_path / "b") == []
 
+    def test_an_errored_result_reports_the_inner_error(self, tmp_path):
+        # the SDK's shape: result.error is an error response whose .error is the error itself
+        rejected = SimpleNamespace(
+            type="errored",
+            error=SimpleNamespace(
+                type="error",
+                error=SimpleNamespace(type="invalid_request_error", message="prompt is too long"),
+            ),
+        )
+
+        class Rejecting(FakeBatches):
+            def results(self, bid):
+                for r in self.created[bid]:
+                    yield SimpleNamespace(custom_id=r["custom_id"], result=rejected)
+
+        client = SimpleNamespace(messages=SimpleNamespace(batches=Rejecting()))
+        out = run([req(1)], ResponseCache(tmp_path / "c"), ledger(tmp_path), client, tmp_path / "b")
+        (f,) = out.failures
+        assert (f["error"], f["message"]) == ("invalid_request_error", "prompt is too long")
+
     def test_failures_are_reported_and_left_uncached(self, tmp_path):
         cache, led = ResponseCache(tmp_path / "c"), ledger(tmp_path)
         out = run([req(1), req(2)], cache, led, fake_client(fail={"user 2"}), tmp_path / "b")

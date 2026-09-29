@@ -178,4 +178,40 @@ predictions:
 
 ## Amendments
 
-None yet.
+**2026-09-28, before the first scored run of the design comparison.** These make precise what the
+text above leaves open; none changes a question set, the selection rule, a Phase 5 rule or a
+prediction.
+
+1. **The answer's form.** Every design answers through one call of a `submit_answer` tool with a
+   strict schema (the fields listed under "The five designs", plus an optional chart). In design 1
+   it is the only tool the model has, and the model must call it; design 1 still reads no data.
+   The chart, when given, is checked after the run against the result's columns; an invalid chart
+   is dropped and recorded. No design calls a chart tool during its loop.
+2. **Model settings.** Claude Sonnet 5 runs with thinking disabled. Claude Haiku 4.5 runs at the
+   API's default sampling settings (no thinking). The local model (`qwen2.5:3b-instruct`) runs at
+   temperature 0, seed 0, with a 32,768-token context; a conversation whose next request might not
+   fit it ends without an answer.
+3. **Design 4's samples.** Its first sample is design 3's run on the same question: the same
+   requests, so the same responses. The second and third samples are new. Design 5's three samples
+   are all new.
+4. **Design 5's narrowing.** The samples see only the chosen tables in the table list, only the
+   chosen columns in `describe_table` and `sample_rows`, and may query only the chosen tables (the
+   query guard is built on them). A query may still name an unchosen column of a chosen table. If
+   the narrowing call chooses nothing usable, the samples get the full schema.
+5. **The loop's limits.** Tool results show the model at most 20 rows, with the total count, and
+   no timings. A turn with no tool call gets one reminder to submit; a conversation makes at most
+   24 model calls. A refusal, a reply cut off at its token limit, or reaching a limit ends the
+   conversation without an answer, which counts as wrong (confidence 0).
+6. **The automatic checks** (design 4 and 5's confidence), made precise: a count (a `COUNT`
+   aggregate or a count-like name) or an amount (an expression over an `amount` column) is out of
+   range when negative, unless its expression subtracts or negates; a share (a percent-like name,
+   or a division multiplied by 100) is out of range outside 0-100. In the vote, samples that
+   decline agree with each other, and a sample with no SQL, or whose SQL fails, agrees with no
+   other.
+7. **Descriptions in both settings.** The database descriptions BIRD ships reach the model in both
+   evidence settings (in the schema of design 1 and through `describe_table`); without evidence,
+   only the per-question hint is left out.
+8. **Prompts frozen** after three tuning rounds on the pilot set (sha256):
+   `prompts/single_shot_v3.md` `c76d55ca986d5827eeb1dc444dc2b7431330d8651055038f80481ebf5b854a27`,
+   `prompts/agent_v3.md` `011ad8a18ebeec59d62e8044f934fd833c5349639d5a067b9acf33fe22b34da5`,
+   `prompts/narrow_v1.md` `f9fe316a146e9b143ec542c75a74bf72516bba1a4e31f39635e7595c332db327`.

@@ -10,8 +10,8 @@ from types import SimpleNamespace
 import pytest
 
 from src.llm.backends import (
+    CONTEXT_OVERFLOW,
     AnthropicBackend,
-    ContextOverflow,
     OllamaBackend,
     UnsupportedParams,
     ollama_messages,
@@ -430,19 +430,29 @@ class TestAnthropicBackend:
 # Ollama backend
 
 
+class ResponseError(Exception):
+    """Named like the Ollama client's error."""
+
+
 class FakeOllama:
-    def __init__(self, tool_calls=None):
+    """Ollama's client at its request method: records the body sent, answers as told."""
+
+    def __init__(self, tool_calls=None, done_reason="stop", prompt=800, output=30, error=None):
         self.kwargs = None
         self.tool_calls = tool_calls
+        self.done_reason, self.prompt, self.output, self.error = done_reason, prompt, output, error
 
-    def chat(self, **kwargs):
-        self.kwargs = kwargs
+    def _request(self, cls, method, path, json, stream):
+        assert (method, path, stream) == ("POST", "/api/chat", False)
+        self.kwargs = json
+        if self.error:
+            raise ResponseError(self.error)
         return SimpleNamespace(
             message=SimpleNamespace(content="done", thinking=None, tool_calls=self.tool_calls),
             model="qwen2.5:3b-instruct",
-            done_reason="stop",
-            prompt_eval_count=800,
-            eval_count=30,
+            done_reason=self.done_reason,
+            prompt_eval_count=self.prompt,
+            eval_count=self.output,
             load_duration=0,
             prompt_eval_duration=1e6,
             eval_duration=2e6,
@@ -471,15 +481,69 @@ class TestOllamaBackend:
             "num_ctx": 8192,
             "num_predict": 100,
         }
-        assert fake.kwargs["tools"] is None
+        assert "tools" not in fake.kwargs
+        # never truncate the prompt or shift the context: a prompt that does not fit is refused
+        assert fake.kwargs["truncate"] is False and fake.kwargs["shift"] is False
         assert out.extra["digest"] == "abc" and out.text == "done"
         assert out.tokens == TokenUsage(input=800, output=30)
+        assert out.stop_reason == "stop" and "error" not in out.extra
 
-    def test_prompt_that_would_be_truncated_is_refused(self):
-        fake = FakeOllama()
-        with pytest.raises(ContextOverflow):
-            OllamaBackend(client=fake).generate(local(system="x" * 20_000, max_tokens=2048))
-        assert fake.kwargs is None  # never sent
+    def test_a_long_prompt_is_sent_and_ollama_decides(self):
+        # 20,000 characters: far more than 8,192 tokens by any character estimate
+        fake = FakeOllama(prompt=6000)
+        out = OllamaBackend(client=fake).generate(local(system="x" * 20_000, max_tokens=2048))
+        assert fake.kwargs is not None and out.stop_reason == "stop"
+
+    @pytest.mark.parametrize(
+        "error",
+        [
+            # what Ollama 0.34.4 returned for a 37,311-token chat at num_ctx 32,768
+            '{"error":{"code":400,"message":"request (37311 tokens) exceeds the available '
+            'context size (32768 tokens), try increasing it","type":"exceed_context_size_error",'
+            '"n_prompt_tokens":37311,"n_ctx":32768}} (status code: 400)',
+            "the input length exceeds the context length (status code: 400)",
+        ],
+    )
+    def test_prompt_refused_by_ollama_is_an_overflow(self, error):
+        out = OllamaBackend(client=FakeOllama(error=error)).generate(local())
+        assert out.stop_reason == CONTEXT_OVERFLOW and out.content == []
+        assert "exceed" in out.extra["error"]
+
+    def test_other_errors_are_not_overflows(self):
+        fake = FakeOllama(error="prediction aborted, token repeat limit reached")
+        with pytest.raises(ResponseError):
+            OllamaBackend(client=fake).generate(local())
+
+    @pytest.mark.parametrize(
+        ("done_reason", "prompt", "output", "overflow"),
+        [
+            ("stop", 8100, 92, True),  # prompt + output reach num_ctx (8192)
+            ("length", 8000, 60, True),  # stopped short of max_tokens (100): the context is full
+            ("length", 7000, 100, False),  # cut off at max_tokens: not an overflow
+            ("stop", 8000, 50, False),
+        ],
+    )
+    def test_full_context_during_the_reply_is_an_overflow(
+        self, done_reason, prompt, output, overflow
+    ):
+        fake = FakeOllama(done_reason=done_reason, prompt=prompt, output=output)
+        out = OllamaBackend(client=fake).generate(local())
+        assert (out.stop_reason == CONTEXT_OVERFLOW) is overflow
+        assert ("error" in out.extra) is overflow
+        assert out.tokens == TokenUsage(input=prompt, output=output)
+
+    def test_overflow_is_cached_and_replayed(self, tmp_path, monkeypatch):
+        fake = FakeOllama(error="the input length exceeds the context length")
+        cache = ResponseCache(tmp_path)
+        first, cached, _ = generate_cached(OllamaBackend(client=fake), local(), cache)
+        assert first.stop_reason == CONTEXT_OVERFLOW and not cached
+        monkeypatch.setenv("ANALYST_REPLAY_ONLY", "1")
+        again, cached, _ = generate_cached(OllamaBackend(client=FakeOllama()), local(), cache)
+        assert cached and again.stop_reason == CONTEXT_OVERFLOW
+
+    def test_num_ctx_is_required(self):
+        with pytest.raises(UnsupportedParams):
+            OllamaBackend(client=FakeOllama()).generate(local(params={"options": {}}))
 
     def test_tools_are_converted_and_calls_come_back_as_tool_use(self):
         call = SimpleNamespace(

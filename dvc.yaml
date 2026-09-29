@@ -236,3 +236,315 @@ stages:
       - data/own_set
       - results/metrics/own_set_gold.json:
           cache: false
+
+  # The agent's runs, stage by stage (configs/agent.yaml `stages`). Each stage's model responses
+  # are an output kept between runs (persist): with them in place a rebuild replays every answer
+  # at no cost (ANALYST_REPLAY_ONLY=1 makes a missing response an error, never a call). Traces
+  # and spans are data; the per-question records are committed.
+  agent_pilot:
+    cmd: uv run python scripts/42_run_stage.py --stage pilot
+    deps: &agent_deps
+      - scripts/42_run_stage.py
+      - src/agent/answer.py
+      - src/agent/clock.py
+      - src/agent/conversation.py
+      - src/agent/driver.py
+      - src/agent/evaluate.py
+      - src/agent/run.py
+      - src/agent/stages.py
+      - src/agent/steps.py
+      - src/agent/tools.py
+      - src/agent/verify.py
+      - src/llm/backends.py
+      - src/llm/batch.py
+      - src/llm/cache.py
+      - src/llm/generate.py
+      - src/llm/ledger.py
+      - src/llm/types.py
+      - src/tools/chart.py
+      - src/tools/definitions.py
+      - src/tools/schema.py
+      - src/tools/sql.py
+      - src/tools/toolbox.py
+      - src/db/guard.py
+      - src/db/execute.py
+      - src/eval/ex.py
+      - src/eval/execution.py
+      - src/eval/own_set.py
+      - src/eval/records.py
+      - src/tracking/otel.py
+      - prompts/single_shot_v3.md
+      - prompts/agent_v3.md
+      - prompts/narrow_v1.md
+      - configs/tools.yaml
+      - dictionary
+      - data/raw/bird_minidev
+      - results/metrics/splits.json
+      - results/metrics/gold_execution.json
+      - results/metrics/db_hardening.json
+    params:
+      - configs/agent.yaml:
+          - prompts
+          - models
+          - designs
+          - reminders
+          - max_model_calls
+          - presentation
+          - checks
+          - stages.pilot
+      - configs/budget.yaml:
+          - prices_usd_per_mtok
+          - batch_discount
+      - configs/eval.yaml:
+          - execution_accuracy
+    outs:
+      - data/cache/llm_pilot:
+          persist: true
+      - data/traces/pilot
+      - data/spans/pilot
+      - results/runs/pilot:
+          cache: false
+
+  agent_ablation:
+    cmd: uv run python scripts/42_run_stage.py --stage ablation
+    deps: *agent_deps
+    params:
+      - configs/agent.yaml:
+          - prompts
+          - models
+          - designs
+          - reminders
+          - max_model_calls
+          - presentation
+          - checks
+          - stages.ablation
+      - configs/budget.yaml:
+          - prices_usd_per_mtok
+          - batch_discount
+      - configs/eval.yaml:
+          - execution_accuracy
+    outs:
+      - data/cache/llm_ablation:
+          persist: true
+      - data/traces/ablation
+      - data/spans/ablation
+      - results/runs/ablation:
+          cache: false
+
+  # The design comparison: every run summarised and compared, the winner chosen by the
+  # pre-registered rule (refuses to run if the pre-registration changed).
+  ablation_report:
+    cmd: uv run python scripts/43_ablation_report.py
+    deps:
+      - scripts/43_ablation_report.py
+      - src/eval/reports.py
+      - src/eval/summary.py
+      - src/eval/selective.py
+      - src/eval/calibration.py
+      - src/eval/bootstrap.py
+      - src/eval/records.py
+      - src/eval/preregistration.py
+      - results/metrics/preregistration.md
+      - results/runs/ablation
+    params:
+      - configs/eval.yaml:
+          - bootstrap
+          - calibration
+          - selective
+          - preregistration
+      - configs/agent.yaml:
+          - stages.ablation
+    outs:
+      - results/metrics/ablation.json:
+          cache: false
+
+  # The winning design's runs (its design read from ablation.json): all 500 questions, the
+  # ablation set without evidence, Claude Haiku 4.5; then the hand-written banking set. Each
+  # reads the responses of the stages before it.
+  agent_main:
+    cmd: uv run python scripts/42_run_stage.py --stage main
+    # the agent's deps (above), the banking set (frozen; for agent_own), the winner, and the
+    # ablation's responses (read by both stages)
+    deps: &winner_deps
+      - scripts/42_run_stage.py
+      - src/agent/answer.py
+      - src/agent/clock.py
+      - src/agent/conversation.py
+      - src/agent/driver.py
+      - src/agent/evaluate.py
+      - src/agent/run.py
+      - src/agent/stages.py
+      - src/agent/steps.py
+      - src/agent/tools.py
+      - src/agent/verify.py
+      - src/llm/backends.py
+      - src/llm/batch.py
+      - src/llm/cache.py
+      - src/llm/generate.py
+      - src/llm/ledger.py
+      - src/llm/types.py
+      - src/tools/chart.py
+      - src/tools/definitions.py
+      - src/tools/schema.py
+      - src/tools/sql.py
+      - src/tools/toolbox.py
+      - src/db/guard.py
+      - src/db/execute.py
+      - src/eval/ex.py
+      - src/eval/execution.py
+      - src/eval/own_set.py
+      - src/eval/records.py
+      - src/tracking/otel.py
+      - prompts/single_shot_v3.md
+      - prompts/agent_v3.md
+      - prompts/narrow_v1.md
+      - configs/tools.yaml
+      - dictionary
+      - data/raw/bird_minidev
+      - results/metrics/splits.json
+      - results/metrics/gold_execution.json
+      - results/metrics/db_hardening.json
+      - own_set/questions.yaml
+      - results/metrics/ablation.json
+      - data/cache/llm_ablation
+    params:
+      - configs/agent.yaml:
+          - prompts
+          - models
+          - designs
+          - reminders
+          - max_model_calls
+          - presentation
+          - checks
+          - stages.ablation
+          - stages.main
+      - configs/budget.yaml:
+          - prices_usd_per_mtok
+          - batch_discount
+      - configs/eval.yaml:
+          - execution_accuracy
+    outs:
+      - data/cache/llm_main:
+          persist: true
+      - data/traces/main
+      - data/spans/main
+      - results/runs/main:
+          cache: false
+
+  agent_own:
+    cmd: uv run python scripts/42_run_stage.py --stage own
+    deps: *winner_deps
+    params:
+      - configs/agent.yaml:
+          - prompts
+          - models
+          - designs
+          - reminders
+          - max_model_calls
+          - presentation
+          - checks
+          - stages.ablation
+          - stages.own
+      - configs/budget.yaml:
+          - prices_usd_per_mtok
+          - batch_discount
+      - configs/eval.yaml:
+          - execution_accuracy
+    outs:
+      - data/cache/llm_own:
+          persist: true
+      - data/traces/own
+      - data/spans/own
+      - results/runs/own:
+          cache: false
+
+  # The winner on the benchmark (all 500, held-out, evidence, Claude Haiku 4.5), then on the
+  # banking set; both refuse to run if the pre-registration changed.
+  main_report:
+    cmd: uv run python scripts/45_main_report.py
+    deps:
+      - scripts/45_main_report.py
+      - src/agent/stages.py
+      - src/eval/reports.py
+      - src/eval/summary.py
+      - src/eval/selective.py
+      - src/eval/calibration.py
+      - src/eval/bootstrap.py
+      - src/eval/records.py
+      - src/eval/preregistration.py
+      - results/metrics/preregistration.md
+      - results/metrics/splits.json
+      - results/metrics/ablation.json
+      - results/runs/ablation
+      - results/runs/main
+    params:
+      - configs/eval.yaml:
+          - bootstrap
+          - calibration
+          - selective
+          - preregistration
+      - configs/agent.yaml:
+          - stages.main
+    outs:
+      - results/metrics/benchmark_main.json:
+          cache: false
+
+  own_set_report:
+    cmd: uv run python scripts/46_own_set_report.py
+    deps:
+      - scripts/46_own_set_report.py
+      - src/agent/stages.py
+      - src/eval/own_review.py
+      - src/eval/own_set.py
+      - own_set/questions.yaml
+      - src/eval/reports.py
+      - src/eval/summary.py
+      - src/eval/selective.py
+      - src/eval/calibration.py
+      - src/eval/bootstrap.py
+      - src/eval/records.py
+      - src/eval/preregistration.py
+      - results/metrics/preregistration.md
+      - results/metrics/ablation.json
+      - results/metrics/benchmark_main.json
+      - results/runs/own
+      - results/reviews/own_set_review.yaml
+    params:
+      - configs/eval.yaml:
+          - bootstrap
+          - calibration
+          - selective
+          - preregistration
+    outs:
+      - results/metrics/own_set.json:
+          cache: false
+
+  # Every agent run rebuilt from the stored responses alone (a missing one is an error, never a
+  # call) and compared with the committed records, field by field.
+  replay_check:
+    cmd: uv run python scripts/44_replay_check.py
+    deps:
+      - scripts/44_replay_check.py
+      - src/agent
+      - src/llm
+      - src/tools
+      - src/db/guard.py
+      - src/db/execute.py
+      - src/eval/execution.py
+      - src/eval/ex.py
+      - src/eval/records.py
+      - results/metrics/ablation.json
+      - results/runs/pilot
+      - results/runs/ablation
+      - results/runs/main
+      - results/runs/own
+      - data/cache/llm_pilot
+      - data/cache/llm_ablation
+      - data/cache/llm_main
+      - data/cache/llm_own
+    params:
+      - configs/agent.yaml:
+          - stages
+    outs:
+      - results/metrics/replay_check.json:
+          cache: false

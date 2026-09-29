@@ -3,12 +3,16 @@
 # missing from phase_caps_usd cannot make a single paid call: each phase's cap is set after
 # its counted dry run, before its first paid call.
 ledger: results/metrics/api_spend.json
-project_cap_usd: 60.0
+project_cap_usd: 80.0
 phase_caps_usd:
   phase0: 0.0 # scaffolding: no API calls
   phase1: 0.0 # data and data dictionary: no API calls
   phase2: 0.0 # safe execution layer: no API calls
   phase3: 0.0 # evaluation harness: no API calls
+  # the agent and the design comparison: raised in steps, each from a counted dry run (pilot
+  # first; then the comparison; then the chosen design's full runs), to at most $62. The cap is
+  # the phase's total, earlier steps included.
+  phase4: 33.0
 batch_discount: 0.5 # Message Batches: half of every token price
 
 # USD per million tokens, Anthropic first-party list prices from

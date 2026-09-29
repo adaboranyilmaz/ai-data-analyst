@@ -31,8 +31,8 @@ from src.llm.types import LLMRequest, TokenUsage
 
 BUDGET_CONFIG = Path("configs/budget.yaml")
 
-# Pessimistic characters per token, used only for pre-flight bounds (the budget reservation
-# and the local model's context fit), never for reported numbers. English prose runs at about
+# Pessimistic characters per token, used only for the pre-flight bound of the budget
+# reservation, never for reported numbers. English prose runs at about
 # 4 characters per token and code or JSON at about 3, while figure-dense text can fall to
 # about 2.4; 1.5 leaves a wide margin. The counted dry run before any paid run checks it
 # against the token-counting endpoint on the real prompts.
