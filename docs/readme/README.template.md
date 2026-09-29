@@ -4,7 +4,7 @@
 
 This project builds an AI analyst that answers questions about a bank's database by writing and running SQL. Every answer comes with its evidence and a confidence, and the analyst declines when it is unsure. The project measures whether that confidence can be trusted.
 
-**Status: under construction. The data, its dictionary, the analyst's guarded database tools and the evaluation that will score it are in place; the analyst itself has not been evaluated yet, so its results below are TBD.**
+**Status: under construction. The analyst is built, five designs of it have been compared, and the chosen one has been evaluated on the benchmark and on the hand-written banking set. Calibrating its confidence, setting the point at which it declines, the statistical guardrail and the demo come next.**
 
 **Auditable** means that every answer can be traced to the exact SQL, the rows it used and the checks it ran, and that it comes with a calibrated confidence. It does not mean guaranteed correct.
 
@@ -20,7 +20,11 @@ The full technical report is in [TECHNICAL_REPORT.md](TECHNICAL_REPORT.md). A re
 
 ## Key Findings
 
-TBD.
+- **The simplest design won.** Of five designs, from a single call with the whole schema to an agent that explores the database, runs its own queries, corrects itself and votes over three attempts, the single call was the most accurate ({{abl_sonnet_d1_ex}}, against {{abl_sonnet_d3_ex}} for the self-correcting agent and {{abl_sonnet_d4_ex}} with voting) and the cheapest ({{abl_sonnet_d1_cost_q}} a question). It won by the rule fixed before any design ran.
+- **Why: exploring made a strong model add things.** With the tools to run its own queries, Claude Sonnet 5 more often returned columns it had looked at but was not asked for, and the benchmark scores an extra column as wrong. Its single-call queries rarely failed, so self-correction had little to fix. The smaller Claude Haiku 4.5, whose queries failed more often, gained from the same tools ({{abl_haiku_d1_ex}} to {{abl_haiku_d3_ex}}).
+- **On questions nothing was tuned on**, the chosen analyst answered {{held_ex}} of the benchmark's {{held_questions}} held-out questions correctly {{held_ex_ci}}, at {{held_cost_correct}} per correct answer. BIRD's hints matter: without them, accuracy was {{evidence_gain_pts}} points lower.
+- **Its confidence ranks its answers, but it is overconfident.** A right answer usually gets a higher confidence than a wrong one (AUROC {{held_auroc}}), but the stated confidences run higher than the accuracy (calibration error {{held_ece}}). Calibrating them is the next step.
+- **On the hand-written banking questions**, which no model can have seen, it answered {{own_ab_ex}} of the standard and multi-step questions correctly, declined {{own_d_success}} of the unanswerable ones and corrected {{own_e_success}} of the false premises, while asking a clarifying question on only {{own_clarify_ab}} of the clear questions.
 
 ## How It Works
 
@@ -35,7 +39,19 @@ The design, being built in stages:
 
 ## Results
 
-**The analyst's accuracy and confidence:** TBD.
+**Choosing the design.** Five designs, each adding one step to the one before, were run on the {{split_ablation}} questions set aside for choosing, with Claude Sonnet 5 on all five, and Claude Haiku 4.5 and a small local model on some. The winner is the design whose confidence best ranks its answers, measured by the area under the risk–coverage curve (AURC); a cheaper design wins if it is not shown to be worse.
+
+{{table:design_comparison}}
+
+- The single call wins outright: the most accurate and the best-ranked, and the cheapest. Each agentic design was less accurate than it on the same questions: the self-correcting agent by {{abl_d1_minus_d3_pts}} points (the single call's lead, with its interval: {{abl_d1_minus_d3}} {{abl_d1_minus_d3_ci}}).
+- Voting over three attempts lowered accuracy ({{abl_d4_minus_d3}} {{abl_d4_minus_d3_ci}} against the single attempt): the attempts share the model's habits, so two can agree on the same mistake and outvote a right answer.
+- The small local model reached {{abl_local_d1_ex}} with a single call and {{abl_local_d3_ex}} with the tools, far below the hosted models.
+
+**The chosen analyst on the benchmark.** On the {{held_questions}} held-out questions it answered {{held_ex}} correctly {{held_ex_ci}}: {{held_simple_ex}} of the simple ones and {{held_challenging_ex}} of the challenging ones. Answering only its most confident four in five raises that to {{held_acc_at_80}}. On all {{bird_questions}} questions it scored {{all_ex}}. Without BIRD's hints, which spell out the definitions a question relies on, it scored {{noev_ex}} on the choosing set, {{evidence_gain_pts}} points lower (the hints' gain, with its interval: {{evidence_gain}} {{evidence_gain_ci}}).
+
+**The chosen analyst on the banking set.** It answered {{own_ab_ex}} of the standard and multi-step questions correctly {{own_ab_ex_ci}}, declined {{own_d_success}} of the unanswerable ones with a reason, and corrected {{own_e_success}} of the false premises. A check by hand of what it said confirmed {{own_e_reviewed}} of the corrections; of the ambiguous questions, {{own_c_reviewed}} were handled well after the check ({{own_c_success}} by the automatic rule, which counts any clarifying question). On the clear questions it asked for clarification on {{own_clarify_ab}}.
+
+<sub>Source: `results/metrics/benchmark_main.json`, `results/metrics/own_set.json`, `results/reviews/own_set_review.yaml` (one run each)</sub>
 
 **Checking the scorer.** Before scoring the analyst, the project's scoring was run beside BIRD's official evaluator on {{ex_validation_cases}} test queries: the {{ex_validation_gold}} expert queries themselves, {{ex_validation_mutants}} expert queries altered on purpose (a missing DISTINCT, a flipped sort, a dropped filter, a cast to another type) and {{ex_validation_edge}} hand-written edge cases.
 
@@ -73,7 +89,9 @@ uv run pytest
 
 ## Limitations
 
-- Work in progress: the analyst has not been evaluated yet.
+- Every result is from one run; the intervals show how much it could move with other questions, not with another run.
+- The benchmark scores an answer's rows exactly: an extra column, or a number of another type, makes an otherwise useful answer wrong. Part of the agentic designs' loss is of this kind.
+- The analyst's confidence is not yet calibrated, and it does not yet decline on its own; both come next.
 - {{gold_reads_the_clock}} of the benchmark's expert queries compute ages from today's date, so their correct answers change over time. The scorer runs them beside each answer, but a stored answer that fixed a year can go out of date.
 - The security results are from one run of a fixed set of attacks. They show that each guard stops these attacks, not that no other attack exists.
 - BIRD's questions are public and may be in the models' training data. The hand-written banking set exists to check for that.

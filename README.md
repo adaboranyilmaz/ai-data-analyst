@@ -5,7 +5,7 @@
 
 This project builds an AI analyst that answers questions about a bank's database by writing and running SQL. Every answer comes with its evidence and a confidence, and the analyst declines when it is unsure. The project measures whether that confidence can be trusted.
 
-**Status: under construction. The data, its dictionary, the analyst's guarded database tools and the evaluation that will score it are in place; the analyst itself has not been evaluated yet, so its results below are TBD.**
+**Status: under construction. The analyst is built, five designs of it have been compared, and the chosen one has been evaluated on the benchmark and on the hand-written banking set. Calibrating its confidence, setting the point at which it declines, the statistical guardrail and the demo come next.**
 
 **Auditable** means that every answer can be traced to the exact SQL, the rows it used and the checks it ran, and that it comes with a calibrated confidence. It does not mean guaranteed correct.
 
@@ -21,7 +21,11 @@ The full technical report is in [TECHNICAL_REPORT.md](TECHNICAL_REPORT.md). A re
 
 ## Key Findings
 
-TBD.
+- **The simplest design won.** Of five designs, from a single call with the whole schema to an agent that explores the database, runs its own queries, corrects itself and votes over three attempts, the single call was the most accurate (59.3%, against 52.0% for the self-correcting agent and 49.3% with voting) and the cheapest ($0.0071 a question). It won by the rule fixed before any design ran.
+- **Why: exploring made a strong model add things.** With the tools to run its own queries, Claude Sonnet 5 more often returned columns it had looked at but was not asked for, and the benchmark scores an extra column as wrong. Its single-call queries rarely failed, so self-correction had little to fix. The smaller Claude Haiku 4.5, whose queries failed more often, gained from the same tools (49.3% to 56.7%).
+- **On questions nothing was tuned on**, the chosen analyst answered 60.6% of the benchmark's 320 held-out questions correctly [55.3, 65.9], at $0.0091 per correct answer. BIRD's hints matter: without them, accuracy was 17.3 points lower.
+- **Its confidence ranks its answers, but it is overconfident.** A right answer usually gets a higher confidence than a wrong one (AUROC 0.77), but the stated confidences run higher than the accuracy (calibration error 0.18). Calibrating them is the next step.
+- **On the hand-written banking questions**, which no model can have seen, it answered 87.5% of the standard and multi-step questions correctly, declined 100.0% of the unanswerable ones and corrected 100.0% of the false premises, while asking a clarifying question on only 4.2% of the clear questions.
 
 ## How It Works
 
@@ -36,7 +40,32 @@ The design, being built in stages:
 
 ## Results
 
-**The analyst's accuracy and confidence:** TBD.
+**Choosing the design.** Five designs, each adding one step to the one before, were run on the 150 questions set aside for choosing, with Claude Sonnet 5 on all five, and Claude Haiku 4.5 and a small local model on some. The winner is the design whose confidence best ranks its answers, measured by the area under the risk–coverage curve (AURC); a cheaper design wins if it is not shown to be worse.
+
+| Model | Design | Execution accuracy | AURC (lower is better) | AUROC | Cost per question | Cost per correct answer |
+|---|---|---|---|---|---|---|
+| Claude Sonnet 5 | 1 single call, full schema | 59.3% [51.3, 67.3] | 0.234 | 0.72 | $0.0071 | $0.012 |
+| Claude Sonnet 5 | 2 + schema tools | 53.3% [45.3, 61.3] | 0.298 | 0.75 | $0.0096 | $0.018 |
+| Claude Sonnet 5 | 3 + self-correction | 52.0% [44.0, 60.0] | 0.304 | 0.74 | $0.0170 | $0.033 |
+| Claude Sonnet 5 | 4 + three-sample vote | 49.3% [41.3, 57.3] | 0.368 | 0.73 | $0.0512 | $0.104 |
+| Claude Sonnet 5 | 5 + schema narrowing | 52.7% [44.7, 60.7] | 0.401 | 0.63 | $0.0376 | $0.071 |
+| Claude Haiku 4.5 | 1 single call, full schema | 49.3% [41.3, 57.3] | 0.360 | 0.72 | $0.0038 | $0.008 |
+| Claude Haiku 4.5 | 3 + self-correction | 56.7% [48.7, 64.7] | 0.304 | 0.67 | $0.0244 | $0.043 |
+| Qwen2.5 3B (local) | 1 single call, full schema | 6.7% [2.7, 10.7] | 0.914 | 0.65 | free | free |
+| Qwen2.5 3B (local) | 2 + schema tools | 10.0% [5.3, 15.3] | 0.844 | 0.73 | free | free |
+| Qwen2.5 3B (local) | 3 + self-correction | 11.3% [6.7, 16.7] | 0.790 | 0.80 | free | free |
+
+<sub>Source: `results/metrics/ablation.json` (one run per design and model; the ablation set, with evidence; batched calls at half price)</sub>
+
+- The single call wins outright: the most accurate and the best-ranked, and the cheapest. Each agentic design was less accurate than it on the same questions: the self-correcting agent by 7.3 points (the single call's lead, with its interval: +7.3 pp [+1.3, +13.3]).
+- Voting over three attempts lowered accuracy (−2.7 pp [−5.3, −0.7] against the single attempt): the attempts share the model's habits, so two can agree on the same mistake and outvote a right answer.
+- The small local model reached 6.7% with a single call and 11.3% with the tools, far below the hosted models.
+
+**The chosen analyst on the benchmark.** On the 320 held-out questions it answered 60.6% correctly [55.3, 65.9]: 70.1% of the simple ones and 50.0% of the challenging ones. Answering only its most confident four in five raises that to 69.8%. On all 500 questions it scored 60.4%. Without BIRD's hints, which spell out the definitions a question relies on, it scored 42.0% on the choosing set, 17.3 points lower (the hints' gain, with its interval: +17.3 pp [+10.7, +24.0]).
+
+**The chosen analyst on the banking set.** It answered 87.5% of the standard and multi-step questions correctly [75.0, 100.0], declined 100.0% of the unanswerable ones with a reason, and corrected 100.0% of the false premises. A check by hand of what it said confirmed 100.0% of the corrections; of the ambiguous questions, 88.9% were handled well after the check (88.9% by the automatic rule, which counts any clarifying question). On the clear questions it asked for clarification on 4.2%.
+
+<sub>Source: `results/metrics/benchmark_main.json`, `results/metrics/own_set.json`, `results/reviews/own_set_review.yaml` (one run each)</sub>
 
 **Checking the scorer.** Before scoring the analyst, the project's scoring was run beside BIRD's official evaluator on 2,032 test queries: the 500 expert queries themselves, 1,499 expert queries altered on purpose (a missing DISTINCT, a flipped sort, a dropped filter, a cast to another type) and 33 hand-written edge cases.
 
@@ -85,7 +114,9 @@ uv run pytest
 
 ## Limitations
 
-- Work in progress: the analyst has not been evaluated yet.
+- Every result is from one run; the intervals show how much it could move with other questions, not with another run.
+- The benchmark scores an answer's rows exactly: an extra column, or a number of another type, makes an otherwise useful answer wrong. Part of the agentic designs' loss is of this kind.
+- The analyst's confidence is not yet calibrated, and it does not yet decline on its own; both come next.
 - 11 of the benchmark's expert queries compute ages from today's date, so their correct answers change over time. The scorer runs them beside each answer, but a stored answer that fixed a year can go out of date.
 - The security results are from one run of a fixed set of attacks. They show that each guard stops these attacks, not that no other attack exists.
 - BIRD's questions are public and may be in the models' training data. The hand-written banking set exists to check for that.

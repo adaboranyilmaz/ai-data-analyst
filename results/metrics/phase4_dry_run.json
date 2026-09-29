@@ -1,0 +1,483 @@
+{
+  "pilot_sonnet": {
+    "set": "pilot",
+    "questions": 30,
+    "evidence": true,
+    "runs": {
+      "d1/claude-sonnet-5": {
+        "first_request_tokens": {
+          "mean": 8115.2,
+          "max": 14225,
+          "total": 243456
+        },
+        "narrowing_tokens_mean": null,
+        "samples": 1,
+        "projection": {
+          "source": "assumed",
+          "turns": [
+            1,
+            1
+          ],
+          "added_per_turn": [
+            0,
+            0
+          ],
+          "output_per_turn": [
+            250,
+            600
+          ]
+        },
+        "central_usd": 0.5619119999999997,
+        "upper_usd": 1.1013119999999998,
+        "batch": false
+      },
+      "d2/claude-sonnet-5": {
+        "first_request_tokens": {
+          "mean": 2471.4666666666667,
+          "max": 2956,
+          "total": 74144
+        },
+        "narrowing_tokens_mean": null,
+        "samples": 1,
+        "projection": {
+          "source": "assumed",
+          "turns": [
+            5,
+            10
+          ],
+          "added_per_turn": [
+            1200,
+            2500
+          ],
+          "output_per_turn": [
+            250,
+            600
+          ]
+        },
+        "central_usd": 1.0228752000000003,
+        "upper_usd": 4.3463192,
+        "batch": false
+      },
+      "d3/claude-sonnet-5": {
+        "first_request_tokens": {
+          "mean": 2651.4666666666667,
+          "max": 3136,
+          "total": 79544
+        },
+        "narrowing_tokens_mean": null,
+        "samples": 1,
+        "projection": {
+          "source": "assumed",
+          "turns": [
+            5,
+            10
+          ],
+          "added_per_turn": [
+            1200,
+            2500
+          ],
+          "output_per_turn": [
+            250,
+            600
+          ]
+        },
+        "central_usd": 1.0406952,
+        "upper_usd": 4.369539199999999,
+        "batch": false
+      },
+      "d4/claude-sonnet-5": {
+        "first_request_tokens": {
+          "mean": 2651.4666666666667,
+          "max": 3136,
+          "total": 79544
+        },
+        "narrowing_tokens_mean": null,
+        "samples": 3,
+        "projection": {
+          "source": "assumed",
+          "turns": [
+            5,
+            10
+          ],
+          "added_per_turn": [
+            1200,
+            2500
+          ],
+          "output_per_turn": [
+            250,
+            600
+          ]
+        },
+        "central_usd": 3.1220856000000006,
+        "upper_usd": 13.108617599999997,
+        "batch": false
+      },
+      "d5/claude-sonnet-5": {
+        "first_request_tokens": {
+          "mean": 2651.4666666666667,
+          "max": 3136,
+          "total": 79544
+        },
+        "narrowing_tokens_mean": 7069.2,
+        "samples": 3,
+        "projection": {
+          "source": "assumed",
+          "turns": [
+            5,
+            10
+          ],
+          "added_per_turn": [
+            1200,
+            2500
+          ],
+          "output_per_turn": [
+            250,
+            600
+          ]
+        },
+        "central_usd": 3.6362376000000007,
+        "upper_usd": 14.147169599999994,
+        "batch": false
+      }
+    },
+    "central_usd": 9.383805600000002,
+    "upper_usd": 37.07295759999999
+  },
+  "ablation_sonnet": {
+    "set": "ablation",
+    "questions": 150,
+    "evidence": true,
+    "runs": {
+      "d1/claude-sonnet-5": {
+        "first_request_tokens": {
+          "mean": 8435.22,
+          "max": 16074,
+          "total": 1265283
+        },
+        "narrowing_tokens_mean": null,
+        "samples": 1,
+        "new_samples": 1,
+        "projection": {
+          "source": "measured (d1/claude-sonnet-5)",
+          "turns": [
+            1,
+            1
+          ],
+          "added_per_turn": [
+            0,
+            0
+          ],
+          "output_per_turn": [
+            452.6666666666667,
+            624
+          ],
+          "questions": 30
+        },
+        "central_usd": 1.6047829999999994,
+        "upper_usd": 2.8012830000000006,
+        "batch": true
+      },
+      "d2/claude-sonnet-5": {
+        "first_request_tokens": {
+          "mean": 2715.4133333333334,
+          "max": 3266,
+          "total": 407312
+        },
+        "narrowing_tokens_mean": null,
+        "samples": 1,
+        "new_samples": 1,
+        "projection": {
+          "source": "measured (d2/claude-sonnet-5)",
+          "turns": [
+            2.2,
+            3
+          ],
+          "added_per_turn": [
+            3612.2,
+            6834.0
+          ],
+          "output_per_turn": [
+            300.72727272727275,
+            651
+          ],
+          "questions": 5
+        },
+        "central_usd": 1.6778712000000002,
+        "upper_usd": 5.761986000000005,
+        "batch": true
+      },
+      "d3/claude-sonnet-5": {
+        "first_request_tokens": {
+          "mean": 2895.4133333333334,
+          "max": 3446,
+          "total": 434312
+        },
+        "narrowing_tokens_mean": null,
+        "samples": 1,
+        "new_samples": 1,
+        "projection": {
+          "source": "measured (d3/claude-sonnet-5)",
+          "turns": [
+            3.3666666666666667,
+            6
+          ],
+          "added_per_turn": [
+            1378.463888888889,
+            3950.5
+          ],
+          "output_per_turn": [
+            241.44554455445544,
+            720
+          ],
+          "questions": 30
+        },
+        "central_usd": 1.7101724,
+        "upper_usd": 14.734497000000005,
+        "batch": true
+      },
+      "d4/claude-sonnet-5": {
+        "first_request_tokens": {
+          "mean": 2895.4133333333334,
+          "max": 3446,
+          "total": 434312
+        },
+        "narrowing_tokens_mean": null,
+        "samples": 3,
+        "new_samples": 2,
+        "projection": {
+          "source": "measured (d3/claude-sonnet-5)",
+          "turns": [
+            3.3666666666666667,
+            6
+          ],
+          "added_per_turn": [
+            1378.463888888889,
+            3950.5
+          ],
+          "output_per_turn": [
+            241.44554455445544,
+            720
+          ],
+          "questions": 30
+        },
+        "central_usd": 3.4203448,
+        "upper_usd": 29.46899400000001,
+        "batch": true
+      },
+      "d5/claude-sonnet-5": {
+        "first_request_tokens": {
+          "mean": 2895.4133333333334,
+          "max": 3446,
+          "total": 434312
+        },
+        "narrowing_tokens_mean": 7188.22,
+        "samples": 3,
+        "new_samples": 3,
+        "projection": {
+          "source": "measured (d3/claude-sonnet-5)",
+          "turns": [
+            3.3666666666666667,
+            6
+          ],
+          "added_per_turn": [
+            1378.463888888889,
+            3950.5
+          ],
+          "output_per_turn": [
+            241.44554455445544,
+            720
+          ],
+          "questions": 30
+        },
+        "central_usd": 6.433750200000005,
+        "upper_usd": 46.81772400000001,
+        "batch": true
+      }
+    },
+    "central_usd": 14.846921600000005,
+    "upper_usd": 99.58448400000003
+  },
+  "ablation_haiku": {
+    "set": "ablation",
+    "questions": 150,
+    "evidence": true,
+    "runs": {
+      "d1/claude-haiku-4-5": {
+        "first_request_tokens": {
+          "mean": 6331.893333333333,
+          "max": 11920,
+          "total": 949784
+        },
+        "narrowing_tokens_mean": null,
+        "samples": 1,
+        "new_samples": 1,
+        "projection": {
+          "source": "measured (d1/claude-haiku-4-5)",
+          "turns": [
+            1,
+            1
+          ],
+          "added_per_turn": [
+            0,
+            0
+          ],
+          "output_per_turn": [
+            448.3333333333333,
+            493
+          ],
+          "questions": 3
+        },
+        "central_usd": 0.6430170000000001,
+        "upper_usd": 1.2428919999999994,
+        "batch": true
+      },
+      "d3/claude-haiku-4-5": {
+        "first_request_tokens": {
+          "mean": 2406.673333333333,
+          "max": 2811,
+          "total": 361001
+        },
+        "narrowing_tokens_mean": null,
+        "samples": 1,
+        "new_samples": 1,
+        "projection": {
+          "source": "measured (d3/claude-haiku-4-5)",
+          "turns": [
+            9.333333333333334,
+            12
+          ],
+          "added_per_turn": [
+            1053.2924242424242,
+            1209.25
+          ],
+          "output_per_turn": [
+            225.25,
+            716
+          ],
+          "questions": 3
+        },
+        "central_usd": 2.1412785249999997,
+        "upper_usd": 11.373793500000001,
+        "batch": true
+      }
+    },
+    "central_usd": 2.7842955249999997,
+    "upper_usd": 12.6166855
+  },
+  "notes": {
+    "pilot_sonnet": "Estimated before the pilot, from assumed turns per conversation. Its method was revised before the ablation's estimate: design 4's first sample (design 3's run, served from the cache) was still charged, and its upper bound still assumed caching.",
+    "ablation_sonnet": "Projected from the pilot's measured conversations; upper bound without caching.",
+    "ablation_haiku": "Projected from the pilot's measured conversations; upper bound without caching."
+  },
+  "stage_main": {
+    "runs": {
+      "all/d1/claude-sonnet-5/evidence": {
+        "set": "all",
+        "evidence": true,
+        "questions": 500,
+        "cached_questions": 150,
+        "first_request_tokens": {
+          "mean": 8302.81142857143,
+          "max": 16125,
+          "total": 2905984
+        },
+        "narrowing_tokens_mean": null,
+        "samples": 1,
+        "new_samples": 1,
+        "projection": {
+          "source": "measured (d1/claude-sonnet-5)",
+          "turns": [
+            1,
+            1
+          ],
+          "added_per_turn": [
+            0,
+            0
+          ],
+          "output_per_turn": [
+            472.1666666666667,
+            796
+          ],
+          "questions": 150
+        },
+        "central_usd": 3.7322756666666668,
+        "upper_usd": 6.489984000000005,
+        "batch": true
+      },
+      "ablation/d1/claude-sonnet-5/no-evidence": {
+        "set": "ablation",
+        "evidence": false,
+        "questions": 150,
+        "cached_questions": 0,
+        "first_request_tokens": {
+          "mean": 8379.486666666666,
+          "max": 15949,
+          "total": 1256923
+        },
+        "narrowing_tokens_mean": null,
+        "samples": 1,
+        "new_samples": 1,
+        "projection": {
+          "source": "measured (d1/claude-sonnet-5)",
+          "turns": [
+            1,
+            1
+          ],
+          "added_per_turn": [
+            0,
+            0
+          ],
+          "output_per_turn": [
+            472.1666666666667,
+            796
+          ],
+          "questions": 150
+        },
+        "central_usd": 1.6110480000000003,
+        "upper_usd": 2.7929229999999996,
+        "batch": true
+      }
+    },
+    "central_usd": 5.343323666666667,
+    "upper_usd": 9.282907000000005
+  },
+  "stage_own": {
+    "runs": {
+      "own/d1/claude-sonnet-5/no-evidence": {
+        "set": "own",
+        "evidence": false,
+        "questions": 60,
+        "cached_questions": 0,
+        "first_request_tokens": {
+          "mean": 11422.55,
+          "max": 11456,
+          "total": 685353
+        },
+        "narrowing_tokens_mean": null,
+        "samples": 1,
+        "new_samples": 1,
+        "projection": {
+          "source": "measured (d1/claude-sonnet-5)",
+          "turns": [
+            1,
+            1
+          ],
+          "added_per_turn": [
+            0,
+            0
+          ],
+          "output_per_turn": [
+            472.1666666666667,
+            796
+          ],
+          "questions": 150
+        },
+        "central_usd": 0.8270029999999999,
+        "upper_usd": 1.2997529999999997,
+        "batch": true
+      }
+    },
+    "central_usd": 0.8270029999999999,
+    "upper_usd": 1.2997529999999997
+  }
+}

@@ -13,11 +13,14 @@ Anthropic (Messages API):
   tool-using turn replays exactly, and the full `usage`, so cache writes and reads are
   priced.
 
-Ollama (local model): runs at temperature 0 with a fixed seed. Ollama silently drops the
-start of a prompt that exceeds `num_ctx`, so a request whose pessimistic size estimate would
-not fit alongside `max_tokens` of output is refused beforehand. Requests use the Messages
-API shape for both backends: tools are converted to Ollama's function schema, and the
-model's tool calls come back as `tool_use` blocks.
+Ollama (local model): runs at temperature 0 with a fixed seed. By default Ollama silently
+drops the oldest messages of a prompt longer than `num_ctx`, and shifts the context window
+when it fills during generation. Both are turned off (`truncate` and `shift` false), so the
+model's own tokenizer decides whether a prompt fits: one that does not is refused by Ollama,
+and a reply stopped by a full context is recognised from the token counts. Either comes back
+as a response with the stop reason `context_overflow`, stored and replayed like any other.
+Requests use the Messages API shape for both backends: tools are converted to Ollama's
+function schema, and the model's tool calls come back as `tool_use` blocks.
 """
 
 from __future__ import annotations
@@ -27,7 +30,6 @@ import time
 from datetime import UTC, datetime
 from typing import Any, Protocol
 
-from src.llm.ledger import estimate_tokens_upper
 from src.llm.types import LLMRequest, LLMResponse
 
 # Removed from the SDK's `messages.create()` signature; sent via `extra_body` on the models
@@ -50,8 +52,10 @@ class UnsupportedParams(ValueError):
     """A request parameter the model is known to reject."""
 
 
-class ContextOverflow(ValueError):
-    """A local-model prompt that could exceed the model's context window."""
+CONTEXT_OVERFLOW = "context_overflow"  # the stop reason of a local call that did not fit
+# How Ollama's refusal of a prompt longer than the context reads (its llama.cpp server's error
+# type, and the wordings of its own checks).
+OVERFLOW_MARKERS = ("exceed_context_size_error", "context size", "context length")
 
 
 def _now() -> str:
@@ -237,13 +241,8 @@ class OllamaBackend:
 
     @staticmethod
     def check(request: LLMRequest) -> None:
-        num_ctx = request.params["options"]["num_ctx"]
-        needed = estimate_tokens_upper(request.prompt_text()) + request.max_tokens
-        if needed > num_ctx:
-            raise ContextOverflow(
-                f"prompt (pessimistic estimate) + max_tokens = {needed} tokens exceeds "
-                f"num_ctx={num_ctx}; Ollama would silently truncate the prompt"
-            )
+        if "num_ctx" not in request.params.get("options", {}):
+            raise UnsupportedParams("a local request must state options.num_ctx")
 
     def digest(self, model: str) -> str | None:
         """Content digest of the local weights: the pinned version of a local model, since a
@@ -253,18 +252,45 @@ class OllamaBackend:
             self._digests[model] = listed.get(model)
         return self._digests[model]
 
+    def chat(self, body: dict[str, Any]) -> Any:
+        """POST /api/chat with `body` as it is. The client's `chat()` cannot send `truncate`
+        and `shift`, so the request goes through the client's own request method."""
+        from ollama import ChatResponse
+
+        return self.client._request(ChatResponse, "POST", "/api/chat", json=body, stream=False)
+
     def generate(self, request: LLMRequest) -> LLMResponse:
         self.check(request)
-        options = {**request.params["options"], "num_predict": request.max_tokens}
+        num_ctx = request.params["options"]["num_ctx"]
+        body: dict[str, Any] = {
+            "model": request.model,
+            "messages": ollama_messages(request),
+            "options": {**request.params["options"], "num_predict": request.max_tokens},
+            "stream": False,
+            "truncate": False,
+            "shift": False,
+        }
+        if request.tools:
+            body["tools"] = [ollama_tool(t) for t in request.tools]
         t0 = time.perf_counter()
-        resp = self.client.chat(
-            model=request.model,
-            messages=ollama_messages(request),
-            tools=[ollama_tool(t) for t in request.tools] or None,
-            options=options,
-            stream=False,
-        )
+        try:
+            resp = self.chat(body)
+        except Exception as e:
+            if type(e).__name__ != "ResponseError" or not any(
+                m in str(e) for m in OVERFLOW_MARKERS
+            ):
+                raise
+            return overflow_response(request.model, f"Ollama refused the prompt: {e}")
         latency = (time.perf_counter() - t0) * 1000
+        prompt, output = resp.prompt_eval_count or 0, resp.eval_count or 0
+        stop_reason = resp.done_reason
+        extra: dict[str, Any] = {}
+        # A full context stops the reply (no shift): it reads "length" before max_tokens.
+        if prompt + output >= num_ctx or (stop_reason == "length" and output < request.max_tokens):
+            stop_reason = CONTEXT_OVERFLOW
+            extra["error"] = (
+                f"the context filled: {prompt} prompt + {output} output tokens, num_ctx={num_ctx}"
+            )
         content: list[dict[str, Any]] = []
         if getattr(resp.message, "thinking", None):
             content.append({"type": "thinking", "thinking": resp.message.thinking})
@@ -283,7 +309,7 @@ class OllamaBackend:
             text=resp.message.content or "",
             content=content,
             model_reported=resp.model,
-            stop_reason=resp.done_reason,
+            stop_reason=stop_reason,
             usage={"input_tokens": resp.prompt_eval_count, "output_tokens": resp.eval_count},
             latency_ms=latency,
             created_utc=_now(),
@@ -292,8 +318,24 @@ class OllamaBackend:
                 "load_ms": (resp.load_duration or 0) / 1e6,
                 "prompt_eval_ms": (resp.prompt_eval_duration or 0) / 1e6,
                 "eval_ms": (resp.eval_duration or 0) / 1e6,
+                **extra,
             },
         )
+
+
+def overflow_response(model: str, message: str) -> LLMResponse:
+    """A local prompt that Ollama refused as longer than the context, in the shape of a
+    response (no content, no tokens)."""
+    return LLMResponse(
+        text="",
+        content=[],
+        model_reported=model,
+        stop_reason=CONTEXT_OVERFLOW,
+        usage={},
+        latency_ms=0.0,
+        created_utc=_now(),
+        extra={"error": message},
+    )
 
 
 def make_backend(backend: str) -> Backend:

@@ -34,10 +34,23 @@ SPEC.loader.exec_module(readme)
         (0.62, "usd2", "$0.62"),
         (8.42, "s1", "8.4 s"),
         (6120, "dur", "1.7 h"),
+        # intervals as the reports write them
+        ({"estimate": 0.606, "low": 0.553, "high": 0.659}, "pctiv1", "[55.3, 65.9]"),
+        ({"estimate": -0.027, "low": -0.053, "high": -0.007}, "ppiv1", "[−5.3, −0.7]"),
+        ({"estimate": 0.77, "low": 0.712, "high": 0.816}, "civ2", "[0.71, 0.82]"),
     ],
 )
 def test_formats(value, spec, expected):
     assert readme.fmt(value, spec) == expected
+
+
+def test_lookup_finds_keys_that_contain_a_slash():
+    """Runs are named model/design: the lookup joins parts until a key matches."""
+    obj = {"runs": {"claude-sonnet-5/d1": {"ex": 0.59}, "qwen2.5:3b-instruct/d3": {"ex": 0.11}}}
+    assert readme.lookup(obj, "runs/claude-sonnet-5/d1/ex") == 0.59
+    assert readme.lookup(obj, "runs/qwen2.5:3b-instruct/d3/ex") == 0.11
+    with pytest.raises(KeyError):
+        readme.lookup(obj, "runs/claude-sonnet-5/d9/ex")
 
 
 def test_lookup_uses_slashes_because_keys_contain_dots():

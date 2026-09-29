@@ -51,6 +51,22 @@ def test_summary_of_a_small_run():
     assert len(s["selective"]["curve"]["risk"]) == 4
 
 
+def test_a_declined_answer_enters_calibration_at_confidence_zero():
+    records = [
+        rec(1, 1, 0.9),
+        rec(2, 1, 0.8),
+        rec(3, 0, 0.3),
+        rec(4, 0, 1.0, declined=True),  # "certain" it cannot answer: no result, so 0
+    ]
+    s = summarise(records, CFG)
+    cal = s["calibration"]
+    assert cal["declines_at_zero"] == 1
+    # at its stated 1.0 it would outrank both right answers (AUROC 0.5); at 0 it ranks last
+    assert cal["auroc"]["estimate"] == pytest.approx(1.0)
+    assert cal["brier"]["estimate"] == pytest.approx((0.1**2 + 0.2**2 + 0.3**2 + 0) / 4)
+    assert records[3]["confidence"] == 1.0  # the record keeps what the model stated
+
+
 def test_questions_without_a_gold_result_are_left_out_of_accuracy():
     records = [rec(1, 1, 0.9), rec(2, None, 0.5)]
     s = summarise(records, CFG)
@@ -125,3 +141,20 @@ def test_own_set_behaviour_rules():
     assert b["e"]["success"]["estimate"] == 0.5
     assert "success" not in b["f"] and b["f"]["questions"] == 1
     assert b["false_decline_rate_ab"]["estimate"] == 0.5
+    assert b["clarification_rate_ab"]["estimate"] == 0.0
+    assert b["premise_correction_rate_ab"]["estimate"] == 0.0
+
+
+def test_asking_or_correcting_everywhere_shows_on_clear_questions():
+    ask = "Which year do you mean?"
+    fix = "That did not happen."
+    records = [
+        own("own-a01", "a", correct=1, clarifying_question=ask, premise_correction=fix),
+        own("own-b01", "b", correct=1, clarifying_question=ask),
+        own("own-c01", "c", clarifying_question=ask),
+        own("own-e01", "e", premise_correction=fix),
+    ]
+    b = own_set_behaviour(records, CFG)
+    assert b["c"]["success"]["estimate"] == b["e"]["success"]["estimate"] == 1.0
+    assert b["clarification_rate_ab"]["estimate"] == 1.0
+    assert b["premise_correction_rate_ab"]["estimate"] == 0.5

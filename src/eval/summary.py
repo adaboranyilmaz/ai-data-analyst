@@ -11,7 +11,10 @@ intervals. A run is summarised with:
   question, and the own set's answerable ones;
 - selective prediction and calibration, when every record has a confidence: AURC, E-AURC,
   accuracy at the configured coverages, ECE (equal-width and equal-mass bins), Brier score,
-  AUROC, the risk-coverage curve and the reliability bins;
+  AUROC, the risk-coverage curve and the reliability bins. A confidence is the probability
+  that the answer's SQL returns the correct result, and a declined answer returns none: it
+  enters calibration and AUROC at confidence 0, whatever it states (its record keeps the stated
+  value), as it enters the risk-coverage curve below every answered question;
 - cost (total, per question, per correct answer), latency (median, 95th percentile), steps,
   tool calls, errors by kind, and how the answers were scored.
 
@@ -19,6 +22,9 @@ intervals. A run is summarised with:
 accuracy; (c) ambiguous questions by a clarifying question or a stated assumption whose SQL
 matches an accepted reading; (d) unanswerable ones by declining with a reason; (e) false
 premises by a correction of the premise. Category (f) is scored by the statistical checks.
+Beside them, how often the standard and multi-step questions (clear, with a true premise) are
+declined, met with a clarifying question, or given a premise correction: a model that always
+asks or always corrects would otherwise succeed on (c) and (e) for free.
 
 `select_design` applies the selection rule fixed before any design was run: the lowest AURC
 wins, unless a cheaper design is not worse by a paired 95% interval that contains zero; then
@@ -52,6 +58,12 @@ def _mean(boot: Callable[..., Interval], values: Sequence[float]) -> dict:
     """The mean of the values, with its interval."""
     v = np.asarray(values, dtype=float)
     return boot(lambda i: v[i].mean(), v.size).to_dict()
+
+
+def answered_confidence(confidence: Sequence[float], declined: Sequence[bool]) -> np.ndarray:
+    """The confidence that an answer's result is correct: 0 for a declined answer, which
+    returns no result, whatever confidence it states. For calibration and AUROC."""
+    return np.where(np.asarray(declined, dtype=bool), 0.0, np.asarray(confidence, dtype=float))
 
 
 def _nan_if_none(x: float | None) -> float:
@@ -113,15 +125,17 @@ def summarise(records: Sequence[dict], cfg: dict[str, Any] | None = None) -> dic
         coverage, risk = selective.risk_coverage(conf, y, declined)
         out["selective"]["curve"] = {"coverage": coverage.tolist(), "risk": risk.tolist()}
         bins = cfg["calibration"]["ece_bins"]
+        p = answered_confidence(conf, declined)
         out["calibration"] = {
-            "ece": boot(lambda i: calibration.ece(conf[i], y[i], bins), n).to_dict(),
+            "declines_at_zero": int(declined.sum()),
+            "ece": boot(lambda i: calibration.ece(p[i], y[i], bins), n).to_dict(),
             "ece_equal_mass": boot(
-                lambda i: calibration.ece(conf[i], y[i], bins, "mass"), n
+                lambda i: calibration.ece(p[i], y[i], bins, "mass"), n
             ).to_dict(),
-            "brier": boot(lambda i: calibration.brier(conf[i], y[i]), n).to_dict(),
-            "auroc": boot(lambda i: _nan_if_none(calibration.auroc(conf[i], y[i])), n).to_dict(),
-            "reliability": calibration.reliability(conf, y, bins),
-            "reliability_equal_mass": calibration.reliability(conf, y, bins, "mass"),
+            "brier": boot(lambda i: calibration.brier(p[i], y[i]), n).to_dict(),
+            "auroc": boot(lambda i: _nan_if_none(calibration.auroc(p[i], y[i])), n).to_dict(),
+            "reliability": calibration.reliability(p, y, bins),
+            "reliability_equal_mass": calibration.reliability(p, y, bins, "mass"),
         }
 
     cost = np.array([r["cost_usd"] for r in records])
@@ -220,35 +234,52 @@ def select_design(runs: dict[str, Sequence[dict]], cfg: dict[str, Any] | None = 
     }
 
 
+def own_success(r: dict) -> int | None:
+    """Whether a banking-set answer succeeds by its category's pre-registered rule."""
+    c = r["category"]
+    if c in ("a", "b"):
+        return answered_correct(r)
+    if c == "c":  # asked, or assumed and answered one accepted reading
+        asked = bool(r["clarifying_question"])
+        return int(asked or (bool(r["assumptions"]) and answered_correct(r) == 1))
+    if c == "d":
+        return int(r["declined"] and bool(r["decline_reason"]))
+    if c == "e":
+        return int(bool(r["premise_correction"]))
+    return None  # (f): scored by the statistical checks
+
+
+def mean_interval(values: Sequence[float], cfg: dict[str, Any] | None = None) -> dict:
+    """The mean of the values, with its bootstrap interval."""
+    boot, _ = _boot(cfg or config())
+    return _mean(boot, values)
+
+
 def own_set_behaviour(records: Sequence[dict], cfg: dict[str, Any] | None = None) -> dict:
     """Success rate per category of the hand-written banking set, with intervals."""
     cfg = cfg or config()
     boot, _ = _boot(cfg)
-
-    def success(r: dict) -> int | None:
-        c = r["category"]
-        if c in ("a", "b"):
-            return answered_correct(r)
-        if c == "c":  # asked, or assumed and answered one accepted reading
-            asked = bool(r["clarifying_question"])
-            return int(asked or (bool(r["assumptions"]) and answered_correct(r) == 1))
-        if c == "d":
-            return int(r["declined"] and bool(r["decline_reason"]))
-        if c == "e":
-            return int(bool(r["premise_correction"]))
-        return None  # (f): scored by the statistical checks
-
     out: dict[str, Any] = {}
     for cat in OWN_CATEGORIES:
         rs = [r for r in records if r["source"] == "own" and r["category"] == cat]
         if not rs:
             continue
-        s = [success(r) for r in rs]
+        s = [own_success(r) for r in rs]
         row: dict[str, Any] = {"questions": len(rs), "declined": sum(r["declined"] for r in rs)}
         if s[0] is not None:
             row["success"] = _mean(boot, s)
         out[cat] = row
+    # The same behaviours where they are not called for: a clear question with a true premise
+    # (standard and multi-step) that is declined, answered with a clarifying question, or given
+    # a premise correction. A model that always asks or always corrects would succeed on (c)
+    # and (e); these rates show it.
     answerable = [r for r in records if r["source"] == "own" and r["category"] in ("a", "b")]
     if answerable:
         out["false_decline_rate_ab"] = _mean(boot, [r["declined"] for r in answerable])
+        out["clarification_rate_ab"] = _mean(
+            boot, [bool(r["clarifying_question"]) for r in answerable]
+        )
+        out["premise_correction_rate_ab"] = _mean(
+            boot, [bool(r["premise_correction"]) for r in answerable]
+        )
     return out

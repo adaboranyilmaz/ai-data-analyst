@@ -1,0 +1,201 @@
+{
+  "note": "every run rebuilt from cached responses (ANALYST_REPLAY_ONLY=1); records compared field by field, except latency_s, evaluated_at, trace",
+  "stages": [
+    "pilot",
+    "ablation",
+    "main",
+    "own"
+  ],
+  "all_identical": true,
+  "runs": {
+    "pilot/pilot-d2-claude-haiku-4-5-evidence-first2": {
+      "records": 2,
+      "identical": 2,
+      "differing": 0,
+      "missing_in_replay": [],
+      "extra_in_replay": [],
+      "examples": [],
+      "ok": true
+    },
+    "pilot/pilot-d1-claude-sonnet-5-evidence": {
+      "records": 30,
+      "identical": 30,
+      "differing": 0,
+      "missing_in_replay": [],
+      "extra_in_replay": [],
+      "examples": [],
+      "ok": true
+    },
+    "pilot/pilot-d3-claude-sonnet-5-evidence": {
+      "records": 30,
+      "identical": 30,
+      "differing": 0,
+      "missing_in_replay": [],
+      "extra_in_replay": [],
+      "examples": [],
+      "ok": true
+    },
+    "pilot/pilot-d2-claude-sonnet-5-evidence-first5": {
+      "records": 5,
+      "identical": 5,
+      "differing": 0,
+      "missing_in_replay": [],
+      "extra_in_replay": [],
+      "examples": [],
+      "ok": true
+    },
+    "pilot/pilot-d4-claude-sonnet-5-evidence-first5": {
+      "records": 5,
+      "identical": 5,
+      "differing": 0,
+      "missing_in_replay": [],
+      "extra_in_replay": [],
+      "examples": [],
+      "ok": true
+    },
+    "pilot/pilot-d5-claude-sonnet-5-evidence-first5": {
+      "records": 5,
+      "identical": 5,
+      "differing": 0,
+      "missing_in_replay": [],
+      "extra_in_replay": [],
+      "examples": [],
+      "ok": true
+    },
+    "pilot/pilot-d1-claude-haiku-4-5-evidence-first3": {
+      "records": 3,
+      "identical": 3,
+      "differing": 0,
+      "missing_in_replay": [],
+      "extra_in_replay": [],
+      "examples": [],
+      "ok": true
+    },
+    "pilot/pilot-d3-claude-haiku-4-5-evidence-first3": {
+      "records": 3,
+      "identical": 3,
+      "differing": 0,
+      "missing_in_replay": [],
+      "extra_in_replay": [],
+      "examples": [],
+      "ok": true
+    },
+    "ablation/ablation-d1-claude-sonnet-5-evidence": {
+      "records": 150,
+      "identical": 150,
+      "differing": 0,
+      "missing_in_replay": [],
+      "extra_in_replay": [],
+      "examples": [],
+      "ok": true
+    },
+    "ablation/ablation-d2-claude-sonnet-5-evidence": {
+      "records": 150,
+      "identical": 150,
+      "differing": 0,
+      "missing_in_replay": [],
+      "extra_in_replay": [],
+      "examples": [],
+      "ok": true
+    },
+    "ablation/ablation-d3-claude-sonnet-5-evidence": {
+      "records": 150,
+      "identical": 150,
+      "differing": 0,
+      "missing_in_replay": [],
+      "extra_in_replay": [],
+      "examples": [],
+      "ok": true
+    },
+    "ablation/ablation-d4-claude-sonnet-5-evidence": {
+      "records": 150,
+      "identical": 150,
+      "differing": 0,
+      "missing_in_replay": [],
+      "extra_in_replay": [],
+      "examples": [],
+      "ok": true
+    },
+    "ablation/ablation-d5-claude-sonnet-5-evidence": {
+      "records": 150,
+      "identical": 150,
+      "differing": 0,
+      "missing_in_replay": [],
+      "extra_in_replay": [],
+      "examples": [],
+      "ok": true
+    },
+    "ablation/ablation-d1-claude-haiku-4-5-evidence": {
+      "records": 150,
+      "identical": 150,
+      "differing": 0,
+      "missing_in_replay": [],
+      "extra_in_replay": [],
+      "examples": [],
+      "ok": true
+    },
+    "ablation/ablation-d3-claude-haiku-4-5-evidence": {
+      "records": 150,
+      "identical": 150,
+      "differing": 0,
+      "missing_in_replay": [],
+      "extra_in_replay": [],
+      "examples": [],
+      "ok": true
+    },
+    "ablation/ablation-d1-qwen2.5_3b-instruct-evidence": {
+      "records": 150,
+      "identical": 150,
+      "differing": 0,
+      "missing_in_replay": [],
+      "extra_in_replay": [],
+      "examples": [],
+      "ok": true
+    },
+    "ablation/ablation-d2-qwen2.5_3b-instruct-evidence": {
+      "records": 150,
+      "identical": 150,
+      "differing": 0,
+      "missing_in_replay": [],
+      "extra_in_replay": [],
+      "examples": [],
+      "ok": true
+    },
+    "ablation/ablation-d3-qwen2.5_3b-instruct-evidence": {
+      "records": 150,
+      "identical": 150,
+      "differing": 0,
+      "missing_in_replay": [],
+      "extra_in_replay": [],
+      "examples": [],
+      "ok": true
+    },
+    "main/all-d1-claude-sonnet-5-evidence": {
+      "records": 500,
+      "identical": 500,
+      "differing": 0,
+      "missing_in_replay": [],
+      "extra_in_replay": [],
+      "examples": [],
+      "ok": true
+    },
+    "main/ablation-d1-claude-sonnet-5-no-evidence": {
+      "records": 150,
+      "identical": 150,
+      "differing": 0,
+      "missing_in_replay": [],
+      "extra_in_replay": [],
+      "examples": [],
+      "ok": true
+    },
+    "own/own-d1-claude-sonnet-5-no-evidence": {
+      "records": 60,
+      "identical": 60,
+      "differing": 0,
+      "missing_in_replay": [],
+      "extra_in_replay": [],
+      "examples": [],
+      "ok": true
+    }
+  }
+}

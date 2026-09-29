@@ -69,13 +69,22 @@ def load(rel: str) -> Any:
 
 
 def lookup(obj: Any, path: str) -> Any:
-    for part in path.split("/") if path else []:
+    """`/`-separated; a key that itself contains `/` (a run named model/design) is matched by
+    joining parts until a key is found."""
+    parts = path.split("/") if path else []
+    i = 0
+    while i < len(parts):
         if isinstance(obj, list):
-            obj = obj[int(part)]
+            obj = obj[int(parts[i])]
+            i += 1
+            continue
+        for j in range(i + 1, len(parts) + 1):
+            key = "/".join(parts[i:j])
+            if key in obj:
+                obj, i = obj[key], j
+                break
         else:
-            if part not in obj:
-                raise KeyError(f"no {part!r} in path {path!r}")
-            obj = obj[part]
+            raise KeyError(f"no {parts[i]!r} in path {path!r}")
     return obj
 
 
@@ -97,9 +106,18 @@ def _duration(s: float) -> str:
 def fmt(value: Any, spec: str) -> str:
     """f3 -> 0.179 | sf2 -> +0.04 | pct1 -> 17.9% | pp1 -> +1.2 pp | ppci1 -> [−1.0, +1.7] |
     int -> 1,234 | usd2 -> $0.62 | dur -> 1.7 h | ci2 -> [0.27, 0.75] |
-    pm3 -> 0.080 ± 0.012 (a spread) | s1 -> seconds with one decimal | str"""
+    pm3 -> 0.080 ± 0.012 (a spread) | s1 -> seconds with one decimal | str
+    An interval as the reports write it ({estimate, low, high}): pctiv1 -> [55.3, 65.9] (a
+    share, in percent) | ppiv1 -> [+10.7, +24.0] (a difference, in points) | civ2 -> [0.71, 0.82]"""
     kind, digits = re.fullmatch(r"([a-z]+)(\d*)", spec).groups()
     d = int(digits) if digits else 0
+    if kind in ("pctiv", "ppiv", "civ"):
+        pair = [value["low"], value["high"]]
+        if kind == "civ":
+            return fmt(pair, f"ci{d}")
+        if kind == "ppiv":
+            return fmt(pair, f"ppci{d}")
+        return f"[{_num(100 * pair[0], d)}, {_num(100 * pair[1], d)}]"
     if kind == "str":
         return str(value)
     if kind == "int":
@@ -259,6 +277,118 @@ def security_suite() -> str:
         ],
         rows,
         "`results/metrics/security_suite.json` (one run)",
+    )
+
+
+MODELS = {
+    "claude-sonnet-5": "Claude Sonnet 5",
+    "claude-haiku-4-5": "Claude Haiku 4.5",
+    "qwen2.5:3b-instruct": "Qwen2.5 3B (local)",
+}
+DESIGNS = {
+    "d1": "1 single call, full schema",
+    "d2": "2 + schema tools",
+    "d3": "3 + self-correction",
+    "d4": "4 + three-sample vote",
+    "d5": "5 + schema narrowing",
+}
+
+
+def _iv(i: dict | None, spec: str, point: str) -> str:
+    """An estimate with its interval, e.g. `59.3% [51.3, 67.3]`."""
+    if not i or i.get("estimate") is None:
+        return "–"
+    return f"{fmt(i['estimate'], point)} {fmt(i, spec)}"
+
+
+@table
+def design_comparison() -> str:
+    """Every design and model on the ablation set: accuracy, AURC, AUROC and cost."""
+    runs = load("metrics/ablation.json")["runs"]
+    rows = []
+    for model, name in MODELS.items():
+        for design, label in DESIGNS.items():
+            s = runs.get(f"{model}/{design}")
+            if s is None:
+                continue
+            cost = s["cost"]
+            paid = cost["total_usd"] > 0
+            rows.append(
+                [
+                    name,
+                    label,
+                    _iv(s["execution_accuracy"], "pctiv1", "pct1"),
+                    fmt(s["selective"]["aurc"]["estimate"], "f3"),
+                    fmt(s["calibration"]["auroc"]["estimate"], "f2"),
+                    fmt(cost["per_question_usd"], "usd4") if paid else "free",
+                    fmt(cost["per_correct_answer_usd"]["estimate"], "usd3") if paid else "free",
+                ]
+            )
+    return md(
+        [
+            "Model",
+            "Design",
+            "Execution accuracy",
+            "AURC (lower is better)",
+            "AUROC",
+            "Cost per question",
+            "Cost per correct answer",
+        ],
+        rows,
+        "`results/metrics/ablation.json` (one run per design and model; the ablation set, with "
+        "evidence; batched calls at half price)",
+    )
+
+
+def _observed(pid: str, v: dict) -> str:
+    """What a checked prediction found, in words and numbers."""
+    iv = lambda x, s="pctiv1", p="pct1": _iv(x, s, p)  # noqa: E731
+    if pid == "P01":
+        return iv(v["execution_accuracy"])
+    if pid == "P02":
+        return f"design {v['best_ex_design'][1:]}, {iv(v['best_ex'])}"
+    if pid == "P03":
+        return f"design {v['winner'][1:]}"
+    if pid == "P04":
+        return iv(v["d4_minus_d3"], "ppiv1", "pp1")
+    if pid == "P05":
+        return "not applicable: the winner is design 1"
+    if pid == "P06":
+        return iv(v["raw_confidence_auroc_held_out"], "civ2", "f2")
+    if pid == "P09":
+        return iv(v["haiku_minus_sonnet_d3"], "ppiv1", "pp1")
+    if pid == "P10":
+        return iv(v["execution_accuracy"])
+    if pid == "P11":
+        return iv(v["evidence_minus_no_evidence"], "ppiv1", "pp1")
+    if pid == "P12":
+        return (
+            f"{iv(v['standard_and_multi_step_ex'])} against "
+            f"{iv(v['held_out_benchmark_ex'])} on the held-out benchmark"
+        )
+    if pid == "P13":
+        return (
+            f"ambiguous {iv(v['ambiguous'])}, unanswerable {iv(v['unanswerable'])}, "
+            f"false premise {iv(v['false_premise'])}"
+        )
+    raise KeyError(pid)
+
+
+@table
+def predictions() -> str:
+    """The pre-registered predictions checked so far, beside what was observed."""
+    found: dict[str, dict] = {}
+    for f in ("metrics/ablation.json", "metrics/benchmark_main.json", "metrics/own_set.json"):
+        found.update(load(f)["predictions"])
+    rows = [
+        [pid, v["claim"], v["prediction"], _observed(pid, v)] for pid, v in sorted(found.items())
+    ]
+    return md(
+        ["", "Claim", "Predicted", "Observed"],
+        rows,
+        "`results/metrics/preregistration.md` (the predictions), `results/metrics/ablation.json`, "
+        "`results/metrics/benchmark_main.json`, `results/metrics/own_set.json` (one run each; "
+        "intervals 95%)",
     )
 
 

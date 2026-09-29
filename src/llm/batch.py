@@ -16,7 +16,8 @@ Guarantees:
   - Every request is checked against its model's accepted parameters before any batch is
     submitted, so one misconfigured request cannot fail after others were paid for.
   - Failures are reported, never hidden: errored, expired or cancelled requests stay
-    uncached and are listed, so a re-run retries exactly those.
+    uncached and are listed (with the error's type and message), so a re-run retries exactly
+    those. A caller may store a failure that would repeat (an invalid request) as a response.
 A batch response has no measured latency (`latency_ms` = 0.0, `extra.service` = "batch").
 """
 
@@ -179,13 +180,16 @@ def _collect(rec: dict, client: Any, cache: ResponseCache, ledger: SpendLedger, 
         request = LLMRequest(**rec["requests"][key])
         kind = result.result.type
         if kind != "succeeded":
-            error = getattr(result.result, "error", None)
+            # an errored result holds an error response, which holds the error itself
+            wrapper = getattr(result.result, "error", None)
+            error = getattr(wrapper, "error", wrapper)
             out.failures.append(
                 {
                     "cache_key": key,
                     "batch_id": rec["batch_id"],
                     "type": kind,
                     "error": str(getattr(error, "type", error)) if error is not None else None,
+                    "message": getattr(error, "message", None),
                 }
             )
             continue
