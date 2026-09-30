@@ -24,6 +24,7 @@ pipeline = [
     "dvc>=3.55",
     "ollama>=0.6",
     "numpy>=2.0",
+    "matplotlib>=3.11",
 ]
 dev = [
     "ruff>=0.7",
@@ -36,6 +37,9 @@ bird-eval = [
     "func-timeout==4.3.5",
     "psycopg2-binary==2.9.9",
     "pymysql==1.1.1",
+]
+langgraph = [
+    "langgraph>=1.2",
 ]
 
 [tool.uv]

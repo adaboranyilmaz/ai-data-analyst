@@ -1,0 +1,82 @@
+# Confidence, calibration and escalation: the critic (src/agent/critic.py), the escalation model
+# (src/agent/escalation.py) and the decline threshold (src/eval/calibrate.py). The rules follow
+# the pre-registration (results/metrics/preregistration.md); a change here changes what is
+# measured. The agent itself (its prompts, designs and the models it ran on) is configured in
+# configs/agent.yaml, which nothing here changes.
+
+# The answers these measures are about: the winning design's run on all 500 benchmark questions,
+# with the hint (its ablation-set answers are the design comparison's, reused). Calibration is
+# fitted on the ablation set (the calibration split) and evaluated on the held-out set only.
+answers: { stage: main, set: all, design: winner, model: claude-sonnet-5, evidence: true }
+
+# Spend is charged to this phase's cap (configs/budget.yaml).
+phase: phase5
+
+# The critic: a second model call reviews each answer with its evidence (the schema, the question
+# and hint, the SQL, the answer in words and its assumptions, the result's first rows and total,
+# the automatic checks) and gives its own confidence. It never sees the answer's stated confidence
+# or any gold query. An answer with no result (declined, no SQL, refused or failing) is not
+# reviewed: its confidence is 0 without a call. A review that ends without a verdict counts at
+# `missing_confidence` ("cannot tell"), and is counted.
+critic:
+  prompt: prompts/critic_v1.md
+  # Frozen after the format check on the pilot questions: the calibration and held-out reviews
+  # refuse to run unless the prompt file has this sha256 (LF line endings).
+  prompt_sha256: 3752aa33338899afe47da67211b88a24e2a97dd067265240d63eedb919b43bfc
+  model: claude-sonnet-5
+  settings:
+    backend: anthropic
+    max_tokens: 1024
+    params: { thinking: { type: disabled } }
+    prompt_cache: true
+  rows_shown: 20
+  missing_confidence: 0.5
+  mode: batch
+  # The critic stage's runs. The pilot's first ten check the prompt's format before it is
+  # frozen; the pilot is in no comparison.
+  runs:
+    - { set: pilot, limit: 10 }
+    - { set: ablation }
+    - { set: held_out }
+
+# Escalation: the winning design on Claude Opus 5.5, paired with Claude Sonnet 5's run on the
+# ablation set. Opus 5.5 always thinks (effort is its only control, stated here and recorded in
+# every trace) and refuses a forced tool choice, so design 1's `submit_answer` call is asked for
+# by the prompt and the tool list (tool_choice auto), with the loop's one reminder. `max_tokens`
+# covers the thinking as well as the answer.
+escalation:
+  model: claude-opus-5-5
+  design: winner
+  evidence: true
+  settings:
+    backend: anthropic
+    max_tokens: 8192
+    params: { output_config: { effort: low } }
+    prompt_cache: true
+  mode: batch
+  # The pilot's first ten measure the output size before the ablation set is sent.
+  runs:
+    - { set: pilot, limit: 10 }
+    - { set: ablation }
+  # Adopted only if its execution accuracy is higher than Claude Sonnet 5's by at least this
+  # much, with a paired 95% interval excluding zero.
+  adopt_min_gain: 0.05
+  # If adopted, the router: on the held-out set, a question whose calibrated confidence (Platt,
+  # fitted on the calibration split) is below the decline threshold chosen there goes to the
+  # escalation model; the others keep the winning design's answer. The router's first 130
+  # questions were answered through batches; the rest are direct calls, since the batches had
+  # stalled for hours. A request is the same either way, and so is its cache key.
+  router: { set: held_out, mode: direct }
+
+# The decline threshold: chosen on the calibration split for the target accuracy of the answered
+# questions (the largest coverage reaching it); if none reaches it, the most accurate threshold
+# answering at least `min_answered` questions, with the shortfall reported.
+decline:
+  calibrator: platt # primary; isotonic is reported beside it
+  target_accuracy: 0.9
+  min_answered: 15
+
+# Not pre-registered, reported as exploratory: one logistic regression on the stated and the
+# critic's confidence, fitted on the calibration split, evaluated on the held-out set.
+combined:
+  inputs: [stated, critic]

@@ -106,8 +106,114 @@ values:
   own_clarify_ab: {file: metrics/own_set.json, path: not_called_for_ab/clarifying_question/estimate, fmt: pct1}
   own_reviewed: {file: metrics/own_set.json, path: review/checked, fmt: int}
 
+  # calibrated confidence and declining (fitted and chosen on the ablation set, reported on the
+  # held-out set)
+  cal_raw_ece: {file: metrics/calibration.json, path: held_out/stated_raw/ece/estimate, fmt: f3}
+  cal_platt_ece: {file: metrics/calibration.json, path: held_out/stated_platt/ece/estimate, fmt: f3}
+  cal_platt_ece_ci: {file: metrics/calibration.json, path: held_out/stated_platt/ece, fmt: civ3}
+  cal_iso_ece: {file: metrics/calibration.json, path: held_out/stated_isotonic/ece/estimate, fmt: f3}
+  cal_raw_brier: {file: metrics/calibration.json, path: held_out/stated_raw/brier/estimate, fmt: f3}
+  cal_platt_brier: {file: metrics/calibration.json, path: held_out/stated_platt/brier/estimate, fmt: f3}
+  cal_platt_slope: {file: metrics/calibration.json, path: calibration_split/calibrators/platt/slope, fmt: f2}
+  decline_target: {file: metrics/calibration.json, path: decline/target_accuracy, fmt: pct0}
+  decline_raw_threshold: {file: metrics/calibration.json, path: decline/raw_confidence_at_threshold, fmt: f2}
+  decline_cal_answered: {file: metrics/calibration.json, path: decline/chosen_on_calibration_split/chosen/answered, fmt: int}
+  decline_cal_accuracy: {file: metrics/calibration.json, path: decline/chosen_on_calibration_split/chosen/accuracy, fmt: pct1}
+  decline_next_answered: {file: metrics/calibration.json, path: decline/chosen_on_calibration_split/candidates/2/answered, fmt: int}
+  decline_next_accuracy: {file: metrics/calibration.json, path: decline/chosen_on_calibration_split/candidates/2/accuracy, fmt: pct1}
+  decline_held_answered: {file: metrics/calibration.json, path: decline/held_out/answered, fmt: int}
+  decline_held_coverage: {file: metrics/calibration.json, path: decline/held_out/coverage/estimate, fmt: pct1}
+  decline_held_coverage_ci: {file: metrics/calibration.json, path: decline/held_out/coverage, fmt: pctiv1}
+  decline_held_accuracy: {file: metrics/calibration.json, path: decline/held_out/accuracy/estimate, fmt: pct1}
+  decline_held_accuracy_ci: {file: metrics/calibration.json, path: decline/held_out/accuracy, fmt: pctiv1}
+
+  # the critic and the combined confidence (held-out set)
+  critic_reviewed_held: {file: metrics/calibration.json, path: critic/held_out/reviewed, fmt: int}
+  critic_verdict_correct: {file: metrics/calibration.json, path: critic/held_out/verdicts/correct, fmt: int}
+  critic_verdict_incorrect: {file: metrics/calibration.json, path: critic/held_out/verdicts/incorrect, fmt: int}
+  critic_verdict_unsure: {file: metrics/calibration.json, path: critic/held_out/verdicts/unsure, fmt: int}
+  critic_cost_held: {file: metrics/calibration.json, path: critic/held_out/cost_usd, fmt: usd2}
+  rc_stated_aurc: {file: metrics/risk_coverage.json, path: held_out/stated_platt/aurc/estimate, fmt: f3}
+  rc_critic_aurc: {file: metrics/risk_coverage.json, path: held_out/critic_raw/aurc/estimate, fmt: f3}
+  rc_critic_auroc: {file: metrics/risk_coverage.json, path: held_out/critic_raw/auroc/estimate, fmt: f2}
+  rc_zeroed_aurc: {file: metrics/risk_coverage.json, path: held_out/stated_zeroed_without_result/aurc/estimate, fmt: f3}
+  rc_combined_aurc: {file: metrics/risk_coverage.json, path: held_out/combined_exploratory/aurc/estimate, fmt: f3}
+  rc_combined_auroc: {file: metrics/risk_coverage.json, path: held_out/combined_exploratory/auroc/estimate, fmt: f2}
+  rc_oracle_aurc: {file: metrics/risk_coverage.json, path: oracle_aurc, fmt: f3}
+  rc_critic_minus_stated: {file: metrics/risk_coverage.json, path: comparisons/critic_minus_stated_platt/aurc/estimate, fmt: sf3}
+  rc_critic_minus_stated_ci: {file: metrics/risk_coverage.json, path: comparisons/critic_minus_stated_platt/aurc, fmt: civ3}
+  rc_critic_minus_zeroed: {file: metrics/risk_coverage.json, path: comparisons/critic_minus_stated_zeroed_without_result/aurc/estimate, fmt: sf3}
+  rc_critic_minus_zeroed_ci: {file: metrics/risk_coverage.json, path: comparisons/critic_minus_stated_zeroed_without_result/aurc, fmt: civ3}
+  rc_combined_minus_stated: {file: metrics/risk_coverage.json, path: comparisons/combined_minus_stated_platt/aurc/estimate, fmt: sf3}
+  rc_combined_minus_stated_ci: {file: metrics/risk_coverage.json, path: comparisons/combined_minus_stated_platt/aurc, fmt: civ3}
+
+  # escalation to Claude Opus 5.5 (ablation set, paired with Claude Sonnet 5), and the router
+  # (held-out set)
+  esc_opus_ex: {file: metrics/escalation.json, path: opus/execution_accuracy/estimate, fmt: pct1}
+  esc_opus_ex_ci: {file: metrics/escalation.json, path: opus/execution_accuracy, fmt: pctiv1}
+  esc_sonnet_ex: {file: metrics/escalation.json, path: sonnet/execution_accuracy/estimate, fmt: pct1}
+  esc_gain: {file: metrics/escalation.json, path: rule/gain/estimate, fmt: pp1}
+  esc_gain_ci: {file: metrics/escalation.json, path: rule/gain, fmt: ppiv1}
+  esc_gain_pts: {expr: esc_gain * 100, fmt: f1}
+  esc_opus_cost_q: {file: metrics/escalation.json, path: cost_per_correct/0/cost_per_question_usd, fmt: usd4}
+  esc_sonnet_cost_q: {file: metrics/escalation.json, path: cost_per_correct/1/cost_per_question_usd, fmt: usd4}
+  esc_opus_cost_correct: {file: metrics/escalation.json, path: cost_per_correct/0/cost_per_correct_answer_usd, fmt: usd4}
+  esc_sonnet_cost_correct: {file: metrics/escalation.json, path: cost_per_correct/1/cost_per_correct_answer_usd, fmt: usd4}
+  esc_opus_output: {file: metrics/escalation.json, path: opus_behaviour/output_tokens_per_question/mean, fmt: int}
+  esc_reminders: {file: metrics/escalation.json, path: opus_behaviour/needed_the_reminder, fmt: int}
+  esc_opus_auroc: {file: metrics/escalation.json, path: opus/calibration/auroc/estimate, fmt: f2}
+  router_questions: {file: metrics/router.json, path: questions, fmt: int}
+  router_routed: {file: metrics/router.json, path: routed, fmt: int}
+  router_kept: {file: metrics/router.json, path: kept, fmt: int}
+  router_ex: {file: metrics/router.json, path: routed_system/execution_accuracy/estimate, fmt: pct1}
+  router_ex_ci: {file: metrics/router.json, path: routed_system/execution_accuracy, fmt: pctiv1}
+  router_sonnet_ex: {file: metrics/router.json, path: sonnet_alone/execution_accuracy/estimate, fmt: pct1}
+  router_sonnet_ex_ci: {file: metrics/router.json, path: sonnet_alone/execution_accuracy, fmt: pctiv1}
+  router_gain: {file: metrics/router.json, path: routed_minus_sonnet/execution_accuracy/estimate, fmt: pp1}
+  router_gain_ci: {file: metrics/router.json, path: routed_minus_sonnet/execution_accuracy, fmt: ppiv1}
+  router_cost_correct: {file: metrics/router.json, path: cost_per_correct/0/cost_per_correct_answer_usd, fmt: usd4}
+  router_sonnet_cost_correct: {file: metrics/router.json, path: cost_per_correct/1/cost_per_correct_answer_usd, fmt: usd4}
+  router_opus_ex: {file: metrics/router.json, path: exploratory/opus_alone/execution_accuracy/estimate, fmt: pct1}
+  router_opus_ex_ci: {file: metrics/router.json, path: exploratory/opus_alone/execution_accuracy, fmt: pctiv1}
+  router_opus_minus_sonnet: {file: metrics/router.json, path: exploratory/opus_minus_sonnet/execution_accuracy/estimate, fmt: pp1}
+  router_opus_minus_sonnet_ci: {file: metrics/router.json, path: exploratory/opus_minus_sonnet/execution_accuracy, fmt: ppiv1}
+  router_opus_minus_routed: {file: metrics/router.json, path: exploratory/opus_alone_minus_routed/execution_accuracy/estimate, fmt: pp1}
+  router_opus_minus_routed_ci: {file: metrics/router.json, path: exploratory/opus_alone_minus_routed/execution_accuracy, fmt: ppiv1}
+  router_opus_cost_correct: {file: metrics/router.json, path: cost_per_correct/2/cost_per_correct_answer_usd, fmt: usd4}
+  router_routed_sonnet_ex: {file: metrics/router.json, path: exploratory/on_routed_questions/sonnet/execution_accuracy/estimate, fmt: pct1}
+  router_routed_opus_ex: {file: metrics/router.json, path: exploratory/on_routed_questions/opus/execution_accuracy/estimate, fmt: pct1}
+  router_kept_sonnet_ex: {file: metrics/router.json, path: exploratory/on_kept_questions/sonnet/execution_accuracy/estimate, fmt: pct1}
+  router_kept_opus_ex: {file: metrics/router.json, path: exploratory/on_kept_questions/opus/execution_accuracy/estimate, fmt: pct1}
+  router_opus_spent: {file: metrics/router.json, path: spent/claude-opus-5-5/spent_usd, fmt: usd2}
+  router_opus_batch_price: {file: metrics/router.json, path: spent/claude-opus-5-5/at_batch_price_usd, fmt: usd2}
+  router_direct_questions: {file: metrics/router.json, path: spent/claude-opus-5-5/questions_with_direct_calls, fmt: int}
+
+  # the framework comparison (ablation set, from stored responses)
+  fw_questions: {file: metrics/framework_comparison.json, path: questions, fmt: int}
+  fw_identical: {file: metrics/framework_comparison.json, path: requests_identical, fmt: int}
+  fw_calls: {file: metrics/framework_comparison.json, path: model_calls_per_question/graph/estimate, fmt: f2}
+  fw_checkpoints: {file: metrics/framework_comparison.json, path: checkpoints_per_question, fmt: int}
+  fw_graph_p50: {file: metrics/framework_comparison.json, path: seconds_per_question_cached_calls/graph/p50, fmt: f3}
+  fw_own_p50: {file: metrics/framework_comparison.json, path: seconds_per_question_cached_calls/own_loop/p50, fmt: f3}
+  fw_graph_p95: {file: metrics/framework_comparison.json, path: seconds_per_question_cached_calls/graph/p95, fmt: f3}
+  fw_own_p95: {file: metrics/framework_comparison.json, path: seconds_per_question_cached_calls/own_loop/p95, fmt: f3}
+  fw_graph_p50_ms: {expr: fw_graph_p50 * 1000, fmt: f0}
+  fw_own_p50_ms: {expr: fw_own_p50 * 1000, fmt: f0}
+  fw_graph_p95_ms: {expr: fw_graph_p95 * 1000, fmt: f0}
+  fw_own_p95_ms: {expr: fw_own_p95 * 1000, fmt: f0}
+  fw_cost_correct: {file: metrics/framework_comparison.json, path: cost_per_correct_answer_usd/graph, fmt: usd4}
+  fw_graph_lines: {file: metrics/framework_comparison.json, path: code_lines/graph_arm/lines, fmt: int}
+  fw_own_lines: {file: metrics/framework_comparison.json, path: code_lines/own_loop/lines, fmt: int}
+
+  # near misses among the winner's wrong held-out answers
+  nm_wrong: {file: metrics/near_miss.json, path: wrong_with_a_result, fmt: int}
+  nm_near: {file: metrics/near_miss.json, path: near_misses, fmt: int}
+  nm_columns: {file: metrics/near_miss.json, path: by_kind/columns, fmt: int}
+  nm_rounding: {file: metrics/near_miss.json, path: by_kind/rounding, fmt: int}
+
   # what it cost, and the replay
   phase4_usd: {file: metrics/api_spend.json, path: by_phase/phase4/usd, fmt: usd2}
+  phase5_usd: {file: metrics/api_spend.json, path: by_phase/phase5/usd, fmt: usd2}
   replay_runs: {file: metrics/replay_check.json, path: runs, count_where: {}, fmt: int}
   replay_records: {file: metrics/replay_check.json, path: runs, sum_of: records, fmt: int}
 
@@ -117,4 +223,5 @@ allowed_literals:
   - "3.12" # the Python version
   - "4.0" # CC BY-SA 4.0, the licence of the BIRD data
   - "4.5" # Claude Haiku 4.5, a model's version
+  - "5.5" # Claude Opus 5.5, a model's version
   - "95%" # the level of every interval, fixed in configs/eval.yaml

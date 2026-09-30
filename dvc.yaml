@@ -519,6 +519,506 @@ stages:
       - results/metrics/own_set.json:
           cache: false
 
+  # Confidence, calibration and escalation (configs/confidence.yaml). The critic reviews the
+  # winner's answers; the escalation arm runs the winner on Claude Opus 5.5. Like the agent's
+  # stages, each keeps its model responses between runs (persist), so a rebuild with
+  # ANALYST_REPLAY_ONLY=1 replays every call at no cost.
+  critic:
+    cmd: uv run python scripts/51_run_critic.py
+    deps:
+      - scripts/51_run_critic.py
+      - src/agent/answer.py
+      - src/agent/clock.py
+      - src/agent/confidence.py
+      - src/agent/conversation.py
+      - src/agent/critic.py
+      - src/agent/driver.py
+      - src/agent/evaluate.py
+      - src/agent/run.py
+      - src/agent/steps.py
+      - src/agent/tools.py
+      - src/agent/verify.py
+      - src/data/bird.py
+      - src/db/connection.py
+      - src/db/execute.py
+      - src/db/guard.py
+      - src/db/hardening.py
+      - src/db/values.py
+      - src/dictionary/model.py
+      - src/dictionary/snapshot.py
+      - src/eval/config.py
+      - src/eval/ex.py
+      - src/eval/execution.py
+      - src/eval/own_set.py
+      - src/eval/records.py
+      - src/llm/backends.py
+      - src/llm/batch.py
+      - src/llm/cache.py
+      - src/llm/generate.py
+      - src/llm/ledger.py
+      - src/llm/types.py
+      - src/tools/chart.py
+      - src/tools/definitions.py
+      - src/tools/schema.py
+      - src/tools/sql.py
+      - src/tools/toolbox.py
+      - src/tracking/otel.py
+      - prompts/critic_v1.md
+      - configs/tools.yaml
+      - dictionary
+      - data/raw/bird_minidev
+      - results/metrics/splits.json
+      - results/metrics/db_hardening.json
+      - results/metrics/ablation.json
+      - results/runs/main
+    params:
+      - configs/confidence.yaml:
+          - answers
+          - phase
+          - critic
+      - configs/agent.yaml:
+          - presentation
+          - checks
+      - configs/budget.yaml:
+          - prices_usd_per_mtok
+          - batch_discount
+    outs:
+      - data/cache/llm_critic:
+          persist: true
+      - data/traces/critic
+      - data/spans/critic
+      - results/runs/critic:
+          cache: false
+
+  agent_escalation:
+    cmd: uv run python scripts/52_run_escalation.py
+    deps:
+      - scripts/52_run_escalation.py
+      - src/agent/answer.py
+      - src/agent/clock.py
+      - src/agent/confidence.py
+      - src/agent/conversation.py
+      - src/agent/driver.py
+      - src/agent/escalation.py
+      - src/agent/evaluate.py
+      - src/agent/run.py
+      - src/agent/stages.py
+      - src/agent/steps.py
+      - src/agent/tools.py
+      - src/agent/verify.py
+      - src/data/bird.py
+      - src/db/connection.py
+      - src/db/execute.py
+      - src/db/guard.py
+      - src/db/hardening.py
+      - src/db/values.py
+      - src/dictionary/model.py
+      - src/dictionary/snapshot.py
+      - src/eval/config.py
+      - src/eval/ex.py
+      - src/eval/execution.py
+      - src/eval/own_set.py
+      - src/eval/records.py
+      - src/llm/backends.py
+      - src/llm/batch.py
+      - src/llm/cache.py
+      - src/llm/generate.py
+      - src/llm/ledger.py
+      - src/llm/types.py
+      - src/tools/chart.py
+      - src/tools/definitions.py
+      - src/tools/schema.py
+      - src/tools/sql.py
+      - src/tools/toolbox.py
+      - src/tracking/otel.py
+      - prompts/single_shot_v3.md
+      - configs/tools.yaml
+      - dictionary
+      - data/raw/bird_minidev
+      - results/metrics/splits.json
+      - results/metrics/gold_execution.json
+      - results/metrics/db_hardening.json
+      - results/metrics/ablation.json
+    params:
+      - configs/confidence.yaml:
+          - phase
+          - escalation
+      - configs/agent.yaml:
+          - prompts
+          - models
+          - designs
+          - reminders
+          - max_model_calls
+          - presentation
+          - checks
+      - configs/budget.yaml:
+          - prices_usd_per_mtok
+          - batch_discount
+      - configs/eval.yaml:
+          - execution_accuracy
+    outs:
+      - data/cache/llm_escalation:
+          persist: true
+      - data/traces/escalation
+      - data/spans/escalation
+      - results/runs/escalation:
+          cache: false
+
+  # Calibration and the decline threshold (fitted and chosen on the calibration split, reported
+  # on the held-out set), the critic's comparison, and the escalation decision; both refuse to
+  # run if the pre-registration changed.
+  confidence_report:
+    cmd: uv run python scripts/53_confidence_report.py
+    deps:
+      - scripts/53_confidence_report.py
+      - src/agent/confidence.py
+      - src/data/bird.py
+      - src/eval/bootstrap.py
+      - src/eval/calibrate.py
+      - src/eval/calibration.py
+      - src/eval/config.py
+      - src/eval/preregistration.py
+      - src/eval/records.py
+      - src/eval/reports.py
+      - src/eval/selective.py
+      - src/eval/summary.py
+      - results/metrics/preregistration.md
+      - results/metrics/splits.json
+      - results/metrics/ablation.json
+      - results/runs/main
+      - results/runs/critic
+    params:
+      - configs/confidence.yaml:
+          - answers
+          - critic
+          - decline
+          - combined
+      - configs/eval.yaml:
+          - bootstrap
+          - calibration
+          - selective
+          - preregistration
+    outs:
+      - results/metrics/calibration.json:
+          cache: false
+      - results/metrics/risk_coverage.json:
+          cache: false
+
+  escalation_report:
+    cmd: uv run python scripts/54_escalation_report.py
+    deps:
+      - scripts/54_escalation_report.py
+      - src/agent/confidence.py
+      - src/data/bird.py
+      - src/eval/bootstrap.py
+      - src/eval/calibration.py
+      - src/eval/config.py
+      - src/eval/preregistration.py
+      - src/eval/records.py
+      - src/eval/reports.py
+      - src/eval/selective.py
+      - src/eval/summary.py
+      - results/metrics/preregistration.md
+      - results/metrics/ablation.json
+      - results/runs/ablation
+      - results/runs/escalation
+    params:
+      - configs/confidence.yaml:
+          - escalation
+      - configs/eval.yaml:
+          - bootstrap
+          - calibration
+          - selective
+          - preregistration
+    outs:
+      - results/metrics/escalation.json:
+          cache: false
+
+  # The router, run only when the escalation model was adopted: the escalation model on the
+  # held-out set; the routing (below the decline threshold) is applied in its report.
+  router:
+    cmd: uv run python scripts/59_run_router.py
+    deps:
+      - scripts/59_run_router.py
+      - src/agent/answer.py
+      - src/agent/clock.py
+      - src/agent/confidence.py
+      - src/agent/conversation.py
+      - src/agent/driver.py
+      - src/agent/escalation.py
+      - src/agent/evaluate.py
+      - src/agent/run.py
+      - src/agent/stages.py
+      - src/agent/steps.py
+      - src/agent/tools.py
+      - src/agent/verify.py
+      - src/data/bird.py
+      - src/db/connection.py
+      - src/db/execute.py
+      - src/db/guard.py
+      - src/db/hardening.py
+      - src/db/values.py
+      - src/dictionary/model.py
+      - src/dictionary/snapshot.py
+      - src/eval/config.py
+      - src/eval/ex.py
+      - src/eval/execution.py
+      - src/eval/own_set.py
+      - src/eval/records.py
+      - src/llm/backends.py
+      - src/llm/batch.py
+      - src/llm/cache.py
+      - src/llm/generate.py
+      - src/llm/ledger.py
+      - src/llm/types.py
+      - src/tools/chart.py
+      - src/tools/definitions.py
+      - src/tools/schema.py
+      - src/tools/sql.py
+      - src/tools/toolbox.py
+      - src/tracking/otel.py
+      - prompts/single_shot_v3.md
+      - configs/tools.yaml
+      - dictionary
+      - data/raw/bird_minidev
+      - results/metrics/splits.json
+      - results/metrics/gold_execution.json
+      - results/metrics/db_hardening.json
+      - results/metrics/ablation.json
+      - results/metrics/calibration.json
+      - results/metrics/escalation.json
+      - results/runs/main
+    params:
+      - configs/confidence.yaml:
+          - answers
+          - phase
+          - escalation
+      - configs/agent.yaml:
+          - prompts
+          - models
+          - designs
+          - reminders
+          - max_model_calls
+          - presentation
+          - checks
+      - configs/budget.yaml:
+          - prices_usd_per_mtok
+          - batch_discount
+      - configs/eval.yaml:
+          - execution_accuracy
+    outs:
+      - data/cache/llm_router:
+          persist: true
+      - data/traces/router
+      - data/spans/router
+      - results/runs/router:
+          cache: false
+
+  router_report:
+    cmd: uv run python scripts/60_router_report.py
+    deps:
+      - scripts/60_router_report.py
+      - src/agent/confidence.py
+      - src/data/bird.py
+      - src/eval/bootstrap.py
+      - src/eval/calibration.py
+      - src/eval/config.py
+      - src/eval/preregistration.py
+      - src/eval/records.py
+      - src/eval/reports.py
+      - src/eval/selective.py
+      - src/eval/summary.py
+      - src/llm/ledger.py
+      - src/llm/types.py
+      - results/metrics/preregistration.md
+      - results/metrics/splits.json
+      - results/metrics/ablation.json
+      - results/metrics/calibration.json
+      - results/metrics/escalation.json
+      - results/runs/main
+      - results/runs/router
+    params:
+      - configs/confidence.yaml:
+          - answers
+          - phase
+          - escalation
+      - configs/budget.yaml:
+          - prices_usd_per_mtok
+          - batch_discount
+      - configs/eval.yaml:
+          - bootstrap
+          - calibration
+          - selective
+          - preregistration
+    outs:
+      - results/metrics/router.json:
+          cache: false
+
+  # The framework comparison: the winner and the critic as a LangGraph graph, run beside the own
+  # loop's same pipeline from stored responses only (it cannot call a model), then compared.
+  framework:
+    cmd: uv run --group langgraph python scripts/55_run_graph.py
+    deps:
+      - scripts/55_run_graph.py
+      - src/agent/answer.py
+      - src/agent/clock.py
+      - src/agent/confidence.py
+      - src/agent/conversation.py
+      - src/agent/critic.py
+      - src/agent/driver.py
+      - src/agent/evaluate.py
+      - src/agent/run.py
+      - src/agent/steps.py
+      - src/agent/tools.py
+      - src/agent/verify.py
+      - src/agent_langgraph/chat_model.py
+      - src/agent_langgraph/graph.py
+      - src/data/bird.py
+      - src/db/connection.py
+      - src/db/execute.py
+      - src/db/guard.py
+      - src/db/hardening.py
+      - src/db/values.py
+      - src/dictionary/model.py
+      - src/dictionary/snapshot.py
+      - src/eval/config.py
+      - src/eval/ex.py
+      - src/eval/execution.py
+      - src/eval/own_set.py
+      - src/eval/records.py
+      - src/llm/backends.py
+      - src/llm/batch.py
+      - src/llm/cache.py
+      - src/llm/generate.py
+      - src/llm/ledger.py
+      - src/llm/types.py
+      - src/tools/chart.py
+      - src/tools/definitions.py
+      - src/tools/schema.py
+      - src/tools/sql.py
+      - src/tools/toolbox.py
+      - src/tracking/otel.py
+      - prompts/single_shot_v3.md
+      - prompts/critic_v1.md
+      - configs/tools.yaml
+      - dictionary
+      - data/raw/bird_minidev
+      - results/metrics/splits.json
+      - results/metrics/ablation.json
+      - data/cache/llm_ablation
+      - data/cache/llm_main
+      - data/cache/llm_critic
+    params:
+      - configs/confidence.yaml:
+          - answers
+          - phase
+          - critic
+      - configs/agent.yaml:
+          - prompts
+          - models
+          - presentation
+          - checks
+      - configs/budget.yaml:
+          - prices_usd_per_mtok
+          - batch_discount
+    outs:
+      - data/spans/framework
+      - results/runs/framework:
+          cache: false
+
+  framework_report:
+    cmd: uv run python scripts/56_framework_report.py
+    deps:
+      - scripts/56_framework_report.py
+      - src/agent/confidence.py
+      - src/data/bird.py
+      - src/eval/bootstrap.py
+      - src/eval/calibration.py
+      - src/eval/config.py
+      - src/eval/preregistration.py
+      - src/eval/records.py
+      - src/eval/reports.py
+      - src/eval/selective.py
+      - src/eval/summary.py
+      # the files whose code is counted
+      - src/agent_langgraph/graph.py
+      - src/agent_langgraph/chat_model.py
+      - src/agent/conversation.py
+      - src/agent/run.py
+      - src/agent/driver.py
+      - src/agent/critic.py
+      - src/agent/confidence.py
+      - src/data/bird.py
+      - src/eval/bootstrap.py
+      - src/eval/calibration.py
+      - src/eval/config.py
+      - src/eval/preregistration.py
+      - src/eval/records.py
+      - src/eval/reports.py
+      - src/eval/selective.py
+      - src/eval/summary.py
+      - results/metrics/preregistration.md
+      - results/metrics/ablation.json
+      - results/runs/ablation
+      - results/runs/critic
+      - results/runs/framework
+    params:
+      - configs/confidence.yaml:
+          - critic
+      - configs/eval.yaml:
+          - bootstrap
+          - selective
+          - preregistration
+    outs:
+      - results/metrics/framework_comparison.json:
+          cache: false
+
+  # Wrong answers whose result holds the right one up to its columns or rounding (no score
+  # changes): both queries are run again on the database.
+  near_miss:
+    cmd: uv run python scripts/58_near_miss.py
+    deps:
+      - scripts/58_near_miss.py
+      - src/agent/confidence.py
+      - src/agent/verify.py
+      - src/data/bird.py
+      - src/db/connection.py
+      - src/db/execute.py
+      - src/db/guard.py
+      - src/db/hardening.py
+      - src/dictionary/model.py
+      - src/dictionary/snapshot.py
+      - src/eval/config.py
+      - src/eval/records.py
+      - src/eval/reports.py
+      - src/tools/chart.py
+      - src/tools/definitions.py
+      - src/tools/schema.py
+      - src/tools/sql.py
+      - src/tools/toolbox.py
+      - data/raw/bird_minidev
+      - results/metrics/splits.json
+      - results/metrics/ablation.json
+      - results/runs/main
+    params:
+      - configs/confidence.yaml:
+          - answers
+    outs:
+      - results/metrics/near_miss.json:
+          cache: false
+
+  plots:
+    cmd: uv run python scripts/57_plots.py
+    deps:
+      - scripts/57_plots.py
+      - results/metrics/calibration.json
+      - results/metrics/risk_coverage.json
+    outs:
+      - results/plots/reliability_held_out.png:
+          cache: false
+      - results/plots/risk_coverage_held_out.png:
+          cache: false
+
   # Every agent run rebuilt from the stored responses alone (a missing one is an error, never a
   # call) and compared with the committed records, field by field.
   replay_check:
@@ -542,9 +1042,19 @@ stages:
       - data/cache/llm_ablation
       - data/cache/llm_main
       - data/cache/llm_own
+      - results/runs/critic
+      - results/runs/escalation
+      - data/cache/llm_critic
+      - data/cache/llm_escalation
+      - results/runs/router
+      - data/cache/llm_router
     params:
       - configs/agent.yaml:
           - stages
+      - configs/confidence.yaml:
+          - answers
+          - critic
+          - escalation
     outs:
       - results/metrics/replay_check.json:
           cache: false

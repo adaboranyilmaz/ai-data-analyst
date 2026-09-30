@@ -1,7 +1,8 @@
 """Rebuild every agent run from the response cache alone and compare it with the committed records.
 
-Each stage's runs (configs/agent.yaml `stages`) whose records exist under results/runs/ are run
-again with ANALYST_REPLAY_ONLY=1: every model response must come from the cache (a missing one
+Each stage's runs (configs/agent.yaml `stages`, and the critic and escalation runs of
+configs/confidence.yaml) whose records exist under results/runs/ are run again with
+ANALYST_REPLAY_ONLY=1: every model response must come from the cache (a missing one
 is an error, never a call), and the tools, the checks and the scoring run again on the
 database. The rebuilt records go to a temporary directory and are compared with the committed
 ones field by field, leaving out what differs on every run by nature: the wall-clock latency,
@@ -30,7 +31,8 @@ from src.data.bird import write_json  # noqa: E402
 from src.eval.records import read_records  # noqa: E402
 
 OUT = ROOT / "results/metrics/replay_check.json"
-STAGES = ("pilot", "ablation", "main", "own")
+AGENT_STAGES = ("pilot", "ablation", "main", "own")
+STAGES = (*AGENT_STAGES, "critic", "escalation", "router")
 IGNORED = ("latency_s", "evaluated_at", "trace")
 EXAMPLES = 5  # differing records shown per run
 
@@ -106,6 +108,99 @@ def replay_stage(stage: str, scratch: Path) -> dict[str, dict]:
     return out
 
 
+def _scratch(spec, scratch: Path):
+    """The same run, writing its records, traces and spans under the scratch directory."""
+    rel = spec.records.relative_to(ROOT / "results/runs")
+    return dataclasses.replace(
+        spec,
+        records=scratch / "runs" / rel,
+        traces_dir=scratch / "traces" / rel.with_suffix(""),
+        spans=scratch / "spans" / rel,
+    )
+
+
+def replay_critic(scratch: Path) -> dict[str, dict]:
+    """Replay the critic's runs that have committed records."""
+    from src.agent import critic
+    from src.agent.confidence import answers_path, confidence_config
+    from src.agent.confidence import read_records as read_reviews
+
+    conf = confidence_config()
+    crit = conf["critic"]
+    path, answer_run = answers_path(conf)
+    answers = read_records(path)
+    specs = []
+    for r in crit["runs"]:
+        items = critic.items_for(r["set"], answers, r.get("limit"))
+        spec = critic.make_spec(
+            r["set"],
+            r.get("limit"),
+            crit["model"],
+            items,
+            answer_run,
+            conf["phase"],
+            crit["mode"],
+            conf["answers"]["evidence"],
+        )
+        if spec.records.exists():
+            specs.append((spec, _scratch(spec, scratch)))
+    if not specs:
+        return {}
+    rebuilt = critic.execute([r for _, r in specs], crit, log=lambda _: None)
+    return {
+        s.name: compare(read_reviews(s.records), records)
+        for (s, _), records in zip(specs, rebuilt, strict=True)
+    }
+
+
+def replay_escalation(scratch: Path) -> dict[str, dict]:
+    """Replay the escalation runs that have committed records."""
+    from src.agent import escalation
+    from src.agent.confidence import confidence_config
+    from src.agent.stages import WINNER, make_spec, winner
+
+    conf = confidence_config()
+    esc = conf["escalation"]
+    cfg = escalation.agent_config_with(esc["model"], esc["settings"])
+    design = winner() if esc["design"] == WINNER else esc["design"]
+    specs = []
+    for r in esc["runs"]:
+        spec = make_spec(
+            "escalation",
+            r["set"],
+            design,
+            esc["model"],
+            esc["evidence"],
+            esc["mode"],
+            r.get("limit"),
+            phase=conf["phase"],
+        )
+        if spec.records.exists():
+            specs.append((spec, _scratch(spec, scratch)))
+    if not specs:
+        return {}
+    rebuilt = escalation.execute([r for _, r in specs], cfg, log=lambda _: None)
+    return {
+        s.name: compare(read_records(s.records), records)
+        for (s, _), records in zip(specs, rebuilt, strict=True)
+    }
+
+
+def replay_router(scratch: Path) -> dict[str, dict]:
+    """Replay the router's run of the escalation model, if it has committed records."""
+    from src.agent import escalation
+    from src.agent.confidence import confidence_config, winning_design
+
+    conf = confidence_config()
+    esc = conf["escalation"]
+    spec = escalation.router_spec(conf, winning_design())
+    if not spec.records.exists():
+        return {}
+    cfg = escalation.agent_config_with(esc["model"], esc["settings"])
+    (records,) = escalation.execute([_scratch(spec, scratch)], cfg, log=lambda _: None)
+    return {spec.name: compare(read_records(spec.records), records)}
+
+
 def main() -> None:
     p = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     p.add_argument("--stages", nargs="*", default=list(STAGES), choices=STAGES)
@@ -118,7 +213,14 @@ def main() -> None:
             if not any((ROOT / "results/runs" / stage).glob("*.jsonl")):
                 print(f"{stage}: no records, skipped", flush=True)
                 continue
-            got = replay_stage(stage, Path(tmp))
+            if stage == "critic":
+                got = replay_critic(Path(tmp))
+            elif stage == "escalation":
+                got = replay_escalation(Path(tmp))
+            elif stage == "router":
+                got = replay_router(Path(tmp))
+            else:
+                got = replay_stage(stage, Path(tmp))
             runs.update(got)
             print(f"{stage}: {len(got)} runs replayed", flush=True)
     ok = all(r["ok"] for r in runs.values())

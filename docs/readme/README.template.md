@@ -4,7 +4,7 @@
 
 This project builds an AI analyst that answers questions about a bank's database by writing and running SQL. Every answer comes with its evidence and a confidence, and the analyst declines when it is unsure. The project measures whether that confidence can be trusted.
 
-**Status: under construction. The analyst is built, five designs of it have been compared, and the chosen one has been evaluated on the benchmark and on the hand-written banking set. Calibrating its confidence, setting the point at which it declines, the statistical guardrail and the demo come next.**
+**Status: under construction. The analyst is built, five designs of it have been compared, the chosen one has been evaluated on the benchmark and on the hand-written banking set, and its confidence has been calibrated, turned into a point at which it declines, and used to route uncertain questions to a larger model. The statistical guardrail and the demo come next.**
 
 **Auditable** means that every answer can be traced to the exact SQL, the rows it used and the checks it ran, and that it comes with a calibrated confidence. It does not mean guaranteed correct.
 
@@ -23,8 +23,16 @@ The full technical report is in [TECHNICAL_REPORT.md](TECHNICAL_REPORT.md). A re
 - **The simplest design won.** Of five designs, from a single call with the whole schema to an agent that explores the database, runs its own queries, corrects itself and votes over three attempts, the single call was the most accurate ({{abl_sonnet_d1_ex}}, against {{abl_sonnet_d3_ex}} for the self-correcting agent and {{abl_sonnet_d4_ex}} with voting) and the cheapest ({{abl_sonnet_d1_cost_q}} a question). It won by the rule fixed before any design ran.
 - **Why: exploring made a strong model add things.** With the tools to run its own queries, Claude Sonnet 5 more often returned columns it had looked at but was not asked for, and the benchmark scores an extra column as wrong. Its single-call queries rarely failed, so self-correction had little to fix. The smaller Claude Haiku 4.5, whose queries failed more often, gained from the same tools ({{abl_haiku_d1_ex}} to {{abl_haiku_d3_ex}}).
 - **On questions nothing was tuned on**, the chosen analyst answered {{held_ex}} of the benchmark's {{held_questions}} held-out questions correctly {{held_ex_ci}}, at {{held_cost_correct}} per correct answer. BIRD's hints matter: without them, accuracy was {{evidence_gain_pts}} points lower.
-- **Its confidence ranks its answers, but it is overconfident.** A right answer usually gets a higher confidence than a wrong one (AUROC {{held_auroc}}), but the stated confidences run higher than the accuracy (calibration error {{held_ece}}). Calibrating them is the next step.
+- **Its confidence ranks its answers, and calibration makes it honest.** A right answer usually gets a higher confidence than a wrong one (AUROC {{held_auroc}}). The stated confidences ran too high (calibration error {{cal_raw_ece}}); adjusted on other questions, they match reality closely ({{cal_platt_ece}}).
+- **But declining for high accuracy leaves few answers.** Answering only when the calibrated confidence promised {{decline_target}} accuracy, the analyst answered {{decline_held_coverage}} of the held-out questions, {{decline_held_accuracy}} of them correctly. Its confidence takes too few distinct values to separate right from wrong finely.
+- **A larger model was much more accurate, and the rule fixed in advance adopted it.** On the same questions Claude Opus 5.5 answered {{esc_opus_ex}} correctly against {{esc_sonnet_ex}} for Claude Sonnet 5 ({{esc_gain_pts}} points more), at {{esc_opus_cost_correct}} per correct answer against {{esc_sonnet_cost_correct}}. On the held-out questions the gain held: {{router_opus_ex}} against {{router_sonnet_ex}}.
+- **Routing only the uncertain questions to the larger model did not pay.** The analyst's confidence cleared the bar for keeping its own answer on only {{router_kept}} of {{router_questions}} questions, so the router sent almost everything to the larger model: it was no more accurate than the larger model alone, and cost more, since it paid for both.
+- **A second model's review did not beat the analyst's own confidence, but the two together did, slightly.** A critic that sees the query's result ranked the answers no better (lower is better: {{rc_critic_aurc}} against {{rc_stated_aurc}}); combining both confidences reached {{rc_combined_aurc}}.
 - **On the hand-written banking questions**, which no model can have seen, it answered {{own_ab_ex}} of the standard and multi-step questions correctly, declined {{own_d_success}} of the unanswerable ones and corrected {{own_e_success}} of the false premises, while asking a clarifying question on only {{own_clarify_ab}} of the clear questions.
+
+![Risk-coverage curves on the held-out questions](results/plots/risk_coverage_held_out.png)
+
+*How often the analyst is wrong among the answers it keeps, keeping its most confident answers first (lower is better). Its own calibrated confidence (blue) and a second model's review (orange) rank the answers about equally well; the two combined (green, exploratory) do a little better. The dotted line is a perfect ranking. One run, {{held_questions}} held-out questions.*
 
 ## How It Works
 
@@ -52,6 +60,27 @@ The design, being built in stages:
 **The chosen analyst on the banking set.** It answered {{own_ab_ex}} of the standard and multi-step questions correctly {{own_ab_ex_ci}}, declined {{own_d_success}} of the unanswerable ones with a reason, and corrected {{own_e_success}} of the false premises. A check by hand of what it said confirmed {{own_e_reviewed}} of the corrections; of the ambiguous questions, {{own_c_reviewed}} were handled well after the check ({{own_c_success}} by the automatic rule, which counts any clarifying question). On the clear questions it asked for clarification on {{own_clarify_ab}}.
 
 <sub>Source: `results/metrics/benchmark_main.json`, `results/metrics/own_set.json`, `results/reviews/own_set_review.yaml` (one run each)</sub>
+
+**Calibrating the confidence and declining.** Fitted on the {{split_ablation}} questions set aside for it and checked on the {{held_questions}} held-out ones:
+
+- The stated confidence ran too high: its calibration error was {{cal_raw_ece}}. After calibration it was {{cal_platt_ece}} {{cal_platt_ece_ci}}.
+- To be right {{decline_target}} of the time, the analyst may only answer when it states a confidence of at least {{decline_raw_threshold}}. On the held-out questions that meant answering {{decline_held_coverage}} {{decline_held_coverage_ci}} of them, {{decline_held_accuracy}} correctly.
+- A second model, shown the question, the SQL, the rows it returned and the checks, ranked the answers no better than the analyst's own confidence (the difference in AURC: {{rc_critic_minus_stated}} {{rc_critic_minus_stated_ci}}). Combined, the two did slightly better ({{rc_combined_minus_stated}} {{rc_combined_minus_stated_ci}}, exploratory).
+- Of the wrong answers whose query ran, {{nm_near}} of {{nm_wrong}} held the right rows, with extra or reordered columns or other rounding.
+
+<sub>Source: `results/metrics/calibration.json`, `results/metrics/risk_coverage.json`, `results/metrics/near_miss.json` (one run each)</sub>
+
+**Escalating to a larger model.** On the {{split_ablation}} questions set aside for choosing, Claude Opus 5.5 was {{esc_gain}} {{esc_gain_ci}} more accurate than Claude Sonnet 5 on the same design, so the rule fixed in advance adopted it. The router it brings in sends Opus the held-out questions Sonnet is unsure of ({{router_routed}} of {{router_questions}}):
+
+- The routed system answered {{router_ex}} {{router_ex_ci}} of the held-out questions correctly, against {{router_sonnet_ex}} for Sonnet alone ({{router_gain}} {{router_gain_ci}}), at {{router_cost_correct}} per correct answer against {{router_sonnet_cost_correct}}.
+- Opus alone, run on every held-out question as an extra comparison, scored the same, {{router_opus_ex}}, at {{router_opus_cost_correct}} per correct answer: on the few questions the router kept, both models got the same ones right. Routing pays for a Sonnet answer first and then sets most of them aside.
+- Costs are at the batch price. When the batches stalled for hours, Opus's last {{router_direct_questions}} held-out questions were sent as direct calls at twice the price; its answers do not depend on how a request is sent.
+
+<sub>Source: `results/metrics/escalation.json`, `results/metrics/router.json` (one run per model)</sub>
+
+**The same pipeline in a framework.** Rebuilt with LangGraph (an orchestrator routing between a SQL agent and the reviewing model), the pipeline sent exactly the same requests on all {{fw_identical}} questions, so its answers and accuracy are identical. Its overhead per question was {{fw_graph_p50_ms}} ms at the median, against {{fw_own_p50_ms}} ms for the hand-written loop, and it saved {{fw_checkpoints}} checkpoints of its state each time. The hand-written loop stays the main system.
+
+<sub>Source: `results/metrics/framework_comparison.json` (one run, from stored responses)</sub>
 
 **Checking the scorer.** Before scoring the analyst, the project's scoring was run beside BIRD's official evaluator on {{ex_validation_cases}} test queries: the {{ex_validation_gold}} expert queries themselves, {{ex_validation_mutants}} expert queries altered on purpose (a missing DISTINCT, a flipped sort, a dropped filter, a cast to another type) and {{ex_validation_edge}} hand-written edge cases.
 
@@ -91,7 +120,7 @@ uv run pytest
 
 - Every result is from one run; the intervals show how much it could move with other questions, not with another run.
 - The benchmark scores an answer's rows exactly: an extra column, or a number of another type, makes an otherwise useful answer wrong. Part of the agentic designs' loss is of this kind.
-- The analyst's confidence is not yet calibrated, and it does not yet decline on its own; both come next.
+- The calibration and the decline threshold were set on {{split_ablation}} questions, so they carry the uncertainty of a small sample.
 - {{gold_reads_the_clock}} of the benchmark's expert queries compute ages from today's date, so their correct answers change over time. The scorer runs them beside each answer, but a stored answer that fixed a year can go out of date.
 - The security results are from one run of a fixed set of attacks. They show that each guard stops these attacks, not that no other attack exists.
 - BIRD's questions are public and may be in the models' training data. The hand-written banking set exists to check for that.
@@ -109,6 +138,8 @@ uv run pytest
 | jsonschema, Vega-Lite schema | checking the analyst's chart designs |
 | NumPy | bootstrap intervals |
 | MLflow, DVC | experiment tracking and data versioning |
+| LangGraph | the framework comparison only |
+| Matplotlib | the figures |
 
 <sub>Source: `pyproject.toml`, `docker-compose.yml`</sub>
 
