@@ -4,7 +4,7 @@
 
 This project builds an AI analyst that answers questions about a bank's database by writing and running SQL. Every answer comes with its evidence and a confidence, and the analyst declines when it is unsure. The project measures whether that confidence can be trusted.
 
-**Status: under construction. The analyst is built, five designs of it have been compared, the chosen one has been evaluated on the benchmark and on the hand-written banking set, and its confidence has been calibrated, turned into a point at which it declines, and used to route uncertain questions to a larger model. The statistical guardrail and the demo come next.**
+**Status: under construction. The analyst is built, five designs of it have been compared, the chosen one has been evaluated on the benchmark and on the hand-written banking set, its confidence has been calibrated, turned into a point at which it declines, and used to route uncertain questions to a larger model, and its wrong answers have been sorted by where they go wrong and priced. The statistical guardrail and the demo come next.**
 
 **Auditable** means that every answer can be traced to the exact SQL, the rows it used and the checks it ran, and that it comes with a calibrated confidence. It does not mean guaranteed correct.
 
@@ -16,18 +16,20 @@ The full technical report is in [TECHNICAL_REPORT.md](TECHNICAL_REPORT.md). A re
 - **Execution accuracy** is the share of questions for which the analyst's query returns the same rows as a query written by an expert.
 - **Calibration** means the confidence matches reality: of the answers given a confidence of eight in ten, about eight in ten should be right.
 - **Declining** means the analyst says it cannot answer reliably, and why, instead of guessing.
-- Accuracy tells you how often the analyst is right. This project measures whether it knows *which* of its answers are right, and whether its evidence helps a person catch the ones that are not.
+- Accuracy tells you how often the analyst is right. This project measures whether it knows *which* of its answers are right, where and why it goes wrong, and what its mistakes cost.
 
 ## Key Findings
 
 - **The simplest design won.** Of five designs, from a single call with the whole schema to an agent that explores the database, runs its own queries, corrects itself and votes over three attempts, the single call was the most accurate ({{abl_sonnet_d1_ex}}, against {{abl_sonnet_d3_ex}} for the self-correcting agent and {{abl_sonnet_d4_ex}} with voting) and the cheapest ({{abl_sonnet_d1_cost_q}} a question). It won by the rule fixed before any design ran.
-- **Why: exploring made a strong model add things.** With the tools to run its own queries, Claude Sonnet 5 more often returned columns it had looked at but was not asked for, and the benchmark scores an extra column as wrong. Its single-call queries rarely failed, so self-correction had little to fix. The smaller Claude Haiku 4.5, whose queries failed more often, gained from the same tools ({{abl_haiku_d1_ex}} to {{abl_haiku_d3_ex}}).
+- **Why: exploring made a strong model add things.** With the tools to run its own queries, Claude Sonnet 5 more often returned columns it had looked at but was not asked for, and the benchmark scores an extra column as wrong. Counting answers that are right in substance but wrong in form as right, the self-correcting agent all but catches up ({{ea_d3_up}} against {{ea_d1_up}}, exploratory). Its single-call queries rarely failed, so self-correction had little to fix. The smaller Claude Haiku 4.5, whose queries failed more often, gained from the same tools ({{abl_haiku_d1_ex}} to {{abl_haiku_d3_ex}}).
 - **On questions nothing was tuned on**, the chosen analyst answered {{held_ex}} of the benchmark's {{held_questions}} held-out questions correctly {{held_ex_ci}}, at {{held_cost_correct}} per correct answer. BIRD's hints matter: without them, accuracy was {{evidence_gain_pts}} points lower.
 - **Its confidence ranks its answers, and calibration makes it honest.** A right answer usually gets a higher confidence than a wrong one (AUROC {{held_auroc}}). The stated confidences ran too high (calibration error {{cal_raw_ece}}); adjusted on other questions, they match reality closely ({{cal_platt_ece}}).
 - **But declining for high accuracy leaves few answers.** Answering only when the calibrated confidence promised {{decline_target}} accuracy, the analyst answered {{decline_held_coverage}} of the held-out questions, {{decline_held_accuracy}} of them correctly. Its confidence takes too few distinct values to separate right from wrong finely.
 - **A larger model was much more accurate, and the rule fixed in advance adopted it.** On the same questions Claude Opus 5.5 answered {{esc_opus_ex}} correctly against {{esc_sonnet_ex}} for Claude Sonnet 5 ({{esc_gain_pts}} points more), at {{esc_opus_cost_correct}} per correct answer against {{esc_sonnet_cost_correct}}. On the held-out questions the gain held: {{router_opus_ex}} against {{router_sonnet_ex}}.
 - **Routing only the uncertain questions to the larger model did not pay.** The analyst's confidence cleared the bar for keeping its own answer on only {{router_kept}} of {{router_questions}} questions, so the router sent almost everything to the larger model: it was no more accurate than the larger model alone, and cost more, since it paid for both.
 - **A second model's review did not beat the analyst's own confidence, but the two together did, slightly.** A critic that sees the query's result ranked the answers no better (lower is better: {{rc_critic_aurc}} against {{rc_stated_aurc}}); combining both confidences reached {{rc_combined_aurc}}.
+- **Most wrong answers are wrong in their logic, not their form.** Of the {{ea_wrong}} wrong held-out answers, {{ea_format_only}} had the right rows in the wrong shape and {{ea_no_result}} returned nothing; the rest read other tables ({{ea_tables}}), filtered differently ({{ea_filter}}) or calculated differently ({{ea_computation}}). Reading {{hc_items}} of them closely found that in {{hc_questionable}} the benchmark's own expert query does not answer the question as asked.
+- **Once a wrong answer costs more than {{da_break_even}}, the larger model is the cheaper one**, although each answer costs more ({{da_opus_api}} against {{da_sonnet_api}}): it makes fewer mistakes. Declining pays when a person's answer costs less than {{da_sonnet_pays}} times what a wrong answer costs. The router is never the cheapest choice.
 - **On the hand-written banking questions**, which no model can have seen, it answered {{own_ab_ex}} of the standard and multi-step questions correctly, declined {{own_d_success}} of the unanswerable ones and corrected {{own_e_success}} of the false premises, while asking a clarifying question on only {{own_clarify_ab}} of the clear questions.
 
 ![Risk-coverage curves on the held-out questions](results/plots/risk_coverage_held_out.png)
@@ -38,7 +40,7 @@ The full technical report is in [TECHNICAL_REPORT.md](TECHNICAL_REPORT.md). A re
 
 The design, being built in stages:
 
-- **The client database.** Real, anonymised data from a Czech bank (1993–1998), with {{financial_trans_rows}} transactions. It is the standard public relational banking dataset and part of the BIRD benchmark. Its codes are in Czech; translating them into business terms is what an analyst does with any bank's internal codes. A hand-written data dictionary gives every column an English name, a meaning and a unit, and translates all {{financial_code_values}} code values found in the data.
+- **The client database.** Real, anonymized data from a Czech bank (1993–1998), with {{financial_trans_rows}} transactions. It is the standard public relational banking dataset and part of the BIRD benchmark. Its codes are in Czech; translating them into business terms is what an analyst does with any bank's internal codes. A hand-written data dictionary gives every column an English name, a meaning and a unit, and translates all {{financial_code_values}} code values found in the data.
 - **The benchmark.** BIRD mini-dev, a public text-to-SQL benchmark of {{bird_questions}} questions over {{bird_databases}} databases, with an expert-written query for every question, so the analyst can be compared with published results. All {{gold_executed}} expert queries run on this project's database.
 - **A hand-written banking test set.** {{own_set_questions}} questions written for this project and fixed before the analyst sees them, including ambiguous, unanswerable and false-premise questions. Unlike a public benchmark, they cannot be in any model's training data.
 - **The analyst.** An agent loop built directly on the Anthropic SDK, with tools to list and describe tables, look at sample rows, run queries and check chart designs.
@@ -66,9 +68,9 @@ The design, being built in stages:
 - The stated confidence ran too high: its calibration error was {{cal_raw_ece}}. After calibration it was {{cal_platt_ece}} {{cal_platt_ece_ci}}.
 - To be right {{decline_target}} of the time, the analyst may only answer when it states a confidence of at least {{decline_raw_threshold}}. On the held-out questions that meant answering {{decline_held_coverage}} {{decline_held_coverage_ci}} of them, {{decline_held_accuracy}} correctly.
 - A second model, shown the question, the SQL, the rows it returned and the checks, ranked the answers no better than the analyst's own confidence (the difference in AURC: {{rc_critic_minus_stated}} {{rc_critic_minus_stated_ci}}). Combined, the two did slightly better ({{rc_combined_minus_stated}} {{rc_combined_minus_stated_ci}}, exploratory).
-- Of the wrong answers whose query ran, {{nm_near}} of {{nm_wrong}} held the right rows, with extra or reordered columns or other rounding.
+- Of the wrong answers whose query ran, {{nm_near}} of {{nm_wrong}} held the right rows, with extra or reordered columns or other rounding. Counted as right, they would lift the held-out accuracy from {{held_ex}} to {{held_ex_up_to_format}}; execution accuracy, which counts them wrong as the benchmark does, stays the measure everywhere else.
 
-<sub>Source: `results/metrics/calibration.json`, `results/metrics/risk_coverage.json`, `results/metrics/near_miss.json` (one run each)</sub>
+<sub>Source: `results/metrics/calibration.json`, `results/metrics/risk_coverage.json`, `results/metrics/benchmark_main.json`, `results/metrics/near_miss.json` (one run each)</sub>
 
 **Escalating to a larger model.** On the {{split_ablation}} questions set aside for choosing, Claude Opus 5.5 was {{esc_gain}} {{esc_gain_ci}} more accurate than Claude Sonnet 5 on the same design, so the rule fixed in advance adopted it. The router it brings in sends Opus the held-out questions Sonnet is unsure of ({{router_routed}} of {{router_questions}}):
 
@@ -77,6 +79,29 @@ The design, being built in stages:
 - Costs are at the batch price. When the batches stalled for hours, Opus's last {{router_direct_questions}} held-out questions were sent as direct calls at twice the price; its answers do not depend on how a request is sent.
 
 <sub>Source: `results/metrics/escalation.json`, `results/metrics/router.json` (one run per model)</sub>
+
+**Where the analyst gets it wrong.** Each of the {{ea_wrong}} wrong held-out answers was put in one category by the first part of its query that differs from the expert's:
+
+- {{ea_no_result}} returned no result ({{ea_refused}} refused by the SQL checker, {{ea_failed}} failed), and {{ea_format_only}} had the right rows in the wrong shape.
+- The rest are mistakes of logic: {{ea_tables}} read other tables, {{ea_filter}} used other conditions, {{ea_computation}} calculated differently, {{ea_output}} returned other columns, {{ea_join}} joined the right tables wrongly and {{ea_order_limit}} kept other rows. In {{ea_several}} of the {{ea_wrong}}, more than one part differs.
+- A close reading of {{hc_items}} of them agreed with the automatic category on {{hc_same}}; where they differ, the automatic one had mostly stopped at a harmless first difference, before the real mistake. It also found {{hc_questionable}} whose expert query does not answer the question as asked, for example counting lab records where the question asks for patients. The author checked {{hc_spot_checked}} of the answers flagged this way and kept the flag on {{hc_spot_kept}}, dropping the other from the count.
+
+![Where the wrong answers go wrong](results/plots/errors_by_category.png)
+
+<sub>Source: `results/metrics/error_analysis.json`, `results/reviews/error_hand_check.yaml` (one run)</sub>
+
+**What errors cost.** Nobody knows in general what a wrong answer costs, or what it costs for a person to answer a question the analyst declines, so no price is assumed. Instead, each system's expected cost per question was worked out for every pair of costs, from a cent to $10,000 for a wrong answer and from a cent to $1,000 for a declined question:
+
+- Opus alone is cheaper than Sonnet alone once a wrong answer costs more than {{da_break_even}} (95% interval {{da_break_even_low}} to {{da_break_even_high}}). Below that, the cheaper model's extra mistakes cost less than the larger model's price.
+- The router is never the cheapest: it gets exactly the same questions wrong as Opus alone and costs {{da_router_extra}} more per question.
+- Declining is worth it only when a person's answer is cheap next to a wrong one: for Sonnet, below {{da_sonnet_pays}} times the cost of a wrong answer.
+- Deciding question by question from the calibrated confidence works only as well as the calibration does. It is the cheapest rule in principle, but for Opus, whose confidence was calibrated on few questions, the fixed threshold sometimes did better.
+
+![The cheapest system at each cost of a wrong answer and of declining](results/plots/cheapest_system.png)
+
+*Which system has the lowest expected cost per question, at each cost of a wrong answer (across) and of a declined question (up). Blue is Sonnet and orange is Opus; the hatched areas decline their least confident questions. Opus declining is exploratory: its threshold was chosen the same way as Sonnet's. One run per model, {{held_questions}} held-out questions, batch prices.*
+
+<sub>Source: `results/metrics/decision_analysis.json` (one run per model, no model calls)</sub>
 
 **The same pipeline in a framework.** Rebuilt with LangGraph (an orchestrator routing between a SQL agent and the reviewing model), the pipeline sent exactly the same requests on all {{fw_identical}} questions, so its answers and accuracy are identical. Its overhead per question was {{fw_graph_p50_ms}} ms at the median, against {{fw_own_p50_ms}} ms for the hand-written loop, and it saved {{fw_checkpoints}} checkpoints of its state each time. The hand-written loop stays the main system.
 
@@ -122,6 +147,8 @@ uv run pytest
 - The benchmark scores an answer's rows exactly: an extra column, or a number of another type, makes an otherwise useful answer wrong. Part of the agentic designs' loss is of this kind.
 - The calibration and the decline threshold were set on {{split_ablation}} questions, so they carry the uncertainty of a small sample.
 - {{gold_reads_the_clock}} of the benchmark's expert queries compute ages from today's date, so their correct answers change over time. The scorer runs them beside each answer, but a stored answer that fixed a year can go out of date.
+- The cost analysis prices every wrong answer the same and assumes a person answers a declined question correctly. It shows which system is cheapest for any pair of costs, not what the costs are.
+- The error categories read the structure of a query, not its intent, so a harmless difference can hide the real mistake behind it.
 - The security results are from one run of a fixed set of attacks. They show that each guard stops these attacks, not that no other attack exists.
 - BIRD's questions are public and may be in the models' training data. The hand-written banking set exists to check for that.
 

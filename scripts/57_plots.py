@@ -34,7 +34,7 @@ TEXT = "#0b0b0b"
 TEXT_2 = "#52514e"
 GRID = "#e4e3df"
 NEUTRAL = "#8a8983"
-# the first three slots of a colour-blind-checked categorical palette, in its fixed order
+# the first three slots of a color-blind-checked categorical palette, in its fixed order
 SERIES = ("#2a78d6", "#eb6834", "#1baf7a")
 MARKERS = ("o", "s", "^")
 LINESTYLES = ("-", "--", "-.")

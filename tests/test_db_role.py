@@ -107,7 +107,7 @@ def test_role_cannot_lift_its_temp_file_limit(agent):
 def test_statement_timeout_is_only_a_default(agent):
     """A known limit of the database layer, kept as a test so it cannot be forgotten: the
     role can lift its own statement timeout, so a timeout the agent's SQL cannot undo has to
-    come from the client (cancelling the query), not from the role."""
+    come from the client (canceling the query), not from the role."""
     agent.execute("SET statement_timeout = 0")
     assert agent.execute("SHOW statement_timeout").fetchone()[0] == "0"
 

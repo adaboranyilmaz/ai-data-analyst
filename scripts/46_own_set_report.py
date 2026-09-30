@@ -3,7 +3,7 @@
 Refuses to run unless the pre-registration is frozen and unchanged. From the `own` stage's
 record of the winner (results/runs/own/):
 
-- the run summarised (execution accuracy over the questions with a gold result, cost, steps,
+- the run summarized (execution accuracy over the questions with a gold result, cost, steps,
   errors);
 - each category's success (src/eval/summary.py `own_set_behaviour`): standard and multi-step
   questions by execution accuracy; ambiguous ones by a clarifying question, or a stated
@@ -11,7 +11,7 @@ record of the winner (results/runs/own/):
   reason; false premises by a correction of the premise. Comparative and causal questions are
   scored by the statistical checks, later; here only their count and declines;
 - how often a clear question with a true premise (standard or multi-step) was declined, met
-  with a clarifying question, or given a premise correction: the same behaviours where they are
+  with a clarifying question, or given a premise correction: the same behaviors where they are
   not called for;
 - beside the ambiguous and false-premise categories' success, their reviewed success: the
   answers that pass on form alone (a clarifying question, a premise correction) checked by hand

@@ -1,5 +1,5 @@
 """One plain-English line per step of a run, from what happened (no model writes them), so the
-same run always reads the same way. The UI's step timeline and the labelling page reuse them."""
+same run always reads the same way. The UI's step timeline and the labeling page reuse them."""
 
 from __future__ import annotations
 

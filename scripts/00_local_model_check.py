@@ -3,7 +3,7 @@ context, and which make valid tool calls.
 
 For each candidate in configs/local_models.yaml that is already downloaded (the script never
 downloads one):
-  1. its capabilities, size, quantisation, licence and weights digest, from Ollama;
+  1. its capabilities, size, quantization, license and weights digest, from Ollama;
   2. GPU fit: the model is loaded at each context size and Ollama's own report of how much
      of it sits in GPU memory is recorded; it fits when all of it does;
   3. tool calling: five fixed questions about a small shop database, each to be answered by

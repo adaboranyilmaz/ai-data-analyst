@@ -3,7 +3,7 @@
 
 # BIRD's official evaluator (EX and Soft-F1 for PostgreSQL), used only to check that
 # src/eval reproduces its verdicts (scripts/31_validate_ex.py). Downloaded at one commit,
-# each file pinned by hash; never committed, since the upstream repository has no licence
+# each file pinned by hash; never committed, since the upstream repository has no license
 # file. Running it needs the `bird-eval` dependency group (the versions its requirements pin).
 official_evaluator:
   commit: f9d2750c9b53639820c9d47f6d7a5e5025c780ab # bird-bench/mini_dev, 2025-09-19

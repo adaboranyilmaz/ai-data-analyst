@@ -1,4 +1,4 @@
-"""The design comparison on the ablation set: every run summarised, the designs compared, and
+"""The design comparison on the ablation set: every run summarized, the designs compared, and
 the winner chosen by the pre-registered rule.
 
 Refuses to run unless the pre-registration is frozen and unchanged (src/eval/preregistration.py).

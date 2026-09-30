@@ -1,7 +1,7 @@
 # Every number in README.md and TECHNICAL_REPORT.md, by name: the results file it comes from
 # (a path under results/), the field inside it (`/`-separated; list items by index) and its
 # format (`fmt` in scripts/90_readme.py). `expr` is arithmetic over other names;
-# `count_where`, `sum_of` and `mean_of` summarise a list; `pending: true` renders TBD until
+# `count_where`, `sum_of` and `mean_of` summarize a list; `pending: true` renders TBD until
 # the result exists. Edit this file or the templates, never the rendered documents.
 
 values:
@@ -210,6 +210,73 @@ values:
   nm_near: {file: metrics/near_miss.json, path: near_misses, fmt: int}
   nm_columns: {file: metrics/near_miss.json, path: by_kind/columns, fmt: int}
   nm_rounding: {file: metrics/near_miss.json, path: by_kind/rounding, fmt: int}
+  # held-out accuracy if the near misses counted as right (a secondary view; EX stays the measure)
+  held_ex_up_to_format: {expr: held_ex + nm_near / held_questions, fmt: pct1}
+
+  # where the winner's wrong held-out answers go wrong
+  ea_wrong: {file: metrics/error_analysis.json, path: wrong, fmt: int}
+  ea_no_result: {file: metrics/error_analysis.json, path: categories/no_result, fmt: int}
+  ea_refused: {file: metrics/error_analysis.json, path: no_result_kinds/refused, fmt: int}
+  ea_failed: {file: metrics/error_analysis.json, path: no_result_kinds/error, fmt: int}
+  ea_format_only: {file: metrics/error_analysis.json, path: categories/format_only, fmt: int}
+  ea_tables: {file: metrics/error_analysis.json, path: categories/tables, fmt: int}
+  ea_join: {file: metrics/error_analysis.json, path: categories/join, fmt: int}
+  ea_filter: {file: metrics/error_analysis.json, path: categories/filter, fmt: int}
+  ea_filter_value: {file: metrics/error_analysis.json, path: filter_kinds/different_value, fmt: int}
+  ea_computation: {file: metrics/error_analysis.json, path: categories/computation, fmt: int}
+  ea_output: {file: metrics/error_analysis.json, path: categories/output, fmt: int}
+  ea_order_limit: {file: metrics/error_analysis.json, path: categories/order_limit, fmt: int}
+  ea_other: {file: metrics/error_analysis.json, path: categories/other, fmt: int}
+  ea_logic: {expr: ea_tables + ea_join + ea_filter + ea_computation + ea_output + ea_order_limit, fmt: int}
+  ea_several: {file: metrics/error_analysis.json, path: several_parts_differ, fmt: int}
+  ea_disjoint: {file: metrics/error_analysis.json, path: relations/disjoint, fmt: int}
+  ea_empty: {file: metrics/error_analysis.json, path: relations/empty, fmt: int}
+  hc_items: {file: metrics/error_analysis.json, path: hand_check/items, fmt: int}
+  hc_same: {file: metrics/error_analysis.json, path: hand_check/same, fmt: int}
+  hc_kappa: {file: metrics/error_analysis.json, path: hand_check/kappa, fmt: f2}
+  hc_questionable: {file: metrics/error_analysis.json, path: hand_check/expert_questionable, fmt: int}
+  hc_spot_checked: {file: metrics/error_analysis.json, path: hand_check/spot_checked, fmt: int}
+  hc_spot_kept: {file: metrics/error_analysis.json, path: hand_check/spot_checked_questionable, fmt: int}
+  # exploratory: the Phase 4 designs' wrong answers on the ablation set, format-only misses counted
+  ea_d1_up: {file: metrics/error_analysis.json, path: designs_exploratory/designs/d1/accuracy_up_to_format, fmt: pct1}
+  ea_d3_up: {file: metrics/error_analysis.json, path: designs_exploratory/designs/d3/accuracy_up_to_format, fmt: pct1}
+  ea_d4_up: {file: metrics/error_analysis.json, path: designs_exploratory/designs/d4/accuracy_up_to_format, fmt: pct1}
+  ea_d3_format: {file: metrics/error_analysis.json, path: designs_exploratory/designs/d3/categories/format_only, fmt: int}
+  ea_d1_format: {file: metrics/error_analysis.json, path: designs_exploratory/designs/d1/categories/format_only, fmt: int}
+  ea_d1_minus_d3_up: {file: metrics/error_analysis.json, path: designs_exploratory/pairs/d1 - d3/accuracy_up_to_format/estimate, fmt: pp1}
+  ea_d1_minus_d3_up_ci: {file: metrics/error_analysis.json, path: designs_exploratory/pairs/d1 - d3/accuracy_up_to_format, fmt: ppiv1}
+
+  # what errors cost: expected cost per held-out question over the costs of a wrong answer and of
+  # declining (no price assumed)
+  da_sonnet_api: {file: metrics/decision_analysis.json, path: systems/sonnet/api_usd_per_question/estimate, fmt: usd4}
+  da_opus_api: {file: metrics/decision_analysis.json, path: systems/opus/api_usd_per_question/estimate, fmt: usd4}
+  da_sonnet_wrong: {file: metrics/decision_analysis.json, path: systems/sonnet/share_wrong/estimate, fmt: pct1}
+  da_opus_wrong: {file: metrics/decision_analysis.json, path: systems/opus/share_wrong/estimate, fmt: pct1}
+  da_break_even: {file: metrics/decision_analysis.json, path: break_even/opus_over_sonnet_usd/estimate, fmt: usd3}
+  da_break_even_low: {file: metrics/decision_analysis.json, path: break_even/opus_over_sonnet_usd/low, fmt: usd3}
+  da_break_even_high: {file: metrics/decision_analysis.json, path: break_even/opus_over_sonnet_usd/high, fmt: usd3}
+  da_router_extra: {file: metrics/decision_analysis.json, path: break_even/router_minus_opus/api_usd_per_question/estimate, fmt: usd4}
+  da_sonnet_pays: {file: metrics/decision_analysis.json, path: break_even/declining_pays_below_ratio/sonnet/estimate, fmt: f2}
+  da_sonnet_pays_ci: {file: metrics/decision_analysis.json, path: break_even/declining_pays_below_ratio/sonnet, fmt: civ2}
+  da_opus_pays: {file: metrics/decision_analysis.json, path: break_even/declining_pays_below_ratio/opus/estimate, fmt: f2}
+  da_opus_pays_ci: {file: metrics/decision_analysis.json, path: break_even/declining_pays_below_ratio/opus, fmt: civ2}
+  da_sonnet_declined: {file: metrics/decision_analysis.json, path: systems/sonnet_declining/share_declined/estimate, fmt: pct1}
+  da_opus_declined: {file: metrics/decision_analysis.json, path: systems/opus_declining/share_declined/estimate, fmt: pct1}
+  da_opus_declining_acc: {file: metrics/decision_analysis.json, path: systems/opus_declining/answered_accuracy/estimate, fmt: pct1}
+  da_opus_threshold: {file: metrics/decision_analysis.json, path: thresholds/opus_exploratory/calibrated, fmt: f2}
+  da_opus_cal_answered: {file: metrics/decision_analysis.json, path: thresholds/opus_exploratory/on_calibration_split/answered, fmt: int}
+  da_grid_sonnet: {file: metrics/decision_analysis.json, path: cheapest/share_of_grid/sonnet, fmt: pct0}
+  da_grid_sonnet_declining: {file: metrics/decision_analysis.json, path: cheapest/share_of_grid/sonnet_declining, fmt: pct0}
+  da_grid_opus: {file: metrics/decision_analysis.json, path: cheapest/share_of_grid/opus, fmt: pct0}
+  da_grid_opus_declining: {file: metrics/decision_analysis.json, path: cheapest/share_of_grid/opus_declining, fmt: pct0}
+  # the cost-optimal rule at C_d / C_w = 0.2 and 0.5 (rows 3 and 4 of optimal_rule), in wrong answers
+  da_opt_ratio: {file: metrics/decision_analysis.json, path: optimal_rule/3/ratio, fmt: f1}
+  da_opt_opus: {file: metrics/decision_analysis.json, path: optimal_rule/3/opus/cost_in_wrong_answers/estimate, fmt: f3}
+  da_opt_opus_all: {file: metrics/decision_analysis.json, path: optimal_rule/3/opus/answering_all_in_wrong_answers, fmt: f3}
+  da_opt_opus_declined: {file: metrics/decision_analysis.json, path: optimal_rule/3/opus/share_declined, fmt: pct0}
+  da_opt_ratio_high: {file: metrics/decision_analysis.json, path: optimal_rule/4/ratio, fmt: f1}
+  da_opt_opus_high: {file: metrics/decision_analysis.json, path: optimal_rule/4/opus/cost_in_wrong_answers/estimate, fmt: f3}
+  da_opt_opus_all_high: {file: metrics/decision_analysis.json, path: optimal_rule/4/opus/answering_all_in_wrong_answers, fmt: f3}
 
   # what it cost, and the replay
   phase4_usd: {file: metrics/api_spend.json, path: by_phase/phase4/usd, fmt: usd2}
@@ -221,7 +288,7 @@ values:
 # never results.
 allowed_literals:
   - "3.12" # the Python version
-  - "4.0" # CC BY-SA 4.0, the licence of the BIRD data
+  - "4.0" # CC BY-SA 4.0, the license of the BIRD data
   - "4.5" # Claude Haiku 4.5, a model's version
   - "5.5" # Claude Opus 5.5, a model's version
   - "95%" # the level of every interval, fixed in configs/eval.yaml

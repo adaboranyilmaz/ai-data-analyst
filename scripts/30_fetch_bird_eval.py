@@ -3,7 +3,7 @@
 The files (configs/eval.yaml `official_evaluator`) go to data/raw/bird_eval/, the output of the
 `bird_eval` stage in dvc.yaml. They are run for one purpose: to check that the project's
 scoring reproduces their verdicts (scripts/31_validate_ex.py). They are not committed, since
-the upstream repository has no licence file. A file already present with the right hash is
+the upstream repository has no license file. A file already present with the right hash is
 kept.
 
 Usage:

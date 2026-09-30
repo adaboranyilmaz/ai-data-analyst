@@ -1,0 +1,4414 @@
+{
+  "note": "one run; the winning run's wrong answers on the held-out set; categories by the first part in which the SQL differs from the expert's (src/eval/errors.py); no score is changed",
+  "answers": "main/all-d1-claude-sonnet-5-evidence",
+  "held_out_questions": 320,
+  "wrong": 126,
+  "categories": {
+    "no_result": 12,
+    "format_only": 29,
+    "tables": 27,
+    "join": 5,
+    "filter": 23,
+    "computation": 18,
+    "output": 8,
+    "order_limit": 1,
+    "other": 3,
+    "unparsed": 0
+  },
+  "filter_kinds": {
+    "different_column": 2,
+    "different_value": 11,
+    "extra": 5,
+    "missing": 5
+  },
+  "no_result_kinds": {
+    "error": 3,
+    "refused": 9
+  },
+  "several_parts_differ": 79,
+  "parts_differing": {
+    "tables": 35,
+    "joins": 32,
+    "filters": 56,
+    "computation": 54,
+    "output": 76,
+    "order_limit": 30
+  },
+  "relations": {
+    "None": 12,
+    "disjoint": 53,
+    "empty": 10,
+    "fewer_rows": 2,
+    "more_rows": 11,
+    "overlap": 5,
+    "same_row_count": 27,
+    "subset": 3,
+    "superset": 3
+  },
+  "category_by_relation": {
+    "no_result": {
+      "None": 12
+    },
+    "format_only": {
+      "disjoint": 9,
+      "fewer_rows": 1,
+      "more_rows": 4,
+      "same_row_count": 15
+    },
+    "tables": {
+      "disjoint": 14,
+      "empty": 3,
+      "fewer_rows": 1,
+      "more_rows": 1,
+      "overlap": 2,
+      "same_row_count": 5,
+      "superset": 1
+    },
+    "join": {
+      "disjoint": 3,
+      "empty": 1,
+      "more_rows": 1
+    },
+    "filter": {
+      "disjoint": 11,
+      "empty": 6,
+      "more_rows": 2,
+      "overlap": 1,
+      "same_row_count": 1,
+      "subset": 1,
+      "superset": 1
+    },
+    "computation": {
+      "disjoint": 11,
+      "more_rows": 2,
+      "same_row_count": 4,
+      "subset": 1
+    },
+    "output": {
+      "disjoint": 3,
+      "more_rows": 1,
+      "overlap": 2,
+      "same_row_count": 2
+    },
+    "order_limit": {
+      "disjoint": 1
+    },
+    "other": {
+      "disjoint": 1,
+      "subset": 1,
+      "superset": 1
+    }
+  },
+  "by_database": {
+    "california_schools": {
+      "computation": 1,
+      "filter": 2,
+      "format_only": 1,
+      "no_result": 1,
+      "output": 2,
+      "tables": 2
+    },
+    "card_games": {
+      "computation": 4,
+      "filter": 4,
+      "join": 1,
+      "no_result": 1,
+      "other": 1,
+      "output": 1
+    },
+    "codebase_community": {
+      "computation": 1,
+      "filter": 3,
+      "format_only": 2,
+      "output": 2,
+      "tables": 6
+    },
+    "debit_card_specializing": {
+      "computation": 1,
+      "filter": 1,
+      "format_only": 2,
+      "join": 1,
+      "tables": 4
+    },
+    "european_football_2": {
+      "filter": 1,
+      "format_only": 6,
+      "join": 2,
+      "output": 1,
+      "tables": 1
+    },
+    "financial": {
+      "computation": 2,
+      "filter": 1,
+      "format_only": 3,
+      "no_result": 4,
+      "tables": 2
+    },
+    "formula_1": {
+      "computation": 1,
+      "filter": 3,
+      "format_only": 8,
+      "no_result": 2,
+      "tables": 7
+    },
+    "student_club": {
+      "computation": 1,
+      "filter": 3,
+      "output": 2
+    },
+    "superhero": {
+      "computation": 1,
+      "filter": 1,
+      "format_only": 2,
+      "order_limit": 1,
+      "tables": 1
+    },
+    "thrombosis_prediction": {
+      "computation": 4,
+      "filter": 1,
+      "format_only": 3,
+      "no_result": 2,
+      "other": 2,
+      "tables": 2
+    },
+    "toxicology": {
+      "computation": 2,
+      "filter": 3,
+      "format_only": 2,
+      "join": 1,
+      "no_result": 2,
+      "tables": 2
+    }
+  },
+  "by_difficulty": {
+    "challenging": {
+      "computation": 4,
+      "filter": 2,
+      "format_only": 6,
+      "join": 3,
+      "no_result": 6,
+      "other": 1,
+      "tables": 11
+    },
+    "moderate": {
+      "computation": 11,
+      "filter": 14,
+      "format_only": 16,
+      "join": 1,
+      "no_result": 5,
+      "order_limit": 1,
+      "other": 1,
+      "output": 3,
+      "tables": 12
+    },
+    "simple": {
+      "computation": 3,
+      "filter": 7,
+      "format_only": 7,
+      "join": 1,
+      "no_result": 1,
+      "other": 1,
+      "output": 5,
+      "tables": 4
+    }
+  },
+  "hand_check": {
+    "status": "done",
+    "reviewer": null,
+    "spot_checked_by": "The Author",
+    "spot_checked": 5,
+    "spot_checked_questionable": 4,
+    "criteria": "hand_category: the first category, in the order and with the meanings in src/eval/errors.py, that describes a real mistake, a difference that changes the answer; differences in how the SQL is written that give the same answer (a harmless extra join, an equivalent condition) do not count; format_only when the answer's rows and values are right and only their shape differs (extra, reordered or combined columns, rounding). Judged from the question, the hint and both queries, without the automatic category, with read-only queries of the data where a fact decides it. expert_questionable: true if the expert query itself does not answer the question as asked (counted, never re-scored).",
+    "items": 30,
+    "same": 17,
+    "share_same": 0.5666666666666667,
+    "kappa": 0.4854881266490765,
+    "disagreements": {
+      "computation -> filter": 1,
+      "computation -> order_limit": 1,
+      "computation -> output": 1,
+      "filter -> computation": 1,
+      "join -> computation": 1,
+      "order_limit -> computation": 1,
+      "other -> output": 1,
+      "output -> filter": 1,
+      "output -> format_only": 1,
+      "tables -> computation": 2,
+      "tables -> filter": 1,
+      "tables -> order_limit": 1
+    },
+    "expert_questionable": 8,
+    "hand_categories": {
+      "computation": 6,
+      "filter": 7,
+      "format_only": 8,
+      "no_result": 3,
+      "order_limit": 2,
+      "output": 2,
+      "tables": 2
+    }
+  },
+  "designs_exploratory": {
+    "note": "exploratory, not pre-registered: format-only misses counted as right; one run per design; intervals are paired 95% bootstrap intervals over the ablation questions",
+    "model": "claude-sonnet-5",
+    "designs": {
+      "d1": {
+        "questions": 150,
+        "wrong": 61,
+        "categories": {
+          "computation": 8,
+          "filter": 14,
+          "format_only": 11,
+          "join": 8,
+          "no_result": 5,
+          "other": 3,
+          "output": 3,
+          "tables": 9
+        },
+        "execution_accuracy": 0.5933333333333334,
+        "accuracy_up_to_format": 0.6666666666666666
+      },
+      "d2": {
+        "questions": 150,
+        "wrong": 70,
+        "categories": {
+          "computation": 8,
+          "filter": 18,
+          "format_only": 14,
+          "join": 9,
+          "no_result": 4,
+          "other": 3,
+          "output": 4,
+          "tables": 10
+        },
+        "execution_accuracy": 0.5333333333333333,
+        "accuracy_up_to_format": 0.6266666666666667
+      },
+      "d3": {
+        "questions": 150,
+        "wrong": 72,
+        "categories": {
+          "computation": 11,
+          "filter": 16,
+          "format_only": 21,
+          "join": 8,
+          "no_result": 1,
+          "other": 2,
+          "output": 3,
+          "tables": 10
+        },
+        "execution_accuracy": 0.52,
+        "accuracy_up_to_format": 0.66
+      },
+      "d4": {
+        "questions": 150,
+        "wrong": 76,
+        "categories": {
+          "computation": 11,
+          "filter": 17,
+          "format_only": 23,
+          "join": 8,
+          "no_result": 1,
+          "other": 2,
+          "output": 3,
+          "tables": 11
+        },
+        "execution_accuracy": 0.49333333333333335,
+        "accuracy_up_to_format": 0.6466666666666666
+      },
+      "d5": {
+        "questions": 150,
+        "wrong": 71,
+        "categories": {
+          "computation": 10,
+          "filter": 13,
+          "format_only": 22,
+          "join": 8,
+          "no_result": 1,
+          "other": 2,
+          "output": 4,
+          "tables": 11
+        },
+        "execution_accuracy": 0.5266666666666666,
+        "accuracy_up_to_format": 0.6733333333333333
+      }
+    },
+    "pairs": {
+      "d1 - d2": {
+        "execution_accuracy": {
+          "estimate": 0.06000000000000005,
+          "low": 0.00666666666666671,
+          "high": 0.11333333333333334,
+          "confidence": 0.95,
+          "resamples": 10000,
+          "undefined": 0
+        },
+        "accuracy_up_to_format": {
+          "estimate": 0.039999999999999925,
+          "low": 0.0,
+          "high": 0.08666666666666667,
+          "confidence": 0.95,
+          "resamples": 10000,
+          "undefined": 0
+        }
+      },
+      "d1 - d3": {
+        "execution_accuracy": {
+          "estimate": 0.07333333333333336,
+          "low": 0.013333333333333308,
+          "high": 0.13333333333333336,
+          "confidence": 0.95,
+          "resamples": 10000,
+          "undefined": 0
+        },
+        "accuracy_up_to_format": {
+          "estimate": 0.006666666666666599,
+          "low": -0.046666666666666745,
+          "high": 0.06666666666666665,
+          "confidence": 0.95,
+          "resamples": 10000,
+          "undefined": 0
+        }
+      },
+      "d1 - d4": {
+        "execution_accuracy": {
+          "estimate": 0.10000000000000003,
+          "low": 0.040000000000000036,
+          "high": 0.16000000000000003,
+          "confidence": 0.95,
+          "resamples": 10000,
+          "undefined": 0
+        },
+        "accuracy_up_to_format": {
+          "estimate": 0.020000000000000018,
+          "low": -0.040000000000000036,
+          "high": 0.07999999999999996,
+          "confidence": 0.95,
+          "resamples": 10000,
+          "undefined": 0
+        }
+      },
+      "d1 - d5": {
+        "execution_accuracy": {
+          "estimate": 0.06666666666666676,
+          "low": 0.013333333333333308,
+          "high": 0.1266666666666666,
+          "confidence": 0.95,
+          "resamples": 10000,
+          "undefined": 0
+        },
+        "accuracy_up_to_format": {
+          "estimate": -0.00666666666666671,
+          "low": -0.06666666666666665,
+          "high": 0.053333333333333344,
+          "confidence": 0.95,
+          "resamples": 10000,
+          "undefined": 0
+        }
+      }
+    }
+  },
+  "answers_detail": [
+    {
+      "question_id": 17,
+      "db_id": "california_schools",
+      "difficulty": "simple",
+      "category": "computation",
+      "subkind": null,
+      "relation": "same_row_count",
+      "differences": {
+        "computation": {
+          "missing": [
+            "rank"
+          ],
+          "extra": [],
+          "distinct": [
+            false,
+            false
+          ]
+        },
+        "output": {
+          "missing": [],
+          "extra": [],
+          "width": [
+            3,
+            2
+          ]
+        },
+        "order_limit": {
+          "limit": [
+            null,
+            null
+          ],
+          "order_differs": true
+        }
+      }
+    },
+    {
+      "question_id": 23,
+      "db_id": "california_schools",
+      "difficulty": "moderate",
+      "category": "output",
+      "subkind": null,
+      "relation": "overlap",
+      "differences": {
+        "output": {
+          "missing": [
+            "school"
+          ],
+          "extra": [
+            "school name"
+          ],
+          "width": [
+            2,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 24,
+      "db_id": "california_schools",
+      "difficulty": "moderate",
+      "category": "tables",
+      "subkind": null,
+      "relation": "overlap",
+      "differences": {
+        "tables": {
+          "missing": [],
+          "extra": [
+            "schools"
+          ]
+        },
+        "joins": {
+          "missing": [],
+          "extra": [
+            "cdscode"
+          ]
+        },
+        "filters": {
+          "kind": "different_column",
+          "missing_columns": [
+            "enrollment (k-12)",
+            "free meal count (k-12)"
+          ],
+          "extra_columns": [
+            "percent (%) eligible free (k-12)"
+          ],
+          "missing_values": [],
+          "extra_values": []
+        },
+        "output": {
+          "missing": [
+            "school name"
+          ],
+          "extra": [
+            "school"
+          ],
+          "width": [
+            1,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 25,
+      "db_id": "california_schools",
+      "difficulty": "moderate",
+      "category": "tables",
+      "subkind": null,
+      "relation": "superset",
+      "differences": {
+        "tables": {
+          "missing": [
+            "frpm"
+          ],
+          "extra": [
+            "schools"
+          ]
+        },
+        "filters": {
+          "kind": "different_column",
+          "missing_columns": [
+            "district name"
+          ],
+          "extra_columns": [
+            "county"
+          ],
+          "missing_values": [
+            "'Riverside%'",
+            "0"
+          ],
+          "extra_values": [
+            "'Riverside'"
+          ]
+        },
+        "output": {
+          "missing": [
+            "charter funding type",
+            "sname"
+          ],
+          "extra": [
+            "fundingtype",
+            "school"
+          ],
+          "width": [
+            2,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 26,
+      "db_id": "california_schools",
+      "difficulty": "moderate",
+      "category": "filter",
+      "subkind": "different_column",
+      "relation": "superset",
+      "differences": {
+        "filters": {
+          "kind": "different_column",
+          "missing_columns": [
+            "county",
+            "free meal count (ages 5-17)"
+          ],
+          "extra_columns": [
+            "county name",
+            "frpm count (ages 5-17)"
+          ],
+          "missing_values": [],
+          "extra_values": []
+        },
+        "output": {
+          "missing": [
+            "school name"
+          ],
+          "extra": [
+            "school"
+          ],
+          "width": [
+            5,
+            5
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 28,
+      "db_id": "california_schools",
+      "difficulty": "challenging",
+      "category": "no_result",
+      "subkind": "refused",
+      "relation": null,
+      "differences": {}
+    },
+    {
+      "question_id": 32,
+      "db_id": "california_schools",
+      "difficulty": "moderate",
+      "category": "filter",
+      "subkind": "different_value",
+      "relation": "same_row_count",
+      "differences": {
+        "filters": {
+          "kind": "different_value",
+          "missing_columns": [],
+          "extra_columns": [],
+          "missing_values": [
+            "66"
+          ],
+          "extra_values": [
+            "'66'"
+          ]
+        },
+        "output": {
+          "missing": [],
+          "extra": [
+            "school name"
+          ],
+          "width": [
+            1,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 46,
+      "db_id": "california_schools",
+      "difficulty": "simple",
+      "category": "format_only",
+      "subkind": "columns",
+      "relation": "same_row_count",
+      "differences": {
+        "output": {
+          "missing": [],
+          "extra": [
+            "enrollment (k-12)"
+          ],
+          "width": [
+            1,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 77,
+      "db_id": "california_schools",
+      "difficulty": "moderate",
+      "category": "output",
+      "subkind": null,
+      "relation": "overlap",
+      "differences": {
+        "output": {
+          "missing": [
+            "school"
+          ],
+          "extra": [
+            "school name"
+          ],
+          "width": [
+            2,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 94,
+      "db_id": "financial",
+      "difficulty": "challenging",
+      "category": "no_result",
+      "subkind": "refused",
+      "relation": null,
+      "differences": {}
+    },
+    {
+      "question_id": 95,
+      "db_id": "financial",
+      "difficulty": "moderate",
+      "category": "no_result",
+      "subkind": "error",
+      "relation": null,
+      "differences": {}
+    },
+    {
+      "question_id": 99,
+      "db_id": "financial",
+      "difficulty": "moderate",
+      "category": "format_only",
+      "subkind": "columns",
+      "relation": "same_row_count",
+      "differences": {
+        "filters": {
+          "kind": "extra",
+          "missing_columns": [],
+          "extra_columns": [
+            "amount"
+          ],
+          "missing_values": [
+            "'%Y'",
+            "'1993'"
+          ],
+          "extra_values": [
+            "'1993-01-01'",
+            "'1993-12-31'"
+          ]
+        },
+        "computation": {
+          "missing": [],
+          "extra": [
+            "max"
+          ],
+          "distinct": [
+            false,
+            false
+          ]
+        },
+        "output": {
+          "missing": [],
+          "extra": [
+            "amount",
+            "date"
+          ],
+          "width": [
+            1,
+            3
+          ]
+        },
+        "order_limit": {
+          "limit": [
+            1,
+            null
+          ],
+          "order_differs": true
+        }
+      }
+    },
+    {
+      "question_id": 115,
+      "db_id": "financial",
+      "difficulty": "challenging",
+      "category": "tables",
+      "subkind": null,
+      "relation": "disjoint",
+      "differences": {
+        "tables": {
+          "missing": [],
+          "extra": [
+            "account"
+          ]
+        },
+        "output": {
+          "missing": [
+            "client_id"
+          ],
+          "extra": [],
+          "width": [
+            1,
+            1
+          ]
+        },
+        "order_limit": {
+          "limit": [
+            1,
+            null
+          ],
+          "order_differs": true
+        }
+      }
+    },
+    {
+      "question_id": 116,
+      "db_id": "financial",
+      "difficulty": "challenging",
+      "category": "no_result",
+      "subkind": "refused",
+      "relation": null,
+      "differences": {}
+    },
+    {
+      "question_id": 120,
+      "db_id": "financial",
+      "difficulty": "moderate",
+      "category": "format_only",
+      "subkind": "columns",
+      "relation": "same_row_count",
+      "differences": {
+        "tables": {
+          "missing": [],
+          "extra": [
+            "client",
+            "disp"
+          ]
+        },
+        "joins": {
+          "missing": [],
+          "extra": [
+            "account_id",
+            "client_id"
+          ]
+        },
+        "filters": {
+          "kind": "different_value",
+          "missing_columns": [],
+          "extra_columns": [],
+          "missing_values": [
+            "1995",
+            "2000"
+          ],
+          "extra_values": [
+            "'1995-01-01'",
+            "'2000-12-31'"
+          ]
+        },
+        "output": {
+          "missing": [],
+          "extra": [
+            "client_id"
+          ],
+          "width": [
+            2,
+            3
+          ]
+        },
+        "order_limit": {
+          "limit": [
+            null,
+            null
+          ],
+          "order_differs": true
+        }
+      }
+    },
+    {
+      "question_id": 129,
+      "db_id": "financial",
+      "difficulty": "moderate",
+      "category": "computation",
+      "subkind": null,
+      "relation": "same_row_count",
+      "differences": {
+        "computation": {
+          "missing": [],
+          "extra": [],
+          "distinct": [
+            true,
+            false
+          ]
+        },
+        "output": {
+          "missing": [],
+          "extra": [
+            "amount"
+          ],
+          "width": [
+            1,
+            2
+          ]
+        },
+        "order_limit": {
+          "limit": [
+            10,
+            10
+          ],
+          "order_differs": true
+        }
+      }
+    },
+    {
+      "question_id": 159,
+      "db_id": "financial",
+      "difficulty": "simple",
+      "category": "format_only",
+      "subkind": "columns",
+      "relation": "same_row_count",
+      "differences": {
+        "tables": {
+          "missing": [
+            "account",
+            "client"
+          ],
+          "extra": []
+        },
+        "joins": {
+          "missing": [
+            "client_id"
+          ],
+          "extra": []
+        },
+        "output": {
+          "missing": [],
+          "extra": [
+            "account",
+            "account_id",
+            "amount",
+            "balance",
+            "bank",
+            "date",
+            "k_symbol",
+            "operation",
+            "type"
+          ],
+          "width": [
+            1,
+            10
+          ]
+        },
+        "order_limit": {
+          "limit": [
+            null,
+            null
+          ],
+          "order_differs": true
+        }
+      }
+    },
+    {
+      "question_id": 173,
+      "db_id": "financial",
+      "difficulty": "challenging",
+      "category": "tables",
+      "subkind": null,
+      "relation": "same_row_count",
+      "differences": {
+        "tables": {
+          "missing": [
+            "order"
+          ],
+          "extra": []
+        },
+        "joins": {
+          "missing": [
+            "account_id"
+          ],
+          "extra": []
+        },
+        "filters": {
+          "kind": "missing",
+          "missing_columns": [
+            "total_amount"
+          ],
+          "extra_columns": [],
+          "missing_values": [
+            "3539"
+          ],
+          "extra_values": []
+        },
+        "computation": {
+          "missing": [
+            "sum"
+          ],
+          "extra": [],
+          "distinct": [
+            false,
+            false
+          ]
+        },
+        "output": {
+          "missing": [
+            "k_symbol"
+          ],
+          "extra": [],
+          "width": [
+            2,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 189,
+      "db_id": "financial",
+      "difficulty": "moderate",
+      "category": "no_result",
+      "subkind": "refused",
+      "relation": null,
+      "differences": {}
+    },
+    {
+      "question_id": 192,
+      "db_id": "financial",
+      "difficulty": "moderate",
+      "category": "filter",
+      "subkind": "different_value",
+      "relation": "disjoint",
+      "differences": {
+        "filters": {
+          "kind": "different_value",
+          "missing_columns": [],
+          "extra_columns": [],
+          "missing_values": [
+            "'D'"
+          ],
+          "extra_values": []
+        }
+      }
+    },
+    {
+      "question_id": 194,
+      "db_id": "financial",
+      "difficulty": "moderate",
+      "category": "computation",
+      "subkind": null,
+      "relation": "disjoint",
+      "differences": {
+        "computation": {
+          "missing": [
+            "sub"
+          ],
+          "extra": [],
+          "distinct": [
+            false,
+            false
+          ]
+        },
+        "order_limit": {
+          "limit": [
+            null,
+            null
+          ],
+          "order_differs": true
+        }
+      }
+    },
+    {
+      "question_id": 197,
+      "db_id": "toxicology",
+      "difficulty": "moderate",
+      "category": "filter",
+      "subkind": "missing",
+      "relation": "disjoint",
+      "differences": {
+        "filters": {
+          "kind": "missing",
+          "missing_columns": [
+            "element"
+          ],
+          "extra_columns": [],
+          "missing_values": [
+            "'o'"
+          ],
+          "extra_values": []
+        },
+        "computation": {
+          "missing": [
+            "avg",
+            "count"
+          ],
+          "extra": [
+            "count_distinct",
+            "div",
+            "sum"
+          ],
+          "distinct": [
+            false,
+            false
+          ]
+        },
+        "output": {
+          "missing": [
+            "oxygen_count"
+          ],
+          "extra": [
+            "element",
+            "molecule_id"
+          ],
+          "width": [
+            1,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 198,
+      "db_id": "toxicology",
+      "difficulty": "challenging",
+      "category": "filter",
+      "subkind": "missing",
+      "relation": "disjoint",
+      "differences": {
+        "filters": {
+          "kind": "missing",
+          "missing_columns": [
+            "bond_type"
+          ],
+          "extra_columns": [],
+          "missing_values": [
+            "'-'"
+          ],
+          "extra_values": []
+        },
+        "computation": {
+          "missing": [
+            "avg"
+          ],
+          "extra": [
+            "div",
+            "sum"
+          ],
+          "distinct": [
+            false,
+            false
+          ]
+        },
+        "output": {
+          "missing": [
+            "single_bond_count"
+          ],
+          "extra": [
+            "atom_id",
+            "bond_type"
+          ],
+          "width": [
+            1,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 212,
+      "db_id": "toxicology",
+      "difficulty": "challenging",
+      "category": "computation",
+      "subkind": null,
+      "relation": "same_row_count",
+      "differences": {
+        "computation": {
+          "missing": [
+            "count_distinct",
+            "count_distinct"
+          ],
+          "extra": [
+            "count"
+          ],
+          "distinct": [
+            false,
+            false
+          ]
+        },
+        "output": {
+          "missing": [],
+          "extra": [],
+          "width": [
+            1,
+            2
+          ]
+        },
+        "order_limit": {
+          "limit": [
+            null,
+            1
+          ],
+          "order_differs": true
+        }
+      }
+    },
+    {
+      "question_id": 215,
+      "db_id": "toxicology",
+      "difficulty": "challenging",
+      "category": "tables",
+      "subkind": null,
+      "relation": "same_row_count",
+      "differences": {
+        "tables": {
+          "missing": [
+            "connected"
+          ],
+          "extra": []
+        },
+        "joins": {
+          "missing": [
+            "atom_id",
+            "bond_id"
+          ],
+          "extra": [
+            "molecule_id"
+          ]
+        },
+        "filters": {
+          "kind": "extra",
+          "missing_columns": [],
+          "extra_columns": [
+            "element"
+          ],
+          "missing_values": [],
+          "extra_values": [
+            "'i'",
+            "'s'"
+          ]
+        },
+        "computation": {
+          "missing": [
+            "count_distinct"
+          ],
+          "extra": [],
+          "distinct": [
+            false,
+            false
+          ]
+        },
+        "output": {
+          "missing": [
+            "element"
+          ],
+          "extra": [],
+          "width": [
+            2,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 218,
+      "db_id": "toxicology",
+      "difficulty": "challenging",
+      "category": "join",
+      "subkind": null,
+      "relation": "disjoint",
+      "differences": {
+        "joins": {
+          "missing": [
+            "molecule_id"
+          ],
+          "extra": []
+        },
+        "filters": {
+          "kind": "extra",
+          "missing_columns": [],
+          "extra_columns": [
+            "element"
+          ],
+          "missing_values": [],
+          "extra_values": [
+            "'f'"
+          ]
+        },
+        "computation": {
+          "missing": [
+            "count_distinct",
+            "count_distinct"
+          ],
+          "extra": [
+            "count",
+            "sum"
+          ],
+          "distinct": [
+            false,
+            true
+          ]
+        },
+        "output": {
+          "missing": [
+            "element"
+          ],
+          "extra": [],
+          "width": [
+            1,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 219,
+      "db_id": "toxicology",
+      "difficulty": "challenging",
+      "category": "tables",
+      "subkind": null,
+      "relation": "disjoint",
+      "differences": {
+        "tables": {
+          "missing": [
+            "atom"
+          ],
+          "extra": []
+        },
+        "filters": {
+          "kind": "different_column",
+          "missing_columns": [
+            "bond_type"
+          ],
+          "extra_columns": [
+            "label"
+          ],
+          "missing_values": [
+            "'#'"
+          ],
+          "extra_values": [
+            "'+'"
+          ]
+        },
+        "computation": {
+          "missing": [
+            "count_distinct",
+            "count_distinct"
+          ],
+          "extra": [
+            "count",
+            "sum"
+          ],
+          "distinct": [
+            false,
+            false
+          ]
+        },
+        "output": {
+          "missing": [
+            "label",
+            "molecule_id"
+          ],
+          "extra": [
+            "bond_id",
+            "bond_type"
+          ],
+          "width": [
+            1,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 228,
+      "db_id": "toxicology",
+      "difficulty": "moderate",
+      "category": "format_only",
+      "subkind": "rounding",
+      "relation": "disjoint",
+      "differences": {
+        "computation": {
+          "missing": [
+            "count"
+          ],
+          "extra": [
+            "sum"
+          ],
+          "distinct": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 231,
+      "db_id": "toxicology",
+      "difficulty": "challenging",
+      "category": "no_result",
+      "subkind": "refused",
+      "relation": null,
+      "differences": {}
+    },
+    {
+      "question_id": 234,
+      "db_id": "toxicology",
+      "difficulty": "moderate",
+      "category": "filter",
+      "subkind": "different_value",
+      "relation": "disjoint",
+      "differences": {
+        "filters": {
+          "kind": "different_value",
+          "missing_columns": [],
+          "extra_columns": [],
+          "missing_values": [
+            "'_1'",
+            "'_2'"
+          ],
+          "extra_values": [
+            "'TR009_12'"
+          ]
+        },
+        "output": {
+          "missing": [
+            "bond_id"
+          ],
+          "extra": [],
+          "width": [
+            1,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 239,
+      "db_id": "toxicology",
+      "difficulty": "simple",
+      "category": "no_result",
+      "subkind": "refused",
+      "relation": null,
+      "differences": {}
+    },
+    {
+      "question_id": 244,
+      "db_id": "toxicology",
+      "difficulty": "moderate",
+      "category": "format_only",
+      "subkind": "columns",
+      "relation": "same_row_count",
+      "differences": {
+        "computation": {
+          "missing": [
+            "count"
+          ],
+          "extra": [],
+          "distinct": [
+            false,
+            false
+          ]
+        },
+        "output": {
+          "missing": [],
+          "extra": [
+            "cnt",
+            "molecule_id"
+          ],
+          "width": [
+            1,
+            3
+          ]
+        },
+        "order_limit": {
+          "limit": [
+            null,
+            1
+          ],
+          "order_differs": true
+        }
+      }
+    },
+    {
+      "question_id": 281,
+      "db_id": "toxicology",
+      "difficulty": "challenging",
+      "category": "computation",
+      "subkind": null,
+      "relation": "more_rows",
+      "differences": {
+        "computation": {
+          "missing": [],
+          "extra": [
+            "count"
+          ],
+          "distinct": [
+            true,
+            false
+          ]
+        },
+        "output": {
+          "missing": [],
+          "extra": [],
+          "width": [
+            1,
+            2
+          ]
+        },
+        "order_limit": {
+          "limit": [
+            null,
+            null
+          ],
+          "order_differs": true
+        }
+      }
+    },
+    {
+      "question_id": 340,
+      "db_id": "card_games",
+      "difficulty": "simple",
+      "category": "output",
+      "subkind": null,
+      "relation": "disjoint",
+      "differences": {
+        "output": {
+          "missing": [
+            "id"
+          ],
+          "extra": [
+            "name"
+          ],
+          "width": [
+            1,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 341,
+      "db_id": "card_games",
+      "difficulty": "simple",
+      "category": "filter",
+      "subkind": "extra",
+      "relation": "more_rows",
+      "differences": {
+        "filters": {
+          "kind": "extra",
+          "missing_columns": [],
+          "extra_columns": [
+            "cardkingdomfoilid"
+          ],
+          "missing_values": [],
+          "extra_values": []
+        },
+        "output": {
+          "missing": [],
+          "extra": [
+            "name"
+          ],
+          "width": [
+            1,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 347,
+      "db_id": "card_games",
+      "difficulty": "moderate",
+      "category": "other",
+      "subkind": null,
+      "relation": "superset",
+      "differences": {}
+    },
+    {
+      "question_id": 349,
+      "db_id": "card_games",
+      "difficulty": "moderate",
+      "category": "filter",
+      "subkind": "missing",
+      "relation": "disjoint",
+      "differences": {
+        "filters": {
+          "kind": "missing",
+          "missing_columns": [
+            "artist",
+            "ispromo",
+            "uuid"
+          ],
+          "extra_columns": [],
+          "missing_values": [
+            "1"
+          ],
+          "extra_values": []
+        },
+        "computation": {
+          "missing": [
+            "count_distinct",
+            "count_distinct",
+            "max"
+          ],
+          "extra": [
+            "count"
+          ],
+          "distinct": [
+            false,
+            false
+          ]
+        },
+        "order_limit": {
+          "limit": [
+            1,
+            1
+          ],
+          "order_differs": true
+        }
+      }
+    },
+    {
+      "question_id": 383,
+      "db_id": "card_games",
+      "difficulty": "simple",
+      "category": "computation",
+      "subkind": null,
+      "relation": "disjoint",
+      "differences": {
+        "computation": {
+          "missing": [
+            "count"
+          ],
+          "extra": [
+            "count_distinct"
+          ],
+          "distinct": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 402,
+      "db_id": "card_games",
+      "difficulty": "moderate",
+      "category": "no_result",
+      "subkind": "error",
+      "relation": null,
+      "differences": {}
+    },
+    {
+      "question_id": 405,
+      "db_id": "card_games",
+      "difficulty": "moderate",
+      "category": "filter",
+      "subkind": "different_value",
+      "relation": "disjoint",
+      "differences": {
+        "filters": {
+          "kind": "different_value",
+          "missing_columns": [],
+          "extra_columns": [],
+          "missing_values": [
+            "'Portuguese (Brazil)'"
+          ],
+          "extra_values": [
+            "'Portuguese (Brasil)'"
+          ]
+        },
+        "output": {
+          "missing": [
+            "id"
+          ],
+          "extra": [],
+          "width": [
+            1,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 412,
+      "db_id": "card_games",
+      "difficulty": "moderate",
+      "category": "join",
+      "subkind": null,
+      "relation": "empty",
+      "differences": {
+        "joins": {
+          "missing": [],
+          "extra": [
+            "uuid"
+          ]
+        },
+        "filters": {
+          "kind": "different_column",
+          "missing_columns": [
+            "types",
+            "uuid"
+          ],
+          "extra_columns": [
+            "type"
+          ],
+          "missing_values": [],
+          "extra_values": []
+        }
+      }
+    },
+    {
+      "question_id": 459,
+      "db_id": "card_games",
+      "difficulty": "moderate",
+      "category": "computation",
+      "subkind": null,
+      "relation": "more_rows",
+      "differences": {
+        "computation": {
+          "missing": [],
+          "extra": [
+            "max"
+          ],
+          "distinct": [
+            false,
+            false
+          ]
+        },
+        "output": {
+          "missing": [],
+          "extra": [
+            "convertedmanacost"
+          ],
+          "width": [
+            1,
+            2
+          ]
+        },
+        "order_limit": {
+          "limit": [
+            1,
+            null
+          ],
+          "order_differs": true
+        }
+      }
+    },
+    {
+      "question_id": 473,
+      "db_id": "card_games",
+      "difficulty": "moderate",
+      "category": "computation",
+      "subkind": null,
+      "relation": "disjoint",
+      "differences": {
+        "computation": {
+          "missing": [],
+          "extra": [],
+          "distinct": [
+            false,
+            true
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 484,
+      "db_id": "card_games",
+      "difficulty": "moderate",
+      "category": "filter",
+      "subkind": "extra",
+      "relation": "overlap",
+      "differences": {
+        "filters": {
+          "kind": "extra",
+          "missing_columns": [],
+          "extra_columns": [
+            "convertedmanacost"
+          ],
+          "missing_values": [],
+          "extra_values": []
+        },
+        "computation": {
+          "missing": [],
+          "extra": [
+            "max"
+          ],
+          "distinct": [
+            false,
+            false
+          ]
+        },
+        "order_limit": {
+          "limit": [
+            null,
+            null
+          ],
+          "order_differs": true
+        }
+      }
+    },
+    {
+      "question_id": 530,
+      "db_id": "card_games",
+      "difficulty": "moderate",
+      "category": "computation",
+      "subkind": null,
+      "relation": "disjoint",
+      "differences": {
+        "computation": {
+          "missing": [],
+          "extra": [],
+          "distinct": [
+            true,
+            false
+          ]
+        },
+        "order_limit": {
+          "limit": [
+            null,
+            null
+          ],
+          "order_differs": true
+        }
+      }
+    },
+    {
+      "question_id": 531,
+      "db_id": "codebase_community",
+      "difficulty": "simple",
+      "category": "filter",
+      "subkind": "missing",
+      "relation": "more_rows",
+      "differences": {
+        "filters": {
+          "kind": "missing",
+          "missing_columns": [
+            "reputation"
+          ],
+          "extra_columns": [],
+          "missing_values": [],
+          "extra_values": []
+        },
+        "computation": {
+          "missing": [
+            "max"
+          ],
+          "extra": [],
+          "distinct": [
+            false,
+            false
+          ]
+        },
+        "output": {
+          "missing": [],
+          "extra": [
+            "reputation"
+          ],
+          "width": [
+            1,
+            2
+          ]
+        },
+        "order_limit": {
+          "limit": [
+            null,
+            null
+          ],
+          "order_differs": true
+        }
+      }
+    },
+    {
+      "question_id": 533,
+      "db_id": "codebase_community",
+      "difficulty": "simple",
+      "category": "output",
+      "subkind": null,
+      "relation": "disjoint",
+      "differences": {
+        "output": {
+          "missing": [
+            "id"
+          ],
+          "extra": [],
+          "width": [
+            1,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 557,
+      "db_id": "codebase_community",
+      "difficulty": "moderate",
+      "category": "format_only",
+      "subkind": "rounding",
+      "relation": "disjoint",
+      "differences": {}
+    },
+    {
+      "question_id": 581,
+      "db_id": "codebase_community",
+      "difficulty": "moderate",
+      "category": "filter",
+      "subkind": "different_value",
+      "relation": "empty",
+      "differences": {
+        "filters": {
+          "kind": "different_value",
+          "missing_columns": [],
+          "extra_columns": [],
+          "missing_values": [
+            "'Open source tools for visualizing multi-dimensional data?'"
+          ],
+          "extra_values": [
+            "'Open source tools for visualizing multi-dimensional data'"
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 584,
+      "db_id": "codebase_community",
+      "difficulty": "moderate",
+      "category": "tables",
+      "subkind": null,
+      "relation": "disjoint",
+      "differences": {
+        "tables": {
+          "missing": [],
+          "extra": [
+            "comments"
+          ]
+        },
+        "filters": {
+          "kind": "extra",
+          "missing_columns": [],
+          "extra_columns": [
+            "userid"
+          ],
+          "missing_values": [],
+          "extra_values": []
+        },
+        "computation": {
+          "missing": [],
+          "extra": [],
+          "distinct": [
+            false,
+            true
+          ]
+        },
+        "output": {
+          "missing": [
+            "comment"
+          ],
+          "extra": [
+            "text"
+          ],
+          "width": [
+            1,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 587,
+      "db_id": "codebase_community",
+      "difficulty": "moderate",
+      "category": "tables",
+      "subkind": null,
+      "relation": "disjoint",
+      "differences": {
+        "tables": {
+          "missing": [
+            "comments"
+          ],
+          "extra": [
+            "posthistory"
+          ]
+        },
+        "filters": {
+          "kind": "different_value",
+          "missing_columns": [],
+          "extra_columns": [],
+          "missing_values": [
+            "'<humor>'"
+          ],
+          "extra_values": [
+            "'%<humor>%'"
+          ]
+        },
+        "output": {
+          "missing": [
+            "viewcount"
+          ],
+          "extra": [],
+          "width": [
+            3,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 595,
+      "db_id": "codebase_community",
+      "difficulty": "moderate",
+      "category": "tables",
+      "subkind": null,
+      "relation": "overlap",
+      "differences": {
+        "tables": {
+          "missing": [
+            "posts"
+          ],
+          "extra": []
+        },
+        "joins": {
+          "missing": [
+            "id=postid"
+          ],
+          "extra": []
+        },
+        "filters": {
+          "kind": "different_column",
+          "missing_columns": [
+            "posthistorytypeid",
+            "viewcount"
+          ],
+          "extra_columns": [
+            "views"
+          ],
+          "missing_values": [],
+          "extra_values": []
+        },
+        "computation": {
+          "missing": [
+            "count_distinct"
+          ],
+          "extra": [
+            "count"
+          ],
+          "distinct": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 604,
+      "db_id": "codebase_community",
+      "difficulty": "moderate",
+      "category": "filter",
+      "subkind": "extra",
+      "relation": "disjoint",
+      "differences": {
+        "filters": {
+          "kind": "extra",
+          "missing_columns": [],
+          "extra_columns": [
+            "owneruserid"
+          ],
+          "missing_values": [],
+          "extra_values": []
+        },
+        "computation": {
+          "missing": [
+            "avg",
+            "avg"
+          ],
+          "extra": [
+            "count",
+            "div",
+            "div",
+            "sum",
+            "sum"
+          ],
+          "distinct": [
+            false,
+            false
+          ]
+        },
+        "output": {
+          "missing": [],
+          "extra": [
+            "id"
+          ],
+          "width": [
+            2,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 634,
+      "db_id": "codebase_community",
+      "difficulty": "challenging",
+      "category": "format_only",
+      "subkind": "columns",
+      "relation": "same_row_count",
+      "differences": {
+        "tables": {
+          "missing": [
+            "posthistory"
+          ],
+          "extra": []
+        },
+        "joins": {
+          "missing": [
+            "id=postid",
+            "id=userid"
+          ],
+          "extra": [
+            "id=owneruserid"
+          ]
+        },
+        "output": {
+          "missing": [],
+          "extra": [
+            "viewcount"
+          ],
+          "width": [
+            1,
+            2
+          ]
+        },
+        "order_limit": {
+          "limit": [
+            1,
+            null
+          ],
+          "order_differs": true
+        }
+      }
+    },
+    {
+      "question_id": 639,
+      "db_id": "codebase_community",
+      "difficulty": "challenging",
+      "category": "tables",
+      "subkind": null,
+      "relation": "disjoint",
+      "differences": {
+        "tables": {
+          "missing": [
+            "posthistory",
+            "tags"
+          ],
+          "extra": [
+            "posts"
+          ]
+        },
+        "joins": {
+          "missing": [
+            "excerptpostid=postid",
+            "id=userid"
+          ],
+          "extra": [
+            "id=owneruserid"
+          ]
+        },
+        "computation": {
+          "missing": [
+            "sum"
+          ],
+          "extra": [
+            "count"
+          ],
+          "distinct": [
+            false,
+            false
+          ]
+        },
+        "output": {
+          "missing": [
+            "id",
+            "tagname"
+          ],
+          "extra": [
+            "tags"
+          ],
+          "width": [
+            1,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 640,
+      "db_id": "codebase_community",
+      "difficulty": "moderate",
+      "category": "tables",
+      "subkind": null,
+      "relation": "disjoint",
+      "differences": {
+        "tables": {
+          "missing": [
+            "posthistory"
+          ],
+          "extra": []
+        },
+        "joins": {
+          "missing": [
+            "id=postid",
+            "id=userid"
+          ],
+          "extra": [
+            "id=owneruserid"
+          ]
+        },
+        "filters": {
+          "kind": "extra",
+          "missing_columns": [],
+          "extra_columns": [
+            "displayname"
+          ],
+          "missing_values": [],
+          "extra_values": [
+            "'Amos'",
+            "'Mornington'"
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 672,
+      "db_id": "codebase_community",
+      "difficulty": "moderate",
+      "category": "computation",
+      "subkind": null,
+      "relation": "disjoint",
+      "differences": {
+        "computation": {
+          "missing": [
+            "count"
+          ],
+          "extra": [
+            "count_distinct"
+          ],
+          "distinct": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 694,
+      "db_id": "codebase_community",
+      "difficulty": "moderate",
+      "category": "tables",
+      "subkind": null,
+      "relation": "disjoint",
+      "differences": {
+        "tables": {
+          "missing": [
+            "users"
+          ],
+          "extra": []
+        },
+        "joins": {
+          "missing": [
+            "id=owneruserid"
+          ],
+          "extra": []
+        },
+        "output": {
+          "missing": [
+            "displayname"
+          ],
+          "extra": [
+            "userdisplayname"
+          ],
+          "width": [
+            2,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 710,
+      "db_id": "codebase_community",
+      "difficulty": "simple",
+      "category": "output",
+      "subkind": null,
+      "relation": "disjoint",
+      "differences": {
+        "output": {
+          "missing": [
+            "id"
+          ],
+          "extra": [],
+          "width": [
+            1,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 726,
+      "db_id": "superhero",
+      "difficulty": "moderate",
+      "category": "order_limit",
+      "subkind": null,
+      "relation": "disjoint",
+      "differences": {
+        "order_limit": {
+          "limit": [
+            null,
+            null
+          ],
+          "order_differs": true
+        }
+      }
+    },
+    {
+      "question_id": 751,
+      "db_id": "superhero",
+      "difficulty": "moderate",
+      "category": "computation",
+      "subkind": null,
+      "relation": "disjoint",
+      "differences": {
+        "computation": {
+          "missing": [],
+          "extra": [],
+          "distinct": [
+            false,
+            true
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 758,
+      "db_id": "superhero",
+      "difficulty": "moderate",
+      "category": "format_only",
+      "subkind": "columns",
+      "relation": "more_rows",
+      "differences": {
+        "computation": {
+          "missing": [],
+          "extra": [],
+          "distinct": [
+            true,
+            false
+          ]
+        },
+        "output": {
+          "missing": [],
+          "extra": [
+            "superhero_name"
+          ],
+          "width": [
+            1,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 769,
+      "db_id": "superhero",
+      "difficulty": "challenging",
+      "category": "filter",
+      "subkind": "different_value",
+      "relation": "empty",
+      "differences": {
+        "filters": {
+          "kind": "different_value",
+          "missing_columns": [],
+          "extra_columns": [],
+          "missing_values": [
+            "'Durability'"
+          ],
+          "extra_values": [
+            "'durability'"
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 772,
+      "db_id": "superhero",
+      "difficulty": "challenging",
+      "category": "tables",
+      "subkind": null,
+      "relation": "disjoint",
+      "differences": {
+        "tables": {
+          "missing": [],
+          "extra": [
+            "colour"
+          ]
+        },
+        "joins": {
+          "missing": [],
+          "extra": [
+            "eye_colour_id=id",
+            "hair_colour_id=id",
+            "id=skin_colour_id"
+          ]
+        },
+        "output": {
+          "missing": [
+            "eye_colour_id",
+            "hair_colour_id",
+            "skin_colour_id"
+          ],
+          "extra": [
+            "colour"
+          ],
+          "width": [
+            3,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 798,
+      "db_id": "superhero",
+      "difficulty": "moderate",
+      "category": "format_only",
+      "subkind": "columns",
+      "relation": "same_row_count",
+      "differences": {
+        "output": {
+          "missing": [],
+          "extra": [
+            "superhero_name"
+          ],
+          "width": [
+            1,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 847,
+      "db_id": "formula_1",
+      "difficulty": "simple",
+      "category": "filter",
+      "subkind": "extra",
+      "relation": "disjoint",
+      "differences": {
+        "filters": {
+          "kind": "extra",
+          "missing_columns": [],
+          "extra_columns": [
+            "q2"
+          ],
+          "missing_values": [],
+          "extra_values": [
+            "''"
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 865,
+      "db_id": "formula_1",
+      "difficulty": "moderate",
+      "category": "format_only",
+      "subkind": "columns",
+      "relation": "same_row_count",
+      "differences": {
+        "filters": {
+          "kind": "missing",
+          "missing_columns": [
+            "dob"
+          ],
+          "extra_columns": [],
+          "missing_values": [],
+          "extra_values": []
+        },
+        "output": {
+          "missing": [],
+          "extra": [
+            "dob"
+          ],
+          "width": [
+            2,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 866,
+      "db_id": "formula_1",
+      "difficulty": "moderate",
+      "category": "format_only",
+      "subkind": "columns",
+      "relation": "more_rows",
+      "differences": {
+        "computation": {
+          "missing": [],
+          "extra": [],
+          "distinct": [
+            true,
+            false
+          ]
+        },
+        "output": {
+          "missing": [],
+          "extra": [
+            "driverid"
+          ],
+          "width": [
+            3,
+            4
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 880,
+      "db_id": "formula_1",
+      "difficulty": "challenging",
+      "category": "format_only",
+      "subkind": "rounding",
+      "relation": "disjoint",
+      "differences": {
+        "tables": {
+          "missing": [],
+          "extra": [
+            "races"
+          ]
+        },
+        "joins": {
+          "missing": [],
+          "extra": [
+            "raceid"
+          ]
+        },
+        "filters": {
+          "kind": "extra",
+          "missing_columns": [],
+          "extra_columns": [
+            "raceid"
+          ],
+          "missing_values": [],
+          "extra_values": [
+            "853",
+            "854"
+          ]
+        },
+        "computation": {
+          "missing": [
+            "sum",
+            "sum",
+            "sum"
+          ],
+          "extra": [
+            "max",
+            "max",
+            "max"
+          ],
+          "distinct": [
+            false,
+            false
+          ]
+        },
+        "output": {
+          "missing": [
+            "fastestlapspeed"
+          ],
+          "extra": [
+            "speed"
+          ],
+          "width": [
+            1,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 884,
+      "db_id": "formula_1",
+      "difficulty": "moderate",
+      "category": "no_result",
+      "subkind": "refused",
+      "relation": null,
+      "differences": {}
+    },
+    {
+      "question_id": 896,
+      "db_id": "formula_1",
+      "difficulty": "challenging",
+      "category": "tables",
+      "subkind": null,
+      "relation": "disjoint",
+      "differences": {
+        "tables": {
+          "missing": [
+            "driverstandings"
+          ],
+          "extra": [
+            "results"
+          ]
+        },
+        "computation": {
+          "missing": [
+            "count"
+          ],
+          "extra": [
+            "sum"
+          ],
+          "distinct": [
+            false,
+            false
+          ]
+        },
+        "output": {
+          "missing": [
+            "driverstandingsid"
+          ],
+          "extra": [
+            "raceid"
+          ],
+          "width": [
+            1,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 897,
+      "db_id": "formula_1",
+      "difficulty": "moderate",
+      "category": "tables",
+      "subkind": null,
+      "relation": "disjoint",
+      "differences": {
+        "tables": {
+          "missing": [
+            "driverstandings"
+          ],
+          "extra": [
+            "results"
+          ]
+        },
+        "filters": {
+          "kind": "different_column",
+          "missing_columns": [
+            "wins"
+          ],
+          "extra_columns": [
+            "position"
+          ],
+          "missing_values": [],
+          "extra_values": []
+        },
+        "output": {
+          "missing": [
+            "points"
+          ],
+          "extra": [
+            "max_points"
+          ],
+          "width": [
+            4,
+            4
+          ]
+        },
+        "order_limit": {
+          "limit": [
+            1,
+            1
+          ],
+          "order_differs": true
+        }
+      }
+    },
+    {
+      "question_id": 898,
+      "db_id": "formula_1",
+      "difficulty": "simple",
+      "category": "format_only",
+      "subkind": "columns",
+      "relation": "disjoint",
+      "differences": {}
+    },
+    {
+      "question_id": 906,
+      "db_id": "formula_1",
+      "difficulty": "moderate",
+      "category": "tables",
+      "subkind": null,
+      "relation": "same_row_count",
+      "differences": {
+        "tables": {
+          "missing": [
+            "driverstandings"
+          ],
+          "extra": [
+            "results"
+          ]
+        },
+        "output": {
+          "missing": [],
+          "extra": [
+            "year"
+          ],
+          "width": [
+            2,
+            3
+          ]
+        },
+        "order_limit": {
+          "limit": [
+            1,
+            1
+          ],
+          "order_differs": true
+        }
+      }
+    },
+    {
+      "question_id": 930,
+      "db_id": "formula_1",
+      "difficulty": "simple",
+      "category": "tables",
+      "subkind": null,
+      "relation": "fewer_rows",
+      "differences": {
+        "tables": {
+          "missing": [],
+          "extra": [
+            "circuits"
+          ]
+        },
+        "joins": {
+          "missing": [],
+          "extra": [
+            "circuitid",
+            "driverid",
+            "raceid"
+          ]
+        },
+        "filters": {
+          "kind": "missing",
+          "missing_columns": [
+            "driverid",
+            "raceid"
+          ],
+          "extra_columns": [],
+          "missing_values": [
+            "1"
+          ],
+          "extra_values": []
+        },
+        "output": {
+          "missing": [],
+          "extra": [
+            "rank",
+            "year"
+          ],
+          "width": [
+            1,
+            3
+          ]
+        },
+        "order_limit": {
+          "limit": [
+            null,
+            1
+          ],
+          "order_differs": true
+        }
+      }
+    },
+    {
+      "question_id": 937,
+      "db_id": "formula_1",
+      "difficulty": "simple",
+      "category": "filter",
+      "subkind": "different_column",
+      "relation": "disjoint",
+      "differences": {
+        "filters": {
+          "kind": "different_column",
+          "missing_columns": [
+            "rank"
+          ],
+          "extra_columns": [
+            "position"
+          ],
+          "missing_values": [],
+          "extra_values": []
+        }
+      }
+    },
+    {
+      "question_id": 948,
+      "db_id": "formula_1",
+      "difficulty": "simple",
+      "category": "tables",
+      "subkind": null,
+      "relation": "disjoint",
+      "differences": {
+        "tables": {
+          "missing": [
+            "constructorstandings"
+          ],
+          "extra": [
+            "constructorresults"
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 951,
+      "db_id": "formula_1",
+      "difficulty": "simple",
+      "category": "tables",
+      "subkind": null,
+      "relation": "disjoint",
+      "differences": {
+        "tables": {
+          "missing": [
+            "constructorstandings"
+          ],
+          "extra": [
+            "constructorresults"
+          ]
+        },
+        "output": {
+          "missing": [
+            "raceid"
+          ],
+          "extra": [],
+          "width": [
+            1,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 964,
+      "db_id": "formula_1",
+      "difficulty": "simple",
+      "category": "filter",
+      "subkind": "different_value",
+      "relation": "empty",
+      "differences": {
+        "filters": {
+          "kind": "different_value",
+          "missing_columns": [],
+          "extra_columns": [],
+          "missing_values": [
+            "'American'"
+          ],
+          "extra_values": [
+            "'America'"
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 967,
+      "db_id": "formula_1",
+      "difficulty": "simple",
+      "category": "format_only",
+      "subkind": "columns",
+      "relation": "more_rows",
+      "differences": {
+        "output": {
+          "missing": [],
+          "extra": [
+            "code"
+          ],
+          "width": [
+            1,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 978,
+      "db_id": "formula_1",
+      "difficulty": "simple",
+      "category": "format_only",
+      "subkind": "columns",
+      "relation": "more_rows",
+      "differences": {
+        "tables": {
+          "missing": [],
+          "extra": [
+            "races"
+          ]
+        },
+        "joins": {
+          "missing": [],
+          "extra": [
+            "circuitid"
+          ]
+        },
+        "computation": {
+          "missing": [],
+          "extra": [
+            "count"
+          ],
+          "distinct": [
+            true,
+            false
+          ]
+        },
+        "output": {
+          "missing": [],
+          "extra": [
+            "raceid"
+          ],
+          "width": [
+            3,
+            4
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 989,
+      "db_id": "formula_1",
+      "difficulty": "moderate",
+      "category": "format_only",
+      "subkind": "columns",
+      "relation": "same_row_count",
+      "differences": {
+        "tables": {
+          "missing": [],
+          "extra": [
+            "drivers"
+          ]
+        },
+        "joins": {
+          "missing": [],
+          "extra": [
+            "driverid"
+          ]
+        },
+        "filters": {
+          "kind": "different_column",
+          "missing_columns": [
+            "time"
+          ],
+          "extra_columns": [
+            "positionorder"
+          ],
+          "missing_values": [
+            "'_:%:__.___'"
+          ],
+          "extra_values": [
+            "1"
+          ]
+        },
+        "output": {
+          "missing": [],
+          "extra": [
+            "forename",
+            "surname"
+          ],
+          "width": [
+            1,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 1002,
+      "db_id": "formula_1",
+      "difficulty": "moderate",
+      "category": "no_result",
+      "subkind": "refused",
+      "relation": null,
+      "differences": {}
+    },
+    {
+      "question_id": 1003,
+      "db_id": "formula_1",
+      "difficulty": "moderate",
+      "category": "format_only",
+      "subkind": "columns",
+      "relation": "same_row_count",
+      "differences": {
+        "tables": {
+          "missing": [
+            "status"
+          ],
+          "extra": []
+        },
+        "joins": {
+          "missing": [
+            "statusid"
+          ],
+          "extra": []
+        },
+        "computation": {
+          "missing": [
+            "count"
+          ],
+          "extra": [],
+          "distinct": [
+            false,
+            false
+          ]
+        },
+        "output": {
+          "missing": [],
+          "extra": [],
+          "width": [
+            1,
+            2
+          ]
+        },
+        "order_limit": {
+          "limit": [
+            1,
+            1
+          ],
+          "order_differs": true
+        }
+      }
+    },
+    {
+      "question_id": 1011,
+      "db_id": "formula_1",
+      "difficulty": "challenging",
+      "category": "computation",
+      "subkind": null,
+      "relation": "same_row_count",
+      "differences": {
+        "computation": {
+          "missing": [
+            "add",
+            "add",
+            "div",
+            "min",
+            "mul"
+          ],
+          "extra": [],
+          "distinct": [
+            false,
+            false
+          ]
+        },
+        "output": {
+          "missing": [
+            "driverid"
+          ],
+          "extra": [],
+          "width": [
+            3,
+            2
+          ]
+        },
+        "order_limit": {
+          "limit": [
+            20,
+            20
+          ],
+          "order_differs": true
+        }
+      }
+    },
+    {
+      "question_id": 1014,
+      "db_id": "formula_1",
+      "difficulty": "challenging",
+      "category": "tables",
+      "subkind": null,
+      "relation": "more_rows",
+      "differences": {
+        "tables": {
+          "missing": [
+            "results"
+          ],
+          "extra": [
+            "laptimes"
+          ]
+        },
+        "filters": {
+          "kind": "missing",
+          "missing_columns": [
+            "fastestlaptime"
+          ],
+          "extra_columns": [],
+          "missing_values": [],
+          "extra_values": []
+        },
+        "computation": {
+          "missing": [
+            "add",
+            "add",
+            "div",
+            "mul"
+          ],
+          "extra": [],
+          "distinct": [
+            false,
+            false
+          ]
+        },
+        "output": {
+          "missing": [
+            "fastestlaptime"
+          ],
+          "extra": [
+            "name",
+            "time"
+          ],
+          "width": [
+            1,
+            2
+          ]
+        },
+        "order_limit": {
+          "limit": [
+            1,
+            null
+          ],
+          "order_differs": false
+        }
+      }
+    },
+    {
+      "question_id": 1029,
+      "db_id": "european_football_2",
+      "difficulty": "moderate",
+      "category": "tables",
+      "subkind": null,
+      "relation": "same_row_count",
+      "differences": {
+        "tables": {
+          "missing": [
+            "team"
+          ],
+          "extra": []
+        },
+        "joins": {
+          "missing": [
+            "team_api_id"
+          ],
+          "extra": []
+        },
+        "output": {
+          "missing": [],
+          "extra": [
+            "team_api_id"
+          ],
+          "width": [
+            1,
+            2
+          ]
+        },
+        "order_limit": {
+          "limit": [
+            4,
+            4
+          ],
+          "order_differs": true
+        }
+      }
+    },
+    {
+      "question_id": 1048,
+      "db_id": "european_football_2",
+      "difficulty": "simple",
+      "category": "format_only",
+      "subkind": "columns",
+      "relation": "same_row_count",
+      "differences": {
+        "filters": {
+          "kind": "different_value",
+          "missing_columns": [],
+          "extra_columns": [],
+          "missing_values": [
+            "'%Y'",
+            "'2011'"
+          ],
+          "extra_values": [
+            "2011"
+          ]
+        },
+        "output": {
+          "missing": [],
+          "extra": [
+            "date"
+          ],
+          "width": [
+            1,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 1058,
+      "db_id": "european_football_2",
+      "difficulty": "challenging",
+      "category": "join",
+      "subkind": null,
+      "relation": "disjoint",
+      "differences": {
+        "joins": {
+          "missing": [
+            "player_api_id"
+          ],
+          "extra": [
+            "id"
+          ]
+        },
+        "output": {
+          "missing": [
+            "a"
+          ],
+          "extra": [
+            "grp"
+          ],
+          "width": [
+            1,
+            1
+          ]
+        },
+        "order_limit": {
+          "limit": [
+            1,
+            1
+          ],
+          "order_differs": true
+        }
+      }
+    },
+    {
+      "question_id": 1076,
+      "db_id": "european_football_2",
+      "difficulty": "challenging",
+      "category": "format_only",
+      "subkind": "rounding",
+      "relation": "disjoint",
+      "differences": {
+        "filters": {
+          "kind": "extra",
+          "missing_columns": [],
+          "extra_columns": [
+            "player_name"
+          ],
+          "missing_values": [],
+          "extra_values": [
+            "'Aaron Appindangoye'",
+            "'Abdou Diallo'"
+          ]
+        },
+        "computation": {
+          "missing": [
+            "count",
+            "count",
+            "div",
+            "div",
+            "sum",
+            "sum"
+          ],
+          "extra": [
+            "avg",
+            "avg"
+          ],
+          "distinct": [
+            false,
+            false
+          ]
+        },
+        "output": {
+          "missing": [
+            "ball_control",
+            "id",
+            "player_name"
+          ],
+          "extra": [],
+          "width": [
+            1,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 1078,
+      "db_id": "european_football_2",
+      "difficulty": "simple",
+      "category": "output",
+      "subkind": null,
+      "relation": "more_rows",
+      "differences": {
+        "output": {
+          "missing": [],
+          "extra": [
+            "birthday"
+          ],
+          "width": [
+            1,
+            2
+          ]
+        },
+        "order_limit": {
+          "limit": [
+            1,
+            null
+          ],
+          "order_differs": false
+        }
+      }
+    },
+    {
+      "question_id": 1079,
+      "db_id": "european_football_2",
+      "difficulty": "simple",
+      "category": "format_only",
+      "subkind": "columns",
+      "relation": "same_row_count",
+      "differences": {
+        "output": {
+          "missing": [],
+          "extra": [
+            "height"
+          ],
+          "width": [
+            1,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 1092,
+      "db_id": "european_football_2",
+      "difficulty": "simple",
+      "category": "filter",
+      "subkind": "missing",
+      "relation": "subset",
+      "differences": {
+        "filters": {
+          "kind": "missing",
+          "missing_columns": [
+            "id"
+          ],
+          "extra_columns": [],
+          "missing_values": [],
+          "extra_values": []
+        },
+        "computation": {
+          "missing": [
+            "count",
+            "max"
+          ],
+          "extra": [],
+          "distinct": [
+            false,
+            false
+          ]
+        },
+        "order_limit": {
+          "limit": [
+            null,
+            1
+          ],
+          "order_differs": true
+        }
+      }
+    },
+    {
+      "question_id": 1114,
+      "db_id": "european_football_2",
+      "difficulty": "challenging",
+      "category": "format_only",
+      "subkind": "rounding",
+      "relation": "disjoint",
+      "differences": {
+        "joins": {
+          "missing": [
+            "player_fifa_api_id"
+          ],
+          "extra": [
+            "player_api_id"
+          ]
+        },
+        "computation": {
+          "missing": [
+            "count",
+            "div",
+            "sum"
+          ],
+          "extra": [
+            "avg"
+          ],
+          "distinct": [
+            false,
+            false
+          ]
+        },
+        "output": {
+          "missing": [
+            "id"
+          ],
+          "extra": [],
+          "width": [
+            1,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 1115,
+      "db_id": "european_football_2",
+      "difficulty": "challenging",
+      "category": "format_only",
+      "subkind": "rounding",
+      "relation": "disjoint",
+      "differences": {
+        "joins": {
+          "missing": [
+            "player_fifa_api_id"
+          ],
+          "extra": [
+            "player_api_id"
+          ]
+        },
+        "filters": {
+          "kind": "extra",
+          "missing_columns": [],
+          "extra_columns": [
+            "player_name"
+          ],
+          "missing_values": [
+            "'2013-07-12'",
+            "1",
+            "10"
+          ],
+          "extra_values": [
+            "'2013-07-12 00:00:00'",
+            "'Jordan Bowery'",
+            "'Landon Donovan'"
+          ]
+        },
+        "computation": {
+          "missing": [
+            "mul",
+            "sum",
+            "sum",
+            "sum"
+          ],
+          "extra": [],
+          "distinct": [
+            false,
+            false
+          ]
+        },
+        "output": {
+          "missing": [
+            "overall_rating",
+            "player_name"
+          ],
+          "extra": [],
+          "width": [
+            1,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 1139,
+      "db_id": "european_football_2",
+      "difficulty": "challenging",
+      "category": "format_only",
+      "subkind": "columns",
+      "relation": "same_row_count",
+      "differences": {
+        "tables": {
+          "missing": [],
+          "extra": [
+            "team"
+          ]
+        },
+        "joins": {
+          "missing": [],
+          "extra": [
+            "away_team_api_id=team_api_id",
+            "home_team_api_id=team_api_id"
+          ]
+        },
+        "output": {
+          "missing": [],
+          "extra": [
+            "team_long_name"
+          ],
+          "width": [
+            2,
+            4
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 1144,
+      "db_id": "european_football_2",
+      "difficulty": "simple",
+      "category": "join",
+      "subkind": null,
+      "relation": "more_rows",
+      "differences": {
+        "joins": {
+          "missing": [],
+          "extra": [
+            "player_api_id"
+          ]
+        },
+        "filters": {
+          "kind": "different_column",
+          "missing_columns": [
+            "player_api_id"
+          ],
+          "extra_columns": [
+            "weight"
+          ],
+          "missing_values": [],
+          "extra_values": []
+        },
+        "computation": {
+          "missing": [],
+          "extra": [
+            "max"
+          ],
+          "distinct": [
+            false,
+            false
+          ]
+        },
+        "output": {
+          "missing": [
+            "id"
+          ],
+          "extra": [],
+          "width": [
+            3,
+            2
+          ]
+        },
+        "order_limit": {
+          "limit": [
+            1,
+            null
+          ],
+          "order_differs": false
+        }
+      }
+    },
+    {
+      "question_id": 1149,
+      "db_id": "thrombosis_prediction",
+      "difficulty": "moderate",
+      "category": "format_only",
+      "subkind": "columns",
+      "relation": "same_row_count",
+      "differences": {
+        "filters": {
+          "kind": "extra",
+          "missing_columns": [],
+          "extra_columns": [
+            "admission"
+          ],
+          "missing_values": [],
+          "extra_values": [
+            "'+'",
+            "'-'"
+          ]
+        },
+        "computation": {
+          "missing": [
+            "sum",
+            "sum"
+          ],
+          "extra": [
+            "count",
+            "count"
+          ],
+          "distinct": [
+            false,
+            false
+          ]
+        },
+        "output": {
+          "missing": [
+            "admission"
+          ],
+          "extra": [
+            "in_patient_male",
+            "outpatient_male"
+          ],
+          "width": [
+            1,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 1166,
+      "db_id": "thrombosis_prediction",
+      "difficulty": "simple",
+      "category": "other",
+      "subkind": null,
+      "relation": "disjoint",
+      "differences": {}
+    },
+    {
+      "question_id": 1179,
+      "db_id": "thrombosis_prediction",
+      "difficulty": "moderate",
+      "category": "format_only",
+      "subkind": "columns",
+      "relation": "disjoint",
+      "differences": {
+        "joins": {
+          "missing": [],
+          "extra": [
+            "id"
+          ]
+        },
+        "filters": {
+          "kind": "missing",
+          "missing_columns": [
+            "id"
+          ],
+          "extra_columns": [],
+          "missing_values": [],
+          "extra_values": []
+        }
+      }
+    },
+    {
+      "question_id": 1189,
+      "db_id": "thrombosis_prediction",
+      "difficulty": "challenging",
+      "category": "no_result",
+      "subkind": "refused",
+      "relation": null,
+      "differences": {}
+    },
+    {
+      "question_id": 1225,
+      "db_id": "thrombosis_prediction",
+      "difficulty": "moderate",
+      "category": "computation",
+      "subkind": null,
+      "relation": "disjoint",
+      "differences": {
+        "computation": {
+          "missing": [],
+          "extra": [
+            "groupconcat"
+          ],
+          "distinct": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 1227,
+      "db_id": "thrombosis_prediction",
+      "difficulty": "moderate",
+      "category": "computation",
+      "subkind": null,
+      "relation": "disjoint",
+      "differences": {
+        "computation": {
+          "missing": [
+            "avg"
+          ],
+          "extra": [
+            "count_distinct",
+            "div",
+            "sum"
+          ],
+          "distinct": [
+            false,
+            false
+          ]
+        },
+        "output": {
+          "missing": [],
+          "extra": [
+            "id"
+          ],
+          "width": [
+            1,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 1235,
+      "db_id": "thrombosis_prediction",
+      "difficulty": "moderate",
+      "category": "format_only",
+      "subkind": "columns",
+      "relation": "disjoint",
+      "differences": {}
+    },
+    {
+      "question_id": 1239,
+      "db_id": "thrombosis_prediction",
+      "difficulty": "challenging",
+      "category": "computation",
+      "subkind": null,
+      "relation": "subset",
+      "differences": {
+        "computation": {
+          "missing": [],
+          "extra": [],
+          "distinct": [
+            true,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 1241,
+      "db_id": "thrombosis_prediction",
+      "difficulty": "challenging",
+      "category": "tables",
+      "subkind": null,
+      "relation": "same_row_count",
+      "differences": {
+        "tables": {
+          "missing": [
+            "patient"
+          ],
+          "extra": []
+        },
+        "joins": {
+          "missing": [
+            "id"
+          ],
+          "extra": []
+        },
+        "filters": {
+          "kind": "extra",
+          "missing_columns": [],
+          "extra_columns": [
+            "plt"
+          ],
+          "missing_values": [],
+          "extra_values": []
+        },
+        "computation": {
+          "missing": [
+            "sum",
+            "sum"
+          ],
+          "extra": [
+            "count_distinct",
+            "count_distinct",
+            "count_distinct",
+            "count_distinct"
+          ],
+          "distinct": [
+            false,
+            true
+          ]
+        },
+        "output": {
+          "missing": [],
+          "extra": [
+            "id"
+          ],
+          "width": [
+            1,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 1242,
+      "db_id": "thrombosis_prediction",
+      "difficulty": "challenging",
+      "category": "other",
+      "subkind": null,
+      "relation": "subset",
+      "differences": {}
+    },
+    {
+      "question_id": 1254,
+      "db_id": "thrombosis_prediction",
+      "difficulty": "moderate",
+      "category": "filter",
+      "subkind": "different_value",
+      "relation": "disjoint",
+      "differences": {
+        "filters": {
+          "kind": "different_value",
+          "missing_columns": [],
+          "extra_columns": [],
+          "missing_values": [
+            "'%Y'",
+            "'1990'"
+          ],
+          "extra_values": [
+            "'1990-01-01'"
+          ]
+        },
+        "computation": {
+          "missing": [
+            "count"
+          ],
+          "extra": [
+            "count_distinct"
+          ],
+          "distinct": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 1256,
+      "db_id": "thrombosis_prediction",
+      "difficulty": "moderate",
+      "category": "computation",
+      "subkind": null,
+      "relation": "disjoint",
+      "differences": {
+        "computation": {
+          "missing": [
+            "count"
+          ],
+          "extra": [
+            "count_distinct"
+          ],
+          "distinct": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 1270,
+      "db_id": "thrombosis_prediction",
+      "difficulty": "challenging",
+      "category": "no_result",
+      "subkind": "error",
+      "relation": null,
+      "differences": {}
+    },
+    {
+      "question_id": 1302,
+      "db_id": "thrombosis_prediction",
+      "difficulty": "challenging",
+      "category": "tables",
+      "subkind": null,
+      "relation": "disjoint",
+      "differences": {
+        "tables": {
+          "missing": [
+            "patient"
+          ],
+          "extra": []
+        },
+        "computation": {
+          "missing": [
+            "count"
+          ],
+          "extra": [
+            "count_distinct"
+          ],
+          "distinct": [
+            false,
+            false
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 1322,
+      "db_id": "student_club",
+      "difficulty": "moderate",
+      "category": "computation",
+      "subkind": null,
+      "relation": "disjoint",
+      "differences": {
+        "computation": {
+          "missing": [
+            "count_distinct"
+          ],
+          "extra": [
+            "count"
+          ],
+          "distinct": [
+            false,
+            false
+          ]
+        },
+        "output": {
+          "missing": [
+            "event_id"
+          ],
+          "extra": [],
+          "width": [
+            1,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 1338,
+      "db_id": "student_club",
+      "difficulty": "moderate",
+      "category": "filter",
+      "subkind": "different_value",
+      "relation": "empty",
+      "differences": {
+        "filters": {
+          "kind": "different_value",
+          "missing_columns": [],
+          "extra_columns": [],
+          "missing_values": [
+            "'2019-10-08%'"
+          ],
+          "extra_values": [
+            "'2019-10-08'"
+          ]
+        },
+        "output": {
+          "missing": [],
+          "extra": [
+            "cost",
+            "expense_description"
+          ],
+          "width": [
+            1,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 1350,
+      "db_id": "student_club",
+      "difficulty": "moderate",
+      "category": "filter",
+      "subkind": "different_value",
+      "relation": "empty",
+      "differences": {
+        "filters": {
+          "kind": "different_value",
+          "missing_columns": [],
+          "extra_columns": [],
+          "missing_values": [
+            "'2019-08-20'"
+          ],
+          "extra_values": [
+            "'2019-8-20'"
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 1381,
+      "db_id": "student_club",
+      "difficulty": "moderate",
+      "category": "output",
+      "subkind": null,
+      "relation": "same_row_count",
+      "differences": {
+        "output": {
+          "missing": [],
+          "extra": [],
+          "width": [
+            2,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 1399,
+      "db_id": "student_club",
+      "difficulty": "moderate",
+      "category": "filter",
+      "subkind": "extra",
+      "relation": "disjoint",
+      "differences": {
+        "filters": {
+          "kind": "extra",
+          "missing_columns": [],
+          "extra_columns": [
+            "event_name"
+          ],
+          "missing_values": [],
+          "extra_values": [
+            "'Women's Soccer'"
+          ]
+        },
+        "output": {
+          "missing": [
+            "event_name"
+          ],
+          "extra": [],
+          "width": [
+            1,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 1410,
+      "db_id": "student_club",
+      "difficulty": "simple",
+      "category": "output",
+      "subkind": null,
+      "relation": "same_row_count",
+      "differences": {
+        "output": {
+          "missing": [],
+          "extra": [],
+          "width": [
+            3,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 1480,
+      "db_id": "debit_card_specializing",
+      "difficulty": "moderate",
+      "category": "format_only",
+      "subkind": "columns",
+      "relation": "same_row_count",
+      "differences": {
+        "filters": {
+          "kind": "different_value",
+          "missing_columns": [],
+          "extra_columns": [],
+          "missing_values": [
+            "'2013'",
+            "1",
+            "4"
+          ],
+          "extra_values": [
+            "'201301'",
+            "'201312'"
+          ]
+        },
+        "output": {
+          "missing": [],
+          "extra": [
+            "consumption"
+          ],
+          "width": [
+            1,
+            2
+          ]
+        },
+        "order_limit": {
+          "limit": [
+            1,
+            1
+          ],
+          "order_differs": true
+        }
+      }
+    },
+    {
+      "question_id": 1481,
+      "db_id": "debit_card_specializing",
+      "difficulty": "challenging",
+      "category": "join",
+      "subkind": null,
+      "relation": "disjoint",
+      "differences": {
+        "joins": {
+          "missing": [],
+          "extra": [
+            "min_consumption=total_consumption",
+            "segment"
+          ]
+        },
+        "filters": {
+          "kind": "different_column",
+          "missing_columns": [
+            "consumption"
+          ],
+          "extra_columns": [
+            "segment"
+          ],
+          "missing_values": [],
+          "extra_values": [
+            "'KAM'",
+            "'LAM'",
+            "'SME'"
+          ]
+        },
+        "computation": {
+          "missing": [
+            "count",
+            "count",
+            "count",
+            "count",
+            "count",
+            "div",
+            "div",
+            "div",
+            "div",
+            "div",
+            "sum",
+            "sum",
+            "sum",
+            "sum"
+          ],
+          "extra": [],
+          "distinct": [
+            false,
+            false
+          ]
+        },
+        "output": {
+          "missing": [
+            "consumption",
+            "customerid",
+            "segment"
+          ],
+          "extra": [],
+          "width": [
+            3,
+            3
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 1498,
+      "db_id": "debit_card_specializing",
+      "difficulty": "simple",
+      "category": "computation",
+      "subkind": null,
+      "relation": "disjoint",
+      "differences": {
+        "computation": {
+          "missing": [
+            "sum",
+            "sum"
+          ],
+          "extra": [
+            "max"
+          ],
+          "distinct": [
+            false,
+            false
+          ]
+        },
+        "order_limit": {
+          "limit": [
+            1,
+            null
+          ],
+          "order_differs": true
+        }
+      }
+    },
+    {
+      "question_id": 1500,
+      "db_id": "debit_card_specializing",
+      "difficulty": "simple",
+      "category": "tables",
+      "subkind": null,
+      "relation": "empty",
+      "differences": {
+        "tables": {
+          "missing": [
+            "yearmonth"
+          ],
+          "extra": []
+        },
+        "joins": {
+          "missing": [
+            "customerid"
+          ],
+          "extra": []
+        },
+        "filters": {
+          "kind": "different_value",
+          "missing_columns": [],
+          "extra_columns": [],
+          "missing_values": [],
+          "extra_values": [
+            "'%Y%m'"
+          ]
+        },
+        "computation": {
+          "missing": [],
+          "extra": [],
+          "distinct": [
+            false,
+            true
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 1501,
+      "db_id": "debit_card_specializing",
+      "difficulty": "moderate",
+      "category": "tables",
+      "subkind": null,
+      "relation": "empty",
+      "differences": {
+        "tables": {
+          "missing": [
+            "yearmonth"
+          ],
+          "extra": []
+        },
+        "joins": {
+          "missing": [
+            "customerid"
+          ],
+          "extra": []
+        },
+        "filters": {
+          "kind": "different_value",
+          "missing_columns": [],
+          "extra_columns": [],
+          "missing_values": [],
+          "extra_values": [
+            "'0'",
+            "1",
+            "2",
+            "4"
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 1524,
+      "db_id": "debit_card_specializing",
+      "difficulty": "simple",
+      "category": "filter",
+      "subkind": "different_value",
+      "relation": "empty",
+      "differences": {
+        "filters": {
+          "kind": "different_value",
+          "missing_columns": [],
+          "extra_columns": [],
+          "missing_values": [
+            "'548.4'"
+          ],
+          "extra_values": [
+            "548.4"
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 1526,
+      "db_id": "debit_card_specializing",
+      "difficulty": "challenging",
+      "category": "tables",
+      "subkind": null,
+      "relation": "empty",
+      "differences": {
+        "tables": {
+          "missing": [
+            "gasstations"
+          ],
+          "extra": []
+        },
+        "joins": {
+          "missing": [
+            "gasstationid"
+          ],
+          "extra": [
+            "customerid"
+          ]
+        },
+        "filters": {
+          "kind": "different_value",
+          "missing_columns": [],
+          "extra_columns": [],
+          "missing_values": [
+            "1513.12"
+          ],
+          "extra_values": [
+            "'2012'",
+            "'2013'",
+            "4",
+            "634.8"
+          ]
+        },
+        "computation": {
+          "missing": [
+            "sum"
+          ],
+          "extra": [
+            "mul"
+          ],
+          "distinct": [
+            false,
+            false
+          ]
+        },
+        "output": {
+          "missing": [
+            "consumption",
+            "date"
+          ],
+          "extra": [
+            "c2012",
+            "c2013"
+          ],
+          "width": [
+            1,
+            1
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 1529,
+      "db_id": "debit_card_specializing",
+      "difficulty": "moderate",
+      "category": "tables",
+      "subkind": null,
+      "relation": "disjoint",
+      "differences": {
+        "tables": {
+          "missing": [
+            "gasstations"
+          ],
+          "extra": []
+        },
+        "joins": {
+          "missing": [
+            "customerid",
+            "gasstationid"
+          ],
+          "extra": []
+        },
+        "filters": {
+          "kind": "extra",
+          "missing_columns": [],
+          "extra_columns": [
+            "date"
+          ],
+          "missing_values": [
+            "'38508'"
+          ],
+          "extra_values": [
+            "'201201'",
+            "38508"
+          ]
+        },
+        "computation": {
+          "missing": [],
+          "extra": [
+            "mul"
+          ],
+          "distinct": [
+            false,
+            false
+          ]
+        },
+        "output": {
+          "missing": [
+            "date",
+            "price"
+          ],
+          "extra": [],
+          "width": [
+            2,
+            2
+          ]
+        }
+      }
+    },
+    {
+      "question_id": 1533,
+      "db_id": "debit_card_specializing",
+      "difficulty": "moderate",
+      "category": "format_only",
+      "subkind": "columns",
+      "relation": "fewer_rows",
+      "differences": {
+        "joins": {
+          "missing": [
+            "customerid"
+          ],
+          "extra": []
+        },
+        "filters": {
+          "kind": "extra",
+          "missing_columns": [],
+          "extra_columns": [
+            "customerid"
+          ],
+          "missing_values": [],
+          "extra_values": []
+        },
+        "output": {
+          "missing": [],
+          "extra": [
+            "customerid"
+          ],
+          "width": [
+            1,
+            2
+          ]
+        }
+      }
+    }
+  ]
+}
