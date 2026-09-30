@@ -355,6 +355,14 @@ def _observed(pid: str, v: dict) -> str:
         return "not applicable: the winner is design 1"
     if pid == "P06":
         return iv(v["raw_confidence_auroc_held_out"], "civ2", "f2")
+    if pid == "P07":
+        return iv(v["ece_platt_held_out"], "civ3", "f3")
+    if pid == "P08":
+        reached = "reached" if v["reached_target_on_calibration_split"] else "not reached"
+        return (
+            f"accuracy {iv(v['held_out_accuracy'])} at coverage {iv(v['held_out_coverage'])} "
+            f"(target {reached} on the calibration split)"
+        )
     if pid == "P09":
         return iv(v["haiku_minus_sonnet_d3"], "ppiv1", "pp1")
     if pid == "P10":
@@ -365,6 +373,14 @@ def _observed(pid: str, v: dict) -> str:
         return (
             f"{iv(v['standard_and_multi_step_ex'])} against "
             f"{iv(v['held_out_benchmark_ex'])} on the held-out benchmark"
+        )
+    if pid == "P14":
+        return f"{'adopted' if v['adopted'] else 'not adopted'}: {iv(v['gain'], 'ppiv1', 'pp1')}"
+    if pid == "P15":
+        verdict = "replaces" if v["replaces_own_loop"] else "does not replace"
+        return (
+            f"{verdict} the own loop: accuracy {iv(v['execution_accuracy'], 'ppiv1', 'pp1')}, "
+            f"AURC {iv(v['aurc'], 'civ3', 'sf3')}"
         )
     if pid == "P13":
         return (
@@ -378,7 +394,14 @@ def _observed(pid: str, v: dict) -> str:
 def predictions() -> str:
     """The pre-registered predictions checked so far, beside what was observed."""
     found: dict[str, dict] = {}
-    for f in ("metrics/ablation.json", "metrics/benchmark_main.json", "metrics/own_set.json"):
+    for f in (
+        "metrics/ablation.json",
+        "metrics/benchmark_main.json",
+        "metrics/own_set.json",
+        "metrics/calibration.json",
+        "metrics/escalation.json",
+        "metrics/framework_comparison.json",
+    ):
         found.update(load(f)["predictions"])
     rows = [
         [pid, v["claim"], v["prediction"], _observed(pid, v)] for pid, v in sorted(found.items())
@@ -387,8 +410,9 @@ def predictions() -> str:
         ["", "Claim", "Predicted", "Observed"],
         rows,
         "`results/metrics/preregistration.md` (the predictions), `results/metrics/ablation.json`, "
-        "`results/metrics/benchmark_main.json`, `results/metrics/own_set.json` (one run each; "
-        "intervals 95%)",
+        "`results/metrics/benchmark_main.json`, `results/metrics/own_set.json`, "
+        "`results/metrics/calibration.json`, `results/metrics/escalation.json`, "
+        "`results/metrics/framework_comparison.json` (one run each; intervals 95%)",
     )
 
 

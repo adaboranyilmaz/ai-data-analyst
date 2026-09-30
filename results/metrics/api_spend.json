@@ -1,6 +1,6 @@
 {
-  "total_usd": 26.63888394999999,
-  "n_calls": 6240,
+  "total_usd": 35.234149100000025,
+  "n_calls": 7183,
   "by_phase": {
     "phase4": {
       "usd": 26.63888394999999,
@@ -10,17 +10,26 @@
       "cache_write_tokens": 14136938,
       "cache_read_tokens": 18152140,
       "n_batch_calls": 5822
+    },
+    "phase5": {
+      "usd": 8.595265150000005,
+      "n_calls": 943,
+      "input_tokens": 238037,
+      "output_tokens": 305647,
+      "cache_write_tokens": 1950240,
+      "cache_read_tokens": 5455795,
+      "n_batch_calls": 753
     }
   },
   "by_model": {
     "claude-sonnet-5": {
-      "usd": 22.249636100000014,
-      "n_calls": 5031,
-      "input_tokens": 97409,
-      "output_tokens": 1419175,
-      "cache_write_tokens": 9373542,
-      "cache_read_tokens": 16952628,
-      "n_batch_calls": 4644
+      "usd": 24.29439494999999,
+      "n_calls": 5494,
+      "input_tokens": 333526,
+      "output_tokens": 1495620,
+      "cache_write_tokens": 10309799,
+      "cache_read_tokens": 19513584,
+      "n_batch_calls": 5107
     },
     "claude-haiku-4-5": {
       "usd": 4.389247849999998,
@@ -30,11 +39,21 @@
       "cache_write_tokens": 4763396,
       "cache_read_tokens": 1199512,
       "n_batch_calls": 1178
+    },
+    "claude-opus-5-5": {
+      "usd": 6.5505063,
+      "n_calls": 480,
+      "input_tokens": 1920,
+      "output_tokens": 229202,
+      "cache_write_tokens": 1013983,
+      "cache_read_tokens": 2894839,
+      "n_batch_calls": 290
     }
   },
-  "updated_utc": "2026-09-28T22:49:01+00:00",
+  "updated_utc": "2026-09-30T13:53:11+00:00",
   "caps": {
     "project_usd": 80.0,
-    "phase4_usd": 33.0
+    "phase4_usd": 33.0,
+    "phase5_usd": 12.0
   }
 }

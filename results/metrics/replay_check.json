@@ -4,7 +4,10 @@
     "pilot",
     "ablation",
     "main",
-    "own"
+    "own",
+    "critic",
+    "escalation",
+    "router"
   ],
   "all_identical": true,
   "runs": {
@@ -191,6 +194,60 @@
     "own/own-d1-claude-sonnet-5-no-evidence": {
       "records": 60,
       "identical": 60,
+      "differing": 0,
+      "missing_in_replay": [],
+      "extra_in_replay": [],
+      "examples": [],
+      "ok": true
+    },
+    "critic/pilot-critic-claude-sonnet-5-first10": {
+      "records": 10,
+      "identical": 10,
+      "differing": 0,
+      "missing_in_replay": [],
+      "extra_in_replay": [],
+      "examples": [],
+      "ok": true
+    },
+    "critic/ablation-critic-claude-sonnet-5": {
+      "records": 150,
+      "identical": 150,
+      "differing": 0,
+      "missing_in_replay": [],
+      "extra_in_replay": [],
+      "examples": [],
+      "ok": true
+    },
+    "critic/held_out-critic-claude-sonnet-5": {
+      "records": 320,
+      "identical": 320,
+      "differing": 0,
+      "missing_in_replay": [],
+      "extra_in_replay": [],
+      "examples": [],
+      "ok": true
+    },
+    "escalation/pilot-d1-claude-opus-5-5-evidence-first10": {
+      "records": 10,
+      "identical": 10,
+      "differing": 0,
+      "missing_in_replay": [],
+      "extra_in_replay": [],
+      "examples": [],
+      "ok": true
+    },
+    "escalation/ablation-d1-claude-opus-5-5-evidence": {
+      "records": 150,
+      "identical": 150,
+      "differing": 0,
+      "missing_in_replay": [],
+      "extra_in_replay": [],
+      "examples": [],
+      "ok": true
+    },
+    "router/held_out-d1-claude-opus-5-5-evidence": {
+      "records": 320,
+      "identical": 320,
       "differing": 0,
       "missing_in_replay": [],
       "extra_in_replay": [],

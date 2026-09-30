@@ -1,0 +1,140 @@
+{
+  "probes": {
+    "assumptions": {
+      "cache_read_share_central": 0.6,
+      "upper": "no cache hit: every prompt token written at the 5-minute cache price",
+      "output": "assumed (before any probe)",
+      "not_included": "an escalation reply without the tool call costs a second request"
+    },
+    "runs": {
+      "critic/pilot-critic-claude-sonnet-5-first10": {
+        "questions": 10,
+        "not_reviewed": 0,
+        "cached": 0,
+        "counted": 10,
+        "prompt_tokens": {
+          "mean": 8668,
+          "max": 11583,
+          "total": 86680
+        },
+        "output_per_request": {
+          "central": 300,
+          "upper": 800
+        },
+        "central_usd": 0.06354080000000001,
+        "upper_usd": 0.14835
+      },
+      "escalation/pilot-d1-claude-opus-5-5-evidence-first10": {
+        "questions": 10,
+        "cached": 0,
+        "counted": 10,
+        "prompt_tokens": {
+          "mean": 8698.1,
+          "max": 11513,
+          "total": 86981
+        },
+        "output_per_request": {
+          "central": 1000,
+          "upper": 2500
+        },
+        "central_usd": 0.19219985999999997,
+        "upper_usd": 0.4674525
+      }
+    },
+    "central_usd": 0.25574065999999995,
+    "upper_usd": 0.6158025,
+    "phase_spent_usd": 0.0
+  },
+  "main": {
+    "assumptions": {
+      "cache_read_share_central": 0.6,
+      "upper": "no cache hit: every prompt token written at the 5-minute cache price",
+      "output": "measured from results\\runs\\critic, results\\runs\\escalation",
+      "not_included": "an escalation reply without the tool call costs a second request"
+    },
+    "runs": {
+      "critic/ablation-critic-claude-sonnet-5": {
+        "questions": 150,
+        "not_reviewed": 5,
+        "cached": 0,
+        "counted": 145,
+        "prompt_tokens": {
+          "mean": 8132.386206896552,
+          "max": 15950,
+          "total": 1179196
+        },
+        "output_per_request": {
+          "central": 153.4,
+          "upper": 800
+        },
+        "central_usd": 0.7715647600000001,
+        "upper_usd": 2.053995
+      },
+      "critic/held_out-critic-claude-sonnet-5": {
+        "questions": 320,
+        "not_reviewed": 12,
+        "cached": 0,
+        "counted": 308,
+        "prompt_tokens": {
+          "mean": 8011.214285714285,
+          "max": 16126,
+          "total": 2467454
+        },
+        "output_per_request": {
+          "central": 153.4,
+          "upper": 800
+        },
+        "central_usd": 1.6180102399999992,
+        "upper_usd": 4.3163175
+      },
+      "escalation/ablation-d1-claude-opus-5-5-evidence": {
+        "questions": 150,
+        "cached": 0,
+        "counted": 150,
+        "prompt_tokens": {
+          "mean": 8242.22,
+          "max": 15881,
+          "total": 1236333
+        },
+        "output_per_request": {
+          "central": 437.1,
+          "upper": 2500
+        },
+        "central_usd": 1.9661629800000007,
+        "upper_usd": 6.8408325
+      }
+    },
+    "central_usd": 4.35573798,
+    "upper_usd": 13.211145,
+    "phase_spent_usd": 0.24765440000000002
+  },
+  "router": {
+    "assumptions": {
+      "cache_read_share_central": 0.6,
+      "upper": "no cache hit: every prompt token written at the 5-minute cache price",
+      "output": "measured from results\\runs\\escalation",
+      "not_included": "an escalation reply without the tool call costs a second request"
+    },
+    "runs": {
+      "router/held_out-d1-claude-opus-5-5-evidence": {
+        "questions": 320,
+        "cached": 0,
+        "counted": 320,
+        "prompt_tokens": {
+          "mean": 8085.7125,
+          "max": 15932,
+          "total": 2587428
+        },
+        "output_per_request": {
+          "central": 478.3125,
+          "upper": 2500
+        },
+        "central_usd": 4.273273679999999,
+        "upper_usd": 14.46857
+      }
+    },
+    "central_usd": 4.273273679999999,
+    "upper_usd": 14.46857,
+    "phase_spent_usd": 3.885884650000003
+  }
+}

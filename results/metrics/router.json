@@ -1,0 +1,343 @@
+{
+  "note": "one run per model; the held-out set; intervals are 95% bootstrap over questions, paired for differences; costs at batch prices",
+  "spent": {
+    "claude-sonnet-5": {
+      "spent_usd": 1.757993,
+      "at_batch_price_usd": 1.757993,
+      "questions_with_direct_calls": 0
+    },
+    "claude-opus-5-5": {
+      "spent_usd": 4.70938,
+      "at_batch_price_usd": 3.279176,
+      "questions_with_direct_calls": 190
+    }
+  },
+  "design": "d1",
+  "escalation_model": "claude-opus-5-5",
+  "questions": 320,
+  "routed": 297,
+  "kept": 23,
+  "routed_system": {
+    "questions": 320,
+    "declined": 0,
+    "execution_accuracy": {
+      "estimate": 0.796875,
+      "low": 0.753125,
+      "high": 0.840625,
+      "confidence": 0.95,
+      "resamples": 10000,
+      "undefined": 0
+    },
+    "by_difficulty": {
+      "challenging": {
+        "questions": 66,
+        "execution_accuracy": {
+          "estimate": 0.7272727272727273,
+          "low": 0.6212121212121212,
+          "high": 0.8333333333333334,
+          "confidence": 0.95,
+          "resamples": 10000,
+          "undefined": 0
+        }
+      },
+      "moderate": {
+        "questions": 157,
+        "execution_accuracy": {
+          "estimate": 0.7834394904458599,
+          "low": 0.7197452229299363,
+          "high": 0.8471337579617835,
+          "confidence": 0.95,
+          "resamples": 10000,
+          "undefined": 0
+        }
+      },
+      "simple": {
+        "questions": 97,
+        "execution_accuracy": {
+          "estimate": 0.865979381443299,
+          "low": 0.7938144329896907,
+          "high": 0.9278350515463918,
+          "confidence": 0.95,
+          "resamples": 10000,
+          "undefined": 0
+        }
+      }
+    },
+    "cost": {
+      "total_usd": 4.866605999999999,
+      "per_question_usd": 0.015208143749999996,
+      "per_correct_answer_usd": {
+        "estimate": 0.019084729411764704,
+        "low": 0.01709064120518868,
+        "high": 0.021352504779741863,
+        "confidence": 0.95,
+        "resamples": 10000,
+        "undefined": 0
+      }
+    },
+    "score_outcomes": {
+      "error": 1,
+      "ok": 317,
+      "refused": 2
+    },
+    "latency_s": {
+      "p50": null,
+      "p95": null,
+      "not_measured": "most model calls were batched, and a batched call has no latency"
+    }
+  },
+  "sonnet_alone": {
+    "questions": 320,
+    "declined": 0,
+    "execution_accuracy": {
+      "estimate": 0.60625,
+      "low": 0.553125,
+      "high": 0.659375,
+      "confidence": 0.95,
+      "resamples": 10000,
+      "undefined": 0
+    },
+    "by_difficulty": {
+      "challenging": {
+        "questions": 66,
+        "execution_accuracy": {
+          "estimate": 0.5,
+          "low": 0.3787878787878788,
+          "high": 0.6212121212121212,
+          "confidence": 0.95,
+          "resamples": 10000,
+          "undefined": 0
+        }
+      },
+      "moderate": {
+        "questions": 157,
+        "execution_accuracy": {
+          "estimate": 0.5923566878980892,
+          "low": 0.5159235668789809,
+          "high": 0.6687898089171974,
+          "confidence": 0.95,
+          "resamples": 10000,
+          "undefined": 0
+        }
+      },
+      "simple": {
+        "questions": 97,
+        "execution_accuracy": {
+          "estimate": 0.7010309278350515,
+          "low": 0.6082474226804123,
+          "high": 0.7938144329896907,
+          "confidence": 0.95,
+          "resamples": 10000,
+          "undefined": 0
+        }
+      }
+    },
+    "cost": {
+      "total_usd": 1.7579930000000001,
+      "per_question_usd": 0.005493728125000001,
+      "per_correct_answer_usd": {
+        "estimate": 0.009061819587628866,
+        "low": 0.008051995364849674,
+        "high": 0.010269200948668726,
+        "confidence": 0.95,
+        "resamples": 10000,
+        "undefined": 0
+      }
+    },
+    "score_outcomes": {
+      "error": 3,
+      "ok": 308,
+      "refused": 9
+    },
+    "latency_s": {
+      "p50": null,
+      "p95": null,
+      "not_measured": "most model calls were batched, and a batched call has no latency"
+    }
+  },
+  "routed_minus_sonnet": {
+    "questions": 320,
+    "execution_accuracy": {
+      "estimate": 0.19062500000000004,
+      "low": 0.14375000000000004,
+      "high": 0.23750000000000004,
+      "confidence": 0.95,
+      "resamples": 10000,
+      "undefined": 0
+    }
+  },
+  "exploratory": {
+    "note": "not pre-registered",
+    "opus_alone": {
+      "questions": 320,
+      "declined": 0,
+      "execution_accuracy": {
+        "estimate": 0.796875,
+        "low": 0.753125,
+        "high": 0.840625,
+        "confidence": 0.95,
+        "resamples": 10000,
+        "undefined": 0
+      },
+      "by_difficulty": {
+        "challenging": {
+          "questions": 66,
+          "execution_accuracy": {
+            "estimate": 0.7272727272727273,
+            "low": 0.6212121212121212,
+            "high": 0.8333333333333334,
+            "confidence": 0.95,
+            "resamples": 10000,
+            "undefined": 0
+          }
+        },
+        "moderate": {
+          "questions": 157,
+          "execution_accuracy": {
+            "estimate": 0.7834394904458599,
+            "low": 0.7197452229299363,
+            "high": 0.8471337579617835,
+            "confidence": 0.95,
+            "resamples": 10000,
+            "undefined": 0
+          }
+        },
+        "simple": {
+          "questions": 97,
+          "execution_accuracy": {
+            "estimate": 0.865979381443299,
+            "low": 0.7938144329896907,
+            "high": 0.9278350515463918,
+            "confidence": 0.95,
+            "resamples": 10000,
+            "undefined": 0
+          }
+        }
+      },
+      "cost": {
+        "total_usd": 3.2791756000000003,
+        "per_question_usd": 0.010247423750000002,
+        "per_correct_answer_usd": {
+          "estimate": 0.012859512156862747,
+          "low": 0.01123421097562002,
+          "high": 0.01467811092601434,
+          "confidence": 0.95,
+          "resamples": 10000,
+          "undefined": 0
+        }
+      },
+      "score_outcomes": {
+        "error": 1,
+        "ok": 317,
+        "refused": 2
+      },
+      "latency_s": {
+        "p50": null,
+        "p95": null,
+        "not_measured": "most model calls were batched, and a batched call has no latency"
+      }
+    },
+    "opus_minus_sonnet": {
+      "questions": 320,
+      "execution_accuracy": {
+        "estimate": 0.19062500000000004,
+        "low": 0.14375000000000004,
+        "high": 0.23750000000000004,
+        "confidence": 0.95,
+        "resamples": 10000,
+        "undefined": 0
+      }
+    },
+    "opus_alone_minus_routed": {
+      "questions": 320,
+      "execution_accuracy": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0,
+        "confidence": 0.95,
+        "resamples": 10000,
+        "undefined": 0
+      }
+    },
+    "on_routed_questions": {
+      "sonnet": {
+        "questions": 297,
+        "execution_accuracy": {
+          "estimate": 0.5791245791245792,
+          "low": 0.5218855218855218,
+          "high": 0.632996632996633,
+          "confidence": 0.95,
+          "resamples": 10000,
+          "undefined": 0
+        }
+      },
+      "opus": {
+        "questions": 297,
+        "execution_accuracy": {
+          "estimate": 0.7845117845117845,
+          "low": 0.7373737373737373,
+          "high": 0.8282828282828283,
+          "confidence": 0.95,
+          "resamples": 10000,
+          "undefined": 0
+        }
+      }
+    },
+    "on_kept_questions": {
+      "sonnet": {
+        "questions": 23,
+        "execution_accuracy": {
+          "estimate": 0.9565217391304348,
+          "low": 0.8695652173913043,
+          "high": 1.0,
+          "confidence": 0.95,
+          "resamples": 10000,
+          "undefined": 0
+        }
+      },
+      "opus": {
+        "questions": 23,
+        "execution_accuracy": {
+          "estimate": 0.9565217391304348,
+          "low": 0.8695652173913043,
+          "high": 1.0,
+          "confidence": 0.95,
+          "resamples": 10000,
+          "undefined": 0
+        }
+      }
+    }
+  },
+  "cost_per_correct": [
+    {
+      "system": "routed",
+      "design": "d1",
+      "set": "held_out",
+      "questions": 320,
+      "execution_accuracy": 0.796875,
+      "cost_per_question_usd": 0.015208143749999996,
+      "cost_per_correct_answer_usd": 0.019084729411764704,
+      "total_usd": 4.866605999999999
+    },
+    {
+      "system": "claude-sonnet-5",
+      "design": "d1",
+      "set": "held_out",
+      "questions": 320,
+      "execution_accuracy": 0.60625,
+      "cost_per_question_usd": 0.005493728125000001,
+      "cost_per_correct_answer_usd": 0.009061819587628866,
+      "total_usd": 1.7579930000000001
+    },
+    {
+      "system": "claude-opus-5-5",
+      "design": "d1",
+      "set": "held_out",
+      "questions": 320,
+      "execution_accuracy": 0.796875,
+      "cost_per_question_usd": 0.010247423750000002,
+      "cost_per_correct_answer_usd": 0.012859512156862747,
+      "total_usd": 3.2791756000000003
+    }
+  ]
+}

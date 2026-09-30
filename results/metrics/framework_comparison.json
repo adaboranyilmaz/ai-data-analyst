@@ -1,0 +1,126 @@
+{
+  "note": "one run; the ablation set; both arms from the same stored responses (replay-only); intervals are 95% bootstrap over questions, paired",
+  "questions": 150,
+  "requests_identical": 150,
+  "graph_minus_own_loop": {
+    "execution_accuracy": {
+      "estimate": 0.0,
+      "low": 0.0,
+      "high": 0.0,
+      "confidence": 0.95,
+      "resamples": 10000,
+      "undefined": 0
+    },
+    "aurc_pipeline_confidence": {
+      "estimate": 0.0,
+      "low": 0.0,
+      "high": 0.0,
+      "confidence": 0.95,
+      "resamples": 10000,
+      "undefined": 0
+    },
+    "aurc_stated_confidence": {
+      "estimate": 0.0,
+      "low": 0.0,
+      "high": 0.0,
+      "confidence": 0.95,
+      "resamples": 10000,
+      "undefined": 0
+    },
+    "accuracy_at_80": {
+      "estimate": 0.0,
+      "low": 0.0,
+      "high": 0.0,
+      "confidence": 0.95,
+      "resamples": 10000,
+      "undefined": 0
+    }
+  },
+  "rule": {
+    "requires": "the graph better on both execution accuracy and AURC, with paired 95% intervals excluding zero",
+    "replaces_own_loop": false
+  },
+  "cost_per_correct_answer_usd": {
+    "graph": 0.020907868539325844,
+    "own_loop": 0.020907868539325844
+  },
+  "model_calls_per_question": {
+    "graph": {
+      "estimate": 1.9666666666666666,
+      "low": 1.9333333333333333,
+      "high": 1.9933333333333334,
+      "confidence": 0.95,
+      "resamples": 10000,
+      "undefined": 0
+    },
+    "own_loop": {
+      "estimate": 1.9666666666666666,
+      "low": 1.9333333333333333,
+      "high": 1.9933333333333334,
+      "confidence": 0.95,
+      "resamples": 10000,
+      "undefined": 0
+    }
+  },
+  "checkpoints_per_question": 7.0,
+  "seconds_per_question_cached_calls": {
+    "note": "every model response from the cache: orchestration, tools and the database only; the model's latency is the same for both (the same requests)",
+    "graph": {
+      "p50": 0.036746,
+      "p95": 0.12784564999999998
+    },
+    "own_loop": {
+      "p50": 0.030134,
+      "p95": 0.12387639999999993
+    }
+  },
+  "code_lines": {
+    "graph_arm": {
+      "files": [
+        "src/agent_langgraph/graph.py",
+        "src/agent_langgraph/chat_model.py"
+      ],
+      "covers": "the winning design and the critic as a graph (routing, the two sub-agents, checkpointing, spans) and the chat-model adapter over the cache and ledger",
+      "lines": 331
+    },
+    "own_loop": {
+      "files": [
+        "src/agent/conversation.py",
+        "src/agent/run.py",
+        "src/agent/driver.py"
+      ],
+      "covers": "the own loop for all five designs (tools, budgets, resubmission, reminders, samples and the vote, narrowing), direct and batched rounds, spans",
+      "lines": 733
+    },
+    "critic_module": {
+      "files": [
+        "src/agent/critic.py"
+      ],
+      "covers": "the critic's tool, evidence and review text, used by both, and the own loop's critic runs",
+      "lines": 475
+    }
+  },
+  "predictions": {
+    "P15": {
+      "claim": "Whether the LangGraph graph replaces the own loop",
+      "prediction": "no",
+      "replaces_own_loop": false,
+      "execution_accuracy": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0,
+        "confidence": 0.95,
+        "resamples": 10000,
+        "undefined": 0
+      },
+      "aurc": {
+        "estimate": 0.0,
+        "low": 0.0,
+        "high": 0.0,
+        "confidence": 0.95,
+        "resamples": 10000,
+        "undefined": 0
+      }
+    }
+  }
+}
