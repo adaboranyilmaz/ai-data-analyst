@@ -10,7 +10,7 @@ Checks recorded:
   - every query accepted by the guard and executed without error, with a non-empty result;
   - the readings of each ambiguous question give different results (else it is not ambiguous);
   - no gold result equals the gold result of one of the benchmark's financial questions, and no
-    query is the same, after normalisation, as a benchmark gold query (the set must not repeat
+    query is the same, after normalization, as a benchmark gold query (the set must not repeat
     the benchmark).
 Writes results/metrics/own_set_gold.json. The rows go to data/own_set/gold_rows.jsonl.gz and a
 review sheet with each question, its SQL and a preview of its result to data/own_set/review.md

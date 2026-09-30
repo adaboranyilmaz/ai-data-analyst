@@ -1,4 +1,4 @@
-"""Run summaries, paired comparisons, the own set's behaviour scores and the selection rule,
+"""Run summaries, paired comparisons, the own set's behavior scores and the selection rule,
 on synthetic records with known answers."""
 
 from __future__ import annotations

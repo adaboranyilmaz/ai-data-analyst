@@ -3,7 +3,7 @@
 A question counts as correct when it was answered (not declined) and its SQL scored correct
 (src/eval/records.py `answered_correct`). Every rate carries a bootstrap interval over questions
 (configs/eval.yaml `bootstrap`); two runs on the same questions are compared with paired
-intervals. A run is summarised with:
+intervals. A run is summarized with:
 
 - execution accuracy, overall and by database and difficulty; mean Soft-F1 (a prediction too
   large for Soft-F1 counts 0, and the number of such is given). These, and the confidence
@@ -269,7 +269,7 @@ def own_set_behaviour(records: Sequence[dict], cfg: dict[str, Any] | None = None
         if s[0] is not None:
             row["success"] = _mean(boot, s)
         out[cat] = row
-    # The same behaviours where they are not called for: a clear question with a true premise
+    # The same behaviors where they are not called for: a clear question with a true premise
     # (standard and multi-step) that is declined, answered with a clarifying question, or given
     # a premise correction. A model that always asks or always corrects would succeed on (c)
     # and (e); these rates show it.

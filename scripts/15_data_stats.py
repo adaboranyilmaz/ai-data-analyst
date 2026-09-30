@@ -1,4 +1,4 @@
-"""Summarise the benchmark data, its dictionaries and the gold SQL execution in one file.
+"""Summarize the benchmark data, its dictionaries and the gold SQL execution in one file.
 
 Reads only committed files: the sources and load records, the schema snapshots, the
 dictionaries and the gold execution results. For every BIRD database: tables, rows, columns,

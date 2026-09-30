@@ -10,7 +10,7 @@ answer's error in every design. For the hand-written banking set, the standard, 
 comparative questions are
 scored against their gold query, an ambiguous one against each accepted reading (correct if any
 matches), and the unanswerable and false-premise ones are not scored by execution (their
-behaviour is scored from the answer's fields, src/eval/summary.py).
+behavior is scored from the answer's fields, src/eval/summary.py).
 
 Each run writes one record per question (src/eval/records.py) to a JSON-lines file, one trace
 per question, and the run's spans.

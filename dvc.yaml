@@ -1,5 +1,5 @@
 # The data pipeline: fetch the pinned benchmark files, load the database and execute the gold
-# SQL, snapshot the schemas, convert BIRD's descriptions into dictionaries, and summarise;
+# SQL, snapshot the schemas, convert BIRD's descriptions into dictionaries, and summarize;
 # then harden the databases, run the security suite and check the agent's tools; then check the
 # project's scoring against BIRD's official evaluator, split the questions into fixed sets, and
 # execute the hand-written banking set.
@@ -167,7 +167,7 @@ stages:
           cache: false
 
   # BIRD's official evaluator at its pinned commit, each file checked against its hash. Only
-  # ex_validation runs it; it is not committed (the upstream repository has no licence file).
+  # ex_validation runs it; it is not committed (the upstream repository has no license file).
   bird_eval:
     cmd: uv run python scripts/30_fetch_bird_eval.py
     deps:
@@ -331,7 +331,7 @@ stages:
       - results/runs/ablation:
           cache: false
 
-  # The design comparison: every run summarised and compared, the winner chosen by the
+  # The design comparison: every run summarized and compared, the winner chosen by the
   # pre-registered rule (refuses to run if the pre-registration changed).
   ablation_report:
     cmd: uv run python scripts/43_ablation_report.py
@@ -989,6 +989,7 @@ stages:
       - src/dictionary/model.py
       - src/dictionary/snapshot.py
       - src/eval/config.py
+      - src/eval/near_miss.py
       - src/eval/records.py
       - src/eval/reports.py
       - src/tools/chart.py
@@ -1057,4 +1058,96 @@ stages:
           - escalation
     outs:
       - results/metrics/replay_check.json:
+          cache: false
+
+  # Where the analyst goes wrong: the winning run's wrong held-out answers classified by how their
+  # SQL and rows differ from the expert's, with a hand-checked sample; exploratory, the same for the
+  # five designs on the ablation set. Both queries are run again on the database; no model call.
+  error_analysis:
+    cmd: uv run python scripts/64_error_analysis.py
+    deps:
+      - scripts/64_error_analysis.py
+      - src/agent/confidence.py
+      - src/agent/verify.py
+      - src/data/bird.py
+      - src/db/connection.py
+      - src/db/execute.py
+      - src/db/guard.py
+      - src/db/hardening.py
+      - src/dictionary/model.py
+      - src/dictionary/snapshot.py
+      - src/eval/bootstrap.py
+      - src/eval/config.py
+      - src/eval/errors.py
+      - src/eval/near_miss.py
+      - src/eval/records.py
+      - src/eval/reports.py
+      - src/tools/chart.py
+      - src/tools/definitions.py
+      - src/tools/schema.py
+      - src/tools/sql.py
+      - src/tools/toolbox.py
+      - data/raw/bird_minidev
+      - results/metrics/splits.json
+      - results/metrics/ablation.json
+      - results/metrics/near_miss.json
+      - results/runs/main
+      - results/runs/ablation
+      - results/reviews/error_hand_check.yaml
+    params:
+      - configs/confidence.yaml:
+          - answers
+      - configs/eval.yaml:
+          - bootstrap
+    outs:
+      - results/metrics/error_analysis.json:
+          cache: false
+
+  # What errors cost: the expected cost per held-out question of the Phase 5 systems over grids of
+  # the cost of a wrong answer and of declining, from the stored runs only (no model is called).
+  decision_analysis:
+    cmd: uv run python scripts/65_decision_analysis.py
+    deps:
+      - scripts/65_decision_analysis.py
+      - src/agent/confidence.py
+      - src/data/bird.py
+      - src/eval/bootstrap.py
+      - src/eval/calibrate.py
+      - src/eval/config.py
+      - src/eval/decisions.py
+      - src/eval/records.py
+      - src/eval/reports.py
+      - src/llm/ledger.py
+      - src/llm/types.py
+      - results/metrics/splits.json
+      - results/metrics/ablation.json
+      - results/metrics/calibration.json
+      - results/runs/main
+      - results/runs/escalation
+      - results/runs/router
+    params:
+      - configs/confidence.yaml:
+          - answers
+          - decline
+      - configs/budget.yaml:
+          - prices_usd_per_mtok
+          - batch_discount
+      - configs/eval.yaml:
+          - bootstrap
+    outs:
+      - results/metrics/decision_analysis.json:
+          cache: false
+
+  phase6_plots:
+    cmd: uv run python scripts/66_phase6_plots.py
+    deps:
+      - scripts/66_phase6_plots.py
+      - results/metrics/error_analysis.json
+      - results/metrics/decision_analysis.json
+    outs:
+      - results/plots/errors_by_category.png:
+          cache: false
+      - results/plots/cheapest_system.png:
+          cache: false
+      - results/plots/cost_of_declining.png:
           cache: false

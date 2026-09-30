@@ -5,7 +5,7 @@ Refuses to run unless the pre-registration is frozen and unchanged. From the rec
 `main` stage (results/runs/main/; Claude Haiku 4.5's run is the ablation stage's when it ran the
 winning design there):
 
-- the winner with evidence, summarised on all 500 questions, on the held-out set (the headline:
+- the winner with evidence, summarized on all 500 questions, on the held-out set (the headline:
   nothing was chosen or fitted on it) and on the ablation set; the pilot's 30 questions, on
   which the prompts were tuned, are in the 500 but in no comparison;
 - the evidence hint's effect: the winner with evidence minus without, paired on the ablation

@@ -24,11 +24,8 @@ Usage:
 
 from __future__ import annotations
 
-import itertools
-import math
 import sys
 from collections import Counter
-from decimal import Decimal
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -38,56 +35,12 @@ from src.agent import verify  # noqa: E402
 from src.agent.confidence import answers_path, confidence_config  # noqa: E402
 from src.data.bird import questions, write_json  # noqa: E402
 from src.db.execute import Limits  # noqa: E402
+from src.eval.near_miss import MAX_ROWS_CHECKED, MAX_SEARCH, classify  # noqa: E402
 from src.eval.records import read_records  # noqa: E402
 from src.eval.reports import split_ids, subset  # noqa: E402
 from src.tools.toolbox import Toolbox  # noqa: E402
 
 OUT = ROOT / "results/metrics/near_miss.json"
-MAX_ROWS_CHECKED = 5000
-MAX_SEARCH = 20_000  # column choices tried per answer
-
-
-def rounded(row: tuple) -> tuple:
-    def r(v):
-        if isinstance(v, bool) or v is None:
-            return v
-        if isinstance(v, int | float | Decimal):
-            x = float(v)
-            return round(x, 2) if math.isfinite(x) else x
-        return v
-
-    return tuple(r(v) for v in row)
-
-
-def recoverable(pred: list[tuple], gold: list[tuple], width: int) -> bool | None:
-    """Whether some choice and order of the prediction's columns gives the gold rows as a set;
-    None if there are too many choices to try."""
-    target = set(gold)
-    n = len(pred[0]) if pred else 0
-    if n < width:
-        return False
-    if math.perm(n, width) > MAX_SEARCH:
-        return None
-    return any(
-        {tuple(row[i] for i in cols) for row in pred} == target
-        for cols in itertools.permutations(range(n), width)
-    )
-
-
-def classify(pred: list[tuple], gold: list[tuple], gold_width: int) -> str:
-    if len(pred) > MAX_ROWS_CHECKED or len(gold) > MAX_ROWS_CHECKED:
-        return "not_checked"
-    if set(map(rounded, pred)) == set(map(rounded, gold)):
-        return "rounding"
-    plain = recoverable(pred, gold, gold_width)
-    if plain:
-        return "columns"
-    both = recoverable([rounded(r) for r in pred], [rounded(r) for r in gold], gold_width)
-    if both:
-        return "columns_and_rounding"
-    if plain is None or both is None:
-        return "not_checked"
-    return "other"
 
 
 def main() -> None:

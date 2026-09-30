@@ -48,7 +48,7 @@ MODES = ("parser", "database", "privileges")
 BLOCKED = frozenset({"rejected", "denied", "contained", "no_effect"})
 DOCUMENTED_EXCEPTION = "disclosed"
 SECRET_TOKEN = "SECRET-TOKEN-4d1f9c"  # src/db/security_fixtures.sql
-# how long a cancelled query may take to stop, beyond the time limit
+# how long a canceled query may take to stop, beyond the time limit
 STOP_MARGIN_S = 2.0
 CONTAINED_KINDS = frozenset({"timeout", "resource_limit"})
 

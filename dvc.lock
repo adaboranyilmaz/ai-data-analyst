@@ -55,7 +55,7 @@ stages:
       nfiles: 77
     - path: docker/postgres/init/01_roles.sh
       hash: md5
-      md5: 08a65a404d80603490edbffda891fa8a
+      md5: 5c4082f4cb1427d28b273da2e93c2926
       size: 2128
     - path: scripts/11_load_bird.py
       hash: md5
@@ -131,11 +131,11 @@ stages:
       nfiles: 11
     - path: scripts/14_convert_descriptions.py
       hash: md5
-      md5: 8bd0bd7a2e14ba55e6be5abbb44937f7
+      md5: d87303aaa344a38852f7d3ef21132ae8
       size: 5067
     - path: src/dictionary/model.py
       hash: md5
-      md5: 565dc265f7588bb7652f2a1be02a29ff
+      md5: 4a08607073cf7171706e07b3df67796f
       size: 6975
     outs:
     - path: dictionary/california_schools.yaml
@@ -183,7 +183,7 @@ stages:
     deps:
     - path: dictionary
       hash: md5
-      md5: 445b94a8f0ac3f1ccc6ea485179f3009.dir
+      md5: 8b6308ec742b7e2e49c9c32ae0a0356d.dir
       size: 276944
       nfiles: 24
     - path: results/metrics/bird_load.json
@@ -200,11 +200,11 @@ stages:
       size: 243001
     - path: scripts/15_data_stats.py
       hash: md5
-      md5: f2189a603dc8de2b9d527c6077e34661
+      md5: 34213d9d390c1e95f53c9147195a14c3
       size: 6037
     - path: src/dictionary/model.py
       hash: md5
-      md5: 565dc265f7588bb7652f2a1be02a29ff
+      md5: 4a08607073cf7171706e07b3df67796f
       size: 6975
     outs:
     - path: results/metrics/data_stats.json
@@ -281,8 +281,8 @@ stages:
       size: 1779
     - path: src/db/execute.py
       hash: md5
-      md5: 0c65f6770b40fd9009f582bce69ff155
-      size: 9856
+      md5: 8ed4e2fe52a061567b74f2eff1b9633f
+      size: 9854
     - path: src/db/guard.py
       hash: md5
       md5: d1ac663da0810f236a13f1f98d0026c3
@@ -293,8 +293,8 @@ stages:
       size: 8524
     - path: src/db/security_suite.py
       hash: md5
-      md5: 319770339579aee35b0804b988bbc61b
-      size: 13574
+      md5: 8a16e2e87cfd0528d833ee9800888890
+      size: 13573
     - path: src/tools/sql.py
       hash: md5
       md5: be425cb4e91b450367c30ee9b5a8b9d1
@@ -322,7 +322,7 @@ stages:
       nfiles: 77
     - path: dictionary
       hash: md5
-      md5: 445b94a8f0ac3f1ccc6ea485179f3009.dir
+      md5: 8b6308ec742b7e2e49c9c32ae0a0356d.dir
       size: 276944
       nfiles: 24
     - path: results/metrics/db_hardening.json
@@ -339,8 +339,8 @@ stages:
       size: 5691
     - path: src/db/execute.py
       hash: md5
-      md5: 0c65f6770b40fd9009f582bce69ff155
-      size: 9856
+      md5: 8ed4e2fe52a061567b74f2eff1b9633f
+      size: 9854
     - path: src/db/guard.py
       hash: md5
       md5: d1ac663da0810f236a13f1f98d0026c3
@@ -383,7 +383,7 @@ stages:
     deps:
     - path: scripts/30_fetch_bird_eval.py
       hash: md5
-      md5: 542afbe57d9a514f871be413d08a720f
+      md5: 71ded0c9cd8472fd0d5548d5ff630668
       size: 1681
     params:
       configs/eval.yaml:
@@ -434,8 +434,8 @@ stages:
       size: 12678
     - path: src/db/execute.py
       hash: md5
-      md5: 0c65f6770b40fd9009f582bce69ff155
-      size: 9856
+      md5: 8ed4e2fe52a061567b74f2eff1b9633f
+      size: 9854
     - path: src/db/values.py
       hash: md5
       md5: 89b4c48e9a002dd8fb24dcd84d56f716
@@ -531,20 +531,20 @@ stages:
       size: 243001
     - path: scripts/33_own_set_gold.py
       hash: md5
-      md5: 2f456a8565983a44310657b0fedb08dd
+      md5: c9f155294055f9e5ba82a522bee1a4d2
       size: 7630
     - path: src/db/execute.py
       hash: md5
-      md5: 0c65f6770b40fd9009f582bce69ff155
-      size: 9856
+      md5: 8ed4e2fe52a061567b74f2eff1b9633f
+      size: 9854
     - path: src/db/guard.py
       hash: md5
       md5: d1ac663da0810f236a13f1f98d0026c3
       size: 15204
     - path: src/eval/own_set.py
       hash: md5
-      md5: 739d06d4de65b499085be9ff0fbd06ed
-      size: 5104
+      md5: 47916d86a55febeab4d77b14e44f8de7
+      size: 5103
     outs:
     - path: data/own_set
       hash: md5
@@ -569,7 +569,7 @@ stages:
       nfiles: 77
     - path: dictionary
       hash: md5
-      md5: 445b94a8f0ac3f1ccc6ea485179f3009.dir
+      md5: 8b6308ec742b7e2e49c9c32ae0a0356d.dir
       size: 276944
       nfiles: 24
     - path: prompts/agent_v3.md
@@ -618,8 +618,8 @@ stages:
       size: 9799
     - path: src/agent/evaluate.py
       hash: md5
-      md5: 6bf915390380cb3907031e6b9999fc1f
-      size: 11902
+      md5: ed51023043b86d6d13203ca42131b1f0
+      size: 11901
     - path: src/agent/run.py
       hash: md5
       md5: ac598a595ea6399f4f04feb2c48611b0
@@ -630,8 +630,8 @@ stages:
       size: 3932
     - path: src/agent/steps.py
       hash: md5
-      md5: f8f290e313b3a61dc77bd816cece2023
-      size: 1885
+      md5: c44cf70db164421a5ff60263af120bb5
+      size: 1884
     - path: src/agent/tools.py
       hash: md5
       md5: aa21cbfc63893d2f095b1c276e5c967b
@@ -642,8 +642,8 @@ stages:
       size: 7107
     - path: src/db/execute.py
       hash: md5
-      md5: 0c65f6770b40fd9009f582bce69ff155
-      size: 9856
+      md5: 8ed4e2fe52a061567b74f2eff1b9633f
+      size: 9854
     - path: src/db/guard.py
       hash: md5
       md5: d1ac663da0810f236a13f1f98d0026c3
@@ -658,20 +658,20 @@ stages:
       size: 9189
     - path: src/eval/own_set.py
       hash: md5
-      md5: 739d06d4de65b499085be9ff0fbd06ed
-      size: 5104
+      md5: 47916d86a55febeab4d77b14e44f8de7
+      size: 5103
     - path: src/eval/records.py
       hash: md5
       md5: 12430c79b94e082121d8125ede4acd38
       size: 6797
     - path: src/llm/backends.py
       hash: md5
-      md5: 4e04238e68504b7c74573d4fb2eba181
+      md5: 4a9658b77297f1f53b06260ef5e79f80
       size: 14261
     - path: src/llm/batch.py
       hash: md5
-      md5: 5bbbc1de77f434b04c096c591d9545d1
-      size: 8498
+      md5: ecaadf245ab910f56c73851f969f18aa
+      size: 8497
     - path: src/llm/cache.py
       hash: md5
       md5: 264497051baa2e5eaf179b5072f7047f
@@ -888,7 +888,7 @@ stages:
       nfiles: 77
     - path: dictionary
       hash: md5
-      md5: 445b94a8f0ac3f1ccc6ea485179f3009.dir
+      md5: 8b6308ec742b7e2e49c9c32ae0a0356d.dir
       size: 276944
       nfiles: 24
     - path: prompts/agent_v3.md
@@ -937,8 +937,8 @@ stages:
       size: 9799
     - path: src/agent/evaluate.py
       hash: md5
-      md5: 6bf915390380cb3907031e6b9999fc1f
-      size: 11902
+      md5: ed51023043b86d6d13203ca42131b1f0
+      size: 11901
     - path: src/agent/run.py
       hash: md5
       md5: ac598a595ea6399f4f04feb2c48611b0
@@ -949,8 +949,8 @@ stages:
       size: 3932
     - path: src/agent/steps.py
       hash: md5
-      md5: f8f290e313b3a61dc77bd816cece2023
-      size: 1885
+      md5: c44cf70db164421a5ff60263af120bb5
+      size: 1884
     - path: src/agent/tools.py
       hash: md5
       md5: aa21cbfc63893d2f095b1c276e5c967b
@@ -961,8 +961,8 @@ stages:
       size: 7107
     - path: src/db/execute.py
       hash: md5
-      md5: 0c65f6770b40fd9009f582bce69ff155
-      size: 9856
+      md5: 8ed4e2fe52a061567b74f2eff1b9633f
+      size: 9854
     - path: src/db/guard.py
       hash: md5
       md5: d1ac663da0810f236a13f1f98d0026c3
@@ -977,20 +977,20 @@ stages:
       size: 9189
     - path: src/eval/own_set.py
       hash: md5
-      md5: 739d06d4de65b499085be9ff0fbd06ed
-      size: 5104
+      md5: 47916d86a55febeab4d77b14e44f8de7
+      size: 5103
     - path: src/eval/records.py
       hash: md5
       md5: 12430c79b94e082121d8125ede4acd38
       size: 6797
     - path: src/llm/backends.py
       hash: md5
-      md5: 4e04238e68504b7c74573d4fb2eba181
+      md5: 4a9658b77297f1f53b06260ef5e79f80
       size: 14261
     - path: src/llm/batch.py
       hash: md5
-      md5: 5bbbc1de77f434b04c096c591d9545d1
-      size: 8498
+      md5: ecaadf245ab910f56c73851f969f18aa
+      size: 8497
     - path: src/llm/cache.py
       hash: md5
       md5: 264497051baa2e5eaf179b5072f7047f
@@ -1207,7 +1207,7 @@ stages:
       nfiles: 10
     - path: scripts/43_ablation_report.py
       hash: md5
-      md5: 84245c0d2ba4f68a36a3132ee7dc530c
+      md5: 6f6db7d1c14d8a487acc92f25ca3d71d
       size: 5521
     - path: src/eval/bootstrap.py
       hash: md5
@@ -1235,8 +1235,8 @@ stages:
       size: 4535
     - path: src/eval/summary.py
       hash: md5
-      md5: 5f7686aabbaac57f97ef108c5dab404e
-      size: 13581
+      md5: 46181323cd9afecf72453c15c5b1217f
+      size: 13580
     params:
       configs/agent.yaml:
         stages.ablation:
@@ -1312,7 +1312,7 @@ stages:
       nfiles: 77
     - path: dictionary
       hash: md5
-      md5: 445b94a8f0ac3f1ccc6ea485179f3009.dir
+      md5: 8b6308ec742b7e2e49c9c32ae0a0356d.dir
       size: 276944
       nfiles: 24
     - path: own_set/questions.yaml
@@ -1369,8 +1369,8 @@ stages:
       size: 9799
     - path: src/agent/evaluate.py
       hash: md5
-      md5: 6bf915390380cb3907031e6b9999fc1f
-      size: 11902
+      md5: ed51023043b86d6d13203ca42131b1f0
+      size: 11901
     - path: src/agent/run.py
       hash: md5
       md5: ac598a595ea6399f4f04feb2c48611b0
@@ -1381,8 +1381,8 @@ stages:
       size: 3932
     - path: src/agent/steps.py
       hash: md5
-      md5: f8f290e313b3a61dc77bd816cece2023
-      size: 1885
+      md5: c44cf70db164421a5ff60263af120bb5
+      size: 1884
     - path: src/agent/tools.py
       hash: md5
       md5: aa21cbfc63893d2f095b1c276e5c967b
@@ -1393,8 +1393,8 @@ stages:
       size: 7107
     - path: src/db/execute.py
       hash: md5
-      md5: 0c65f6770b40fd9009f582bce69ff155
-      size: 9856
+      md5: 8ed4e2fe52a061567b74f2eff1b9633f
+      size: 9854
     - path: src/db/guard.py
       hash: md5
       md5: d1ac663da0810f236a13f1f98d0026c3
@@ -1409,20 +1409,20 @@ stages:
       size: 9189
     - path: src/eval/own_set.py
       hash: md5
-      md5: 739d06d4de65b499085be9ff0fbd06ed
-      size: 5104
+      md5: 47916d86a55febeab4d77b14e44f8de7
+      size: 5103
     - path: src/eval/records.py
       hash: md5
       md5: 12430c79b94e082121d8125ede4acd38
       size: 6797
     - path: src/llm/backends.py
       hash: md5
-      md5: 4e04238e68504b7c74573d4fb2eba181
+      md5: 4a9658b77297f1f53b06260ef5e79f80
       size: 14261
     - path: src/llm/batch.py
       hash: md5
-      md5: 5bbbc1de77f434b04c096c591d9545d1
-      size: 8498
+      md5: ecaadf245ab910f56c73851f969f18aa
+      size: 8497
     - path: src/llm/cache.py
       hash: md5
       md5: 264497051baa2e5eaf179b5072f7047f
@@ -1660,7 +1660,7 @@ stages:
       nfiles: 77
     - path: dictionary
       hash: md5
-      md5: 445b94a8f0ac3f1ccc6ea485179f3009.dir
+      md5: 8b6308ec742b7e2e49c9c32ae0a0356d.dir
       size: 276944
       nfiles: 24
     - path: own_set/questions.yaml
@@ -1717,8 +1717,8 @@ stages:
       size: 9799
     - path: src/agent/evaluate.py
       hash: md5
-      md5: 6bf915390380cb3907031e6b9999fc1f
-      size: 11902
+      md5: ed51023043b86d6d13203ca42131b1f0
+      size: 11901
     - path: src/agent/run.py
       hash: md5
       md5: ac598a595ea6399f4f04feb2c48611b0
@@ -1729,8 +1729,8 @@ stages:
       size: 3932
     - path: src/agent/steps.py
       hash: md5
-      md5: f8f290e313b3a61dc77bd816cece2023
-      size: 1885
+      md5: c44cf70db164421a5ff60263af120bb5
+      size: 1884
     - path: src/agent/tools.py
       hash: md5
       md5: aa21cbfc63893d2f095b1c276e5c967b
@@ -1741,8 +1741,8 @@ stages:
       size: 7107
     - path: src/db/execute.py
       hash: md5
-      md5: 0c65f6770b40fd9009f582bce69ff155
-      size: 9856
+      md5: 8ed4e2fe52a061567b74f2eff1b9633f
+      size: 9854
     - path: src/db/guard.py
       hash: md5
       md5: d1ac663da0810f236a13f1f98d0026c3
@@ -1757,20 +1757,20 @@ stages:
       size: 9189
     - path: src/eval/own_set.py
       hash: md5
-      md5: 739d06d4de65b499085be9ff0fbd06ed
-      size: 5104
+      md5: 47916d86a55febeab4d77b14e44f8de7
+      size: 5103
     - path: src/eval/records.py
       hash: md5
       md5: 12430c79b94e082121d8125ede4acd38
       size: 6797
     - path: src/llm/backends.py
       hash: md5
-      md5: 4e04238e68504b7c74573d4fb2eba181
+      md5: 4a9658b77297f1f53b06260ef5e79f80
       size: 14261
     - path: src/llm/batch.py
       hash: md5
-      md5: 5bbbc1de77f434b04c096c591d9545d1
-      size: 8498
+      md5: ecaadf245ab910f56c73851f969f18aa
+      size: 8497
     - path: src/llm/cache.py
       hash: md5
       md5: 264497051baa2e5eaf179b5072f7047f
@@ -2007,7 +2007,7 @@ stages:
       nfiles: 2
     - path: scripts/45_main_report.py
       hash: md5
-      md5: 44d498bd146c3f8ebda7b9aa427be182
+      md5: 353790090814819dbf0d31b51b827cec
       size: 6176
     - path: src/agent/stages.py
       hash: md5
@@ -2039,8 +2039,8 @@ stages:
       size: 4535
     - path: src/eval/summary.py
       hash: md5
-      md5: 5f7686aabbaac57f97ef108c5dab404e
-      size: 13581
+      md5: 46181323cd9afecf72453c15c5b1217f
+      size: 13580
     params:
       configs/agent.yaml:
         stages.main:
@@ -2109,8 +2109,8 @@ stages:
       nfiles: 1
     - path: scripts/46_own_set_report.py
       hash: md5
-      md5: e7a4b66c8ff7446c3e0cca21abbd505a
-      size: 7471
+      md5: 2e87a27bb6a4b3fb17e2c306c736ad01
+      size: 7470
     - path: src/agent/stages.py
       hash: md5
       md5: bf695447e1c64b9dd93e8e6acbd64aeb
@@ -2129,8 +2129,8 @@ stages:
       size: 4470
     - path: src/eval/own_set.py
       hash: md5
-      md5: 739d06d4de65b499085be9ff0fbd06ed
-      size: 5104
+      md5: 47916d86a55febeab4d77b14e44f8de7
+      size: 5103
     - path: src/eval/preregistration.py
       hash: md5
       md5: 335201c17bf6a46608b4c969a0c903d6
@@ -2149,8 +2149,8 @@ stages:
       size: 4535
     - path: src/eval/summary.py
       hash: md5
-      md5: 5f7686aabbaac57f97ef108c5dab404e
-      size: 13581
+      md5: 46181323cd9afecf72453c15c5b1217f
+      size: 13580
     params:
       configs/eval.yaml:
         bootstrap:
@@ -2255,13 +2255,13 @@ stages:
       size: 9057
     - path: src/agent
       hash: md5
-      md5: 02106381c02374e2515e4f46b50bcf43.dir
-      size: 119691
+      md5: 8ca8b178d933ec4d39c7b7390f7af0bc.dir
+      size: 119689
       nfiles: 14
     - path: src/db/execute.py
       hash: md5
-      md5: 0c65f6770b40fd9009f582bce69ff155
-      size: 9856
+      md5: 8ed4e2fe52a061567b74f2eff1b9633f
+      size: 9854
     - path: src/db/guard.py
       hash: md5
       md5: d1ac663da0810f236a13f1f98d0026c3
@@ -2280,8 +2280,8 @@ stages:
       size: 6797
     - path: src/llm
       hash: md5
-      md5: a927ca2847efc1d1088babe9f8996819.dir
-      size: 40625
+      md5: c856a26f8ddbafebe46b7dd9d23844de.dir
+      size: 40624
       nfiles: 7
     - path: src/tools
       hash: md5
@@ -2448,7 +2448,7 @@ stages:
       nfiles: 77
     - path: dictionary
       hash: md5
-      md5: 445b94a8f0ac3f1ccc6ea485179f3009.dir
+      md5: 8b6308ec742b7e2e49c9c32ae0a0356d.dir
       size: 276944
       nfiles: 24
     - path: prompts/critic_v1.md
@@ -2502,16 +2502,16 @@ stages:
       size: 9799
     - path: src/agent/evaluate.py
       hash: md5
-      md5: 6bf915390380cb3907031e6b9999fc1f
-      size: 11902
+      md5: ed51023043b86d6d13203ca42131b1f0
+      size: 11901
     - path: src/agent/run.py
       hash: md5
       md5: ac598a595ea6399f4f04feb2c48611b0
       size: 17698
     - path: src/agent/steps.py
       hash: md5
-      md5: f8f290e313b3a61dc77bd816cece2023
-      size: 1885
+      md5: c44cf70db164421a5ff60263af120bb5
+      size: 1884
     - path: src/agent/tools.py
       hash: md5
       md5: aa21cbfc63893d2f095b1c276e5c967b
@@ -2530,8 +2530,8 @@ stages:
       size: 1392
     - path: src/db/execute.py
       hash: md5
-      md5: 0c65f6770b40fd9009f582bce69ff155
-      size: 9856
+      md5: 8ed4e2fe52a061567b74f2eff1b9633f
+      size: 9854
     - path: src/db/guard.py
       hash: md5
       md5: d1ac663da0810f236a13f1f98d0026c3
@@ -2546,7 +2546,7 @@ stages:
       size: 3787
     - path: src/dictionary/model.py
       hash: md5
-      md5: 565dc265f7588bb7652f2a1be02a29ff
+      md5: 4a08607073cf7171706e07b3df67796f
       size: 6975
     - path: src/dictionary/snapshot.py
       hash: md5
@@ -2566,20 +2566,20 @@ stages:
       size: 9189
     - path: src/eval/own_set.py
       hash: md5
-      md5: 739d06d4de65b499085be9ff0fbd06ed
-      size: 5104
+      md5: 47916d86a55febeab4d77b14e44f8de7
+      size: 5103
     - path: src/eval/records.py
       hash: md5
       md5: 12430c79b94e082121d8125ede4acd38
       size: 6797
     - path: src/llm/backends.py
       hash: md5
-      md5: 4e04238e68504b7c74573d4fb2eba181
+      md5: 4a9658b77297f1f53b06260ef5e79f80
       size: 14261
     - path: src/llm/batch.py
       hash: md5
-      md5: 5bbbc1de77f434b04c096c591d9545d1
-      size: 8498
+      md5: ecaadf245ab910f56c73851f969f18aa
+      size: 8497
     - path: src/llm/cache.py
       hash: md5
       md5: 264497051baa2e5eaf179b5072f7047f
@@ -2711,7 +2711,7 @@ stages:
       nfiles: 77
     - path: dictionary
       hash: md5
-      md5: 445b94a8f0ac3f1ccc6ea485179f3009.dir
+      md5: 8b6308ec742b7e2e49c9c32ae0a0356d.dir
       size: 276944
       nfiles: 24
     - path: prompts/single_shot_v3.md
@@ -2764,8 +2764,8 @@ stages:
       size: 5461
     - path: src/agent/evaluate.py
       hash: md5
-      md5: 6bf915390380cb3907031e6b9999fc1f
-      size: 11902
+      md5: ed51023043b86d6d13203ca42131b1f0
+      size: 11901
     - path: src/agent/run.py
       hash: md5
       md5: ac598a595ea6399f4f04feb2c48611b0
@@ -2776,8 +2776,8 @@ stages:
       size: 3932
     - path: src/agent/steps.py
       hash: md5
-      md5: f8f290e313b3a61dc77bd816cece2023
-      size: 1885
+      md5: c44cf70db164421a5ff60263af120bb5
+      size: 1884
     - path: src/agent/tools.py
       hash: md5
       md5: aa21cbfc63893d2f095b1c276e5c967b
@@ -2796,8 +2796,8 @@ stages:
       size: 1392
     - path: src/db/execute.py
       hash: md5
-      md5: 0c65f6770b40fd9009f582bce69ff155
-      size: 9856
+      md5: 8ed4e2fe52a061567b74f2eff1b9633f
+      size: 9854
     - path: src/db/guard.py
       hash: md5
       md5: d1ac663da0810f236a13f1f98d0026c3
@@ -2812,7 +2812,7 @@ stages:
       size: 3787
     - path: src/dictionary/model.py
       hash: md5
-      md5: 565dc265f7588bb7652f2a1be02a29ff
+      md5: 4a08607073cf7171706e07b3df67796f
       size: 6975
     - path: src/dictionary/snapshot.py
       hash: md5
@@ -2832,20 +2832,20 @@ stages:
       size: 9189
     - path: src/eval/own_set.py
       hash: md5
-      md5: 739d06d4de65b499085be9ff0fbd06ed
-      size: 5104
+      md5: 47916d86a55febeab4d77b14e44f8de7
+      size: 5103
     - path: src/eval/records.py
       hash: md5
       md5: 12430c79b94e082121d8125ede4acd38
       size: 6797
     - path: src/llm/backends.py
       hash: md5
-      md5: 4e04238e68504b7c74573d4fb2eba181
+      md5: 4a9658b77297f1f53b06260ef5e79f80
       size: 14261
     - path: src/llm/batch.py
       hash: md5
-      md5: 5bbbc1de77f434b04c096c591d9545d1
-      size: 8498
+      md5: ecaadf245ab910f56c73851f969f18aa
+      size: 8497
     - path: src/llm/cache.py
       hash: md5
       md5: 264497051baa2e5eaf179b5072f7047f
@@ -3107,8 +3107,8 @@ stages:
       size: 4535
     - path: src/eval/summary.py
       hash: md5
-      md5: 5f7686aabbaac57f97ef108c5dab404e
-      size: 13581
+      md5: 46181323cd9afecf72453c15c5b1217f
+      size: 13580
     params:
       configs/confidence.yaml:
         answers:
@@ -3192,7 +3192,7 @@ stages:
       nfiles: 2
     - path: scripts/54_escalation_report.py
       hash: md5
-      md5: 609e0c72f75bf175a7feaf4f49c004d8
+      md5: d757059320035f9ddad19e116517bd54
       size: 6116
     - path: src/agent/confidence.py
       hash: md5
@@ -3232,8 +3232,8 @@ stages:
       size: 4535
     - path: src/eval/summary.py
       hash: md5
-      md5: 5f7686aabbaac57f97ef108c5dab404e
-      size: 13581
+      md5: 46181323cd9afecf72453c15c5b1217f
+      size: 13580
     params:
       configs/confidence.yaml:
         escalation:
@@ -3290,7 +3290,7 @@ stages:
       nfiles: 77
     - path: dictionary
       hash: md5
-      md5: 445b94a8f0ac3f1ccc6ea485179f3009.dir
+      md5: 8b6308ec742b7e2e49c9c32ae0a0356d.dir
       size: 276944
       nfiles: 24
     - path: prompts/single_shot_v3.md
@@ -3356,8 +3356,8 @@ stages:
       size: 5461
     - path: src/agent/evaluate.py
       hash: md5
-      md5: 6bf915390380cb3907031e6b9999fc1f
-      size: 11902
+      md5: ed51023043b86d6d13203ca42131b1f0
+      size: 11901
     - path: src/agent/run.py
       hash: md5
       md5: ac598a595ea6399f4f04feb2c48611b0
@@ -3368,8 +3368,8 @@ stages:
       size: 3932
     - path: src/agent/steps.py
       hash: md5
-      md5: f8f290e313b3a61dc77bd816cece2023
-      size: 1885
+      md5: c44cf70db164421a5ff60263af120bb5
+      size: 1884
     - path: src/agent/tools.py
       hash: md5
       md5: aa21cbfc63893d2f095b1c276e5c967b
@@ -3388,8 +3388,8 @@ stages:
       size: 1392
     - path: src/db/execute.py
       hash: md5
-      md5: 0c65f6770b40fd9009f582bce69ff155
-      size: 9856
+      md5: 8ed4e2fe52a061567b74f2eff1b9633f
+      size: 9854
     - path: src/db/guard.py
       hash: md5
       md5: d1ac663da0810f236a13f1f98d0026c3
@@ -3404,7 +3404,7 @@ stages:
       size: 3787
     - path: src/dictionary/model.py
       hash: md5
-      md5: 565dc265f7588bb7652f2a1be02a29ff
+      md5: 4a08607073cf7171706e07b3df67796f
       size: 6975
     - path: src/dictionary/snapshot.py
       hash: md5
@@ -3424,20 +3424,20 @@ stages:
       size: 9189
     - path: src/eval/own_set.py
       hash: md5
-      md5: 739d06d4de65b499085be9ff0fbd06ed
-      size: 5104
+      md5: 47916d86a55febeab4d77b14e44f8de7
+      size: 5103
     - path: src/eval/records.py
       hash: md5
       md5: 12430c79b94e082121d8125ede4acd38
       size: 6797
     - path: src/llm/backends.py
       hash: md5
-      md5: 4e04238e68504b7c74573d4fb2eba181
+      md5: 4a9658b77297f1f53b06260ef5e79f80
       size: 14261
     - path: src/llm/batch.py
       hash: md5
-      md5: 5bbbc1de77f434b04c096c591d9545d1
-      size: 8498
+      md5: ecaadf245ab910f56c73851f969f18aa
+      size: 8497
     - path: src/llm/cache.py
       hash: md5
       md5: 264497051baa2e5eaf179b5072f7047f
@@ -3709,8 +3709,8 @@ stages:
       size: 4535
     - path: src/eval/summary.py
       hash: md5
-      md5: 5f7686aabbaac57f97ef108c5dab404e
-      size: 13581
+      md5: 46181323cd9afecf72453c15c5b1217f
+      size: 13580
     - path: src/llm/ledger.py
       hash: md5
       md5: 46d662ed376a96a7f3158056b311d8fa
@@ -3818,7 +3818,7 @@ stages:
       nfiles: 77
     - path: dictionary
       hash: md5
-      md5: 445b94a8f0ac3f1ccc6ea485179f3009.dir
+      md5: 8b6308ec742b7e2e49c9c32ae0a0356d.dir
       size: 276944
       nfiles: 24
     - path: prompts/critic_v1.md
@@ -3867,16 +3867,16 @@ stages:
       size: 9799
     - path: src/agent/evaluate.py
       hash: md5
-      md5: 6bf915390380cb3907031e6b9999fc1f
-      size: 11902
+      md5: ed51023043b86d6d13203ca42131b1f0
+      size: 11901
     - path: src/agent/run.py
       hash: md5
       md5: ac598a595ea6399f4f04feb2c48611b0
       size: 17698
     - path: src/agent/steps.py
       hash: md5
-      md5: f8f290e313b3a61dc77bd816cece2023
-      size: 1885
+      md5: c44cf70db164421a5ff60263af120bb5
+      size: 1884
     - path: src/agent/tools.py
       hash: md5
       md5: aa21cbfc63893d2f095b1c276e5c967b
@@ -3903,8 +3903,8 @@ stages:
       size: 1392
     - path: src/db/execute.py
       hash: md5
-      md5: 0c65f6770b40fd9009f582bce69ff155
-      size: 9856
+      md5: 8ed4e2fe52a061567b74f2eff1b9633f
+      size: 9854
     - path: src/db/guard.py
       hash: md5
       md5: d1ac663da0810f236a13f1f98d0026c3
@@ -3919,7 +3919,7 @@ stages:
       size: 3787
     - path: src/dictionary/model.py
       hash: md5
-      md5: 565dc265f7588bb7652f2a1be02a29ff
+      md5: 4a08607073cf7171706e07b3df67796f
       size: 6975
     - path: src/dictionary/snapshot.py
       hash: md5
@@ -3939,20 +3939,20 @@ stages:
       size: 9189
     - path: src/eval/own_set.py
       hash: md5
-      md5: 739d06d4de65b499085be9ff0fbd06ed
-      size: 5104
+      md5: 47916d86a55febeab4d77b14e44f8de7
+      size: 5103
     - path: src/eval/records.py
       hash: md5
       md5: 12430c79b94e082121d8125ede4acd38
       size: 6797
     - path: src/llm/backends.py
       hash: md5
-      md5: 4e04238e68504b7c74573d4fb2eba181
+      md5: 4a9658b77297f1f53b06260ef5e79f80
       size: 14261
     - path: src/llm/batch.py
       hash: md5
-      md5: 5bbbc1de77f434b04c096c591d9545d1
-      size: 8498
+      md5: ecaadf245ab910f56c73851f969f18aa
+      size: 8497
     - path: src/llm/cache.py
       hash: md5
       md5: 264497051baa2e5eaf179b5072f7047f
@@ -4214,12 +4214,12 @@ stages:
       size: 4535
     - path: src/eval/summary.py
       hash: md5
-      md5: 5f7686aabbaac57f97ef108c5dab404e
-      size: 13581
+      md5: 46181323cd9afecf72453c15c5b1217f
+      size: 13580
     - path: src/eval/summary.py
       hash: md5
-      md5: 5f7686aabbaac57f97ef108c5dab404e
-      size: 13581
+      md5: 46181323cd9afecf72453c15c5b1217f
+      size: 13580
     params:
       configs/confidence.yaml:
         critic:
@@ -4283,8 +4283,8 @@ stages:
       nfiles: 2
     - path: scripts/58_near_miss.py
       hash: md5
-      md5: 8be3f87bea1e8ed33663c6063402fd1e
-      size: 5760
+      md5: 0e422d6fea95fd0a7db71ec11fb038f2
+      size: 4296
     - path: src/agent/confidence.py
       hash: md5
       md5: 6536796f30d3d83eb7f6aa88497f254c
@@ -4303,8 +4303,8 @@ stages:
       size: 1392
     - path: src/db/execute.py
       hash: md5
-      md5: 0c65f6770b40fd9009f582bce69ff155
-      size: 9856
+      md5: 8ed4e2fe52a061567b74f2eff1b9633f
+      size: 9854
     - path: src/db/guard.py
       hash: md5
       md5: d1ac663da0810f236a13f1f98d0026c3
@@ -4315,7 +4315,7 @@ stages:
       size: 8524
     - path: src/dictionary/model.py
       hash: md5
-      md5: 565dc265f7588bb7652f2a1be02a29ff
+      md5: 4a08607073cf7171706e07b3df67796f
       size: 6975
     - path: src/dictionary/snapshot.py
       hash: md5
@@ -4325,6 +4325,10 @@ stages:
       hash: md5
       md5: ef8ed88399d05a712d3388b7de6ef891
       size: 480
+    - path: src/eval/near_miss.py
+      hash: md5
+      md5: 863d282dfb0993f8f9e967ec3ff87380
+      size: 2551
     - path: src/eval/records.py
       hash: md5
       md5: 12430c79b94e082121d8125ede4acd38
@@ -4379,8 +4383,8 @@ stages:
       size: 123032
     - path: scripts/57_plots.py
       hash: md5
-      md5: ea60ff8757c5851c2b948c6b7eff464e
-      size: 5725
+      md5: 50c9edb8b4c5d22fb5a17ff5ce1703dd
+      size: 5724
     outs:
     - path: results/plots/reliability_held_out.png
       hash: md5
@@ -4390,3 +4394,284 @@ stages:
       hash: md5
       md5: 9f81d1b37dd33eac6234f214ebf40f1d
       size: 136933
+  error_analysis:
+    cmd: uv run python scripts/64_error_analysis.py
+    deps:
+    - path: data/raw/bird_minidev
+      hash: md5
+      md5: de9ac463b8487b2d6c1b587646cc0ccc.dir
+      size: 518739
+      nfiles: 77
+    - path: results/metrics/ablation.json
+      hash: md5
+      md5: 1409cd2d3e59038899cc5e1dc6684028
+      size: 211300
+    - path: results/metrics/near_miss.json
+      hash: md5
+      md5: 3330bc801570e8ffeb123a5401f58a0e
+      size: 2019
+    - path: results/metrics/splits.json
+      hash: md5
+      md5: 8fb712fd3a959d31ac6aacc79f7b50c2
+      size: 9712
+    - path: results/reviews/error_hand_check.yaml
+      hash: md5
+      md5: 3cacc7216275772b82935af007bef1fc
+      size: 33387
+    - path: results/runs/ablation
+      hash: md5
+      md5: bbface1c9b120c1da34ae844f6d13ede.dir
+      size: 1908752
+      nfiles: 10
+    - path: results/runs/main
+      hash: md5
+      md5: b075bd245403301617a204942619ca2b.dir
+      size: 856822
+      nfiles: 2
+    - path: scripts/64_error_analysis.py
+      hash: md5
+      md5: 5b0fdaa4a92f2de0fc0fb3bd692b4937
+      size: 13193
+    - path: src/agent/confidence.py
+      hash: md5
+      md5: 6536796f30d3d83eb7f6aa88497f254c
+      size: 4499
+    - path: src/agent/verify.py
+      hash: md5
+      md5: ddd8e4392971a9eddf8f48fb218a964f
+      size: 7107
+    - path: src/data/bird.py
+      hash: md5
+      md5: 45e1b5dc7e07059e01bf1a1b9f695183
+      size: 2382
+    - path: src/db/connection.py
+      hash: md5
+      md5: 499bb640b62d76a6a8f7ae285be2b93e
+      size: 1392
+    - path: src/db/execute.py
+      hash: md5
+      md5: 8ed4e2fe52a061567b74f2eff1b9633f
+      size: 9854
+    - path: src/db/guard.py
+      hash: md5
+      md5: d1ac663da0810f236a13f1f98d0026c3
+      size: 15204
+    - path: src/db/hardening.py
+      hash: md5
+      md5: b5a3c955be3fdfdea464fdb7085cf054
+      size: 8524
+    - path: src/dictionary/model.py
+      hash: md5
+      md5: 4a08607073cf7171706e07b3df67796f
+      size: 6975
+    - path: src/dictionary/snapshot.py
+      hash: md5
+      md5: dcd0ce18396ab6b29c4488c9a674ba42
+      size: 3050
+    - path: src/eval/bootstrap.py
+      hash: md5
+      md5: 3f48b4ad951b8e0882f7f37c544816d9
+      size: 3009
+    - path: src/eval/config.py
+      hash: md5
+      md5: ef8ed88399d05a712d3388b7de6ef891
+      size: 480
+    - path: src/eval/errors.py
+      hash: md5
+      md5: 206c0f73c03560be8a895bfe508e6890
+      size: 13719
+    - path: src/eval/near_miss.py
+      hash: md5
+      md5: 863d282dfb0993f8f9e967ec3ff87380
+      size: 2551
+    - path: src/eval/records.py
+      hash: md5
+      md5: 12430c79b94e082121d8125ede4acd38
+      size: 6797
+    - path: src/eval/reports.py
+      hash: md5
+      md5: e3c298057a061e5a4778ad2353acc64c
+      size: 1971
+    - path: src/tools/chart.py
+      hash: md5
+      md5: bc8162edbd3432c3e37afa9e49ea1fe5
+      size: 4993
+    - path: src/tools/definitions.py
+      hash: md5
+      md5: 1b7a1eee9ad25bcde9f8ea52d68a120c
+      size: 3349
+    - path: src/tools/schema.py
+      hash: md5
+      md5: b2a428a5a1e72e98203fd23b6b55968c
+      size: 2754
+    - path: src/tools/sql.py
+      hash: md5
+      md5: be425cb4e91b450367c30ee9b5a8b9d1
+      size: 4639
+    - path: src/tools/toolbox.py
+      hash: md5
+      md5: d864c61493338149145259e67bcfc130
+      size: 4148
+    params:
+      configs/confidence.yaml:
+        answers:
+          stage: main
+          set: all
+          design: winner
+          model: claude-sonnet-5
+          evidence: true
+      configs/eval.yaml:
+        bootstrap:
+          resamples: 10000
+          confidence: 0.95
+          seed: 20260927
+    outs:
+    - path: results/metrics/error_analysis.json
+      hash: md5
+      md5: 408b0fbd34d3b1d75351fd63455ae986
+      size: 92427
+  decision_analysis:
+    cmd: uv run python scripts/65_decision_analysis.py
+    deps:
+    - path: results/metrics/ablation.json
+      hash: md5
+      md5: 1409cd2d3e59038899cc5e1dc6684028
+      size: 211300
+    - path: results/metrics/calibration.json
+      hash: md5
+      md5: d4062628eb0644e3331efba381edad95
+      size: 27925
+    - path: results/metrics/splits.json
+      hash: md5
+      md5: 8fb712fd3a959d31ac6aacc79f7b50c2
+      size: 9712
+    - path: results/runs/escalation
+      hash: md5
+      md5: 101edb4db0715157d1a4aa9740834613.dir
+      size: 192493
+      nfiles: 2
+    - path: results/runs/main
+      hash: md5
+      md5: b075bd245403301617a204942619ca2b.dir
+      size: 856822
+      nfiles: 2
+    - path: results/runs/router
+      hash: md5
+      md5: 43e35a55c4cee260896e1ac97cbb2e89.dir
+      size: 382701
+      nfiles: 1
+    - path: scripts/65_decision_analysis.py
+      hash: md5
+      md5: 917498090126a344affb5db88c326f4d
+      size: 11089
+    - path: src/agent/confidence.py
+      hash: md5
+      md5: 6536796f30d3d83eb7f6aa88497f254c
+      size: 4499
+    - path: src/data/bird.py
+      hash: md5
+      md5: 45e1b5dc7e07059e01bf1a1b9f695183
+      size: 2382
+    - path: src/eval/bootstrap.py
+      hash: md5
+      md5: 3f48b4ad951b8e0882f7f37c544816d9
+      size: 3009
+    - path: src/eval/calibrate.py
+      hash: md5
+      md5: 0ba0e8e65e6140d5072bf5c52a4df476
+      size: 9944
+    - path: src/eval/config.py
+      hash: md5
+      md5: ef8ed88399d05a712d3388b7de6ef891
+      size: 480
+    - path: src/eval/decisions.py
+      hash: md5
+      md5: 549543e02dc8c8480b441ca5606ce7a9
+      size: 5707
+    - path: src/eval/records.py
+      hash: md5
+      md5: 12430c79b94e082121d8125ede4acd38
+      size: 6797
+    - path: src/eval/reports.py
+      hash: md5
+      md5: e3c298057a061e5a4778ad2353acc64c
+      size: 1971
+    - path: src/llm/ledger.py
+      hash: md5
+      md5: 46d662ed376a96a7f3158056b311d8fa
+      size: 9071
+    - path: src/llm/types.py
+      hash: md5
+      md5: 0ab94c543b5f37cd7418db48acbce03c
+      size: 4700
+    params:
+      configs/budget.yaml:
+        batch_discount: 0.5
+        prices_usd_per_mtok:
+          claude-sonnet-5:
+            input: 2.0
+            output: 10.0
+            cache_write_5m: 2.5
+            cache_write_1h: 4.0
+            cache_read: 0.2
+          claude-haiku-4-5:
+            input: 1.0
+            output: 5.0
+            cache_write_5m: 1.25
+            cache_write_1h: 2.0
+            cache_read: 0.1
+          claude-opus-5-5:
+            input: 4.0
+            output: 20.0
+            cache_write_5m: 5.0
+            cache_write_1h: 8.0
+            cache_read: 0.2
+      configs/confidence.yaml:
+        answers:
+          stage: main
+          set: all
+          design: winner
+          model: claude-sonnet-5
+          evidence: true
+        decline:
+          calibrator: platt
+          target_accuracy: 0.9
+          min_answered: 15
+      configs/eval.yaml:
+        bootstrap:
+          resamples: 10000
+          confidence: 0.95
+          seed: 20260927
+    outs:
+    - path: results/metrics/decision_analysis.json
+      hash: md5
+      md5: 168896a42a06a7783e1fe5a951578183
+      size: 87071
+  phase6_plots:
+    cmd: uv run python scripts/66_phase6_plots.py
+    deps:
+    - path: results/metrics/decision_analysis.json
+      hash: md5
+      md5: 168896a42a06a7783e1fe5a951578183
+      size: 87071
+    - path: results/metrics/error_analysis.json
+      hash: md5
+      md5: 408b0fbd34d3b1d75351fd63455ae986
+      size: 92427
+    - path: scripts/66_phase6_plots.py
+      hash: md5
+      md5: 858d46523402cf89eb52be1f33533bf3
+      size: 10082
+    outs:
+    - path: results/plots/cheapest_system.png
+      hash: md5
+      md5: 257116208875ee68f1294908756a1010
+      size: 185960
+    - path: results/plots/cost_of_declining.png
+      hash: md5
+      md5: 6e9773f9d420025218cdf53ddff236c2
+      size: 123856
+    - path: results/plots/errors_by_category.png
+      hash: md5
+      md5: de53e0c2b187dbb420d31b2271590b03
+      size: 86901

@@ -4,7 +4,7 @@ Refuses to run unless the pre-registration is frozen and unchanged. From the esc
 run on the ablation set (results/runs/escalation/) and Claude Sonnet 5's run of the same design
 there (results/runs/ablation/), paired on the same questions:
 
-- both runs summarised (execution accuracy, calibration, cost), and Opus 5.5 minus Sonnet 5 with
+- both runs summarized (execution accuracy, calibration, cost), and Opus 5.5 minus Sonnet 5 with
   paired intervals;
 - the pre-registered rule (configs/confidence.yaml `escalation.adopt_min_gain`): Opus 5.5 is
   adopted only if its execution accuracy is higher by at least the minimum gain, with a paired

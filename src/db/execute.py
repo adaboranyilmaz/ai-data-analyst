@@ -41,7 +41,7 @@ from src.db.connection import AGENT_ROLE, connect
 CURSOR_NAME = "analyst_query"
 # Sessions opened here carry this name, so a server-side check can find the agent's queries.
 APPLICATION_NAME = "analyst_agent"
-# A cancelled query needs a moment to stop; the server-side timeout is a backstop only.
+# A canceled query needs a moment to stop; the server-side timeout is a backstop only.
 SERVER_TIMEOUT_MARGIN_S = 1.0
 
 
@@ -237,7 +237,7 @@ class ReadOnlyExecutor:
     def _count_rest(conn: psycopg.Connection, cursor: str, fetched: int) -> int | None:
         """Rows fetched plus the rows left, counted on the server; None if time ran out."""
         try:
-            with conn.transaction():  # a savepoint: a cancelled count leaves the rows usable
+            with conn.transaction():  # a savepoint: a canceled count leaves the rows usable
                 moved = conn.execute(
                     sql.SQL("MOVE FORWARD ALL IN {}").format(sql.Identifier(cursor))
                 ).rowcount

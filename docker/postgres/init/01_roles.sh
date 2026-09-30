@@ -1,6 +1,6 @@
 #!/bin/bash
 # The agent's read-only role, and a canary table the role tests try to change. Runs once, when
-# the data volume is first initialised (the image's /docker-entrypoint-initdb.d hook), as the
+# the data volume is first initialized (the image's /docker-entrypoint-initdb.d hook), as the
 # admin superuser. The entrypoint executes this file when it is executable and sources it
 # otherwise (a checkout without the executable bit), so it sets no shell options of its own:
 # the entrypoint already stops on the first failing command, and psql's exit status is this

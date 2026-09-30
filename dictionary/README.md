@@ -44,7 +44,7 @@ tables:
 ```
 
 A `code` holds values with a meaning to translate (`PRIJEM`: credit); a `label` is a name or an
-opaque code that is its own meaning (a district's name, an anonymised bank code). Converted
+opaque code that is its own meaning (a district's name, an anonymized bank code). Converted
 dictionaries keep BIRD's fields: `bird_name`, `name`, `description`, `data_format`,
 `value_description`.
 
@@ -56,4 +56,4 @@ Interface? A BIg Bench for Large-Scale Database Grounded Text-to-SQLs*, NeurIPS 
 Benchmarks. They are licensed under
 [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/), as BIRD is. The Czech bank
 dictionary also draws on Berka, P. (1999), *Guide to the Financial Data Set*, PKDD'99 Discovery
-Challenge. The code in this repository is under the MIT licence.
+Challenge. The code in this repository is under the MIT License.

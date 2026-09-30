@@ -1,0 +1,655 @@
+answers: the winning run's wrong held-out answers
+criteria: 'hand_category: the first category, in the order and with the meanings in src/eval/errors.py,
+  that describes a real mistake, a difference that changes the answer; differences in how the SQL is written
+  that give the same answer (a harmless extra join, an equivalent condition) do not count; format_only
+  when the answer''s rows and values are right and only their shape differs (extra, reordered or combined
+  columns, rounding). Judged from the question, the hint and both queries, without the automatic category,
+  with read-only queries of the data where a fact decides it. expert_questionable: true if the expert
+  query itself does not answer the question as asked (counted, never re-scored).'
+reviewer: null
+reviewed_on: '2026-09-30'
+items:
+- question_id: 24
+  db_id: california_schools
+  question: Give the names of the schools with the percent eligible for free meals in K-12 is more than
+    0.1 and test takers whose test score is greater than or equal to 1500?
+  hint: Percent eligible for free meals = Free Meal Count (K-12) / Total (Enrollment (K-12)
+  answer_sql: "SELECT s.school\nFROM schools s\nJOIN satscores sc ON sc.cds = s.cdscode\nJOIN frpm f ON\
+    \ f.\"cdscode\" = s.cdscode\nWHERE f.\"Percent (%) Eligible Free (K-12)\" > 0.1\n  AND sc.numge1500\
+    \ > 0"
+  expert_sql: SELECT T2."School Name" FROM satscores AS T1 INNER JOIN frpm AS T2 ON T1.cds = T2.CDSCode
+    WHERE CAST(T2."Free Meal Count (K-12)" AS REAL) / NULLIF(T2."Enrollment (K-12)", 0) > 0.1 AND T1.NumGE1500
+    > 0
+  outcome: ok
+  relation: overlap
+  hand_category: filter
+  expert_questionable: false
+  note: Filters on the stored percent column instead of the hint's ratio (Free Meal Count (K-12) / Enrollment
+    (K-12)); the extra join to schools for the name is harmless.
+- question_id: 26
+  db_id: california_schools
+  question: State the names and full communication address of high schools in Monterey which has more
+    than 800 free or reduced price meals for ages 15-17?
+  hint: Full communication address should include Street, City, State and zip code if any.
+  answer_sql: "SELECT\n    s.school AS school_name,\n    s.street AS street,\n    s.city AS city,\n  \
+    \  s.state AS state,\n    s.zip AS zip\nFROM frpm f\nJOIN schools s ON f.cdscode = s.cdscode\nWHERE\
+    \ f.\"County Name\" = 'Monterey'\n  AND f.\"School Type\" = 'High Schools (Public)'\n  AND f.\"FRPM\
+    \ Count (Ages 5-17)\" > 800"
+  expert_sql: SELECT T1."School Name", T2.Street, T2.City, T2.State, T2.Zip FROM frpm AS T1 INNER JOIN
+    schools AS T2 ON T1.CDSCode = T2.CDSCode WHERE T2.County = 'Monterey' AND T1."Free Meal Count (Ages
+    5-17)" > 800 AND T1."School Type" = 'High Schools (Public)'
+  outcome: ok
+  relation: superset
+  hand_category: filter
+  expert_questionable: true
+  note: Uses the FRPM count (free or reduced price), as the question asks; the expert uses the free-meal
+    count only, a narrower question.
+- question_id: 28
+  db_id: california_schools
+  question: Consider the average difference between K-12 enrollment and 15-17 enrollment of schools that
+    are locally funded, list the names and DOC type of schools which has a difference above this average.
+  hint: Difference between K-12 enrollment and 15-17 enrollment can be computed by `Enrollment (K-12)`
+    - `Enrollment (Ages 5-17)`
+  answer_sql: "WITH locally_funded AS (\n  SELECT\n    f.cdscode,\n    f.\"School Name\" AS school_name,\n\
+    \    s.doctype,\n    (f.\"Enrollment (K-12)\" - f.\"Enrollment (Ages 5-17)\") AS diff\n  FROM frpm\
+    \ f\n  JOIN schools s ON f.cdscode = s.cdscode\n  WHERE s.fundingtype = 'Locally funded'\n    AND\
+    \ f.\"Enrollment (K-12)\" IS NOT NULL\n    AND f.\"Enrollment (Ages 5-17)\" IS NOT NULL\n),\navg_diff\
+    \ AS (\n  SELECT AVG(diff) AS avg_d FROM locally_funded\n)\nSELECT lf.school_name, lf.doctype\nFROM\
+    \ locally_funded lf, avg_diff\nWHERE lf.diff > avg_diff.avg_d;"
+  expert_sql: SELECT T2.School, T2.DOC FROM frpm AS T1 INNER JOIN schools AS T2 ON T1.CDSCode = T2.CDSCode
+    WHERE T2.FundingType = 'Locally funded' AND (T1."Enrollment (K-12)" - T1."Enrollment (Ages 5-17)")
+    > (SELECT AVG(T3."Enrollment (K-12)" - T3."Enrollment (Ages 5-17)") FROM frpm AS T3 INNER JOIN schools
+    AS T4 ON T3.CDSCode = T4.CDSCode WHERE T4.FundingType = 'Locally funded')
+  outcome: refused
+  relation: null
+  hand_category: no_result
+  expert_questionable: false
+  note: Refused by the checker (a comma join); the logic otherwise follows the expert's.
+- question_id: 95
+  db_id: financial
+  question: List out the account numbers of clients who are youngest and have highest average salary?
+  hint: If the person A's birthdate < B's birthdate, it means that person B is younger than person A;
+    A11 refers to average salary
+  answer_sql: "WITH client_acct AS (\n  SELECT c.client_id, c.birth_date, d.account_id, di.a11\n  FROM\
+    \ client c\n  JOIN disp di ON di.client_id = c.client_id\n  JOIN account a ON a.account_id = di.account_id\n\
+    \  JOIN district d ON d.district_id = c.district_id\n  JOIN district dd ON dd.district_id = a.district_id\n\
+    )\nSELECT account_id\nFROM (\n  SELECT c.client_id, c.birth_date, di.account_id, dist.a11\n  FROM\
+    \ client c\n  JOIN disp di ON di.client_id = c.client_id\n  JOIN district dist ON dist.district_id\
+    \ = c.district_id\n) t\nWHERE birth_date = (SELECT MAX(birth_date) FROM client)\nORDER BY a11 DESC\n\
+    LIMIT 1;"
+  expert_sql: SELECT T1.account_id FROM account AS T1 INNER JOIN disp AS T2 ON T1.account_id = T2.account_id
+    INNER JOIN client AS T3 ON T2.client_id = T3.client_id INNER JOIN district AS T4 ON T4.district_id
+    = T1.district_id WHERE T2.client_id = (SELECT client_id FROM client ORDER BY birth_date DESC NULLS
+    LAST LIMIT 1) GROUP BY T4.A11, T1.account_id
+  outcome: error
+  relation: null
+  hand_category: no_result
+  expert_questionable: false
+  note: 'Fails: district has no account_id column.'
+- question_id: 129
+  db_id: financial
+  question: Which are the top ten withdrawals (non-credit card) by district names for the month of January
+    1996?
+  hint: Non-credit card withdraws refers to type = 'VYDAJ'; January 1996 can be found by date LIKE '1996-01%'
+    in the database; A2 means district names
+  answer_sql: "SELECT d.a2 AS district_name, t.amount\nFROM trans t\nJOIN account a ON t.account_id =\
+    \ a.account_id\nJOIN district d ON a.district_id = d.district_id\nWHERE t.type = 'VYDAJ'\n  AND CAST(t.date\
+    \ AS TEXT) LIKE '1996-01%'\nORDER BY t.amount DESC\nLIMIT 10;"
+  expert_sql: SELECT DISTINCT T1.A2 FROM district AS T1 INNER JOIN account AS T2 ON T1.district_id = T2.district_id
+    INNER JOIN trans AS T3 ON T2.account_id = T3.account_id WHERE T3.type = 'VYDAJ' AND CAST(T3.date AS
+    TEXT) LIKE '1996-01%' ORDER BY T1.A2 ASC LIMIT 10
+  outcome: ok
+  relation: same_row_count
+  hand_category: computation
+  expert_questionable: true
+  note: Lists the ten largest withdrawals with their district; the expert lists ten distinct district
+    names in alphabetical order, which ranks no withdrawal.
+- question_id: 159
+  db_id: financial
+  question: List all the withdrawals in cash transactions that the client with the id 3356 makes.
+  hint: operation = 'VYBER' refers to withdrawal in cash
+  answer_sql: 'SELECT t.trans_id, t.account_id, t.date, t.type, t.operation, t.amount, t.balance, t.k_symbol,
+    t.bank, t.account
+
+    FROM trans t
+
+    JOIN disp d ON t.account_id = d.account_id
+
+    WHERE d.client_id = 3356 AND t.operation = ''VYBER''
+
+    ORDER BY t.date;'
+  expert_sql: SELECT T4.trans_id FROM client AS T1 INNER JOIN disp AS T2 ON T1.client_id = T2.client_id
+    INNER JOIN account AS T3 ON T2.account_id = T3.account_id INNER JOIN trans AS T4 ON T3.account_id
+    = T4.account_id WHERE T1.client_id = 3356 AND T4.operation = 'VYBER'
+  outcome: ok
+  relation: same_row_count
+  hand_category: format_only
+  expert_questionable: false
+  note: The same transactions, with every column of trans instead of the id only.
+- question_id: 197
+  db_id: toxicology
+  question: Calculate the average number of oxygen atoms in single-bonded molecules.
+  hint: single-bonded molecules refers to bond_type = '-' ; average number of oxygen atom = AVG(element
+    = 'o')
+  answer_sql: 'SELECT CAST(SUM(CASE WHEN a.element = ''o'' THEN 1 ELSE 0 END) AS REAL) / COUNT(DISTINCT
+    b.molecule_id) AS avg_oxygen_atoms
+
+    FROM bond b
+
+    JOIN atom a ON a.molecule_id = b.molecule_id
+
+    WHERE b.bond_type = ''-'''
+  expert_sql: SELECT AVG(oxygen_count) FROM (SELECT T1.molecule_id, COUNT(T1.element) AS oxygen_count
+    FROM atom AS T1 INNER JOIN bond AS T2 ON T1.molecule_id = T2.molecule_id WHERE T2.bond_type = '-'
+    AND T1.element = 'o' GROUP BY T1.molecule_id) AS oxygen_counts
+  outcome: ok
+  relation: disjoint
+  hand_category: computation
+  expert_questionable: false
+  note: Divides the oxygen count by all single-bonded molecules; the expert averages over the molecules
+    that have oxygen. Both multiply atoms by bonds through the join.
+- question_id: 218
+  db_id: toxicology
+  question: What percentage of carcinogenic-type molecules does not contain fluorine?
+  hint: label = '+' mean molecules are carcinogenic; contain fluorine refers to element = 'f'; percentage
+    = DIVIDE(SUM(element = 'f') * 100, COUNT(molecule_id)) where label = '+'; Should consider the distinct
+    atoms when counting;
+  answer_sql: "SELECT CAST(SUM(CASE WHEN m.molecule_id NOT IN (\n    SELECT DISTINCT a.molecule_id FROM\
+    \ atom a WHERE a.element = 'f'\n) THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(m.molecule_id) AS pct_no_fluorine\n\
+    FROM molecule m\nWHERE m.label = '+';"
+  expert_sql: SELECT CAST(COUNT(DISTINCT CASE WHEN T1.element <> 'f' THEN T2.molecule_id ELSE NULL END)
+    AS REAL) * 100 / NULLIF(COUNT(DISTINCT T2.molecule_id), 0) FROM atom AS T1 INNER JOIN molecule AS
+    T2 ON T1.molecule_id = T2.molecule_id WHERE T2.label = '+'
+  outcome: ok
+  relation: disjoint
+  hand_category: computation
+  expert_questionable: true
+  note: The share of carcinogenic molecules with no fluorine atom, as asked; the expert counts molecules
+    with any non-fluorine atom, close to all of them.
+- question_id: 228
+  db_id: toxicology
+  question: How much of the hydrogen in molecule TR206 is accounted for? Please provide your answer as
+    a percentage with four decimal places.
+  hint: hydrogen refers to element = 'h'; TR206 is the molecule id; percentage = DIVIDE(SUM(element =
+    'h'), COUNT(atom_id)) as percent where molecule_id = 'TR206'
+  answer_sql: 'SELECT CAST(SUM(CASE WHEN element = ''h'' THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(atom_id)
+    AS percentage
+
+    FROM atom
+
+    WHERE molecule_id = ''TR206'';'
+  expert_sql: SELECT ROUND(CAST((CAST(COUNT(CASE WHEN T.element = 'h' THEN T.atom_id ELSE NULL END) AS
+    REAL) * 100 / NULLIF(COUNT(T.atom_id), 0)) AS NUMERIC), 4) AS percentage FROM atom AS T WHERE T.molecule_id
+    = 'TR206'
+  outcome: ok
+  relation: disjoint
+  hand_category: format_only
+  expert_questionable: false
+  note: The right value, not rounded to four decimal places.
+- question_id: 281
+  db_id: toxicology
+  question: Tally the toxicology element of the 4th atom of each molecule that was carcinogenic.
+  hint: 'label = ''+'' means molecules are carcinogenic; 4th atom of each molecule refers to substr(atom_id,
+    7, 1) = ''4''; '
+  answer_sql: 'SELECT a.element, COUNT(*) AS cnt
+
+    FROM atom a
+
+    JOIN molecule m ON a.molecule_id = m.molecule_id
+
+    WHERE m.label = ''+'' AND substr(a.atom_id, 7, 1) = ''4''
+
+    GROUP BY a.element
+
+    ORDER BY cnt DESC'
+  expert_sql: SELECT DISTINCT T1.element FROM atom AS T1 INNER JOIN molecule AS T2 ON T1.molecule_id =
+    T2.molecule_id WHERE T2.label = '+' AND RIGHT(T1.atom_id, 1) = '4' AND LENGTH(T1.atom_id) = 7
+  outcome: ok
+  relation: more_rows
+  hand_category: filter
+  expert_questionable: false
+  note: Follows the hint (seventh character 4, which also matches atoms 40-49); the expert takes ids of
+    length 7 ending in 4. The counts beside the elements fit 'tally'.
+- question_id: 341
+  db_id: card_games
+  question: What are the borderless cards available without powerful foils?
+  hint: borderless' refers to borderColor; poweful foils refers to cardKingdomFoilId paired with cardKingdomId
+    AND cardKingdomId is not null
+  answer_sql: "SELECT id, name\nFROM cards\nWHERE bordercolor = 'borderless'\n  AND NOT (cardkingdomfoilid\
+    \ IS NOT NULL AND cardkingdomid IS NOT NULL);"
+  expert_sql: SELECT id FROM cards WHERE borderColor = 'borderless' AND (cardKingdomId IS NULL OR cardKingdomId
+    IS NULL)
+  outcome: ok
+  relation: more_rows
+  hand_category: filter
+  expert_questionable: true
+  note: Excludes cards with both Card Kingdom ids, as the hint defines; the expert's condition repeats
+    cardKingdomId IS NULL twice (a typo).
+- question_id: 484
+  db_id: card_games
+  question: Please list the Italian names of the cards in the set Coldsnap with the highest converted
+    mana cost.
+  hint: card set Coldsnap refers to name = 'Coldsnap'; Italian refers to language = 'Italian'; highest
+    converted mana cost refers to MAX(convertedManaCost)
+  answer_sql: "WITH coldsnap AS (\n  SELECT c.uuid, c.convertedmanacost\n  FROM cards c\n  JOIN sets s\
+    \ ON c.setcode = s.code\n  WHERE s.name = 'Coldsnap'\n)\nSELECT fd.name\nFROM foreign_data fd\nJOIN\
+    \ coldsnap c ON fd.uuid = c.uuid\nWHERE fd.language = 'Italian'\nAND c.convertedmanacost = (SELECT\
+    \ MAX(convertedmanacost) FROM coldsnap);"
+  expert_sql: SELECT T2.name FROM foreign_data AS T1 INNER JOIN cards AS T2 ON T2.uuid = T1.uuid INNER
+    JOIN sets AS T3 ON T3.code = T2.setCode WHERE T3.name = 'Coldsnap' AND T1.language = 'Italian' ORDER
+    BY T2.convertedManaCost DESC NULLS LAST
+  outcome: ok
+  relation: overlap
+  hand_category: filter
+  expert_questionable: true
+  note: Keeps only the cards with the highest converted mana cost, as asked; the expert orders by it without
+    keeping the highest, and returns the English names.
+- question_id: 530
+  db_id: card_games
+  question: List all the frame styles and cards Allen Williams worked on and find any banned cards if
+    there are any.
+  hint: frame styles refers to frameVersion; cards Allen Williams worked on refers to artist = 'Allen
+    Williams'; banned cards refers to status = 'Banned'
+  answer_sql: 'SELECT c.frameversion, c.name AS card_name, l.status
+
+    FROM cards c
+
+    LEFT JOIN legalities l ON c.uuid = l.uuid AND l.status = ''Banned''
+
+    WHERE c.artist = ''Allen Williams''
+
+    ORDER BY c.frameversion, c.name;'
+  expert_sql: SELECT DISTINCT T1.frameVersion, T1.name, CASE WHEN T2.status = 'Banned' THEN T1.name ELSE
+    'NO' END FROM cards AS T1 INNER JOIN legalities AS T2 ON T1.uuid = T2.uuid WHERE T1.artist = 'Allen
+    Williams'
+  outcome: ok
+  relation: disjoint
+  hand_category: output
+  expert_questionable: false
+  note: A status column (Banned or empty) per card; the expert returns the card name or 'NO'. The question
+    allows both readings; the rows differ in shape and content.
+- question_id: 533
+  db_id: codebase_community
+  question: How many users last accessed the website after 2014/9/1?
+  hint: last accessed after 2014/9/1 refers to LastAccessDate > '2014-09-01'
+  answer_sql: SELECT COUNT(*) FROM users WHERE lastaccessdate > '2014-09-01'
+  expert_sql: SELECT COUNT(Id) FROM users WHERE DATE(LastAccessDate) > '2014-09-01'
+  outcome: ok
+  relation: disjoint
+  hand_category: filter
+  expert_questionable: false
+  note: Compares the timestamp with the date as the hint writes it (so 1 September after midnight counts);
+    the expert compares the date part (all of 1 September excluded).
+- question_id: 587
+  db_id: codebase_community
+  question: Calculate the average view count of each post tagged as 'humor' and list the title and the
+    comment of each post.
+  hint: tagged as  'humor' refers to tag = '<humor>'; comment of the post refers to Text; average view
+    count = AVG(ViewCount)
+  answer_sql: "WITH humor_posts AS (\n  SELECT p.id, p.title, p.viewcount\n  FROM posts p\n  WHERE p.tags\
+    \ LIKE '%<humor>%'\n)\nSELECT\n  (SELECT CAST(AVG(viewcount) AS REAL) FROM humor_posts) AS avg_view_count,\n\
+    \  hp.title,\n  ph.text AS comment\nFROM humor_posts hp\nLEFT JOIN posthistory ph ON hp.id = ph.postid;"
+  expert_sql: SELECT AVG(T2.ViewCount) AS AverageViewCount, T2.Title, T1.Text FROM comments AS T1 INNER
+    JOIN posts AS T2 ON T2.Id = T1.PostId WHERE T2.Tags = '<humor>' GROUP BY T2.Title, T1.Text
+  outcome: ok
+  relation: disjoint
+  hand_category: tables
+  expert_questionable: false
+  note: Takes the comments from posthistory instead of comments, and matches the tag with LIKE; also one
+    average over all posts instead of each post's.
+- question_id: 639
+  db_id: codebase_community
+  question: Based on posts posted by Community, calculate the percentage of posts that use the R language.
+  hint: DIVIDE(COUNT(PostId WHERE TagName = 'r')), (COUNT(PostId WHERE DisplayName = 'Community')) as
+    percentage; R language refers to tagname = 'r'
+  answer_sql: 'SELECT CAST(COUNT(CASE WHEN p.tags LIKE ''%<r>%'' THEN 1 END) AS REAL) * 100 / COUNT(*)
+    AS percentage
+
+    FROM posts p
+
+    JOIN users u ON p.owneruserid = u.id
+
+    WHERE u.displayname = ''Community'''
+  expert_sql: SELECT CAST(SUM(CASE WHEN T3.TagName = 'r' THEN 1 ELSE 0 END) AS REAL) * 100 / NULLIF(COUNT(T1.Id),
+    0) FROM users AS T1 INNER JOIN postHistory AS T2 ON T1.Id = T2.UserId INNER JOIN tags AS T3 ON T3.ExcerptPostId
+    = T2.PostId WHERE T1.DisplayName = 'Community'
+  outcome: ok
+  relation: disjoint
+  hand_category: tables
+  expert_questionable: true
+  note: Counts Community's posts tagged r in posts; the expert joins postHistory to tags through ExcerptPostId,
+    which does not count posts that use R.
+- question_id: 726
+  db_id: superhero
+  question: Rank heroes published by Marvel Comics by their height in descending order.
+  hint: name refers to superhero_name; the tallest hero refers to MAX(height_cm); published by Marvel
+    Comics refers to publisher_name = 'Marvel Comics'
+  answer_sql: "SELECT s.superhero_name, s.height_cm,\n       RANK() OVER (ORDER BY s.height_cm DESC) AS\
+    \ height_rank\nFROM superhero s\nJOIN publisher p ON s.publisher_id = p.id\nWHERE p.publisher_name\
+    \ = 'Marvel Comics'\nORDER BY s.height_cm DESC;"
+  expert_sql: SELECT superhero_name, height_cm, RANK() OVER (ORDER BY height_cm DESC NULLS LAST) AS HeightRank
+    FROM superhero INNER JOIN publisher ON superhero.publisher_id = publisher.id WHERE publisher.publisher_name
+    = 'Marvel Comics'
+  outcome: ok
+  relation: disjoint
+  hand_category: computation
+  expert_questionable: false
+  note: RANK() over height descending puts heroes with no height first (PostgreSQL's default), so the
+    ranks shift; the expert puts them last.
+- question_id: 751
+  db_id: superhero
+  question: List down at least five superpowers of male superheroes.
+  hint: male refers to gender = 'Male'; superpowers refers to power_name;
+  answer_sql: 'SELECT DISTINCT sp.power_name
+
+    FROM hero_power hp
+
+    JOIN superhero sh ON sh.id = hp.hero_id
+
+    JOIN gender g ON g.id = sh.gender_id
+
+    JOIN superpower sp ON sp.id = hp.power_id
+
+    WHERE g.gender = ''Male''
+
+    LIMIT 5;'
+  expert_sql: SELECT T3.power_name FROM superhero AS T1 INNER JOIN hero_power AS T2 ON T1.id = T2.hero_id
+    INNER JOIN superpower AS T3 ON T3.id = T2.power_id INNER JOIN gender AS T4 ON T4.id = T1.gender_id
+    WHERE T4.gender = 'Male' LIMIT 5
+  outcome: ok
+  relation: disjoint
+  hand_category: order_limit
+  expert_questionable: false
+  note: 'Any five powers answer the question; the expert''s LIMIT 5 without an order keeps arbitrary rows
+    (and may repeat a power), so no single result is the right one. Spot check: the expert query judged
+    acceptable (see spot_checked).'
+- question_id: 769
+  db_id: superhero
+  question: Which superhero has the most durability published by Dark Horse Comics?
+  hint: which superhero refers to superhero_name; most durability refers to MAX(attribute_value) WHERE
+    attribute_name = 'durability'; published by Dark Horse Comics refers to publisher_name = 'Dark Horse
+    Comics';
+  answer_sql: 'SELECT s.superhero_name
+
+    FROM superhero s
+
+    JOIN hero_attribute ha ON s.id = ha.hero_id
+
+    JOIN attribute a ON ha.attribute_id = a.id
+
+    JOIN publisher p ON s.publisher_id = p.id
+
+    WHERE a.attribute_name = ''durability'' AND p.publisher_name = ''Dark Horse Comics''
+
+    ORDER BY ha.attribute_value DESC
+
+    LIMIT 1'
+  expert_sql: SELECT T1.superhero_name FROM superhero AS T1 INNER JOIN hero_attribute AS T2 ON T1.id =
+    T2.hero_id INNER JOIN attribute AS T3 ON T3.id = T2.attribute_id INNER JOIN publisher AS T4 ON T4.id
+    = T1.publisher_id WHERE T4.publisher_name = 'Dark Horse Comics' AND T3.attribute_name = 'Durability'
+    ORDER BY T2.attribute_value DESC NULLS LAST LIMIT 1
+  outcome: ok
+  relation: empty
+  hand_category: filter
+  expert_questionable: false
+  note: attribute_name = 'durability' in lower case, as the hint writes it; the data holds 'Durability',
+    so the result is empty.
+- question_id: 865
+  db_id: formula_1
+  question: For all the drivers who finished the game in race No. 592, who is the oldest?
+  hint: drivers who finished the race refers to time is not empty (i.e. time IS NOT NULL); race number
+    refers to raceId; date of birth refers to drivers.dob; The larger the birthday value, the younger
+    the person is, and vice versa;
+  answer_sql: 'SELECT d.forename, d.surname, d.dob
+
+    FROM results r
+
+    JOIN drivers d ON r.driverid = d.driverid
+
+    WHERE r.raceid = 592 AND r.time IS NOT NULL
+
+    ORDER BY d.dob ASC
+
+    LIMIT 1;'
+  expert_sql: SELECT T1.forename, T1.surname FROM drivers AS T1 INNER JOIN results AS T2 ON T2.driverId
+    = T1.driverId WHERE T2.raceId = 592 AND NOT T2.time IS NULL AND NOT T1.dob IS NULL ORDER BY T1.dob
+    ASC NULLS FIRST LIMIT 1
+  outcome: ok
+  relation: same_row_count
+  hand_category: format_only
+  expert_questionable: false
+  note: The same driver, with the birth date as an extra column (no finisher lacks a birth date).
+- question_id: 880
+  db_id: formula_1
+  question: Paul di Resta was in the No. 853 race, what percent faster did he finish in the 853rd race
+    than the next race for the fastest lap speed?
+  hint: Paul di Resta refers to the full name of the driver; Full name of the driver refers to drivers.forename
+    ='Paul' and drivers.surname = 'di Resta'; race number refers to raceId; percentage = DIVIDE(SUBTRACT(fastestLapSpeed(raceId
+    = 853), (fastestLapSpeed (raceId = 854)) * 100 , (fastestLapSpeed(raceId = 853))
+  answer_sql: "WITH speeds AS (\n  SELECT r.raceid, CAST(res.fastestlapspeed AS REAL) AS speed\n  FROM\
+    \ results res\n  JOIN drivers d ON res.driverid = d.driverid\n  JOIN races r ON res.raceid = r.raceid\n\
+    \  WHERE d.forename = 'Paul' AND d.surname = 'di Resta'\n    AND r.raceid IN (853, 854)\n)\nSELECT\n\
+    \  CAST((MAX(CASE WHEN raceid = 853 THEN speed END) - MAX(CASE WHEN raceid = 854 THEN speed END))\
+    \ AS REAL) * 100\n  / MAX(CASE WHEN raceid = 853 THEN speed END) AS pct_faster\nFROM speeds;"
+  expert_sql: SELECT (SUM(CASE WHEN T2.raceId = 853 THEN T2.fastestLapSpeed::numeric ELSE 0 END) - SUM(CASE
+    WHEN T2.raceId = 854 THEN T2.fastestLapSpeed::numeric ELSE 0 END)) * 100 / NULLIF(SUM(CASE WHEN T2.raceId
+    = 853 THEN T2.fastestLapSpeed::numeric ELSE 0 END), 0) FROM drivers AS T1 INNER JOIN results AS T2
+    ON T2.driverId = T1.driverId WHERE T1.forename = 'Paul' AND T1.surname = 'di Resta'
+  outcome: ok
+  relation: disjoint
+  hand_category: format_only
+  expert_questionable: false
+  note: The same percentage, computed in single-precision floats where the expert uses numeric.
+- question_id: 930
+  db_id: formula_1
+  question: In which Formula_1 race did Lewis Hamilton rank the highest?
+  hint: rank the highest refers to min(rank); Lewis Hamilton refers to the full name of the driver; Full
+    name of the driver refers to drivers.forename and drivers.surname;
+  answer_sql: 'SELECT r.name, ra.year, res.rank
+
+    FROM results res
+
+    JOIN drivers d ON res.driverid = d.driverid
+
+    JOIN races ra ON res.raceid = ra.raceid
+
+    JOIN circuits ci ON ra.circuitid = ci.circuitid
+
+    JOIN races r ON r.raceid = ra.raceid
+
+    WHERE d.forename = ''Lewis'' AND d.surname = ''Hamilton'' AND res.rank IS NOT NULL
+
+    ORDER BY res.rank ASC
+
+    LIMIT 1'
+  expert_sql: SELECT name FROM races WHERE raceId IN (SELECT raceId FROM results WHERE rank = 1 AND driverId
+    = (SELECT driverId FROM drivers WHERE forename = 'Lewis' AND surname = 'Hamilton'))
+  outcome: ok
+  relation: fewer_rows
+  hand_category: order_limit
+  expert_questionable: false
+  note: LIMIT 1 keeps one of the races where he ranked first; the expert lists all of them. The extra
+    join to circuits is harmless.
+- question_id: 1003
+  db_id: formula_1
+  question: How many accidents did the driver who had the highest number accidents in the Canadian Grand
+    Prix have?
+  hint: 'number of accidents refers to the number where statusid = 3; Canadian Grand Prix refers to the
+    race of name
+
+    '
+  answer_sql: 'SELECT r.driverid, COUNT(*) AS accident_count
+
+    FROM results r
+
+    JOIN races rc ON r.raceid = rc.raceid
+
+    WHERE rc.name = ''Canadian Grand Prix'' AND r.statusid = 3
+
+    GROUP BY r.driverid
+
+    ORDER BY accident_count DESC
+
+    LIMIT 1'
+  expert_sql: SELECT COUNT(T1.driverId) FROM results AS T1 INNER JOIN races AS T2 ON T1.raceId = T2.raceId
+    INNER JOIN status AS T3 ON T1.statusId = T3.statusId WHERE T3.statusId = 3 AND T2.name = 'Canadian
+    Grand Prix' GROUP BY T1.driverId ORDER BY COUNT(T1.driverId) DESC NULLS LAST LIMIT 1
+  outcome: ok
+  relation: same_row_count
+  hand_category: format_only
+  expert_questionable: false
+  note: The same count, with the driver id as an extra column.
+- question_id: 1079
+  db_id: european_football_2
+  question: Which player is the tallest?
+  hint: tallest player refers to MAX(height);
+  answer_sql: SELECT player_name, height FROM player ORDER BY height DESC LIMIT 1
+  expert_sql: SELECT player_name FROM Player ORDER BY height DESC NULLS LAST LIMIT 1
+  outcome: ok
+  relation: same_row_count
+  hand_category: format_only
+  expert_questionable: false
+  note: The same player, with the height as an extra column (no player lacks a height).
+- question_id: 1149
+  db_id: thrombosis_prediction
+  question: Are there more in-patient or outpatient who were male? What is the deviation in percentage?
+  hint: male refers to SEX = 'M'; in-patient refers to Admission = '+'; outpatient refers to Admission
+    = '-'; percentage = DIVIDE(COUNT(ID) where SEX = 'M' and Admission = '+', COUNT(ID) where SEX  = 'M'
+    and Admission = '-')
+  answer_sql: "WITH counts AS (\n  SELECT\n    COUNT(*) FILTER (WHERE sex = 'M' AND admission = '+') AS\
+    \ in_patient_male,\n    COUNT(*) FILTER (WHERE sex = 'M' AND admission = '-') AS outpatient_male\n\
+    \  FROM patient\n)\nSELECT\n  in_patient_male,\n  outpatient_male,\n  CAST(in_patient_male AS REAL)\
+    \ * 100 / NULLIF(outpatient_male, 0) AS percentage\nFROM counts;"
+  expert_sql: SELECT CAST(SUM(CASE WHEN Admission = '+' THEN 1 ELSE 0 END) AS REAL) * 100 / NULLIF(SUM(CASE
+    WHEN Admission = '-' THEN 1 ELSE 0 END), 0) FROM Patient WHERE SEX = 'M'
+  outcome: ok
+  relation: same_row_count
+  hand_category: format_only
+  expert_questionable: false
+  note: The same percentage, with the two counts as extra columns.
+- question_id: 1166
+  db_id: thrombosis_prediction
+  question: What are the symptoms observed by the youngest patient to ever did a medical examination?
+    Identify their diagnosis.
+  hint: The larger the birthday value, the younger the person is, and vice versa; symptoms observed refers
+    to the symptoms is not NULL
+  answer_sql: 'SELECT e.symptoms, e.diagnosis
+
+    FROM examination e
+
+    JOIN patient p ON p.id = e.id
+
+    WHERE e.symptoms IS NOT NULL
+
+    ORDER BY p.birthday DESC
+
+    LIMIT 1'
+  expert_sql: SELECT T2.Symptoms, T1.Diagnosis FROM Patient AS T1 INNER JOIN Examination AS T2 ON T1.ID
+    = T2.ID WHERE NOT T2.Symptoms IS NULL ORDER BY T1.Birthday DESC NULLS LAST LIMIT 1
+  outcome: ok
+  relation: disjoint
+  hand_category: output
+  expert_questionable: false
+  note: Takes the diagnosis from examination; the expert takes it from patient. The order is not the issue
+    (no examined patient with symptoms lacks a birthday).
+- question_id: 1241
+  db_id: thrombosis_prediction
+  question: For patients with abnormal platelet level, state the number of patients with lower than normal
+    range. How is it compare to the number of patients with higher than normal range?
+  hint: abnormal platelet level refers to PLT <= 100 or PLT >= 400; platelet level lower than normal range
+    refers to PLT < 100; calculation = SUBTRACT(SUM(PLT < 100), SUM(PLT > 400)); platelet level higher
+    than normal range refers to PLT > 400;
+  answer_sql: "WITH plt_data AS (\n  SELECT DISTINCT id, plt FROM laboratory WHERE plt IS NOT NULL\n)\n\
+    SELECT\n  COUNT(DISTINCT CASE WHEN plt < 100 THEN id END) AS lower_count,\n  COUNT(DISTINCT CASE WHEN\
+    \ plt > 400 THEN id END) AS higher_count,\n  COUNT(DISTINCT CASE WHEN plt < 100 THEN id END) - COUNT(DISTINCT\
+    \ CASE WHEN plt > 400 THEN id END) AS difference\nFROM plt_data;"
+  expert_sql: SELECT SUM(CASE WHEN T2.PLT <= 100 THEN 1 ELSE 0 END) - SUM(CASE WHEN T2.PLT >= 400 THEN
+    1 ELSE 0 END) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID
+  outcome: ok
+  relation: same_row_count
+  hand_category: computation
+  expert_questionable: true
+  note: Counts distinct patients with PLT < 100 and > 400, as the hint says; the expert counts laboratory
+    rows with <= 100 and >= 400, against its own hint.
+- question_id: 1270
+  db_id: thrombosis_prediction
+  question: Among the patients who has a normal anti-scl70, how many of them are female and does not have
+    any symptom?
+  hint: normal anti-scl70 refers to SC170 IN('negative', '0'); female refers to Sex = 'F'; does not have
+    any symptom refers to symptoms IS NULL; Should consider DISTINCT in the final result;
+  answer_sql: "SELECT COUNT(DISTINCT p.id)\nFROM patient p\nJOIN examination e ON p.id = e.id\nWHERE e.sc170\
+    \ IN ('negative', '0')\n  AND p.sex = 'F'\n  AND e.symptoms IS NULL;"
+  expert_sql: SELECT COUNT(DISTINCT T1.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID
+    INNER JOIN Examination AS T3 ON T3.ID = T2.ID WHERE (T2.SC170 = 'negative' OR T2.SC170 = '0') AND
+    T1.SEX = 'F' AND T3.Symptoms IS NULL
+  outcome: error
+  relation: null
+  hand_category: no_result
+  expert_questionable: false
+  note: 'Fails: sc170 is in laboratory, not examination.'
+- question_id: 1302
+  db_id: thrombosis_prediction
+  question: For the patients with a normal range of creatinine phosphokinase, how many of them have a
+    positive measure of degree of coagulation?
+  hint: normal range of creatinine phosphokinase refers to CPK < 250; positive measure of degree of coagulation
+    refers to KCT = '+' or RVVT = '+' or LAC = '+' ;
+  answer_sql: 'SELECT COUNT(DISTINCT l.id)
+
+    FROM laboratory l
+
+    JOIN examination e ON l.id = e.id
+
+    WHERE l.cpk < 250
+
+    AND (e.kct = ''+'' OR e.rvvt = ''+'' OR e.lac = ''+'')'
+  expert_sql: SELECT COUNT(T1.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID INNER
+    JOIN Examination AS T3 ON T1.ID = T3.ID WHERE T2.CPK < 250 AND (T3.KCT = '+' OR T3.RVVT = '+' OR T3.LAC
+    = '+')
+  outcome: ok
+  relation: disjoint
+  hand_category: computation
+  expert_questionable: true
+  note: Counts distinct patients, as 'how many of them' asks; the expert counts joined rows, repeating
+    patients.
+- question_id: 1381
+  db_id: student_club
+  question: List the name of students that have attended more than 7 events.
+  hint: name of students means the full name; full name refers to first_name, last_name; attended more
+    than 7 events refers to COUNT(link_to_event) > 7
+  answer_sql: 'SELECT m.first_name || '' '' || m.last_name AS full_name
+
+    FROM member m
+
+    JOIN attendance a ON m.member_id = a.link_to_member
+
+    GROUP BY m.member_id, m.first_name, m.last_name
+
+    HAVING COUNT(a.link_to_event) > 7'
+  expert_sql: SELECT T1.first_name, T1.last_name FROM member AS T1 INNER JOIN attendance AS T2 ON T1.member_id
+    = T2.link_to_member GROUP BY T1.member_id, T1.first_name, T1.last_name HAVING COUNT(T2.link_to_event)
+    > 7
+  outcome: ok
+  relation: same_row_count
+  hand_category: format_only
+  expert_questionable: false
+  note: The right students, with the full name in one column instead of two; the automatic near-miss check
+    cannot see this (it only drops and reorders columns).
+spot_checked_by: The Author
+spot_checked:
+- question_id: 1302
+  expert_questionable: true
+  note: 'Agrees: the question asks for patients, not tests.'
+- question_id: 1241
+  expert_questionable: true
+  note: Agrees; the bounds alone are not clearly wrong unless the question itself says below 100 rather
+    than 100 or below.
+- question_id: 751
+  expert_questionable: false
+  note: 'Disagrees: the question does not ask for different powers, so five arbitrary rows answer it,
+    though listing distinct ones would be better.'
+- question_id: 341
+  expert_questionable: true
+  note: Agrees.
+- question_id: 129
+  expert_questionable: true
+  note: Agrees.

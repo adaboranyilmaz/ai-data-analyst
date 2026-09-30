@@ -3,7 +3,7 @@ every BIRD database except the Czech bank (`financial`), whose dictionary is han
 
 BIRD ships one CSV per table: original_column_name, column_name, column_description,
 data_format, value_description. They are converted as they are: the text is not edited,
-beyond normalising line endings and trailing spaces. Each CSV row is matched to a column in
+beyond normalizing line endings and trailing spaces. Each CSV row is matched to a column in
 the database's snapshot (dictionary/_snapshot/<db>.json) by name: exactly, then ignoring
 case, then ignoring case and surrounding spaces. Every database column gets an entry; one
 with no description is marked `status: missing`. CSV rows that match no column are listed

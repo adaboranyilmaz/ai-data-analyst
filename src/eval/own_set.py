@@ -111,7 +111,7 @@ def problems(data: dict[str, Any]) -> list[str]:
 
 
 def queries(q: dict[str, Any]) -> list[tuple[str, str]]:
-    """Every SQL a question carries, labelled: `gold`, `reading-<n>`, `premise`."""
+    """Every SQL a question carries, labeled: `gold`, `reading-<n>`, `premise`."""
     if q["category"] in ("a", "b", "f"):
         return [("gold", q["gold_sql"])]
     if q["category"] == "c":

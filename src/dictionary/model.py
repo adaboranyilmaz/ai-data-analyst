@@ -23,7 +23,7 @@ ROOT = Path(__file__).resolve().parent.parent.parent
 DICTIONARY_DIR = ROOT / "dictionary"
 ORIGINS = {"hand-written", "bird-description"}
 # identifier: a key or reference number; code: values with a meaning to translate; label: a
-# name or opaque code that is its own meaning (district names, anonymised bank codes);
+# name or opaque code that is its own meaning (district names, anonymized bank codes);
 # quantity: a number with a unit; date; text: free text
 KINDS = {"identifier", "code", "label", "quantity", "date", "text"}
 COLUMN_KEYS = {

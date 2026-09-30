@@ -17,7 +17,7 @@ Ollama (local model): runs at temperature 0 with a fixed seed. By default Ollama
 drops the oldest messages of a prompt longer than `num_ctx`, and shifts the context window
 when it fills during generation. Both are turned off (`truncate` and `shift` false), so the
 model's own tokenizer decides whether a prompt fits: one that does not is refused by Ollama,
-and a reply stopped by a full context is recognised from the token counts. Either comes back
+and a reply stopped by a full context is recognized from the token counts. Either comes back
 as a response with the stop reason `context_overflow`, stored and replayed like any other.
 Requests use the Messages API shape for both backends: tools are converted to Ollama's
 function schema, and the model's tool calls come back as `tool_use` blocks.
