@@ -154,7 +154,6 @@ values:
   esc_sonnet_ex: {file: metrics/escalation.json, path: sonnet/execution_accuracy/estimate, fmt: pct1}
   esc_gain: {file: metrics/escalation.json, path: rule/gain/estimate, fmt: pp1}
   esc_gain_ci: {file: metrics/escalation.json, path: rule/gain, fmt: ppiv1}
-  esc_gain_pts: {expr: esc_gain * 100, fmt: f1}
   esc_opus_cost_q: {file: metrics/escalation.json, path: cost_per_correct/0/cost_per_question_usd, fmt: usd4}
   esc_sonnet_cost_q: {file: metrics/escalation.json, path: cost_per_correct/1/cost_per_question_usd, fmt: usd4}
   esc_opus_cost_correct: {file: metrics/escalation.json, path: cost_per_correct/0/cost_per_correct_answer_usd, fmt: usd4}
@@ -411,8 +410,6 @@ values:
   canary_ceiling: {file: metrics/phase9_dry_run.json, path: ceiling_usd, fmt: usd2}
   drift_window: {file: metrics/drift_check.json, path: settings/window, fmt: int}
   drift_min_window: {file: metrics/drift_check.json, path: settings/min_window, fmt: int}
-  drift_warn: {file: metrics/drift_check.json, path: settings/warn, fmt: f2}
-  drift_alert: {file: metrics/drift_check.json, path: settings/alert, fmt: f2}
   drift_draws: {file: metrics/drift_check.json, path: settings/draws_per_scenario, fmt: int}
   drift_ref_psi: {file: metrics/drift_check.json, path: "systems/d1-sonnet-5-opus-router/scenarios/held_out (the reference's own population)/psi/mean", fmt: f3}
   drift_ref_warn: {file: metrics/drift_check.json, path: "systems/d1-sonnet-5-opus-router/scenarios/held_out (the reference's own population)/share_of_windows_above_warn", fmt: pct1}
