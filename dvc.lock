@@ -5927,8 +5927,8 @@ stages:
     deps:
     - path: results/metrics/api_spend.json
       hash: md5
-      md5: a315c66de708e3ed2bbb0caaf60597d6
-      size: 1680
+      md5: 538ecde1affd5ebfc425c1f3afe74143
+      size: 1893
     - path: results/reviews/guardrail_review.yaml
       hash: md5
       md5: f95ba590384d205becf395ca630f256e
@@ -5985,6 +5985,7 @@ stages:
           phase5: 12.0
           phase6: 0.0
           phase7: 6.5
+          phase8: 0.5
       configs/guardrail.yaml:
         phase: phase7
         planted.copies:
@@ -6038,3 +6039,246 @@ stages:
       hash: md5
       md5: f14514caaa3dbf88309787050a70642a
       size: 152705
+  demo_runs:
+    cmd: uv run python scripts/80_demo_runs.py
+    deps:
+    - path: data/raw/bird_minidev/mini_dev_pg.json
+      hash: md5
+      md5: f422a1da2fb9d950bd5b35ce71af6af2
+      size: 283551
+    - path: data/traces/main
+      hash: md5
+      md5: d04d574c6d19316d59fdfa295df6b4e2.dir
+      size: 15885986
+      nfiles: 650
+    - path: data/traces/own
+      hash: md5
+      md5: 2a1a6bd4d719786d5f5c44f2f627aa3d.dir
+      size: 1905665
+      nfiles: 60
+    - path: own_set/questions.yaml
+      hash: md5
+      md5: 29495a4f896ae0ac76df919eff032ad3
+      size: 27926
+    - path: results/metrics/calibration.json
+      hash: md5
+      md5: d4062628eb0644e3331efba381edad95
+      size: 27925
+    - path: results/metrics/error_analysis.json
+      hash: md5
+      md5: 408b0fbd34d3b1d75351fd63455ae986
+      size: 92427
+    - path: results/metrics/splits.json
+      hash: md5
+      md5: 8fb712fd3a959d31ac6aacc79f7b50c2
+      size: 9712
+    - path: results/reviews/demo_explanations.yaml
+      hash: md5
+      md5: 65d90668c80d1baffa087ed71bbf189f
+      size: 2739
+    - path: results/reviews/guardrail_review.yaml
+      hash: md5
+      md5: f95ba590384d205becf395ca630f256e
+      size: 8751
+    - path: results/runs/guardrail/own.jsonl
+      hash: md5
+      md5: 92a021f620fa644f79e36d25a360feac
+      size: 75822
+    - path: results/runs/main
+      hash: md5
+      md5: b075bd245403301617a204942619ca2b.dir
+      size: 856822
+      nfiles: 2
+    - path: results/runs/own
+      hash: md5
+      md5: 03482bc85545a0679da5b64dab853ee9.dir
+      size: 89459
+      nfiles: 1
+    - path: scripts/80_demo_runs.py
+      hash: md5
+      md5: d65657f8ea99a08667dd195648c53261
+      size: 6553
+    - path: src/explain/outline.py
+      hash: md5
+      md5: 32dfdf3b981553d8828eda7a3edbd96e
+      size: 14373
+    - path: src/serving/__init__.py
+      hash: md5
+      md5: 843725ad669882df745f952b644877c6
+      size: 91
+    - path: src/serving/curated.py
+      hash: md5
+      md5: a2e4f15781fcfb2cbd5a4fc95ace78e4
+      size: 4391
+    - path: src/serving/evidence.py
+      hash: md5
+      md5: 438df4475fc92516c91c061a29be623b
+      size: 11107
+    - path: src/serving/explain.py
+      hash: md5
+      md5: 60d41996e15ad70d6f8e91f8d2254364
+      size: 4755
+    - path: src/serving/meter.py
+      hash: md5
+      md5: 84d234585c2b0493566f9595aa28092c
+      size: 5396
+    params:
+      configs/serving.yaml:
+        curated:
+          seed: 20261001
+          out_dir: results/demo
+          held_out:
+            stage: main
+            run: all-d1-claude-sonnet-5-evidence
+            slots:
+              correct_above_threshold: 3
+              wrong_above_threshold: 1
+              correct_below_threshold: 3
+              wrong_below_threshold: 3
+          banking:
+            stage: own
+            run: own-d1-claude-sonnet-5-no-evidence
+            one_per_category:
+            - a
+            - b
+            - c
+            - d
+            - e
+            wrong_extra: 1
+          guardrail:
+            records: results/runs/guardrail/own.jsonl
+            review: results/reviews/guardrail_review.yaml
+            reviewed_success: 2
+            reviewed_failure: 2
+        meter:
+          calibration: results/metrics/calibration.json
+          band_width: 0.1
+          min_band_n: 20
+    outs:
+    - path: results/demo
+      hash: md5
+      md5: f18b41f1addf15b43723b2de534063d6.dir
+      size: 118398
+      nfiles: 21
+  serving_check:
+    cmd: uv run python scripts/81_serving_check.py
+    deps:
+    - path: results/demo
+      hash: md5
+      md5: f18b41f1addf15b43723b2de534063d6.dir
+      size: 118398
+      nfiles: 21
+    - path: results/metrics/calibration.json
+      hash: md5
+      md5: d4062628eb0644e3331efba381edad95
+      size: 27925
+    - path: results/runs/guardrail/own.jsonl
+      hash: md5
+      md5: 92a021f620fa644f79e36d25a360feac
+      size: 75822
+    - path: results/runs/main
+      hash: md5
+      md5: b075bd245403301617a204942619ca2b.dir
+      size: 856822
+      nfiles: 2
+    - path: results/runs/own
+      hash: md5
+      md5: 03482bc85545a0679da5b64dab853ee9.dir
+      size: 89459
+      nfiles: 1
+    - path: scripts/81_serving_check.py
+      hash: md5
+      md5: d01371725927eb1bdef8f6b7aeca792d
+      size: 3701
+    - path: src/serving
+      hash: md5
+      md5: aa273d8808084947a60381ee9c34d0d6.dir
+      size: 77063
+      nfiles: 14
+    params:
+      configs/serving.yaml:
+        curated:
+          seed: 20261001
+          out_dir: results/demo
+          held_out:
+            stage: main
+            run: all-d1-claude-sonnet-5-evidence
+            slots:
+              correct_above_threshold: 3
+              wrong_above_threshold: 1
+              correct_below_threshold: 3
+              wrong_below_threshold: 3
+          banking:
+            stage: own
+            run: own-d1-claude-sonnet-5-no-evidence
+            one_per_category:
+            - a
+            - b
+            - c
+            - d
+            - e
+            wrong_extra: 1
+          guardrail:
+            records: results/runs/guardrail/own.jsonl
+            review: results/reviews/guardrail_review.yaml
+            reviewed_success: 2
+            reviewed_failure: 2
+        meter:
+          calibration: results/metrics/calibration.json
+          band_width: 0.1
+          min_band_n: 20
+        replay:
+          default_ms: 700
+          cap_ms: 4000
+          speed: 1.0
+    outs:
+    - path: results/metrics/serving_check.json
+      hash: md5
+      md5: be6a9bd846ba2274e3fb264cd4785b32
+      size: 2235
+  mcp_security:
+    cmd: uv run python scripts/82_mcp_security.py
+    deps:
+    - path: configs/security_attacks.yaml
+      hash: md5
+      md5: d436a1a46cd6e840f416e26bbf057b1a
+      size: 14591
+    - path: configs/tools.yaml
+      hash: md5
+      md5: f1ea0d9e92ab712e422d4dc65b8b0cfd
+      size: 761
+    - path: scripts/82_mcp_security.py
+      hash: md5
+      md5: 020afc7588390cecb1b3328fb5db7a39
+      size: 1131
+    - path: src/db/execute.py
+      hash: md5
+      md5: 8ed4e2fe52a061567b74f2eff1b9633f
+      size: 9854
+    - path: src/db/guard.py
+      hash: md5
+      md5: d1ac663da0810f236a13f1f98d0026c3
+      size: 15204
+    - path: src/db/security_suite.py
+      hash: md5
+      md5: 8a16e2e87cfd0528d833ee9800888890
+      size: 13573
+    - path: src/mcp_server
+      hash: md5
+      md5: fcb9236f5da96ede95f7f690e8d31cb4.dir
+      size: 21710
+      nfiles: 6
+    - path: src/serving/connections.py
+      hash: md5
+      md5: 35b416a6be0a74db4590e4cff316d4df
+      size: 11181
+    - path: src/tools
+      hash: md5
+      md5: 111ec94b72271ec0ad7fc28c1e872502.dir
+      size: 200191
+      nfiles: 7
+    outs:
+    - path: results/metrics/mcp_security.json
+      hash: md5
+      md5: e92ba1cdc1a948bef53bcf141b804503
+      size: 35317

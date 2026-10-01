@@ -1,0 +1,397 @@
+{
+ "schema_version": 1,
+ "id": "guard-own-f03",
+ "kind": "guardrail",
+ "source_run": "guardrail/own",
+ "question": "Do weekly statements lead to more overdrafts?",
+ "hint": null,
+ "db_id": "financial",
+ "category": "f",
+ "difficulty": null,
+ "design": "d1+guardrail",
+ "model": "claude-sonnet-5",
+ "steps": [
+  {
+   "type": "step",
+   "kind": "model",
+   "text": "Recognized a comparative or causal question: it needs an interval.",
+   "recorded_ms": null
+  },
+  {
+   "type": "step",
+   "kind": "tool",
+   "text": "Planned the comparison: compare groups of had_overdraft by statement_group, one row per an account.",
+   "recorded_ms": null
+  },
+  {
+   "type": "step",
+   "kind": "tool",
+   "text": "Pulled 4,500 rows through the read-only guard.",
+   "recorded_ms": null
+  },
+  {
+   "type": "step",
+   "kind": "tool",
+   "text": "Ran the analysis in the sandbox: no network, no files, a time limit.",
+   "recorded_ms": null
+  },
+  {
+   "type": "step",
+   "kind": "submit",
+   "text": "Wrote the answer from the computed result.",
+   "recorded_ms": null
+  }
+ ],
+ "answer": {
+  "text": "Accounts on weekly statements had an overdraft rate of 15.4% (37 of 240), compared to 5.9% (251 of 4,260) for accounts not on weekly statements — a gap of about 9.5 percentage points (95% CI: +5.4 to +14.7, p < 0.001). This difference persists even after accounting for account open date and district average salary, with a similar gap of +9.5 points (CI: +4.9 to +14.1). The result is statistically robust and unlikely due to chance, but since these are observational records rather than a randomized experiment, this shows an association between weekly statements and overdrafts, not proof that weekly statements cause overdrafts.\n\nStatistics (95% intervals):\n- weekly minus not weekly: +9.5 percentage points, interval +5.4 to +14.7; Newcombe's hybrid score interval; Fisher's exact test, p < 0.001\n- Compared within levels of account_open_date, district_avg_salary: +9.5 percentage points, interval +4.9 to +14.1; without them, on the same units: +9.5 percentage points, interval +4.9 to +14.2. So the result holds within these levels\n- Warning: account_open_date was cut into fifths to compare within it.\n- Warning: district_avg_salary was cut into fifths to compare within it.\n- Verdict of the test (compared within the strata): the interval excludes zero, so the data show a difference.\n- These are observational records: the groups were not assigned at random, so a difference or a trend is an association and does not show that one thing causes another.",
+  "sql": "SELECT\n  a.account_id,\n  a.frequency,\n  CASE WHEN a.frequency = 'POPLATEK TYDNE' THEN 'weekly' ELSE 'not weekly' END AS statement_group,\n  CASE WHEN EXISTS (\n    SELECT 1 FROM trans t WHERE t.account_id = a.account_id AND t.balance < 0\n  ) THEN 1 ELSE 0 END AS had_overdraft,\n  a.date AS account_open_date,\n  d.a11 AS district_avg_salary,\n  d.a3 AS district_region\nFROM account a\nJOIN district d ON a.district_id = d.district_id\n",
+  "declined": false,
+  "decline_reason": null,
+  "clarifying_question": null,
+  "assumptions": [],
+  "premise_correction": null
+ },
+ "sql_outline": {
+  "kind": "select",
+  "intermediate_results": [],
+  "tables": [
+   {
+    "name": "account"
+   },
+   {
+    "name": "district"
+   },
+   {
+    "name": "trans"
+   }
+  ],
+  "links": [
+   {
+    "table": "district",
+    "keep_unmatched": false,
+    "side": "inner",
+    "on": [
+     {
+      "phrase": [
+       {
+        "t": "col",
+        "v": "account.district_id"
+       },
+       {
+        "t": "op",
+        "v": "eq"
+       },
+       {
+        "t": "col",
+        "v": "district.district_id"
+       }
+      ]
+     }
+    ],
+    "using": []
+   }
+  ],
+  "filters": [],
+  "groups": [],
+  "group_filters": [],
+  "distinct": false,
+  "returns": [
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "account.account_id"
+     }
+    ],
+    "name": null
+   },
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "account.frequency"
+     }
+    ],
+    "name": null
+   },
+   {
+    "phrase": [
+     {
+      "t": "fn",
+      "v": "case",
+      "args": [
+       [
+        {
+         "t": "lit",
+         "v": "\"weekly\""
+        }
+       ],
+       [
+        {
+         "t": "col",
+         "v": "account.frequency"
+        },
+        {
+         "t": "op",
+         "v": "eq"
+        },
+        {
+         "t": "lit",
+         "v": "\"POPLATEK TYDNE\""
+        }
+       ],
+       [
+        {
+         "t": "lit",
+         "v": "\"not weekly\""
+        }
+       ]
+      ]
+     }
+    ],
+    "name": "statement_group"
+   },
+   {
+    "unrendered": true,
+    "name": "had_overdraft"
+   },
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "account.date"
+     }
+    ],
+    "name": "account_open_date"
+   },
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "district.a11"
+     }
+    ],
+    "name": "district_avg_salary"
+   },
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "district.a3"
+     }
+    ],
+    "name": "district_region"
+   }
+  ],
+  "order": [],
+  "limit": null,
+  "offset": null
+ },
+ "result": null,
+ "checks": [],
+ "chart_spec": null,
+ "statistics": {
+  "analysis": "compare_groups",
+  "comparisons": [
+   {
+    "ci": [
+     0.054354746207791356,
+     0.1467803776521187
+    ],
+    "estimate": 0.09524647887323945,
+    "group": "weekly",
+    "measure": "difference in rates",
+    "method": "Newcombe's hybrid score interval; Fisher's exact test",
+    "p_value": 3.6213852146741816e-07
+   }
+  ],
+  "detected": true,
+  "groups": [
+   {
+    "ci": [
+     0.052238471088047876,
+     0.06639667604535451
+    ],
+    "estimate": 0.05892018779342723,
+    "events": 251,
+    "label": "not weekly",
+    "n": 4260
+   },
+   {
+    "ci": [
+     0.11396422987732183,
+     0.20526556474892307
+    ],
+    "estimate": 0.15416666666666667,
+    "events": 37,
+    "label": "weekly",
+    "n": 240
+   }
+  ],
+  "n": 4500,
+  "n_dropped": 0,
+  "outcome_type": "binary",
+  "primary": "stratified",
+  "reference": "not weekly",
+  "stratified": {
+   "adjusted": {
+    "ci": [
+     0.048604402384759465,
+     0.14127485354246647
+    ],
+    "estimate": 0.09493962796361297,
+    "n": 4500,
+    "p_value": 5.921600841031155e-05
+   },
+   "by_stratum": [
+    {
+     "estimate": 0.08797054009819967,
+     "group_estimate": 0.17307692307692307,
+     "n": 898,
+     "n_group": 52,
+     "n_reference": 846,
+     "reference_estimate": 0.0851063829787234,
+     "stratum": "1993-01-01 to 1993-10-17",
+     "variable": "account_open_date"
+    },
+    {
+     "estimate": 0.08359576968272622,
+     "group_estimate": 0.14,
+     "n": 901,
+     "n_group": 50,
+     "n_reference": 851,
+     "reference_estimate": 0.0564042303172738,
+     "stratum": "1993-10-17 to 1995-05-08",
+     "variable": "account_open_date"
+    },
+    {
+     "estimate": 0.15090543259557343,
+     "group_estimate": 0.21428571428571427,
+     "n": 894,
+     "n_group": 42,
+     "n_reference": 852,
+     "reference_estimate": 0.06338028169014084,
+     "stratum": "1995-05-08 to 1996-05-08",
+     "variable": "account_open_date"
+    },
+    {
+     "estimate": 0.1007119247393847,
+     "group_estimate": 0.15217391304347827,
+     "n": 901,
+     "n_group": 46,
+     "n_reference": 855,
+     "reference_estimate": 0.05146198830409357,
+     "stratum": "1996-05-08 to 1996-12-30",
+     "variable": "account_open_date"
+    },
+    {
+     "estimate": 0.06144859813084113,
+     "group_estimate": 0.1,
+     "n": 906,
+     "n_group": 50,
+     "n_reference": 856,
+     "reference_estimate": 0.038551401869158876,
+     "stratum": "1996-12-30 to 1997-12-29",
+     "variable": "account_open_date"
+    },
+    {
+     "estimate": 0.12995689655172415,
+     "group_estimate": 0.2,
+     "n": 983,
+     "n_group": 55,
+     "n_reference": 928,
+     "reference_estimate": 0.07004310344827586,
+     "stratum": "10177 to 12541",
+     "variable": "district_avg_salary"
+    },
+    {
+     "estimate": 0.00533715178338974,
+     "group_estimate": 0.06521739130434782,
+     "n": 881,
+     "n_group": 46,
+     "n_reference": 835,
+     "reference_estimate": 0.059880239520958084,
+     "stratum": "8110 to 8507",
+     "variable": "district_avg_salary"
+    },
+    {
+     "estimate": 0.13942307692307693,
+     "group_estimate": 0.1875,
+     "n": 880,
+     "n_group": 48,
+     "n_reference": 832,
+     "reference_estimate": 0.04807692307692308,
+     "stratum": "8507 to 8814",
+     "variable": "district_avg_salary"
+    },
+    {
+     "estimate": 0.055441214304090554,
+     "group_estimate": 0.10869565217391304,
+     "n": 891,
+     "n_group": 46,
+     "n_reference": 845,
+     "reference_estimate": 0.05325443786982249,
+     "stratum": "8814 to 9307",
+     "variable": "district_avg_salary"
+    },
+    {
+     "estimate": 0.1378048780487805,
+     "group_estimate": 0.2,
+     "n": 865,
+     "n_group": 45,
+     "n_reference": 820,
+     "reference_estimate": 0.06219512195121951,
+     "stratum": "9307 to 10177",
+     "variable": "district_avg_salary"
+    }
+   ],
+   "change": "stable",
+   "crude": {
+    "ci": [
+     0.04882764313552638,
+     0.14166531461095258
+    ],
+    "estimate": 0.09524647887323948,
+    "n": 4500,
+    "p_value": 5.779528384425023e-05
+   },
+   "method": "linear probability model with an indicator per stratum, HC3 errors",
+   "strata": [
+    "account_open_date",
+    "district_avg_salary"
+   ],
+   "units_dropped": 0
+  },
+  "warnings": [
+   {
+    "bins": 5,
+    "kind": "binned_stratum",
+    "variable": "account_open_date"
+   },
+   {
+    "bins": 5,
+    "kind": "binned_stratum",
+    "variable": "district_avg_salary"
+   }
+  ]
+ },
+ "confidence": {
+  "stated": null,
+  "calibrated": null,
+  "band": null,
+  "threshold": null,
+  "withheld": false,
+  "not_calibrated": true
+ },
+ "status": "answered",
+ "evaluation": {
+  "reviewed_success": false
+ },
+ "explanation": null,
+ "before": {
+  "text": "Comparing accounts by statement frequency, weekly-statement accounts (POPLATEK TYDNE) do not show notably higher overdraft rates than monthly (POPLATEK MESICNE) or per-transaction (POPLATEK PO OBRATU) statement accounts once you look at the share of accounts that ever go negative and the share of transactions left with a negative balance. In practice the monthly-statement group, being by far the largest (4,167 of 4,500 accounts), dominates the overall overdraft counts, but on a per-account percentage basis the three frequency groups are fairly close, so there is no clear evidence that weekly statements themselves lead to more overdrafts — it looks more like a byproduct of group size and account behavior rather than the statement frequency causing overdrafts.\"",
+  "sql": "SELECT\n  a.frequency,\n  COUNT(DISTINCT a.account_id) AS num_accounts,\n  COUNT(DISTINCT CASE WHEN t.balance < 0 THEN t.account_id END) AS accounts_with_overdraft,\n  CAST(COUNT(DISTINCT CASE WHEN t.balance < 0 THEN t.account_id END) AS REAL) * 100\n    / COUNT(DISTINCT a.account_id) AS pct_accounts_with_overdraft,\n  COUNT(CASE WHEN t.balance < 0 THEN 1 END) AS num_overdraft_transactions,\n  CAST(COUNT(CASE WHEN t.balance < 0 THEN 1 END) AS REAL) * 100 / COUNT(t.trans_id) AS pct_overdraft_transactions\nFROM account a\nJOIN trans t ON t.account_id = a.account_id\nGROUP BY a.frequency\nORDER BY pct_accounts_with_overdraft DESC;"
+ },
+ "cost_usd": 0.011266,
+ "slot": "reviewed_failure"
+}

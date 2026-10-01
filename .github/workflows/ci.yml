@@ -35,7 +35,7 @@ jobs:
           uv run ruff check .
           uv run ruff format --check .
       - name: Start PostgreSQL
-        run: docker compose up -d --wait
+        run: docker compose up -d --wait postgres
       - name: Harden the database (closed system functions and views, schema roles)
         run: uv run python scripts/20_harden_db.py --no-results
       - name: Tests (the database tests may not skip)
@@ -68,3 +68,72 @@ jobs:
         env:
           ANALYST_REQUIRE_SANDBOX: "1"
         run: uv run pytest -q -rs -m sandbox
+
+  # The UI: types, unit tests and the production build.
+  ui:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: ui
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: ui/package-lock.json
+      - run: npm ci
+      - run: npx tsc --noEmit
+      - run: npx vitest run
+      - run: npm run build
+
+  # End to end, in a real browser: the built UI served by the API in replay mode (no key, no
+  # database). Ask, stream, evidence visible, permalink.
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: ${{ env.UV_VERSION }}
+          enable-cache: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: ui/package-lock.json
+      - run: uv sync --frozen
+      - name: Build the UI
+        working-directory: ui
+        run: |
+          npm ci
+          npm run build
+      - name: Install the browser
+        working-directory: ui
+        run: npx playwright install --with-deps chromium
+      - name: Browser tests
+        working-directory: ui
+        run: npx playwright test
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-traces
+          path: ui/test-results
+
+  # The service image builds, starts, and serves a recorded run.
+  image:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build
+        run: docker build -t analyst-api:ci .
+      - name: Start and ask
+        run: |
+          docker run -d --name api -p 8000:8000 analyst-api:ci
+          for i in $(seq 1 30); do curl -sf http://127.0.0.1:8000/health && break; sleep 1; done
+          curl -sf http://127.0.0.1:8000/ready
+          curl -sf -X POST http://127.0.0.1:8000/ask -H 'content-type: application/json' \
+            -d '{"run_id":"bench-782"}' | grep -q '"type": "done"'

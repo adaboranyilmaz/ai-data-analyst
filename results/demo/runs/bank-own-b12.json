@@ -1,0 +1,280 @@
+{
+ "schema_version": 1,
+ "id": "bank-own-b12",
+ "kind": "banking",
+ "source_run": "own/own-d1-claude-sonnet-5-no-evidence",
+ "question": "How many clients own an account that has both a loan and a standing order for an insurance premium?",
+ "hint": null,
+ "db_id": "financial",
+ "category": "b",
+ "difficulty": null,
+ "design": "d1",
+ "model": "claude-sonnet-5",
+ "steps": [
+  {
+   "type": "step",
+   "kind": "model",
+   "text": "Read the question and the financial database's tables and columns.",
+   "recorded_ms": null
+  },
+  {
+   "type": "step",
+   "kind": "submit",
+   "text": "Submitted an answer (75% confidence).",
+   "recorded_ms": null
+  }
+ ],
+ "answer": {
+  "text": "This counts distinct clients who are the OWNER of an account that has both a loan and a standing order for an insurance premium (k_symbol = POJISTNE).",
+  "sql": "SELECT COUNT(DISTINCT c.client_id)\nFROM client c\nJOIN disp d ON d.client_id = c.client_id AND d.type = 'OWNER'\nJOIN account a ON a.account_id = d.account_id\nJOIN loan l ON l.account_id = a.account_id\nJOIN \"order\" o ON o.account_id = a.account_id AND o.k_symbol = 'POJISTNE'",
+  "declined": false,
+  "decline_reason": null,
+  "clarifying_question": "Should \"own\" include only account owners (OWNER disposition) or also authorized users (DISPONENT)?",
+  "assumptions": [
+   "\"Own\" means the client has the OWNER disposition on the account (not a DISPONENT).",
+   "\"Standing order for an insurance premium\" means order.k_symbol = 'POJISTNE'.",
+   "A client is counted once even if they own multiple qualifying accounts."
+  ],
+  "premise_correction": null
+ },
+ "sql_outline": {
+  "kind": "select",
+  "intermediate_results": [],
+  "tables": [
+   {
+    "name": "client"
+   },
+   {
+    "name": "disp"
+   },
+   {
+    "name": "account"
+   },
+   {
+    "name": "loan"
+   },
+   {
+    "name": "order"
+   }
+  ],
+  "links": [
+   {
+    "table": "disp",
+    "keep_unmatched": false,
+    "side": "inner",
+    "on": [
+     {
+      "phrase": [
+       {
+        "t": "col",
+        "v": "disp.client_id"
+       },
+       {
+        "t": "op",
+        "v": "eq"
+       },
+       {
+        "t": "col",
+        "v": "client.client_id"
+       }
+      ]
+     },
+     {
+      "phrase": [
+       {
+        "t": "col",
+        "v": "disp.type"
+       },
+       {
+        "t": "op",
+        "v": "eq"
+       },
+       {
+        "t": "lit",
+        "v": "\"OWNER\""
+       }
+      ]
+     }
+    ],
+    "using": []
+   },
+   {
+    "table": "account",
+    "keep_unmatched": false,
+    "side": "inner",
+    "on": [
+     {
+      "phrase": [
+       {
+        "t": "col",
+        "v": "account.account_id"
+       },
+       {
+        "t": "op",
+        "v": "eq"
+       },
+       {
+        "t": "col",
+        "v": "disp.account_id"
+       }
+      ]
+     }
+    ],
+    "using": []
+   },
+   {
+    "table": "loan",
+    "keep_unmatched": false,
+    "side": "inner",
+    "on": [
+     {
+      "phrase": [
+       {
+        "t": "col",
+        "v": "loan.account_id"
+       },
+       {
+        "t": "op",
+        "v": "eq"
+       },
+       {
+        "t": "col",
+        "v": "account.account_id"
+       }
+      ]
+     }
+    ],
+    "using": []
+   },
+   {
+    "table": "order",
+    "keep_unmatched": false,
+    "side": "inner",
+    "on": [
+     {
+      "phrase": [
+       {
+        "t": "col",
+        "v": "order.account_id"
+       },
+       {
+        "t": "op",
+        "v": "eq"
+       },
+       {
+        "t": "col",
+        "v": "account.account_id"
+       }
+      ]
+     },
+     {
+      "phrase": [
+       {
+        "t": "col",
+        "v": "order.k_symbol"
+       },
+       {
+        "t": "op",
+        "v": "eq"
+       },
+       {
+        "t": "lit",
+        "v": "\"POJISTNE\""
+       }
+      ]
+     }
+    ],
+    "using": []
+   }
+  ],
+  "filters": [],
+  "groups": [],
+  "group_filters": [],
+  "distinct": false,
+  "returns": [
+   {
+    "phrase": [
+     {
+      "t": "agg",
+      "v": "count_distinct",
+      "arg": [
+       {
+        "t": "col",
+        "v": "client.client_id"
+       }
+      ]
+     }
+    ],
+    "name": null
+   }
+  ],
+  "order": [],
+  "limit": null,
+  "offset": null
+ },
+ "result": {
+  "ok": true,
+  "error": null,
+  "columns": [
+   "count"
+  ],
+  "rows": [
+   [
+    114
+   ]
+  ],
+  "fetched_rows": 1,
+  "truncated": false
+ },
+ "checks": [
+  {
+   "name": "not_empty",
+   "ok": true,
+   "text": "The query returned rows."
+  },
+  {
+   "name": "no_repeated_rows",
+   "ok": true,
+   "text": "No row is repeated."
+  },
+  {
+   "name": "values_in_range",
+   "ok": true,
+   "text": "No count, amount or share is outside its possible range."
+  },
+  {
+   "name": "result_size",
+   "ok": true,
+   "text": "The whole result fits."
+  }
+ ],
+ "chart_spec": null,
+ "statistics": null,
+ "confidence": {
+  "stated": 0.75,
+  "calibrated": 0.5544,
+  "band": {
+   "range": [
+    0.5,
+    0.6
+   ],
+   "n": 62,
+   "accuracy": 0.5323,
+   "interval": [
+    0.4098,
+    0.6509
+   ],
+   "thin": false
+  },
+  "threshold": 0.7959,
+  "withheld": true
+ },
+ "status": "clarify",
+ "evaluation": {
+  "correct": true,
+  "rule": "banking set, category b"
+ },
+ "explanation": null,
+ "cost_usd": 0.0038958,
+ "slot": "category_b"
+}

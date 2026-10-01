@@ -1417,3 +1417,70 @@ stages:
           cache: false
       - results/plots/planted_claims.png:
           cache: false
+
+  # The product: the curated replay set (a draw by the rule in configs/serving.yaml) and the check
+  # that what the service serves equals what was evaluated. No database, no model call.
+  demo_runs:
+    cmd: uv run python scripts/80_demo_runs.py
+    deps:
+      - scripts/80_demo_runs.py
+      - src/serving/__init__.py
+      - src/serving/curated.py
+      - src/serving/evidence.py
+      - src/serving/explain.py
+      - src/serving/meter.py
+      - src/explain/outline.py
+      - results/metrics/calibration.json
+      - results/metrics/splits.json
+      - results/metrics/error_analysis.json
+      - results/reviews/guardrail_review.yaml
+      - results/reviews/demo_explanations.yaml
+      - own_set/questions.yaml
+      - data/raw/bird_minidev/mini_dev_pg.json
+      - results/runs/main
+      - results/runs/own
+      - results/runs/guardrail/own.jsonl
+      - data/traces/main
+      - data/traces/own
+    params:
+      - configs/serving.yaml:
+          - curated
+          - meter
+    outs:
+      - results/demo:
+          cache: false
+
+  serving_check:
+    cmd: uv run python scripts/81_serving_check.py
+    deps:
+      - scripts/81_serving_check.py
+      - src/serving
+      - results/demo
+      - results/metrics/calibration.json
+      - results/runs/main
+      - results/runs/own
+      - results/runs/guardrail/own.jsonl
+    params:
+      - configs/serving.yaml:
+          - curated
+          - meter
+          - replay
+    outs:
+      - results/metrics/serving_check.json:
+          cache: false
+
+  mcp_security:
+    cmd: uv run python scripts/82_mcp_security.py
+    deps:
+      - scripts/82_mcp_security.py
+      - src/mcp_server
+      - src/serving/connections.py
+      - src/db/security_suite.py
+      - src/db/guard.py
+      - src/db/execute.py
+      - src/tools
+      - configs/security_attacks.yaml
+      - configs/tools.yaml
+    outs:
+      - results/metrics/mcp_security.json:
+          cache: false

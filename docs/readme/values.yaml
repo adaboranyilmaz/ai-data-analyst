@@ -372,6 +372,16 @@ values:
   gr_predictions: {file: metrics/guardrail.json, path: predictions, count_where: {}, fmt: int}
   phase7_usd: {file: metrics/api_spend.json, path: by_phase/phase7/usd, fmt: usd2}
 
+  # the product: the service's check against the evaluation, and the security suite through the
+  # tool server
+  serving_runs: {file: metrics/serving_check.json, path: runs, fmt: int}
+  serving_runs_identical: {file: metrics/serving_check.json, path: identical, fmt: int}
+  mcp_attacks: {file: metrics/mcp_security.json, path: attacks, fmt: int}
+  mcp_boundary_attacks: {file: metrics/mcp_security.json, path: boundary_attacks, fmt: int}
+  mcp_breaches: {file: metrics/mcp_security.json, path: breaches, fmt: int}
+  smoke_spent: {file: metrics/live_smoke.json, path: phase_spent_usd, fmt: usd4}
+  smoke_upper: {file: metrics/live_smoke.json, path: counted_upper_usd, fmt: usd4}
+
 # Decimals and percentages the templates may contain outside a placeholder: version numbers,
 # never results.
 allowed_literals:

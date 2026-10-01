@@ -1,0 +1,158 @@
+{
+ "schema_version": 1,
+ "id": "bench-573",
+ "kind": "benchmark",
+ "source_run": "main/all-d1-claude-sonnet-5-evidence",
+ "question": "Write the contents of comments with a score of 17.",
+ "hint": "score of 17 refers to Score = 17; contents of comments refers to Text",
+ "db_id": "codebase_community",
+ "category": null,
+ "difficulty": "simple",
+ "design": "d1",
+ "model": "claude-sonnet-5",
+ "steps": [
+  {
+   "type": "step",
+   "kind": "model",
+   "text": "Read the question and the codebase_community database's tables and columns.",
+   "recorded_ms": null
+  },
+  {
+   "type": "step",
+   "kind": "submit",
+   "text": "Submitted an answer (95% confidence).",
+   "recorded_ms": null
+  }
+ ],
+ "answer": {
+  "text": "The query returns the Text field of all comments whose Score equals 17.",
+  "sql": "SELECT text FROM comments WHERE score = 17;",
+  "declined": false,
+  "decline_reason": null,
+  "clarifying_question": null,
+  "assumptions": [],
+  "premise_correction": null
+ },
+ "sql_outline": {
+  "kind": "select",
+  "intermediate_results": [],
+  "tables": [
+   {
+    "name": "comments"
+   }
+  ],
+  "links": [],
+  "filters": [
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "score"
+     },
+     {
+      "t": "op",
+      "v": "eq"
+     },
+     {
+      "t": "lit",
+      "v": "17"
+     }
+    ]
+   }
+  ],
+  "groups": [],
+  "group_filters": [],
+  "distinct": false,
+  "returns": [
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "text"
+     }
+    ],
+    "name": null
+   }
+  ],
+  "order": [],
+  "limit": null,
+  "offset": null
+ },
+ "result": {
+  "ok": true,
+  "error": null,
+  "columns": [
+   "text"
+  ],
+  "rows": [
+   [
+    "Reminds me that in my early days as a referee i spent *far* too long reviewing a statistical paper that was eventually rejected by that particular journal, but the other referees and I suggested a more useful application for the method, and I also sketched an algebraic proof to replace an unsatisfac...[263 more characters]"
+   ],
+   [
+    "If you're going to use R, I'd recommend embedding your R code in an Sweave document that produces your report.  That way the R code stays with the report."
+   ],
+   [
+    "As a non-expert, I think that the key to the entire debate is that people actually reason like Bayesians. You have to be trained to think like a frequentist, and even then it's easy to slip up and either reason or present your reasoning as if it were Bayesian. \"There's a 95% chance that the value is...[47 more characters]"
+   ],
+   [
+    "In the linear regression model the dependent variable $y$ is considered continuous, whereas in logistic regression it is categorical, i.e., discrete. In application, the former is used in regression settings while the latter is used for binary classification or multi-class classification (where it i...[42 more characters]"
+   ],
+   [
+    "Did anyone else notice that the tour guide changes colors between the second and third frames?"
+   ]
+  ],
+  "fetched_rows": 5,
+  "truncated": false
+ },
+ "checks": [
+  {
+   "name": "not_empty",
+   "ok": true,
+   "text": "The query returned rows."
+  },
+  {
+   "name": "no_repeated_rows",
+   "ok": true,
+   "text": "No row is repeated."
+  },
+  {
+   "name": "values_in_range",
+   "ok": true,
+   "text": "No count, amount or share is outside its possible range."
+  },
+  {
+   "name": "result_size",
+   "ok": true,
+   "text": "The whole result fits."
+  }
+ ],
+ "chart_spec": null,
+ "statistics": null,
+ "confidence": {
+  "stated": 0.95,
+  "calibrated": 0.8267,
+  "band": {
+   "range": [
+    0.8,
+    0.9
+   ],
+   "n": 20,
+   "accuracy": 0.95,
+   "interval": [
+    0.7639,
+    0.9911
+   ],
+   "thin": false
+  },
+  "threshold": 0.7959,
+  "withheld": false
+ },
+ "status": "answered",
+ "evaluation": {
+  "correct": true,
+  "rule": "execution accuracy"
+ },
+ "explanation": null,
+ "cost_usd": 0.0020719,
+ "slot": "correct_above_threshold"
+}

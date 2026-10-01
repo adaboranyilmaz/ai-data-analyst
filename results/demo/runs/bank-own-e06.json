@@ -1,0 +1,155 @@
+{
+ "schema_version": 1,
+ "id": "bank-own-e06",
+ "kind": "banking",
+ "source_run": "own/own-d1-claude-sonnet-5-no-evidence",
+ "question": "Given that all our loans run for 12 months, what is the average monthly instalment?",
+ "hint": null,
+ "db_id": "financial",
+ "category": "e",
+ "difficulty": null,
+ "design": "d1",
+ "model": "claude-sonnet-5",
+ "steps": [
+  {
+   "type": "step",
+   "kind": "model",
+   "text": "Read the question and the financial database's tables and columns.",
+   "recorded_ms": null
+  },
+  {
+   "type": "step",
+   "kind": "submit",
+   "text": "Submitted an answer (75% confidence).",
+   "recorded_ms": null
+  }
+ ],
+ "answer": {
+  "text": "The premise is false: not all loans run for 12 months (durations in the data are 12, 24, 36, 48 or 60 months). Restricting to the 12-month loans, the average monthly instalment (payments column) works out from the query above.",
+  "sql": "SELECT AVG(payments) AS avg_monthly_instalment\nFROM loan\nWHERE duration = 12",
+  "declined": false,
+  "decline_reason": null,
+  "clarifying_question": null,
+  "assumptions": [
+   "Interpreted 'monthly instalment' as the loan.payments column.",
+   "Since the premise that all loans run 12 months is false, computed the average only over loans with duration = 12 months."
+  ],
+  "premise_correction": "Not all loans run for 12 months: loan durations in the data are 12, 24, 36, 48 or 60 months (5 distinct values).\""
+ },
+ "sql_outline": {
+  "kind": "select",
+  "intermediate_results": [],
+  "tables": [
+   {
+    "name": "loan"
+   }
+  ],
+  "links": [],
+  "filters": [
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "duration"
+     },
+     {
+      "t": "op",
+      "v": "eq"
+     },
+     {
+      "t": "lit",
+      "v": "12"
+     }
+    ]
+   }
+  ],
+  "groups": [],
+  "group_filters": [],
+  "distinct": false,
+  "returns": [
+   {
+    "phrase": [
+     {
+      "t": "agg",
+      "v": "avg",
+      "arg": [
+       {
+        "t": "col",
+        "v": "payments"
+       }
+      ]
+     }
+    ],
+    "name": "avg_monthly_instalment"
+   }
+  ],
+  "order": [],
+  "limit": null,
+  "offset": null
+ },
+ "result": {
+  "ok": true,
+  "error": null,
+  "columns": [
+   "avg_monthly_instalment"
+  ],
+  "rows": [
+   [
+    4469.625954198474
+   ]
+  ],
+  "fetched_rows": 1,
+  "truncated": false
+ },
+ "checks": [
+  {
+   "name": "not_empty",
+   "ok": true,
+   "text": "The query returned rows."
+  },
+  {
+   "name": "no_repeated_rows",
+   "ok": true,
+   "text": "No row is repeated."
+  },
+  {
+   "name": "values_in_range",
+   "ok": true,
+   "text": "No count, amount or share is outside its possible range."
+  },
+  {
+   "name": "result_size",
+   "ok": true,
+   "text": "The whole result fits."
+  }
+ ],
+ "chart_spec": null,
+ "statistics": null,
+ "confidence": {
+  "stated": 0.75,
+  "calibrated": 0.5544,
+  "band": {
+   "range": [
+    0.5,
+    0.6
+   ],
+   "n": 62,
+   "accuracy": 0.5323,
+   "interval": [
+    0.4098,
+    0.6509
+   ],
+   "thin": false
+  },
+  "threshold": 0.7959,
+  "withheld": true
+ },
+ "status": "withheld",
+ "evaluation": {
+  "correct": true,
+  "rule": "banking set, category e"
+ },
+ "explanation": null,
+ "cost_usd": 0.0033998,
+ "slot": "category_e"
+}

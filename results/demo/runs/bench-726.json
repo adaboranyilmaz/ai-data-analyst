@@ -1,0 +1,417 @@
+{
+ "schema_version": 1,
+ "id": "bench-726",
+ "kind": "benchmark",
+ "source_run": "main/all-d1-claude-sonnet-5-evidence",
+ "question": "Rank heroes published by Marvel Comics by their height in descending order.",
+ "hint": "name refers to superhero_name; the tallest hero refers to MAX(height_cm); published by Marvel Comics refers to publisher_name = 'Marvel Comics'",
+ "db_id": "superhero",
+ "category": null,
+ "difficulty": "moderate",
+ "design": "d1",
+ "model": "claude-sonnet-5",
+ "steps": [
+  {
+   "type": "step",
+   "kind": "model",
+   "text": "Read the question and the superhero database's tables and columns.",
+   "recorded_ms": null
+  },
+  {
+   "type": "step",
+   "kind": "submit",
+   "text": "Submitted an answer (85% confidence).",
+   "recorded_ms": null
+  }
+ ],
+ "answer": {
+  "text": "The query lists superhero names and heights for heroes published by Marvel Comics, ranked in descending order of height using RANK() (ties get the same rank).",
+  "sql": "SELECT s.superhero_name, s.height_cm,\n       RANK() OVER (ORDER BY s.height_cm DESC) AS height_rank\nFROM superhero s\nJOIN publisher p ON s.publisher_id = p.id\nWHERE p.publisher_name = 'Marvel Comics'\nORDER BY s.height_cm DESC;",
+  "declined": false,
+  "decline_reason": null,
+  "clarifying_question": null,
+  "assumptions": [
+   "Ranking uses standard RANK() with ties sharing rank, ordered by height_cm descending",
+   "Heroes with null height_cm are included and ranked last"
+  ],
+  "premise_correction": null
+ },
+ "sql_outline": {
+  "kind": "select",
+  "intermediate_results": [],
+  "tables": [
+   {
+    "name": "superhero"
+   },
+   {
+    "name": "publisher"
+   }
+  ],
+  "links": [
+   {
+    "table": "publisher",
+    "keep_unmatched": false,
+    "side": "inner",
+    "on": [
+     {
+      "phrase": [
+       {
+        "t": "col",
+        "v": "superhero.publisher_id"
+       },
+       {
+        "t": "op",
+        "v": "eq"
+       },
+       {
+        "t": "col",
+        "v": "publisher.id"
+       }
+      ]
+     }
+    ],
+    "using": []
+   }
+  ],
+  "filters": [
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "publisher.publisher_name"
+     },
+     {
+      "t": "op",
+      "v": "eq"
+     },
+     {
+      "t": "lit",
+      "v": "\"Marvel Comics\""
+     }
+    ]
+   }
+  ],
+  "groups": [],
+  "group_filters": [],
+  "distinct": false,
+  "returns": [
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "superhero.superhero_name"
+     }
+    ],
+    "name": null
+   },
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "superhero.height_cm"
+     }
+    ],
+    "name": null
+   },
+   {
+    "unrendered": true,
+    "name": "height_rank"
+   }
+  ],
+  "order": [
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "superhero.height_cm"
+     }
+    ],
+    "descending": true
+   }
+  ],
+  "limit": null,
+  "offset": null
+ },
+ "result": {
+  "ok": true,
+  "error": null,
+  "columns": [
+   "superhero_name",
+   "height_cm",
+   "height_rank"
+  ],
+  "rows": [
+   [
+    "Bird-Man",
+    null,
+    1
+   ],
+   [
+    "Blaquesmith",
+    null,
+    1
+   ],
+   [
+    "Wondra",
+    null,
+    1
+   ],
+   [
+    "Thunderbird II",
+    null,
+    1
+   ],
+   [
+    "Cat II",
+    null,
+    1
+   ],
+   [
+    "Giant-Man II",
+    null,
+    1
+   ],
+   [
+    "Stacy X",
+    null,
+    1
+   ],
+   [
+    "Spider-Woman II",
+    null,
+    1
+   ],
+   [
+    "Speedball",
+    null,
+    1
+   ],
+   [
+    "Snake-Eyes",
+    null,
+    1
+   ],
+   [
+    "Bumbleboy",
+    null,
+    1
+   ],
+   [
+    "Goliath",
+    null,
+    1
+   ],
+   [
+    "Penance I",
+    null,
+    1
+   ],
+   [
+    "Penance",
+    null,
+    1
+   ],
+   [
+    "Bird-Man II",
+    null,
+    1
+   ],
+   [
+    "Black Abbott",
+    null,
+    1
+   ],
+   [
+    "Black Goliath",
+    null,
+    1
+   ],
+   [
+    "Box",
+    null,
+    1
+   ],
+   [
+    "Boomer",
+    null,
+    1
+   ],
+   [
+    "Meteorite",
+    null,
+    1
+   ]
+  ],
+  "fetched_rows": 387,
+  "truncated": false
+ },
+ "checks": [
+  {
+   "name": "not_empty",
+   "ok": true,
+   "text": "The query returned rows."
+  },
+  {
+   "name": "no_repeated_rows",
+   "ok": false,
+   "text": "Two rows are identical."
+  },
+  {
+   "name": "values_in_range",
+   "ok": true,
+   "text": "No count, amount or share is outside its possible range."
+  },
+  {
+   "name": "result_size",
+   "ok": true,
+   "text": "The whole result fits."
+  }
+ ],
+ "chart_spec": null,
+ "statistics": null,
+ "confidence": {
+  "stated": 0.85,
+  "calibrated": 0.709,
+  "band": {
+   "range": [
+    0.7,
+    0.8
+   ],
+   "n": 156,
+   "accuracy": 0.7564,
+   "interval": [
+    0.6834,
+    0.8171
+   ],
+   "thin": false
+  },
+  "threshold": 0.7959,
+  "withheld": true
+ },
+ "status": "withheld",
+ "evaluation": {
+  "correct": false,
+  "rule": "execution accuracy"
+ },
+ "explanation": {
+  "expected": {
+   "columns": [
+    "superhero_name",
+    "height_cm",
+    "heightrank"
+   ],
+   "rows": [
+    [
+     "Ymir",
+     30480,
+     1
+    ],
+    [
+     "Surtur",
+     30480,
+     1
+    ],
+    [
+     "Bloodwraith",
+     3050,
+     3
+    ],
+    [
+     "Utgard-Loki",
+     1520,
+     4
+    ],
+    [
+     "Fin Fang Foom",
+     975,
+     5
+    ],
+    [
+     "Galactus",
+     876,
+     6
+    ],
+    [
+     "Groot",
+     701,
+     7
+    ],
+    [
+     "MODOK",
+     366,
+     8
+    ],
+    [
+     "Wolfsbane",
+     366,
+     8
+    ],
+    [
+     "Sasquatch",
+     305,
+     10
+    ],
+    [
+     "Onslaught",
+     305,
+     10
+    ],
+    [
+     "Juggernaut",
+     287,
+     12
+    ],
+    [
+     "Hulk",
+     244,
+     13
+    ],
+    [
+     "Venom III",
+     229,
+     14
+    ],
+    [
+     "Anti-Venom",
+     229,
+     14
+    ],
+    [
+     "Bi-Beast",
+     229,
+     14
+    ],
+    [
+     "Colossus",
+     226,
+     17
+    ],
+    [
+     "Venompool",
+     226,
+     17
+    ],
+    [
+     "Cloak",
+     226,
+     17
+    ],
+    [
+     "Warpath",
+     218,
+     20
+    ]
+   ],
+   "total_rows": 387,
+   "truncated": true
+  },
+  "expected_sql": "SELECT superhero_name, height_cm, RANK() OVER (ORDER BY height_cm DESC NULLS LAST) AS HeightRank FROM superhero INNER JOIN publisher ON superhero.publisher_id = publisher.id WHERE publisher.publisher_name = 'Marvel Comics'",
+  "comparison": null,
+  "category": "order_limit",
+  "category_text": "it ordered or limited the rows differently",
+  "note": "Both queries return the same heroes and the same columns, but they rank them differently. In PostgreSQL a descending sort puts unknown (empty) values first, so the analyst's ranking begins with heroes whose height is not recorded and gives them rank one. The expert's query puts unknown heights last, so its ranking begins with the tallest heroes. The analyst's ranking is wrong in substance, not only in form.",
+  "hint": "name refers to superhero_name; the tallest hero refers to MAX(height_cm); published by Marvel Comics refers to publisher_name = 'Marvel Comics'"
+ },
+ "cost_usd": 0.0065899,
+ "slot": "wrong_below_threshold"
+}

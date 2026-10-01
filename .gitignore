@@ -29,3 +29,8 @@ Thumbs.db
 # --- build ---
 build/
 dist/
+
+# --- UI ---
+node_modules/
+ui/test-results/
+ui/playwright-report/

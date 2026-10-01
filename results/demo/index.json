@@ -1,0 +1,168 @@
+{
+ "rule": "configs/serving.yaml, curated",
+ "seed": 20261001,
+ "count": 20,
+ "short": {},
+ "runs": [
+  {
+   "id": "bench-782",
+   "kind": "benchmark",
+   "slot": "correct_above_threshold",
+   "question": "List the heroes' names whose eyes and hair colours are both black.",
+   "db_id": "superhero",
+   "status": "answered"
+  },
+  {
+   "id": "bench-573",
+   "kind": "benchmark",
+   "slot": "correct_above_threshold",
+   "question": "Write the contents of comments with a score of 17.",
+   "db_id": "codebase_community",
+   "status": "answered"
+  },
+  {
+   "id": "bench-859",
+   "kind": "benchmark",
+   "slot": "correct_above_threshold",
+   "question": "What's Bruno Senna's Q1 result in the qualifying race No. 354?",
+   "db_id": "formula_1",
+   "status": "answered"
+  },
+  {
+   "id": "bench-533",
+   "kind": "benchmark",
+   "slot": "wrong_above_threshold",
+   "question": "How many users last accessed the website after 2014/9/1?",
+   "db_id": "codebase_community",
+   "status": "answered"
+  },
+  {
+   "id": "bench-829",
+   "kind": "benchmark",
+   "slot": "correct_below_threshold",
+   "question": "Which publisher created more superheroes: DC or Marvel Comics? Find the difference in the number of superheroes.",
+   "db_id": "superhero",
+   "status": "withheld"
+  },
+  {
+   "id": "bench-1080",
+   "kind": "benchmark",
+   "slot": "correct_below_threshold",
+   "question": "Among the players whose preferred foot was the left foot when attacking, how many of them would remain in his position when the team attacked?",
+   "db_id": "european_football_2",
+   "status": "withheld"
+  },
+  {
+   "id": "bench-1378",
+   "kind": "benchmark",
+   "slot": "correct_below_threshold",
+   "question": "What is the highest amount of budget spend for an event?",
+   "db_id": "student_club",
+   "status": "withheld"
+  },
+  {
+   "id": "bench-726",
+   "kind": "benchmark",
+   "slot": "wrong_below_threshold",
+   "question": "Rank heroes published by Marvel Comics by their height in descending order.",
+   "db_id": "superhero",
+   "status": "withheld"
+  },
+  {
+   "id": "bench-751",
+   "kind": "benchmark",
+   "slot": "wrong_below_threshold",
+   "question": "List down at least five superpowers of male superheroes.",
+   "db_id": "superhero",
+   "status": "withheld"
+  },
+  {
+   "id": "bench-1254",
+   "kind": "benchmark",
+   "slot": "wrong_below_threshold",
+   "question": "How many patients with a normal Ig A level came to the hospital after 1990/1/1?",
+   "db_id": "thrombosis_prediction",
+   "status": "withheld"
+  },
+  {
+   "id": "bank-own-a09",
+   "kind": "banking",
+   "slot": "category_a",
+   "question": "How many old-age pension payments were credited in 1998, and what was their total amount in CZK?",
+   "db_id": "financial",
+   "status": "withheld"
+  },
+  {
+   "id": "bank-own-b12",
+   "kind": "banking",
+   "slot": "category_b",
+   "question": "How many clients own an account that has both a loan and a standing order for an insurance premium?",
+   "db_id": "financial",
+   "status": "clarify"
+  },
+  {
+   "id": "bank-own-c09",
+   "kind": "banking",
+   "slot": "category_c",
+   "question": "How many young clients do we have?",
+   "db_id": "financial",
+   "status": "clarify"
+  },
+  {
+   "id": "bank-own-d03",
+   "kind": "banking",
+   "slot": "category_d",
+   "question": "What interest rate was charged on each loan granted in 1996?",
+   "db_id": "financial",
+   "status": "declined"
+  },
+  {
+   "id": "bank-own-e06",
+   "kind": "banking",
+   "slot": "category_e",
+   "question": "Given that all our loans run for 12 months, what is the average monthly instalment?",
+   "db_id": "financial",
+   "status": "withheld"
+  },
+  {
+   "id": "bank-own-b06",
+   "kind": "banking",
+   "slot": "wrong_extra",
+   "question": "Which ten account owners were charged the most penalty interest in total? List their client IDs.",
+   "db_id": "financial",
+   "status": "withheld"
+  },
+  {
+   "id": "guard-own-f11",
+   "kind": "guardrail",
+   "slot": "reviewed_success",
+   "question": "Are loans on accounts with a second authorised user repaid better, because two people share responsibility?",
+   "db_id": "financial",
+   "status": "answered"
+  },
+  {
+   "id": "guard-own-f06",
+   "kind": "guardrail",
+   "slot": "reviewed_success",
+   "question": "Do older clients keep higher balances?",
+   "db_id": "financial",
+   "status": "answered"
+  },
+  {
+   "id": "guard-own-f02",
+   "kind": "guardrail",
+   "slot": "reviewed_failure",
+   "question": "Are loans to women repaid worse than loans to men?",
+   "db_id": "financial",
+   "status": "answered"
+  },
+  {
+   "id": "guard-own-f03",
+   "kind": "guardrail",
+   "slot": "reviewed_failure",
+   "question": "Do weekly statements lead to more overdrafts?",
+   "db_id": "financial",
+   "status": "answered"
+  }
+ ]
+}

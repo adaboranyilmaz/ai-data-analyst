@@ -1,0 +1,37 @@
+criteria: >-
+  A plain-words reading of each wrong answer in the curated demo set: what the expert's query does
+  differently and whether the difference is the analyst's mistake, a reasonable other reading of the
+  question, or the expert query departing from its own hint. Written from reading both queries and
+  their results side by side. It states no figures: the page shows the two results from the data.
+reviewer: project author
+status: drafted, not yet checked
+notes:
+  bench-533: >-
+    The expert's query counts users whose last-access date, with the time of day ignored, is after
+    1 September 2014, so it leaves out everyone who last accessed the site on 1 September itself.
+    The analyst compared the full timestamp with midnight at the start of 1 September, so it also
+    counted the users who accessed the site later that day, and its count is higher. The question
+    can be read either way; the benchmark takes the date-only reading, and the analyst wrote its
+    own reading down as an assumption.
+  bench-726: >-
+    Both queries return the same heroes and the same columns, but they rank them differently. In
+    PostgreSQL a descending sort puts unknown (empty) values first, so the analyst's ranking begins
+    with heroes whose height is not recorded and gives them rank one. The expert's query puts unknown
+    heights last, so its ranking begins with the tallest heroes. The analyst's ranking is wrong in
+    substance, not only in form.
+  bench-751: >-
+    The question asks for any five superpowers, and both queries return five. Neither query orders
+    its rows, so each picks a different five, and the benchmark scores the analyst's five as wrong
+    only because they differ from the expert's. The analyst's answer is a fair reading of the
+    question; here the scoring, not the analyst, is too strict.
+  bench-1254: >-
+    The two queries count different things. The expert's query counts rows of patients joined to
+    their laboratory tests, so a patient with several tests is counted several times; the analyst
+    counts each patient once, which is what "how many patients" asks. They also differ at the edges:
+    the hint says a normal level is above 80 and below 500 and the year is 1990 or later, which the
+    analyst followed, while the expert's query includes 80 and 500 and starts from 1991. The expert
+    answer here departs from its own hint and counts test rows, so it is questionable.
+  bank-own-b06: >-
+    The question asks for the ten client IDs. The analyst chose the right ten, but it also returned
+    each client's total as a second column, and the benchmark compares every column, so the extra
+    column makes the answer wrong. This is a difference of form, not of substance.

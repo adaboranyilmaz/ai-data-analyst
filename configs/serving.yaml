@@ -1,0 +1,77 @@
+# The product (src/serving/, src/mcp_server/): what the service serves, how a curated demo run is
+# chosen, what the confidence meter says and how a replay is paced. A change here changes what the
+# service shows; the evaluated numbers themselves come from the results files named below.
+
+# The system live mode runs: the winning design on Claude Sonnet 5, without the benchmark's hint
+# (a company has a data dictionary, not per-question hints). The escalation model is a switch,
+# off by default: the router is a measured alternative, not the default service.
+live:
+  design: d1
+  model: claude-sonnet-5
+  evidence: false
+  router: false
+  database: financial # the demo database; its schema role is the agent's only reach
+  phase: phase8 # the ledger phase live calls are charged to (configs/budget.yaml)
+  cache_dir: data/serving/cache # live responses, so asking the same question twice costs nothing
+  ledger: data/serving/ledger.json # this deployment's own spend ledger, never the project's
+  runs_dir: data/serving/runs # live runs, so a permalink works after the stream ends
+  # A person's own database gets its own cache: it holds that database's schema and samples.
+  connection_cache_dir: data/serving/cache_connection
+  # The statistical guardrail on a comparative or causal question (src/serving/live_guardrail.py):
+  # its own caches, the deployment's ledger. Needs the sandbox (Docker) where the service runs.
+  guardrail: true
+  guardrail_cache_dir: data/serving/cache_guardrail
+  keep_runs: 200 # saved live runs (permalinks); older ones are removed
+  max_concurrent: 2 # live questions at once; another waits as "busy" rather than queueing
+  # A deployment's own cap on live spend, enforced before each question on top of the ledger's
+  # phase and project caps: a question whose worst-case cost would pass it is refused.
+  spend_cap_usd: 1.00
+  worst_case_question_usd: 0.20
+  max_question_chars: 600
+
+# The API's housekeeping.
+api:
+  request_log_max_mb: 5 # the request log rolls over to one old file beyond this size
+
+# Where the confidence meter's numbers come from: the Platt calibrator fitted on the calibration
+# split, the decline threshold chosen there, and the reliability of the calibrated confidence on
+# the held-out split. Nothing is fitted or tuned here.
+meter:
+  calibration: results/metrics/calibration.json
+  # Bands of calibrated confidence, as the held-out reliability table reports them.
+  band_width: 0.1
+  # A band with fewer held-out answers than this is shown with a plain "too few to say" note.
+  min_band_n: 20
+
+# The curated replay set. The rule was fixed before any run was looked at; the seed picks
+# among the runs that fit a slot, so no run was chosen by what it says. Wrong answers and
+# declined or withheld ones are included on purpose.
+curated:
+  seed: 20261001
+  out_dir: results/demo
+  held_out: # the benchmark's held-out split, the winning design with the hint
+    stage: main
+    run: all-d1-claude-sonnet-5-evidence
+    slots:
+      correct_above_threshold: 3
+      wrong_above_threshold: 1
+      correct_below_threshold: 3
+      wrong_below_threshold: 3
+  banking: # the banking set, no hint
+    stage: own
+    run: own-d1-claude-sonnet-5-no-evidence
+    one_per_category: [a, b, c, d, e]
+    wrong_extra: 1 # one more, among the questions scored wrong in any category
+  guardrail: # the banking set's comparative and causal questions, guarded
+    records: results/runs/guardrail/own.jsonl
+    review: results/reviews/guardrail_review.yaml
+    reviewed_success: 2
+    reviewed_failure: 2
+
+# How a replay is paced. A recorded model call and tool call keep their recorded durations
+# (capped); a batched call has no recorded duration, so it gets `default_ms`. `speed` scales
+# everything (1 = recorded; the end-to-end tests use a large value).
+replay:
+  default_ms: 700
+  cap_ms: 4000
+  speed: 1.0

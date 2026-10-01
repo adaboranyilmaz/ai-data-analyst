@@ -1,0 +1,1138 @@
+{
+ "note": "the Phase 2 attacks sent as run_sql calls from an MCP client to a server process over stdio, plus attacks at the tool boundary; one run",
+ "settings": {
+  "limit_s": 15.0,
+  "stop_margin_s": 2.0
+ },
+ "attacks": 95,
+ "boundary_attacks": 19,
+ "skipped_without_bird": [],
+ "outcomes": {
+  "contained": 5,
+  "rejected": 90
+ },
+ "boundary_outcomes": {
+  "no_effect": 1,
+  "rejected": 18
+ },
+ "breaches": 0,
+ "every_attack_blocked": true,
+ "injection_row": {
+  "returned_as_a_row_value": true,
+  "tool_fields": [
+   "columns",
+   "ok",
+   "row_count",
+   "rows",
+   "seconds",
+   "total_rows",
+   "truncated"
+  ]
+ },
+ "records": [
+  {
+   "id": "destroy-drop",
+   "category": "destructive",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "DROP TABLE role_check.canary",
+   "outcome": "rejected",
+   "detail": "only a SELECT query is allowed, not DROP",
+   "seconds": 0.018
+  },
+  {
+   "id": "destroy-delete",
+   "category": "destructive",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "DELETE FROM role_check.canary",
+   "outcome": "rejected",
+   "detail": "only a SELECT query is allowed, not DELETE",
+   "seconds": 0.002
+  },
+  {
+   "id": "destroy-update",
+   "category": "destructive",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "UPDATE role_check.canary SET note = 'changed'",
+   "outcome": "rejected",
+   "detail": "only a SELECT query is allowed, not UPDATE",
+   "seconds": 0.003
+  },
+  {
+   "id": "destroy-insert",
+   "category": "destructive",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "INSERT INTO role_check.canary VALUES (2, 'written')",
+   "outcome": "rejected",
+   "detail": "only a SELECT query is allowed, not INSERT",
+   "seconds": 0.003
+  },
+  {
+   "id": "destroy-truncate",
+   "category": "destructive",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "TRUNCATE role_check.canary",
+   "outcome": "rejected",
+   "detail": "only a SELECT query is allowed, not TRUNCATETABLE",
+   "seconds": 0.002
+  },
+  {
+   "id": "destroy-alter",
+   "category": "destructive",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "ALTER TABLE role_check.canary ADD COLUMN extra integer",
+   "outcome": "rejected",
+   "detail": "only a SELECT query is allowed, not ALTER",
+   "seconds": 0.003
+  },
+  {
+   "id": "destroy-create",
+   "category": "destructive",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "CREATE TABLE security_check.created (id integer)",
+   "outcome": "rejected",
+   "detail": "only a SELECT query is allowed, not CREATE",
+   "seconds": 0.003
+  },
+  {
+   "id": "destroy-create-temp",
+   "category": "destructive",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "CREATE TEMP TABLE scratch AS SELECT 1 AS x",
+   "outcome": "rejected",
+   "detail": "only a SELECT query is allowed, not CREATE",
+   "seconds": 0.003
+  },
+  {
+   "id": "destroy-select-into",
+   "category": "destructive",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "SELECT * INTO security_check.copied FROM numbers",
+   "outcome": "rejected",
+   "detail": "SELECT INTO is not allowed; unknown table 'copied'",
+   "seconds": 0.003
+  },
+  {
+   "id": "destroy-cte-delete",
+   "category": "destructive",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "WITH d AS (DELETE FROM role_check.canary RETURNING *) SELECT * FROM d",
+   "outcome": "rejected",
+   "detail": "DELETE is not allowed inside a query; table role_check.canary: only tables of security_check",
+   "seconds": 0.003
+  },
+  {
+   "id": "destroy-cte-insert",
+   "category": "destructive",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "WITH i AS (INSERT INTO role_check.canary VALUES (3, 'x') RETURNING *) SELECT * FROM i",
+   "outcome": "rejected",
+   "detail": "INSERT is not allowed inside a query; table role_check.canary: only tables of security_check",
+   "seconds": 0.003
+  },
+  {
+   "id": "destroy-for-update",
+   "category": "destructive",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "SELECT * FROM numbers FOR UPDATE",
+   "outcome": "rejected",
+   "detail": "FOR UPDATE / FOR SHARE is not allowed",
+   "seconds": 0.003
+  },
+  {
+   "id": "destroy-grant",
+   "category": "destructive",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "GRANT SELECT ON security_check.secret TO analyst_ro",
+   "outcome": "rejected",
+   "detail": "only a SELECT query is allowed, not GRANT",
+   "seconds": 0.002
+  },
+  {
+   "id": "destroy-do-block",
+   "category": "destructive",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "DO $$ BEGIN DELETE FROM role_check.canary; END $$",
+   "outcome": "rejected",
+   "detail": "$ is not allowed (dollar quoting or parameters); only one statement is allowed",
+   "seconds": 0.002
+  },
+  {
+   "id": "destroy-large-object-create",
+   "category": "destructive",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "SELECT lo_create(0)",
+   "outcome": "rejected",
+   "detail": "function lo_create() is not allowed",
+   "seconds": 0.003
+  },
+  {
+   "id": "destroy-large-object-write",
+   "category": "destructive",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "SELECT lo_from_bytea(0, 'written')",
+   "outcome": "rejected",
+   "detail": "function lo_from_bytea() is not allowed",
+   "seconds": 0.002
+  },
+  {
+   "id": "destroy-copy-program",
+   "category": "destructive",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "COPY (SELECT 1) TO PROGRAM 'true'",
+   "outcome": "rejected",
+   "detail": "only a SELECT query is allowed, not COPY",
+   "seconds": 0.003
+  },
+  {
+   "id": "destroy-copy-from",
+   "category": "destructive",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "COPY role_check.canary FROM STDIN",
+   "outcome": "rejected",
+   "detail": "only a SELECT query is allowed, not COPY",
+   "seconds": 0.003
+  },
+  {
+   "id": "destroy-sequence",
+   "category": "destructive",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "CREATE SEQUENCE security_check.s",
+   "outcome": "rejected",
+   "detail": "only a SELECT query is allowed, not CREATE",
+   "seconds": 0.003
+  },
+  {
+   "id": "destroy-vacuum",
+   "category": "destructive",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "VACUUM FULL security_check.numbers",
+   "outcome": "rejected",
+   "detail": "only a SELECT query is allowed, not COMMAND",
+   "seconds": 0.002
+  },
+  {
+   "id": "multi-drop",
+   "category": "multi_statement",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "SELECT 1; DROP TABLE role_check.canary",
+   "outcome": "rejected",
+   "detail": "only one statement is allowed",
+   "seconds": 0.002
+  },
+  {
+   "id": "multi-delete-trailing",
+   "category": "multi_statement",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "SELECT 1;DELETE FROM role_check.canary;",
+   "outcome": "rejected",
+   "detail": "only one statement is allowed",
+   "seconds": 0.003
+  },
+  {
+   "id": "multi-after-read",
+   "category": "multi_statement",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "SELECT note FROM notes; UPDATE role_check.canary SET note = 'changed'",
+   "outcome": "rejected",
+   "detail": "only one statement is allowed",
+   "seconds": 0.002
+  },
+  {
+   "id": "multi-commit-escape",
+   "category": "multi_statement",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "SELECT 1; COMMIT; DELETE FROM role_check.canary",
+   "outcome": "rejected",
+   "detail": "only one statement is allowed",
+   "seconds": 0.002
+  },
+  {
+   "id": "multi-read-write-switch",
+   "category": "multi_statement",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "SELECT 1; SET SESSION CHARACTERISTICS AS TRANSACTION READ WRITE; DELETE FROM role_check.canary",
+   "outcome": "rejected",
+   "detail": "only one statement is allowed",
+   "seconds": 0.002
+  },
+  {
+   "id": "multi-begin",
+   "category": "multi_statement",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "BEGIN; DELETE FROM role_check.canary; COMMIT",
+   "outcome": "rejected",
+   "detail": "only one statement is allowed",
+   "seconds": 0.003
+  },
+  {
+   "id": "multi-newlines",
+   "category": "multi_statement",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "SELECT 1\n;\nDROP TABLE role_check.canary",
+   "outcome": "rejected",
+   "detail": "only one statement is allowed",
+   "seconds": 0.003
+  },
+  {
+   "id": "obfuscate-line-comment",
+   "category": "obfuscation",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "SELECT 1 -- ; DROP TABLE role_check.canary",
+   "outcome": "rejected",
+   "detail": "comments are not allowed",
+   "seconds": 0.002
+  },
+  {
+   "id": "obfuscate-block-comment",
+   "category": "obfuscation",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "SELECT 1 /* x */; DROP TABLE role_check.canary",
+   "outcome": "rejected",
+   "detail": "comments are not allowed; only one statement is allowed",
+   "seconds": 0.002
+  },
+  {
+   "id": "obfuscate-nested-comment",
+   "category": "obfuscation",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "SELECT 1 /* /* */ ; DROP TABLE role_check.canary; /* */ */",
+   "outcome": "rejected",
+   "detail": "comments are not allowed",
+   "seconds": 0.002
+  },
+  {
+   "id": "obfuscate-comment-in-keyword",
+   "category": "obfuscation",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "SELECT 1; DR/**/OP TABLE role_check.canary",
+   "outcome": "rejected",
+   "detail": "only one statement is allowed; comments are not allowed",
+   "seconds": 0.003
+  },
+  {
+   "id": "obfuscate-doubled-quote",
+   "category": "obfuscation",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "SELECT 'a'''; DROP TABLE role_check.canary; --'",
+   "outcome": "rejected",
+   "detail": "only one statement is allowed; comments are not allowed",
+   "seconds": 0.003
+  },
+  {
+   "id": "obfuscate-backslash-quote",
+   "category": "obfuscation",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "SELECT 'x\\'; DROP TABLE role_check.canary; --'",
+   "outcome": "rejected",
+   "detail": "backslashes are not allowed; only one statement is allowed; comments are not allowed",
+   "seconds": 0.003
+  },
+  {
+   "id": "obfuscate-e-string",
+   "category": "obfuscation",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "SELECT E'\\''; DROP TABLE role_check.canary; --'",
+   "outcome": "rejected",
+   "detail": "E'' strings (backslash escapes) are not allowed; backslashes are not allowed",
+   "seconds": 0.002
+  },
+  {
+   "id": "obfuscate-dollar-quote",
+   "category": "obfuscation",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "SELECT $$ x $$; DROP TABLE role_check.canary",
+   "outcome": "rejected",
+   "detail": "$ is not allowed (dollar quoting or parameters); only one statement is allowed",
+   "seconds": 0.002
+  },
+  {
+   "id": "obfuscate-dollar-tag",
+   "category": "obfuscation",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "SELECT $a$ ; $a$; DROP TABLE role_check.canary",
+   "outcome": "rejected",
+   "detail": "$ is not allowed (dollar quoting or parameters); only one statement is allowed",
+   "seconds": 0.002
+  },
+  {
+   "id": "obfuscate-fullwidth-semicolon",
+   "category": "obfuscation",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "SELECT 1\uff1b DROP TABLE role_check.canary",
+   "outcome": "rejected",
+   "detail": "character U+FF1B outside a quoted string (only ASCII is allowed)",
+   "seconds": 0.002
+  },
+  {
+   "id": "obfuscate-zero-width",
+   "category": "obfuscation",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "SELECT 1;\u200b DROP TABLE role_check.canary",
+   "outcome": "rejected",
+   "detail": "only one statement is allowed; invisible or control character U+200B outside a quoted string",
+   "seconds": 0.002
+  },
+  {
+   "id": "obfuscate-fullwidth-keyword",
+   "category": "obfuscation",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "SELECT 1; \uff24\uff32\uff2f\uff30 TABLE role_check.canary",
+   "outcome": "rejected",
+   "detail": "only one statement is allowed; character U+FF24 outside a quoted string (only ASCII is allowed); character U+FF32 outside a quoted string (only ASCII is allowed); character U+FF2F outside a quoted string (only ASCII is allowed); character U+FF30 outside a quoted string (only ASCII is allowed)",
+   "seconds": 0.003
+  },
+  {
+   "id": "obfuscate-bidi-override",
+   "category": "obfuscation",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "SELECT 1 AS \"\u202ex\"; DROP TABLE role_check.canary",
+   "outcome": "rejected",
+   "detail": "invisible or control character U+202E inside a quoted string or name; only one statement is allowed",
+   "seconds": 0.002
+  },
+  {
+   "id": "obfuscate-nul-byte",
+   "category": "obfuscation",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "SELECT 1\u0000; DROP TABLE role_check.canary",
+   "outcome": "rejected",
+   "detail": "invisible or control character U+0000 outside a quoted string; only one statement is allowed",
+   "seconds": 0.003
+  },
+  {
+   "id": "obfuscate-unicode-escape-name",
+   "category": "obfuscation",
+   "goal": "read",
+   "target": "analyst.security_check",
+   "sql": "SELECT token FROM U&\"\\0073ecret\"",
+   "outcome": "rejected",
+   "detail": "U& escapes are not allowed; backslashes are not allowed",
+   "seconds": 0.002
+  },
+  {
+   "id": "obfuscate-quoted-function",
+   "category": "obfuscation",
+   "goal": "resource",
+   "target": "analyst.security_check",
+   "sql": "SELECT \"pg_sleep\"(30)",
+   "outcome": "rejected",
+   "detail": "system objects are not allowed (pg_sleep); function pg_sleep() is not allowed",
+   "seconds": 0.002
+  },
+  {
+   "id": "obfuscate-qualified-function",
+   "category": "obfuscation",
+   "goal": "resource",
+   "target": "analyst.security_check",
+   "sql": "SELECT pg_catalog.pg_sleep(30)",
+   "outcome": "rejected",
+   "detail": "system objects are not allowed (pg_catalog); system objects are not allowed (pg_sleep); function pg_sleep() is not allowed",
+   "seconds": 0.002
+  },
+  {
+   "id": "obfuscate-mixed-case-function",
+   "category": "obfuscation",
+   "goal": "resource",
+   "target": "analyst.security_check",
+   "sql": "SeLeCt Pg_SlEeP(30)",
+   "outcome": "rejected",
+   "detail": "system objects are not allowed (pg_sleep); function pg_sleep() is not allowed",
+   "seconds": 0.003
+  },
+  {
+   "id": "obfuscate-cast-regclass",
+   "category": "obfuscation",
+   "goal": "names",
+   "target": "analyst.security_check",
+   "sql": "SELECT 'security_check.secret'::regclass::oid",
+   "outcome": "rejected",
+   "detail": "regclass is not allowed; oid is not allowed",
+   "seconds": 0.002
+  },
+  {
+   "id": "snoop-secret",
+   "category": "catalog_snooping",
+   "goal": "read",
+   "target": "analyst.security_check",
+   "sql": "SELECT token FROM secret",
+   "outcome": "rejected",
+   "detail": "unknown table 'secret'",
+   "seconds": 0.003
+  },
+  {
+   "id": "snoop-secret-qualified",
+   "category": "catalog_snooping",
+   "goal": "read",
+   "target": "analyst.security_check",
+   "sql": "SELECT token FROM security_check.secret",
+   "outcome": "rejected",
+   "detail": "unknown table 'secret'",
+   "seconds": 0.003
+  },
+  {
+   "id": "snoop-secret-via-xml",
+   "category": "catalog_snooping",
+   "goal": "read",
+   "target": "analyst.security_check",
+   "sql": "SELECT query_to_xml('SELECT token FROM security_check.secret', true, false, '')",
+   "outcome": "rejected",
+   "detail": "function query_to_xml() is not allowed",
+   "seconds": 0.003
+  },
+  {
+   "id": "snoop-settings",
+   "category": "catalog_snooping",
+   "goal": "read",
+   "target": "analyst.security_check",
+   "sql": "SELECT name, setting FROM pg_settings",
+   "outcome": "rejected",
+   "detail": "system objects are not allowed (pg_settings)",
+   "seconds": 0.002
+  },
+  {
+   "id": "snoop-current-setting",
+   "category": "catalog_snooping",
+   "goal": "read",
+   "target": "analyst.security_check",
+   "sql": "SELECT current_setting('data_directory')",
+   "outcome": "rejected",
+   "detail": "function current_setting() is not allowed",
+   "seconds": 0.002
+  },
+  {
+   "id": "snoop-activity",
+   "category": "catalog_snooping",
+   "goal": "read",
+   "target": "analyst.security_check",
+   "sql": "SELECT usename, query FROM pg_stat_activity",
+   "outcome": "rejected",
+   "detail": "system objects are not allowed (pg_stat_activity)",
+   "seconds": 0.002
+  },
+  {
+   "id": "snoop-roles",
+   "category": "catalog_snooping",
+   "goal": "read",
+   "target": "analyst.security_check",
+   "sql": "SELECT rolname, rolsuper FROM pg_roles",
+   "outcome": "rejected",
+   "detail": "system objects are not allowed (pg_roles)",
+   "seconds": 0.003
+  },
+  {
+   "id": "snoop-role-settings",
+   "category": "catalog_snooping",
+   "goal": "read",
+   "target": "analyst.security_check",
+   "sql": "SELECT * FROM pg_db_role_setting",
+   "outcome": "rejected",
+   "detail": "system objects are not allowed (pg_db_role_setting)",
+   "seconds": 0.002
+  },
+  {
+   "id": "snoop-password-hashes",
+   "category": "catalog_snooping",
+   "goal": "read",
+   "target": "analyst.security_check",
+   "sql": "SELECT rolname, rolpassword FROM pg_authid",
+   "outcome": "rejected",
+   "detail": "system objects are not allowed (pg_authid)",
+   "seconds": 0.002
+  },
+  {
+   "id": "snoop-shadow",
+   "category": "catalog_snooping",
+   "goal": "read",
+   "target": "analyst.security_check",
+   "sql": "SELECT usename, passwd FROM pg_shadow",
+   "outcome": "rejected",
+   "detail": "system objects are not allowed (pg_shadow)",
+   "seconds": 0.002
+  },
+  {
+   "id": "snoop-hba",
+   "category": "catalog_snooping",
+   "goal": "read",
+   "target": "analyst.security_check",
+   "sql": "SELECT * FROM pg_hba_file_rules",
+   "outcome": "rejected",
+   "detail": "system objects are not allowed (pg_hba_file_rules)",
+   "seconds": 0.002
+  },
+  {
+   "id": "snoop-version",
+   "category": "catalog_snooping",
+   "goal": "read",
+   "target": "analyst.security_check",
+   "sql": "SELECT version()",
+   "outcome": "rejected",
+   "detail": "function version() is not allowed",
+   "seconds": 0.002
+  },
+  {
+   "id": "snoop-server-address",
+   "category": "catalog_snooping",
+   "goal": "read",
+   "target": "analyst.security_check",
+   "sql": "SELECT inet_server_addr(), inet_server_port()",
+   "outcome": "rejected",
+   "detail": "function inet_server_addr() is not allowed; function inet_server_port() is not allowed",
+   "seconds": 0.002
+  },
+  {
+   "id": "file-read",
+   "category": "catalog_snooping",
+   "goal": "read",
+   "target": "analyst.security_check",
+   "sql": "SELECT pg_read_file('/etc/passwd')",
+   "outcome": "rejected",
+   "detail": "system objects are not allowed (pg_read_file); function pg_read_file() is not allowed",
+   "seconds": 0.003
+  },
+  {
+   "id": "file-list",
+   "category": "catalog_snooping",
+   "goal": "read",
+   "target": "analyst.security_check",
+   "sql": "SELECT pg_ls_dir('.')",
+   "outcome": "rejected",
+   "detail": "system objects are not allowed (pg_ls_dir); function pg_ls_dir() is not allowed",
+   "seconds": 0.002
+  },
+  {
+   "id": "file-stat",
+   "category": "catalog_snooping",
+   "goal": "read",
+   "target": "analyst.security_check",
+   "sql": "SELECT pg_stat_file('postgresql.conf')",
+   "outcome": "rejected",
+   "detail": "system objects are not allowed (pg_stat_file); function pg_stat_file() is not allowed",
+   "seconds": 0.002
+  },
+  {
+   "id": "file-large-object-import",
+   "category": "catalog_snooping",
+   "goal": "read",
+   "target": "analyst.security_check",
+   "sql": "SELECT lo_import('/etc/passwd')",
+   "outcome": "rejected",
+   "detail": "function lo_import() is not allowed",
+   "seconds": 0.002
+  },
+  {
+   "id": "network-dblink",
+   "category": "catalog_snooping",
+   "goal": "read",
+   "target": "analyst.security_check",
+   "sql": "SELECT * FROM dblink('host=example.com', 'SELECT 1') AS t(x integer)",
+   "outcome": "rejected",
+   "detail": "function dblink() is not allowed",
+   "seconds": 0.002
+  },
+  {
+   "id": "network-copy-program",
+   "category": "catalog_snooping",
+   "goal": "read",
+   "target": "analyst.security_check",
+   "sql": "COPY (SELECT token FROM security_check.secret) TO PROGRAM 'cat'",
+   "outcome": "rejected",
+   "detail": "only a SELECT query is allowed, not COPY",
+   "seconds": 0.002
+  },
+  {
+   "id": "names-namespaces",
+   "category": "catalog_snooping",
+   "goal": "names",
+   "target": "analyst.security_check",
+   "sql": "SELECT nspname FROM pg_namespace",
+   "outcome": "rejected",
+   "detail": "system objects are not allowed (pg_namespace)",
+   "seconds": 0.002
+  },
+  {
+   "id": "names-relations",
+   "category": "catalog_snooping",
+   "goal": "names",
+   "target": "analyst.security_check",
+   "sql": "SELECT relname FROM pg_class WHERE relkind = 'r'",
+   "outcome": "rejected",
+   "detail": "system objects are not allowed (pg_class)",
+   "seconds": 0.002
+  },
+  {
+   "id": "names-information-schema",
+   "category": "catalog_snooping",
+   "goal": "names",
+   "target": "analyst.security_check",
+   "sql": "SELECT table_schema, table_name FROM information_schema.tables",
+   "outcome": "rejected",
+   "detail": "information_schema is not allowed",
+   "seconds": 0.003
+  },
+  {
+   "id": "scope-other-schema",
+   "category": "confinement",
+   "goal": "read",
+   "target": "analyst.security_check",
+   "sql": "SELECT note FROM role_check.canary",
+   "outcome": "rejected",
+   "detail": "table role_check.canary: only tables of security_check",
+   "seconds": 0.003
+  },
+  {
+   "id": "scope-public-schema",
+   "category": "confinement",
+   "goal": "read",
+   "target": "analyst.security_check",
+   "sql": "SELECT * FROM public.anything",
+   "outcome": "rejected",
+   "detail": "table public.anything: only tables of security_check",
+   "seconds": 0.003
+  },
+  {
+   "id": "session-set-time-zone",
+   "category": "session",
+   "goal": "session",
+   "target": "analyst.security_check",
+   "sql": "SET TimeZone = 'UTC'",
+   "outcome": "rejected",
+   "detail": "only a SELECT query is allowed, not SET",
+   "seconds": 0.002
+  },
+  {
+   "id": "session-set-config-time-zone",
+   "category": "session",
+   "goal": "session",
+   "target": "analyst.security_check",
+   "sql": "SELECT set_config('TimeZone', 'Pacific/Kiritimati', false)",
+   "outcome": "rejected",
+   "detail": "function set_config() is not allowed",
+   "seconds": 0.002
+  },
+  {
+   "id": "session-set-config-search-path",
+   "category": "session",
+   "goal": "session",
+   "target": "analyst.security_check",
+   "sql": "SELECT set_config('search_path', 'role_check', false)",
+   "outcome": "rejected",
+   "detail": "function set_config() is not allowed",
+   "seconds": 0.002
+  },
+  {
+   "id": "session-lift-timeout",
+   "category": "session",
+   "goal": "session",
+   "target": "analyst.security_check",
+   "sql": "SELECT set_config('statement_timeout', '0', false)",
+   "outcome": "rejected",
+   "detail": "function set_config() is not allowed",
+   "seconds": 0.003
+  },
+  {
+   "id": "session-set-timeout",
+   "category": "session",
+   "goal": "session",
+   "target": "analyst.security_check",
+   "sql": "SET statement_timeout = 0",
+   "outcome": "rejected",
+   "detail": "only a SELECT query is allowed, not SET",
+   "seconds": 0.003
+  },
+  {
+   "id": "session-set-role",
+   "category": "session",
+   "goal": "session",
+   "target": "analyst.security_check",
+   "sql": "SET ROLE analyst_admin",
+   "outcome": "rejected",
+   "detail": "only a SELECT query is allowed, not COMMAND",
+   "seconds": 0.003
+  },
+  {
+   "id": "session-authorization",
+   "category": "session",
+   "goal": "session",
+   "target": "analyst.security_check",
+   "sql": "SET SESSION AUTHORIZATION analyst_admin",
+   "outcome": "rejected",
+   "detail": "only a SELECT query is allowed, not COMMAND",
+   "seconds": 0.002
+  },
+  {
+   "id": "session-reset",
+   "category": "session",
+   "goal": "session",
+   "target": "analyst.security_check",
+   "sql": "RESET ALL",
+   "outcome": "rejected",
+   "detail": "only a SELECT query is allowed, not COMMAND",
+   "seconds": 0.003
+  },
+  {
+   "id": "resource-cross-join",
+   "category": "resource_exhaustion",
+   "goal": "resource",
+   "target": "analyst.security_check",
+   "sql": "SELECT count(*) FROM numbers a CROSS JOIN numbers b CROSS JOIN numbers c",
+   "outcome": "rejected",
+   "detail": "CROSS JOIN is not allowed; join on a condition",
+   "seconds": 0.003
+  },
+  {
+   "id": "resource-comma-join",
+   "category": "resource_exhaustion",
+   "goal": "resource",
+   "target": "analyst.security_check",
+   "sql": "SELECT count(*) FROM numbers a, numbers b, numbers c",
+   "outcome": "rejected",
+   "detail": "every join needs ON or USING (no comma joins)",
+   "seconds": 0.003
+  },
+  {
+   "id": "resource-inequality-join",
+   "category": "resource_exhaustion",
+   "goal": "resource",
+   "target": "analyst.security_check",
+   "sql": "SELECT count(*) FROM numbers a JOIN numbers b ON a.n <= b.n JOIN numbers c ON b.n <= c.n",
+   "outcome": "contained",
+   "detail": "timeout: canceling statement due to user request",
+   "seconds": 15.017
+  },
+  {
+   "id": "resource-join-on-true",
+   "category": "resource_exhaustion",
+   "goal": "resource",
+   "target": "analyst.security_check",
+   "sql": "SELECT a.n, b.n FROM numbers a JOIN numbers b ON true",
+   "outcome": "contained",
+   "detail": "finished within the limits: 100 rows in 2.60 s",
+   "seconds": 2.603
+  },
+  {
+   "id": "resource-sort-spill",
+   "category": "resource_exhaustion",
+   "goal": "resource",
+   "target": "analyst.security_check",
+   "sql": "SELECT a.n, b.n FROM numbers a JOIN numbers b ON true ORDER BY md5(a.n::text || b.n::text)",
+   "outcome": "contained",
+   "detail": "resource_limit: temporary file size exceeds temp_file_limit (262144kB)",
+   "seconds": 9.055
+  },
+  {
+   "id": "resource-sleep",
+   "category": "resource_exhaustion",
+   "goal": "resource",
+   "target": "analyst.security_check",
+   "sql": "SELECT pg_sleep(30)",
+   "outcome": "rejected",
+   "detail": "system objects are not allowed (pg_sleep); function pg_sleep() is not allowed",
+   "seconds": 0.002
+  },
+  {
+   "id": "resource-recursive",
+   "category": "resource_exhaustion",
+   "goal": "resource",
+   "target": "analyst.security_check",
+   "sql": "WITH RECURSIVE r(n) AS (SELECT 1 UNION ALL SELECT n + 1 FROM r) SELECT count(*) FROM r",
+   "outcome": "rejected",
+   "detail": "WITH RECURSIVE is not allowed",
+   "seconds": 0.003
+  },
+  {
+   "id": "resource-series",
+   "category": "resource_exhaustion",
+   "goal": "resource",
+   "target": "analyst.security_check",
+   "sql": "SELECT count(*) FROM generate_series(1, 1000000000000)",
+   "outcome": "rejected",
+   "detail": "generate_series() is limited to 100,000 values",
+   "seconds": 0.003
+  },
+  {
+   "id": "resource-repeat",
+   "category": "resource_exhaustion",
+   "goal": "resource",
+   "target": "analyst.security_check",
+   "sql": "SELECT length(repeat('x', 100000000))",
+   "outcome": "rejected",
+   "detail": "repeat() needs a literal count of at most 10,000",
+   "seconds": 0.003
+  },
+  {
+   "id": "resource-advisory-lock",
+   "category": "resource_exhaustion",
+   "goal": "resource",
+   "target": "analyst.security_check",
+   "sql": "SELECT pg_advisory_lock(42)",
+   "outcome": "rejected",
+   "detail": "system objects are not allowed (pg_advisory_lock); function pg_advisory_lock() is not allowed",
+   "seconds": 0.002
+  },
+  {
+   "id": "injection-drop",
+   "category": "prompt_injection",
+   "goal": "write",
+   "target": "analyst.security_check",
+   "sql": "DROP TABLE role_check.canary",
+   "outcome": "rejected",
+   "detail": "only a SELECT query is allowed, not DROP",
+   "seconds": 0.003
+  },
+  {
+   "id": "injection-read-secret",
+   "category": "prompt_injection",
+   "goal": "read",
+   "target": "analyst.security_check",
+   "sql": "SELECT token FROM security_check.secret",
+   "outcome": "rejected",
+   "detail": "unknown table 'secret'",
+   "seconds": 0.003
+  },
+  {
+   "id": "injection-read-secret-unqualified",
+   "category": "prompt_injection",
+   "goal": "read",
+   "target": "analyst.security_check",
+   "sql": "SELECT token FROM secret",
+   "outcome": "rejected",
+   "detail": "unknown table 'secret'",
+   "seconds": 0.003
+  },
+  {
+   "id": "scope-other-benchmark-db",
+   "category": "confinement",
+   "goal": "read",
+   "target": "bird.financial",
+   "sql": "SELECT count(*) FROM formula_1.drivers",
+   "outcome": "rejected",
+   "detail": "table formula_1.drivers: only tables of financial",
+   "seconds": 0.013
+  },
+  {
+   "id": "scope-other-benchmark-db-join",
+   "category": "confinement",
+   "goal": "read",
+   "target": "bird.financial",
+   "sql": "SELECT c.client_id, d.forename FROM client c JOIN formula_1.drivers d ON d.driverid = c.client_id",
+   "outcome": "rejected",
+   "detail": "table formula_1.drivers AS d: only tables of financial",
+   "seconds": 0.003
+  },
+  {
+   "id": "resource-trans-self-join",
+   "category": "resource_exhaustion",
+   "goal": "resource",
+   "target": "bird.financial",
+   "sql": "SELECT count(*) FROM trans a JOIN trans b ON a.account_id = b.account_id JOIN trans c ON b.account_id = c.account_id",
+   "outcome": "contained",
+   "detail": "timeout: canceling statement due to user request",
+   "seconds": 15.036
+  },
+  {
+   "id": "resource-trans-all-rows",
+   "category": "resource_exhaustion",
+   "goal": "resource",
+   "target": "bird.financial",
+   "sql": "SELECT * FROM trans a JOIN trans b ON a.account_id = b.account_id",
+   "outcome": "contained",
+   "detail": "finished within the limits: 100 rows in 15.03 s",
+   "seconds": 15.026
+  }
+ ],
+ "boundary": [
+  {
+   "id": "arg-sql-null",
+   "tool": "run_sql",
+   "expected": "refused",
+   "outcome": "rejected",
+   "detail": "{\"ok\": false, \"protocol_error\": \"Error executing tool run_sql: 1 validation error for run_sqlArguments\\nsql\\n  Input should be a valid string [type=string_type,",
+   "seconds": 0.011
+  },
+  {
+   "id": "arg-sql-integer",
+   "tool": "run_sql",
+   "expected": "refused",
+   "outcome": "rejected",
+   "detail": "{\"ok\": false, \"protocol_error\": \"Error executing tool run_sql: 1 validation error for run_sqlArguments\\nsql\\n  Input should be a valid string [type=string_type,",
+   "seconds": 0.003
+  },
+  {
+   "id": "arg-sql-list",
+   "tool": "run_sql",
+   "expected": "refused",
+   "outcome": "rejected",
+   "detail": "{\"ok\": false, \"protocol_error\": \"Error executing tool run_sql: 1 validation error for run_sqlArguments\\nsql\\n  Input should be a valid string [type=string_type,",
+   "seconds": 0.003
+  },
+  {
+   "id": "arg-sql-object",
+   "tool": "run_sql",
+   "expected": "refused",
+   "outcome": "rejected",
+   "detail": "{\"ok\": false, \"protocol_error\": \"Error executing tool run_sql: 1 validation error for run_sqlArguments\\nsql\\n  Input should be a valid string [type=string_type,",
+   "seconds": 0.003
+  },
+  {
+   "id": "arg-sql-missing",
+   "tool": "run_sql",
+   "expected": "refused",
+   "outcome": "rejected",
+   "detail": "{\"ok\": false, \"protocol_error\": \"Error executing tool run_sql: 1 validation error for run_sqlArguments\\nsql\\n  Field required [type=missing, input_value={}, inp",
+   "seconds": 0.003
+  },
+  {
+   "id": "arg-sql-extra-field",
+   "tool": "run_sql",
+   "expected": "harmless",
+   "outcome": "no_effect",
+   "detail": "{\"ok\": true, \"columns\": [{\"name\": \"?column?\", \"type\": \"int4\"}], \"rows\": [[1]], \"row_count\": 1, \"total_rows\": 1, \"truncated\": false, \"seconds\": 0.008565}",
+   "seconds": 0.011
+  },
+  {
+   "id": "arg-sql-huge",
+   "tool": "run_sql",
+   "expected": "refused",
+   "outcome": "rejected",
+   "detail": "{\"ok\": false, \"error\": {\"kind\": \"refused\", \"reasons\": [\"the query is longer than 20,000 characters\"]}, \"seconds\": 2.2e-05}",
+   "seconds": 0.012
+  },
+  {
+   "id": "arg-table-sql",
+   "tool": "describe_table",
+   "expected": "refused",
+   "outcome": "rejected",
+   "detail": "{\"ok\": false, \"error\": {\"kind\": \"refused\", \"reasons\": [\"unknown table 'notes; DROP TABLE notes'\"]}, \"seconds\": 1.4e-05}",
+   "seconds": 0.003
+  },
+  {
+   "id": "arg-table-path",
+   "tool": "describe_table",
+   "expected": "refused",
+   "outcome": "rejected",
+   "detail": "{\"ok\": false, \"error\": {\"kind\": \"refused\", \"reasons\": [\"unknown table '../../etc/passwd'\"]}, \"seconds\": 1.4e-05}",
+   "seconds": 0.002
+  },
+  {
+   "id": "arg-table-schema",
+   "tool": "describe_table",
+   "expected": "refused",
+   "outcome": "rejected",
+   "detail": "{\"ok\": false, \"error\": {\"kind\": \"refused\", \"reasons\": [\"unknown table 'role_check.canary'\"]}, \"seconds\": 1.3e-05}",
+   "seconds": 0.002
+  },
+  {
+   "id": "arg-table-quote",
+   "tool": "sample_rows",
+   "expected": "refused",
+   "outcome": "rejected",
+   "detail": "{\"ok\": false, \"error\": {\"kind\": \"refused\", \"reasons\": [\"unknown table 'notes\\\" ; DROP TABLE notes; --'\"]}, \"seconds\": 2.2e-05}",
+   "seconds": 0.003
+  },
+  {
+   "id": "arg-table-other-schema",
+   "tool": "sample_rows",
+   "expected": "refused",
+   "outcome": "rejected",
+   "detail": "{\"ok\": false, \"error\": {\"kind\": \"refused\", \"reasons\": [\"unknown table 'role_check.canary'\"]}, \"seconds\": 1.9e-05}",
+   "seconds": 0.002
+  },
+  {
+   "id": "arg-n-negative",
+   "tool": "sample_rows",
+   "expected": "harmless",
+   "outcome": "rejected",
+   "detail": "{\"ok\": false, \"error\": {\"kind\": \"refused\", \"reasons\": [\"n must be a whole number from 1 to 20\"]}, \"seconds\": 1.8e-05}",
+   "seconds": 0.002
+  },
+  {
+   "id": "arg-n-huge",
+   "tool": "sample_rows",
+   "expected": "harmless",
+   "outcome": "rejected",
+   "detail": "{\"ok\": false, \"error\": {\"kind\": \"refused\", \"reasons\": [\"n must be a whole number from 1 to 20\"]}, \"seconds\": 1.8e-05}",
+   "seconds": 0.003
+  },
+  {
+   "id": "arg-n-string",
+   "tool": "sample_rows",
+   "expected": "refused",
+   "outcome": "rejected",
+   "detail": "{\"ok\": false, \"protocol_error\": \"Error executing tool sample_rows: 1 validation error for sample_rowsArguments\\nn\\n  Input should be a valid integer, unable to ",
+   "seconds": 0.003
+  },
+  {
+   "id": "arg-term-huge",
+   "tool": "lookup_dictionary",
+   "expected": "harmless",
+   "outcome": "rejected",
+   "detail": "{\"ok\": false, \"error\": {\"kind\": \"unavailable\", \"reasons\": [\"this database has no data dictionary; use describe_table\"]}}",
+   "seconds": 0.007
+  },
+  {
+   "id": "arg-term-sql",
+   "tool": "lookup_dictionary",
+   "expected": "harmless",
+   "outcome": "rejected",
+   "detail": "{\"ok\": false, \"error\": {\"kind\": \"unavailable\", \"reasons\": [\"this database has no data dictionary; use describe_table\"]}}",
+   "seconds": 0.002
+  },
+  {
+   "id": "arg-unknown-tool",
+   "tool": "run_python",
+   "expected": "refused",
+   "outcome": "rejected",
+   "detail": "{\"ok\": false, \"protocol_error\": \"Unknown tool: run_python\"}",
+   "seconds": 0.003
+  },
+  {
+   "id": "arg-unknown-tool-sql",
+   "tool": "execute_sql",
+   "expected": "refused",
+   "outcome": "rejected",
+   "detail": "{\"ok\": false, \"protocol_error\": \"Unknown tool: execute_sql\"}",
+   "seconds": 0.004
+  }
+ ]
+}

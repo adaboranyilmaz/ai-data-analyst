@@ -1,0 +1,72 @@
+{
+ "schema_version": 1,
+ "id": "bank-own-d03",
+ "kind": "banking",
+ "source_run": "own/own-d1-claude-sonnet-5-no-evidence",
+ "question": "What interest rate was charged on each loan granted in 1996?",
+ "hint": null,
+ "db_id": "financial",
+ "category": "d",
+ "difficulty": null,
+ "design": "d1",
+ "model": "claude-sonnet-5",
+ "steps": [
+  {
+   "type": "step",
+   "kind": "model",
+   "text": "Read the question and the financial database's tables and columns.",
+   "recorded_ms": null
+  },
+  {
+   "type": "step",
+   "kind": "submit",
+   "text": "Declined to answer.",
+   "recorded_ms": null
+  }
+ ],
+ "answer": {
+  "text": "The database does not record an interest rate for loans. The loan table only gives the amount granted, duration, monthly payment, and status; amount equals duration times payments exactly, so no interest is charged or stored separately anywhere in the data.",
+  "sql": null,
+  "declined": true,
+  "decline_reason": "The loan table (and the rest of the schema) has no interest rate column. The data dictionary explicitly notes that loan amount equals duration × payments exactly, meaning no interest is charged or recorded separately in this database.",
+  "clarifying_question": null,
+  "assumptions": [],
+  "premise_correction": "The premise that loans carry a recorded interest rate is false: the loan table shows amount = duration × payments with no separate interest component, so no interest rate exists in this database for any loan."
+ },
+ "sql_outline": null,
+ "result": {
+  "ok": false,
+  "error": {
+   "kind": "no_sql",
+   "message": "no SQL"
+  },
+  "columns": [],
+  "rows": [],
+  "fetched_rows": 0,
+  "truncated": false
+ },
+ "checks": [
+  {
+   "name": "applicable",
+   "ok": true,
+   "text": "No result to check."
+  }
+ ],
+ "chart_spec": null,
+ "statistics": null,
+ "confidence": {
+  "stated": 0.9,
+  "calibrated": null,
+  "band": null,
+  "threshold": 0.7959275365580794,
+  "withheld": false
+ },
+ "status": "declined",
+ "evaluation": {
+  "correct": true,
+  "rule": "banking set, category d"
+ },
+ "explanation": null,
+ "cost_usd": 0.0032938,
+ "slot": "category_d"
+}

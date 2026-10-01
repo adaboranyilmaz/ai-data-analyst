@@ -1,0 +1,267 @@
+{
+ "schema_version": 1,
+ "id": "bench-829",
+ "kind": "benchmark",
+ "source_run": "main/all-d1-claude-sonnet-5-evidence",
+ "question": "Which publisher created more superheroes: DC or Marvel Comics? Find the difference in the number of superheroes.",
+ "hint": "DC refers to publisher_name = 'DC Comics'; Marvel Comics refers to publisher_name = 'Marvel Comics'; difference = SUBTRACT(SUM(publisher_name = 'DC Comics'), SUM(publisher_name = 'Marvel Comics'));",
+ "db_id": "superhero",
+ "category": null,
+ "difficulty": "challenging",
+ "design": "d1",
+ "model": "claude-sonnet-5",
+ "steps": [
+  {
+   "type": "step",
+   "kind": "model",
+   "text": "Read the question and the superhero database's tables and columns.",
+   "recorded_ms": null
+  },
+  {
+   "type": "step",
+   "kind": "submit",
+   "text": "Submitted an answer (90% confidence).",
+   "recorded_ms": null
+  }
+ ],
+ "answer": {
+  "text": "Marvel Comics created more superheroes than DC Comics. Computing (count of DC Comics heroes) minus (count of Marvel Comics heroes) yields a negative number, indicating DC Comics has fewer heroes than Marvel Comics; the magnitude of this difference is the answer returned by the query.",
+  "sql": "SELECT\n  SUM(CASE WHEN p.publisher_name = 'DC Comics' THEN 1 ELSE 0 END)\n  - SUM(CASE WHEN p.publisher_name = 'Marvel Comics' THEN 1 ELSE 0 END) AS difference\nFROM superhero s\nJOIN publisher p ON s.publisher_id = p.id\nWHERE p.publisher_name IN ('DC Comics', 'Marvel Comics');",
+  "declined": false,
+  "decline_reason": null,
+  "clarifying_question": null,
+  "assumptions": [
+   "Each superhero has at most one publisher_id, so counting rows equals counting superheroes.",
+   "The difference is computed as DC Comics count minus Marvel Comics count, per the hint's formula."
+  ],
+  "premise_correction": null
+ },
+ "sql_outline": {
+  "kind": "select",
+  "intermediate_results": [],
+  "tables": [
+   {
+    "name": "superhero"
+   },
+   {
+    "name": "publisher"
+   }
+  ],
+  "links": [
+   {
+    "table": "publisher",
+    "keep_unmatched": false,
+    "side": "inner",
+    "on": [
+     {
+      "phrase": [
+       {
+        "t": "col",
+        "v": "superhero.publisher_id"
+       },
+       {
+        "t": "op",
+        "v": "eq"
+       },
+       {
+        "t": "col",
+        "v": "publisher.id"
+       }
+      ]
+     }
+    ],
+    "using": []
+   }
+  ],
+  "filters": [
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "publisher.publisher_name"
+     },
+     {
+      "t": "op",
+      "v": "in"
+     },
+     {
+      "t": "open"
+     },
+     {
+      "t": "lit",
+      "v": "\"DC Comics\""
+     },
+     {
+      "t": "op",
+      "v": "list_sep"
+     },
+     {
+      "t": "lit",
+      "v": "\"Marvel Comics\""
+     },
+     {
+      "t": "close"
+     }
+    ]
+   }
+  ],
+  "groups": [],
+  "group_filters": [],
+  "distinct": false,
+  "returns": [
+   {
+    "phrase": [
+     {
+      "t": "agg",
+      "v": "sum",
+      "arg": [
+       {
+        "t": "fn",
+        "v": "case",
+        "args": [
+         [
+          {
+           "t": "lit",
+           "v": "1"
+          }
+         ],
+         [
+          {
+           "t": "col",
+           "v": "publisher.publisher_name"
+          },
+          {
+           "t": "op",
+           "v": "eq"
+          },
+          {
+           "t": "lit",
+           "v": "\"DC Comics\""
+          }
+         ],
+         [
+          {
+           "t": "lit",
+           "v": "0"
+          }
+         ]
+        ]
+       }
+      ]
+     },
+     {
+      "t": "op",
+      "v": "minus"
+     },
+     {
+      "t": "agg",
+      "v": "sum",
+      "arg": [
+       {
+        "t": "fn",
+        "v": "case",
+        "args": [
+         [
+          {
+           "t": "lit",
+           "v": "1"
+          }
+         ],
+         [
+          {
+           "t": "col",
+           "v": "publisher.publisher_name"
+          },
+          {
+           "t": "op",
+           "v": "eq"
+          },
+          {
+           "t": "lit",
+           "v": "\"Marvel Comics\""
+          }
+         ],
+         [
+          {
+           "t": "lit",
+           "v": "0"
+          }
+         ]
+        ]
+       }
+      ]
+     }
+    ],
+    "name": "difference"
+   }
+  ],
+  "order": [],
+  "limit": null,
+  "offset": null
+ },
+ "result": {
+  "ok": true,
+  "error": null,
+  "columns": [
+   "difference"
+  ],
+  "rows": [
+   [
+    -163
+   ]
+  ],
+  "fetched_rows": 1,
+  "truncated": false
+ },
+ "checks": [
+  {
+   "name": "not_empty",
+   "ok": true,
+   "text": "The query returned rows."
+  },
+  {
+   "name": "no_repeated_rows",
+   "ok": true,
+   "text": "No row is repeated."
+  },
+  {
+   "name": "values_in_range",
+   "ok": true,
+   "text": "No count, amount or share is outside its possible range."
+  },
+  {
+   "name": "result_size",
+   "ok": true,
+   "text": "The whole result fits."
+  }
+ ],
+ "chart_spec": null,
+ "statistics": null,
+ "confidence": {
+  "stated": 0.9,
+  "calibrated": 0.7732,
+  "band": {
+   "range": [
+    0.7,
+    0.8
+   ],
+   "n": 156,
+   "accuracy": 0.7564,
+   "interval": [
+    0.6834,
+    0.8171
+   ],
+   "thin": false
+  },
+  "threshold": 0.7959,
+  "withheld": true
+ },
+ "status": "withheld",
+ "evaluation": {
+  "correct": true,
+  "rule": "execution accuracy"
+ },
+ "explanation": null,
+ "cost_usd": 0.0071709,
+ "slot": "correct_below_threshold"
+}

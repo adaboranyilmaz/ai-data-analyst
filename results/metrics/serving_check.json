@@ -1,0 +1,128 @@
+{
+ "note": "every curated run, as served, compared field by field with the evaluated record it came from and with its own replayed and API streams; no model call, no database",
+ "runs": 20,
+ "identical": 20,
+ "all_identical": true,
+ "per_run": [
+  {
+   "id": "bench-782",
+   "kind": "benchmark",
+   "identical": true,
+   "differences": {}
+  },
+  {
+   "id": "bench-573",
+   "kind": "benchmark",
+   "identical": true,
+   "differences": {}
+  },
+  {
+   "id": "bench-859",
+   "kind": "benchmark",
+   "identical": true,
+   "differences": {}
+  },
+  {
+   "id": "bench-533",
+   "kind": "benchmark",
+   "identical": true,
+   "differences": {}
+  },
+  {
+   "id": "bench-829",
+   "kind": "benchmark",
+   "identical": true,
+   "differences": {}
+  },
+  {
+   "id": "bench-1080",
+   "kind": "benchmark",
+   "identical": true,
+   "differences": {}
+  },
+  {
+   "id": "bench-1378",
+   "kind": "benchmark",
+   "identical": true,
+   "differences": {}
+  },
+  {
+   "id": "bench-726",
+   "kind": "benchmark",
+   "identical": true,
+   "differences": {}
+  },
+  {
+   "id": "bench-751",
+   "kind": "benchmark",
+   "identical": true,
+   "differences": {}
+  },
+  {
+   "id": "bench-1254",
+   "kind": "benchmark",
+   "identical": true,
+   "differences": {}
+  },
+  {
+   "id": "bank-own-a09",
+   "kind": "banking",
+   "identical": true,
+   "differences": {}
+  },
+  {
+   "id": "bank-own-b12",
+   "kind": "banking",
+   "identical": true,
+   "differences": {}
+  },
+  {
+   "id": "bank-own-c09",
+   "kind": "banking",
+   "identical": true,
+   "differences": {}
+  },
+  {
+   "id": "bank-own-d03",
+   "kind": "banking",
+   "identical": true,
+   "differences": {}
+  },
+  {
+   "id": "bank-own-e06",
+   "kind": "banking",
+   "identical": true,
+   "differences": {}
+  },
+  {
+   "id": "bank-own-b06",
+   "kind": "banking",
+   "identical": true,
+   "differences": {}
+  },
+  {
+   "id": "guard-own-f11",
+   "kind": "guardrail",
+   "identical": true,
+   "differences": {}
+  },
+  {
+   "id": "guard-own-f06",
+   "kind": "guardrail",
+   "identical": true,
+   "differences": {}
+  },
+  {
+   "id": "guard-own-f02",
+   "kind": "guardrail",
+   "identical": true,
+   "differences": {}
+  },
+  {
+   "id": "guard-own-f03",
+   "kind": "guardrail",
+   "identical": true,
+   "differences": {}
+  }
+ ]
+}

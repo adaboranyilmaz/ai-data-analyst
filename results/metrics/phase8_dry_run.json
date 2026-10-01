@@ -1,0 +1,27 @@
+{
+ "note": "counted with the token-counting endpoint ($0); cache writes counted at 1.25x for the first call of a prefix; outputs assumed (central, upper = max_tokens)",
+ "prompt_tokens": {
+  "d1": 11412,
+  "classify": 1142,
+  "plan": 11602,
+  "answer_assumed": 1500
+ },
+ "central_usd": {
+  "q1": 0.03303,
+  "q2_d1": 0.00678,
+  "q2_classify": 0.00144,
+  "q2_plan": 0.0385,
+  "q2_answers": 0.011,
+  "total": 0.0908
+ },
+ "upper_usd": {
+  "q1": 0.0433,
+  "q2_d1": 0.0433,
+  "q2_classify": 0.00214,
+  "q2_plan": 0.04368,
+  "q2_answers": 0.02,
+  "total": 0.1524
+ },
+ "phase_cap_usd": 0.5,
+ "counted_at": "2026-10-01T13:03:39+00:00"
+}
