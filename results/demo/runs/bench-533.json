@@ -1,0 +1,173 @@
+{
+ "schema_version": 1,
+ "id": "bench-533",
+ "kind": "benchmark",
+ "source_run": "main/all-d1-claude-sonnet-5-evidence",
+ "question": "How many users last accessed the website after 2014/9/1?",
+ "hint": "last accessed after 2014/9/1 refers to LastAccessDate > '2014-09-01'",
+ "db_id": "codebase_community",
+ "category": null,
+ "difficulty": "simple",
+ "design": "d1",
+ "model": "claude-sonnet-5",
+ "steps": [
+  {
+   "type": "step",
+   "kind": "model",
+   "text": "Read the question and the codebase_community database's tables and columns.",
+   "recorded_ms": null
+  },
+  {
+   "type": "step",
+   "kind": "submit",
+   "text": "Submitted an answer (95% confidence).",
+   "recorded_ms": null
+  }
+ ],
+ "answer": {
+  "text": "The query counts users whose LastAccessDate is after September 1, 2014.",
+  "sql": "SELECT COUNT(*) FROM users WHERE lastaccessdate > '2014-09-01'",
+  "declined": false,
+  "decline_reason": null,
+  "clarifying_question": null,
+  "assumptions": [
+   "'after 2014/9/1' means strictly greater than the timestamp 2014-09-01 00:00:00, as stated in the hint"
+  ],
+  "premise_correction": null
+ },
+ "sql_outline": {
+  "kind": "select",
+  "intermediate_results": [],
+  "tables": [
+   {
+    "name": "users"
+   }
+  ],
+  "links": [],
+  "filters": [
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "lastaccessdate"
+     },
+     {
+      "t": "op",
+      "v": "gt"
+     },
+     {
+      "t": "lit",
+      "v": "\"2014-09-01\""
+     }
+    ]
+   }
+  ],
+  "groups": [],
+  "group_filters": [],
+  "distinct": false,
+  "returns": [
+   {
+    "phrase": [
+     {
+      "t": "agg",
+      "v": "count_rows",
+      "arg": []
+     }
+    ],
+    "name": null
+   }
+  ],
+  "order": [],
+  "limit": null,
+  "offset": null
+ },
+ "result": {
+  "ok": true,
+  "error": null,
+  "columns": [
+   "count"
+  ],
+  "rows": [
+   [
+    5146
+   ]
+  ],
+  "fetched_rows": 1,
+  "truncated": false
+ },
+ "checks": [
+  {
+   "name": "not_empty",
+   "ok": true,
+   "text": "The query returned rows."
+  },
+  {
+   "name": "no_repeated_rows",
+   "ok": true,
+   "text": "No row is repeated."
+  },
+  {
+   "name": "values_in_range",
+   "ok": true,
+   "text": "No count, amount or share is outside its possible range."
+  },
+  {
+   "name": "result_size",
+   "ok": true,
+   "text": "The whole result fits."
+  }
+ ],
+ "chart_spec": null,
+ "statistics": null,
+ "confidence": {
+  "stated": 0.95,
+  "calibrated": 0.8267,
+  "band": {
+   "range": [
+    0.8,
+    0.9
+   ],
+   "n": 20,
+   "accuracy": 0.95,
+   "interval": [
+    0.7639,
+    0.9911
+   ],
+   "thin": false
+  },
+  "threshold": 0.7959,
+  "withheld": false
+ },
+ "status": "answered",
+ "evaluation": {
+  "correct": false,
+  "rule": "execution accuracy"
+ },
+ "explanation": {
+  "expected": {
+   "columns": [
+    "count"
+   ],
+   "rows": [
+    [
+     4941
+    ]
+   ],
+   "total_rows": 1,
+   "truncated": false
+  },
+  "expected_sql": "SELECT COUNT(Id) FROM users WHERE DATE(LastAccessDate) > '2014-09-01'",
+  "comparison": {
+   "relation": "single_value",
+   "got": 5146,
+   "expected": 4941,
+   "text": "It returned 5146; the expected answer is 4941."
+  },
+  "category": "output",
+  "category_text": "it returned different columns",
+  "note": "The expert's query counts users whose last-access date, with the time of day ignored, is after 1 September 2014, so it leaves out everyone who last accessed the site on 1 September itself. The analyst compared the full timestamp with midnight at the start of 1 September, so it also counted the users who accessed the site later that day, and its count is higher. The question can be read either way; the benchmark takes the date-only reading, and the analyst wrote its own reading down as an assumption.",
+  "hint": "last accessed after 2014/9/1 refers to LastAccessDate > '2014-09-01'"
+ },
+ "cost_usd": 0.0023979,
+ "slot": "wrong_above_threshold"
+}

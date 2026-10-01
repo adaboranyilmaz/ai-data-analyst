@@ -1,6 +1,8 @@
-# PostgreSQL 16 for the analyst. The agent connects as `analyst_ro`, a role that can only read
+# The analyst: PostgreSQL 16, and the API with the built UI (http://127.0.0.1:8000). The agent connects as `analyst_ro`, a role that can only read
 # (docker/postgres/init/01_roles.sh); `analyst_admin` owns the data and loads it.
-#   docker compose up -d --wait        # start, and wait until it accepts connections
+#   docker compose up -d --wait        # start both, and wait until they are healthy
+#   docker compose up -d --wait postgres  # the database alone (tests, CI)
+#   ANALYST_SERVING_MODE=live docker compose up -d --wait   # live questions: key in .env
 #   docker compose down                # stop (add -v to delete the data volume)
 # Passwords come from .env; empty values fall back to the local-only defaults below. The port
 # is bound to 127.0.0.1 only, and the data is a public benchmark.
@@ -25,5 +27,28 @@ services:
       timeout: 3s
       retries: 30
 
+  # The service. Replay mode by default: recorded runs, no key, no database needed. Live mode
+  # (ANALYST_SERVING_MODE=live, ANTHROPIC_API_KEY in .env) answers over the benchmark loaded into
+  # the postgres service; its statistical guardrail is off here (it needs Docker for its sandbox).
+  api:
+    build: .
+    image: analyst-api:dev
+    environment:
+      ANALYST_SERVING_MODE: ${ANALYST_SERVING_MODE:-replay}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      ANALYST_DB_HOST: postgres
+      ANALYST_DB_PORT: "5432"
+      ANALYST_RO_PASSWORD: ${ANALYST_RO_PASSWORD:-analyst-local-ro}
+    ports:
+      - "127.0.0.1:${ANALYST_API_PORT:-8000}:8000"
+    volumes:
+      # the deployment's spend ledger, saved runs and caches survive a recreated container, so
+      # its spend cap cannot be reset by restarting it
+      - serving_data:/app/data/serving
+    depends_on:
+      postgres:
+        condition: service_healthy
+
 volumes:
   pgdata:
+  serving_data:

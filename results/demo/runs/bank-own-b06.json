@@ -1,0 +1,345 @@
+{
+ "schema_version": 1,
+ "id": "bank-own-b06",
+ "kind": "banking",
+ "source_run": "own/own-d1-claude-sonnet-5-no-evidence",
+ "question": "Which ten account owners were charged the most penalty interest in total? List their client IDs.",
+ "hint": null,
+ "db_id": "financial",
+ "category": "b",
+ "difficulty": null,
+ "design": "d1",
+ "model": "claude-sonnet-5",
+ "steps": [
+  {
+   "type": "step",
+   "kind": "model",
+   "text": "Read the question and the financial database's tables and columns.",
+   "recorded_ms": null
+  },
+  {
+   "type": "step",
+   "kind": "submit",
+   "text": "Submitted an answer (80% confidence).",
+   "recorded_ms": null
+  }
+ ],
+ "answer": {
+  "text": "The query groups transactions with purpose \"penalty interest for a negative balance\" (k_symbol = SANKC. UROK) by account, joins to the account owner via the disp table (type = OWNER), sums the amounts, and returns the 10 client IDs with the highest total penalty interest charged.",
+  "sql": "SELECT d.client_id, SUM(t.amount) AS total_penalty\nFROM trans t\nJOIN account a ON t.account_id = a.account_id\nJOIN disp d ON d.account_id = a.account_id AND d.type = 'OWNER'\nWHERE t.k_symbol = 'SANKC. UROK'\nGROUP BY d.client_id\nORDER BY total_penalty DESC\nLIMIT 10;",
+  "declined": false,
+  "decline_reason": null,
+  "clarifying_question": null,
+  "assumptions": [
+   "\"Account owners\" means clients with disp.type = 'OWNER' on the account where the penalty was charged (not disponents).",
+   "Penalty interest is identified by trans.k_symbol = 'SANKC. UROK'.",
+   "Ranking is by total summed amount per owner client, descending, limited to top 10."
+  ],
+  "premise_correction": null
+ },
+ "sql_outline": {
+  "kind": "select",
+  "intermediate_results": [],
+  "tables": [
+   {
+    "name": "trans"
+   },
+   {
+    "name": "account"
+   },
+   {
+    "name": "disp"
+   }
+  ],
+  "links": [
+   {
+    "table": "account",
+    "keep_unmatched": false,
+    "side": "inner",
+    "on": [
+     {
+      "phrase": [
+       {
+        "t": "col",
+        "v": "trans.account_id"
+       },
+       {
+        "t": "op",
+        "v": "eq"
+       },
+       {
+        "t": "col",
+        "v": "account.account_id"
+       }
+      ]
+     }
+    ],
+    "using": []
+   },
+   {
+    "table": "disp",
+    "keep_unmatched": false,
+    "side": "inner",
+    "on": [
+     {
+      "phrase": [
+       {
+        "t": "col",
+        "v": "disp.account_id"
+       },
+       {
+        "t": "op",
+        "v": "eq"
+       },
+       {
+        "t": "col",
+        "v": "account.account_id"
+       }
+      ]
+     },
+     {
+      "phrase": [
+       {
+        "t": "col",
+        "v": "disp.type"
+       },
+       {
+        "t": "op",
+        "v": "eq"
+       },
+       {
+        "t": "lit",
+        "v": "\"OWNER\""
+       }
+      ]
+     }
+    ],
+    "using": []
+   }
+  ],
+  "filters": [
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "trans.k_symbol"
+     },
+     {
+      "t": "op",
+      "v": "eq"
+     },
+     {
+      "t": "lit",
+      "v": "\"SANKC. UROK\""
+     }
+    ]
+   }
+  ],
+  "groups": [
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "disp.client_id"
+     }
+    ]
+   }
+  ],
+  "group_filters": [],
+  "distinct": false,
+  "returns": [
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "disp.client_id"
+     }
+    ],
+    "name": null
+   },
+   {
+    "phrase": [
+     {
+      "t": "agg",
+      "v": "sum",
+      "arg": [
+       {
+        "t": "col",
+        "v": "trans.amount"
+       }
+      ]
+     }
+    ],
+    "name": "total_penalty"
+   }
+  ],
+  "order": [
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "total_penalty"
+     }
+    ],
+    "descending": true
+   }
+  ],
+  "limit": 10,
+  "offset": null
+ },
+ "result": {
+  "ok": true,
+  "error": null,
+  "columns": [
+   "client_id",
+   "total_penalty"
+  ],
+  "rows": [
+   [
+    6144,
+    "3084"
+   ],
+   [
+    6552,
+    "2497"
+   ],
+   [
+    2789,
+    "2284"
+   ],
+   [
+    6452,
+    "1987"
+   ],
+   [
+    4020,
+    "1770"
+   ],
+   [
+    5247,
+    "1542"
+   ],
+   [
+    9313,
+    "1294"
+   ],
+   [
+    2736,
+    "1267"
+   ],
+   [
+    1824,
+    "1230"
+   ],
+   [
+    4433,
+    "1116"
+   ]
+  ],
+  "fetched_rows": 10,
+  "truncated": false
+ },
+ "checks": [
+  {
+   "name": "not_empty",
+   "ok": true,
+   "text": "The query returned rows."
+  },
+  {
+   "name": "no_repeated_rows",
+   "ok": true,
+   "text": "No row is repeated."
+  },
+  {
+   "name": "values_in_range",
+   "ok": true,
+   "text": "No count, amount or share is outside its possible range."
+  },
+  {
+   "name": "result_size",
+   "ok": true,
+   "text": "The whole result fits."
+  }
+ ],
+ "chart_spec": null,
+ "statistics": null,
+ "confidence": {
+  "stated": 0.8,
+  "calibrated": 0.6352,
+  "band": {
+   "range": [
+    0.6,
+    0.7
+   ],
+   "n": 7,
+   "accuracy": 0.7143,
+   "interval": [
+    0.3589,
+    0.9178
+   ],
+   "thin": true
+  },
+  "threshold": 0.7959,
+  "withheld": true
+ },
+ "status": "withheld",
+ "evaluation": {
+  "correct": false,
+  "rule": "banking set, category b"
+ },
+ "explanation": {
+  "expected": {
+   "columns": [
+    "client_id"
+   ],
+   "rows": [
+    [
+     6144
+    ],
+    [
+     6552
+    ],
+    [
+     2789
+    ],
+    [
+     6452
+    ],
+    [
+     4020
+    ],
+    [
+     5247
+    ],
+    [
+     9313
+    ],
+    [
+     2736
+    ],
+    [
+     1824
+    ],
+    [
+     4433
+    ]
+   ],
+   "total_rows": 10,
+   "truncated": false
+  },
+  "expected_sql": "SELECT dp.client_id FROM trans AS t JOIN disp AS dp ON dp.account_id = t.account_id AND dp.type = 'OWNER' WHERE t.k_symbol = 'SANKC. UROK' GROUP BY dp.client_id ORDER BY SUM(t.amount) DESC LIMIT 10",
+  "comparison": {
+   "relation": "extra_columns",
+   "extra": [
+    "total_penalty"
+   ],
+   "text": "Every expected row is there. The analyst returned the extra column total_penalty, and the benchmark compares every column."
+  },
+  "category": null,
+  "category_text": null,
+  "note": "The question asks for the ten client IDs. The analyst chose the right ten, but it also returned each client's total as a second column, and the benchmark compares every column, so the extra column makes the answer wrong. This is a difference of form, not of substance.",
+  "hint": null
+ },
+ "cost_usd": 0.0040318,
+ "slot": "wrong_extra"
+}

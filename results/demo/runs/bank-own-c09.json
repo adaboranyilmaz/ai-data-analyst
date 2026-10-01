@@ -1,0 +1,164 @@
+{
+ "schema_version": 1,
+ "id": "bank-own-c09",
+ "kind": "banking",
+ "source_run": "own/own-d1-claude-sonnet-5-no-evidence",
+ "question": "How many young clients do we have?",
+ "hint": null,
+ "db_id": "financial",
+ "category": "c",
+ "difficulty": null,
+ "design": "d1",
+ "model": "claude-sonnet-5",
+ "steps": [
+  {
+   "type": "step",
+   "kind": "model",
+   "text": "Read the question and the financial database's tables and columns.",
+   "recorded_ms": null
+  },
+  {
+   "type": "step",
+   "kind": "submit",
+   "text": "Submitted an answer (25% confidence).",
+   "recorded_ms": null
+  }
+ ],
+ "answer": {
+  "text": "Using an age cutoff of under 18 years old (calculated as of 1998-12-31, the last date in the transaction history, since there is no other reference date), there are essentially no clients that young in this dataset — the query counts clients whose computed age is under 18. Given the data's minimum birth_date range, this count is very likely 0, meaning the bank has no clients recorded as minors.",
+  "sql": "SELECT COUNT(*) AS young_client_count\nFROM client\nWHERE DATE_PART('year', AGE(DATE '1998-12-31', birth_date)) < 18",
+  "declined": false,
+  "decline_reason": null,
+  "clarifying_question": "What age threshold defines a \"young\" client (e.g., under 18, under 25, under 30), and what reference date should be used to compute age?",
+  "assumptions": [
+   "\"Young\" means under 18 years old (a minor)",
+   "Age is computed as of 1998-12-31, the last date covered by the transaction history, since there's no explicit reference date in the data"
+  ],
+  "premise_correction": null
+ },
+ "sql_outline": {
+  "kind": "select",
+  "intermediate_results": [],
+  "tables": [
+   {
+    "name": "client"
+   }
+  ],
+  "links": [],
+  "filters": [
+   {
+    "phrase": [
+     {
+      "t": "fn",
+      "v": "whole_years",
+      "args": [
+       [
+        {
+         "t": "col",
+         "v": "birth_date"
+        }
+       ],
+       [
+        {
+         "t": "lit",
+         "v": "\"1998-12-31\""
+        }
+       ]
+      ]
+     },
+     {
+      "t": "op",
+      "v": "lt"
+     },
+     {
+      "t": "lit",
+      "v": "18"
+     }
+    ]
+   }
+  ],
+  "groups": [],
+  "group_filters": [],
+  "distinct": false,
+  "returns": [
+   {
+    "phrase": [
+     {
+      "t": "agg",
+      "v": "count_rows",
+      "arg": []
+     }
+    ],
+    "name": "young_client_count"
+   }
+  ],
+  "order": [],
+  "limit": null,
+  "offset": null
+ },
+ "result": {
+  "ok": true,
+  "error": null,
+  "columns": [
+   "young_client_count"
+  ],
+  "rows": [
+   [
+    72
+   ]
+  ],
+  "fetched_rows": 1,
+  "truncated": false
+ },
+ "checks": [
+  {
+   "name": "not_empty",
+   "ok": true,
+   "text": "The query returned rows."
+  },
+  {
+   "name": "no_repeated_rows",
+   "ok": true,
+   "text": "No row is repeated."
+  },
+  {
+   "name": "values_in_range",
+   "ok": true,
+   "text": "No count, amount or share is outside its possible range."
+  },
+  {
+   "name": "result_size",
+   "ok": true,
+   "text": "The whole result fits."
+  }
+ ],
+ "chart_spec": null,
+ "statistics": null,
+ "confidence": {
+  "stated": 0.25,
+  "calibrated": 0.0414,
+  "band": {
+   "range": [
+    0.0,
+    0.1
+   ],
+   "n": 3,
+   "accuracy": 0.0,
+   "interval": [
+    0.0,
+    0.5615
+   ],
+   "thin": true
+  },
+  "threshold": 0.7959,
+  "withheld": true
+ },
+ "status": "clarify",
+ "evaluation": {
+  "correct": true,
+  "rule": "banking set, category c"
+ },
+ "explanation": null,
+ "cost_usd": 0.0037138,
+ "slot": "category_c"
+}

@@ -180,8 +180,35 @@ Of the guardrail's {{gr_predictions}} predictions, fixed before the first paid c
 
 ## Try It
 
-TBD.
+- **Public demo:** TBD. It will replay recorded runs only: no key and no database on the host.
+- **Locally, replaying recorded runs (no key needed):** `docker compose up -d --wait`, then open http://127.0.0.1:8000. The page replays {{serving_runs}} recorded runs as they streamed: the steps, the query and what it means in words, the rows it used, the checks it ran, the answer and what its confidence means. {{serving_runs_identical}} of {{serving_runs}} replay exactly as they were evaluated, and the page says, after each, whether the evaluation scored it right. The runs were drawn by a rule fixed before looking at them, so wrong answers and held-back ones are in the set.
+- **Locally, asking your own questions:** put an API key in `.env`, load the benchmark (see the technical report), and run `uv run python -m src.serving --mode live`. A question costs a few cents; the service keeps its own spend ledger and cap, and refuses new questions when the cap is reached. It has no sign-in and no rate limit: it is meant for one person on their own machine, answers only to localhost names, and is not for exposing to a network. A question that asks for a comparison or a cause also gets the statistical analysis, which needs Docker on the machine; inside the compose stack it is off, and the answer says so.
+- **Your own PostgreSQL (live mode, on your machine only):** the page can point the analyst at your database. It first checks that the role can only read and refuses a role that can write, listing what to change. The confidence is not calibrated for your data, and the page says so.
 
+Beside each answer the page states the result in one plain line built from the rows (the analyst writes its sentence before it sees them), and an answer with its evidence can be copied as Markdown. When the evaluation scored an answer wrong, the page shows what the right answer was beside the analyst's result, a short note in plain words on why the two differ (a real mistake, another fair reading of the question, or an expert answer that departs from its own hint), and, behind a link, the expert's query. The analyst never saw that query; it is shown after the fact.
+
+The page's confidence meter quotes only what was measured: how often answers at that calibrated confidence were right on held-out benchmark questions, with the interval and how many questions it rests on.
+
+<sub>Source: `results/metrics/serving_check.json`, `results/metrics/calibration.json`</sub>
+
+### Use it from an MCP client
+
+The same guarded, read-only tools are available to any [MCP](https://modelcontextprotocol.io) client over stdio: list the tables, describe one, sample rows, look up what a code means in the data dictionary, and run one `SELECT`. Add this to your MCP client's configuration (the file where it lists its servers), with the path of this repository, and start the database first (`docker compose up -d --wait postgres`):
+
+```json
+{
+  "mcpServers": {
+    "ai-data-analyst": {
+      "command": "uv",
+      "args": ["run", "--directory", "C:/path/to/ai-data-analyst", "python", "-m", "src.mcp_server"]
+    }
+  }
+}
+```
+
+It serves the Czech bank database. To serve your own PostgreSQL instead, set `ANALYST_MCP_PG_HOST`, `ANALYST_MCP_PG_PORT`, `ANALYST_MCP_PG_DBNAME`, `ANALYST_MCP_PG_USER`, `ANALYST_MCP_PG_PASSWORD` and, if it is not `public`, `ANALYST_MCP_PG_SCHEMA` in the server's `env`; a role that can write is refused at start. Every call goes through the same query checker, read-only transaction, row cap and time limit as the analyst's own. The security suite was sent through this server by a real MCP client: {{mcp_attacks}} attacks on the query tool and {{mcp_boundary_attacks}} on the tools' arguments, with {{mcp_breaches}} breaches.
+
+<sub>Source: `results/metrics/mcp_security.json` (one run)</sub>
 ## Reproducing the Results
 
 - Needs Python 3.12 with [uv](https://docs.astral.sh/uv/), and Docker.
@@ -224,6 +251,12 @@ uv run pytest
 | MLflow, DVC | experiment tracking and data versioning |
 | LangGraph | the framework comparison only |
 | Matplotlib | the figures |
+| FastAPI, uvicorn | the service that streams a run's steps |
+| MCP Python SDK | the tool server for MCP clients |
+| prometheus-client | the service's metrics |
+| React, Vite, Tailwind CSS, Vega-Embed, highlight.js | the page: steps, evidence, charts |
+| Inter, JetBrains Mono (bundled fonts) | the page's type |
+| Playwright, axe-core | browser tests and an automated accessibility audit of the page |
 
 <sub>Source: `pyproject.toml`, `docker-compose.yml`</sub>
 

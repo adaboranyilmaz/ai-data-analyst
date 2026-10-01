@@ -22,6 +22,9 @@ phase_caps_usd:
   # then the classifier, plan and answer runs, all direct), to at most $6.50. The cap is the
   # phase's total.
   phase7: 6.50
+  # the product: tests use a scripted model; this covers one live smoke test of the finished
+  # service, counted first with the token-counting endpoint.
+  phase8: 0.50
 batch_discount: 0.5 # Message Batches: half of every token price
 
 # USD per million tokens, Anthropic first-party list prices from

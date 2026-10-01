@@ -1,0 +1,239 @@
+{
+ "schema_version": 1,
+ "id": "bench-1254",
+ "kind": "benchmark",
+ "source_run": "main/all-d1-claude-sonnet-5-evidence",
+ "question": "How many patients with a normal Ig A level came to the hospital after 1990/1/1?",
+ "hint": "normal Ig A level refers to IGA > 80 AND IGA < 500; came to the hospital after 1990/1/1 refers to YEAR(`First Date`) > = 1990;",
+ "db_id": "thrombosis_prediction",
+ "category": null,
+ "difficulty": "moderate",
+ "design": "d1",
+ "model": "claude-sonnet-5",
+ "steps": [
+  {
+   "type": "step",
+   "kind": "model",
+   "text": "Read the question and the thrombosis_prediction database's tables and columns.",
+   "recorded_ms": null
+  },
+  {
+   "type": "step",
+   "kind": "submit",
+   "text": "Submitted an answer (70% confidence).",
+   "recorded_ms": null
+  }
+ ],
+ "answer": {
+  "text": "The query counts distinct patients who have a normal IgA level (between 80 and 500) recorded in the laboratory table and whose First Date at the hospital is on or after 1990-01-01.",
+  "sql": "SELECT COUNT(DISTINCT p.id)\nFROM patient p\nJOIN laboratory l ON p.id = l.id\nWHERE l.iga > 80 AND l.iga < 500\nAND p.\"First Date\" >= '1990-01-01';",
+  "declined": false,
+  "decline_reason": null,
+  "clarifying_question": null,
+  "assumptions": [
+   "Interpreted 'YEAR(First Date) >= 1990' as First Date >= 1990-01-01, matching the hint's wording 'after 1990/1/1'.",
+   "Counted distinct patients since a patient may have multiple laboratory records; a patient qualifies if any of their IgA records is normal."
+  ],
+  "premise_correction": null
+ },
+ "sql_outline": {
+  "kind": "select",
+  "intermediate_results": [],
+  "tables": [
+   {
+    "name": "patient"
+   },
+   {
+    "name": "laboratory"
+   }
+  ],
+  "links": [
+   {
+    "table": "laboratory",
+    "keep_unmatched": false,
+    "side": "inner",
+    "on": [
+     {
+      "phrase": [
+       {
+        "t": "col",
+        "v": "patient.id"
+       },
+       {
+        "t": "op",
+        "v": "eq"
+       },
+       {
+        "t": "col",
+        "v": "laboratory.id"
+       }
+      ]
+     }
+    ],
+    "using": []
+   }
+  ],
+  "filters": [
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "laboratory.iga"
+     },
+     {
+      "t": "op",
+      "v": "gt"
+     },
+     {
+      "t": "lit",
+      "v": "80"
+     }
+    ]
+   },
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "laboratory.iga"
+     },
+     {
+      "t": "op",
+      "v": "lt"
+     },
+     {
+      "t": "lit",
+      "v": "500"
+     }
+    ]
+   },
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "patient.First Date"
+     },
+     {
+      "t": "op",
+      "v": "gte"
+     },
+     {
+      "t": "lit",
+      "v": "\"1990-01-01\""
+     }
+    ]
+   }
+  ],
+  "groups": [],
+  "group_filters": [],
+  "distinct": false,
+  "returns": [
+   {
+    "phrase": [
+     {
+      "t": "agg",
+      "v": "count_distinct",
+      "arg": [
+       {
+        "t": "col",
+        "v": "patient.id"
+       }
+      ]
+     }
+    ],
+    "name": null
+   }
+  ],
+  "order": [],
+  "limit": null,
+  "offset": null
+ },
+ "result": {
+  "ok": true,
+  "error": null,
+  "columns": [
+   "count"
+  ],
+  "rows": [
+   [
+    140
+   ]
+  ],
+  "fetched_rows": 1,
+  "truncated": false
+ },
+ "checks": [
+  {
+   "name": "not_empty",
+   "ok": true,
+   "text": "The query returned rows."
+  },
+  {
+   "name": "no_repeated_rows",
+   "ok": true,
+   "text": "No row is repeated."
+  },
+  {
+   "name": "values_in_range",
+   "ok": true,
+   "text": "No count, amount or share is outside its possible range."
+  },
+  {
+   "name": "result_size",
+   "ok": true,
+   "text": "The whole result fits."
+  }
+ ],
+ "chart_spec": null,
+ "statistics": null,
+ "confidence": {
+  "stated": 0.7,
+  "calibrated": 0.4706,
+  "band": {
+   "range": [
+    0.4,
+    0.5
+   ],
+   "n": 24,
+   "accuracy": 0.3333,
+   "interval": [
+    0.1797,
+    0.5329
+   ],
+   "thin": false
+  },
+  "threshold": 0.7959,
+  "withheld": true
+ },
+ "status": "withheld",
+ "evaluation": {
+  "correct": false,
+  "rule": "execution accuracy"
+ },
+ "explanation": {
+  "expected": {
+   "columns": [
+    "count"
+   ],
+   "rows": [
+    [
+     1590
+    ]
+   ],
+   "total_rows": 1,
+   "truncated": false
+  },
+  "expected_sql": "SELECT COUNT(T1.ID) FROM Patient AS T1 INNER JOIN Laboratory AS T2 ON T1.ID = T2.ID WHERE T2.IGA BETWEEN 80 AND 500 AND TO_CHAR(CAST(T1.\"First Date\" AS TIMESTAMP), 'YYYY') > '1990'",
+  "comparison": {
+   "relation": "single_value",
+   "got": 140,
+   "expected": 1590,
+   "text": "It returned 140; the expected answer is 1590."
+  },
+  "category": "filter",
+  "category_text": "it filtered the rows differently",
+  "note": "The two queries count different things. The expert's query counts rows of patients joined to their laboratory tests, so a patient with several tests is counted several times; the analyst counts each patient once, which is what \"how many patients\" asks. They also differ at the edges: the hint says a normal level is above 80 and below 500 and the year is 1990 or later, which the analyst followed, while the expert's query includes 80 and 500 and starts from 1991. The expert answer here departs from its own hint and counts test rows, so it is questionable.",
+  "hint": "normal Ig A level refers to IGA > 80 AND IGA < 500; came to the hospital after 1990/1/1 refers to YEAR(`First Date`) > = 1990;"
+ },
+ "cost_usd": 0.0031798,
+ "slot": "wrong_below_threshold"
+}

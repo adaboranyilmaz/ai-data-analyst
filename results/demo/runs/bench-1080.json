@@ -1,0 +1,165 @@
+{
+ "schema_version": 1,
+ "id": "bench-1080",
+ "kind": "benchmark",
+ "source_run": "main/all-d1-claude-sonnet-5-evidence",
+ "question": "Among the players whose preferred foot was the left foot when attacking, how many of them would remain in his position when the team attacked?",
+ "hint": "preferred foot when attacking was the left refers to preferred_foot = 'left'; players who would remain in his position when the team attacked refers to attacking_work_rate = 'low';",
+ "db_id": "european_football_2",
+ "category": null,
+ "difficulty": "moderate",
+ "design": "d1",
+ "model": "claude-sonnet-5",
+ "steps": [
+  {
+   "type": "step",
+   "kind": "model",
+   "text": "Read the question and the european_football_2 database's tables and columns.",
+   "recorded_ms": null
+  },
+  {
+   "type": "step",
+   "kind": "submit",
+   "text": "Submitted an answer (85% confidence).",
+   "recorded_ms": null
+  }
+ ],
+ "answer": {
+  "text": "The number of player_attributes records with preferred_foot = 'left' and attacking_work_rate = 'low' gives the count of left-footed players who remain in position during attack.",
+  "sql": "SELECT COUNT(*) FROM player_attributes WHERE preferred_foot = 'left' AND attacking_work_rate = 'low';",
+  "declined": false,
+  "decline_reason": null,
+  "clarifying_question": null,
+  "assumptions": [
+   "Counting rows in player_attributes (not distinct players), since a player can have multiple attribute records over time matching the criteria."
+  ],
+  "premise_correction": null
+ },
+ "sql_outline": {
+  "kind": "select",
+  "intermediate_results": [],
+  "tables": [
+   {
+    "name": "player_attributes"
+   }
+  ],
+  "links": [],
+  "filters": [
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "preferred_foot"
+     },
+     {
+      "t": "op",
+      "v": "eq"
+     },
+     {
+      "t": "lit",
+      "v": "\"left\""
+     }
+    ]
+   },
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "attacking_work_rate"
+     },
+     {
+      "t": "op",
+      "v": "eq"
+     },
+     {
+      "t": "lit",
+      "v": "\"low\""
+     }
+    ]
+   }
+  ],
+  "groups": [],
+  "group_filters": [],
+  "distinct": false,
+  "returns": [
+   {
+    "phrase": [
+     {
+      "t": "agg",
+      "v": "count_rows",
+      "arg": []
+     }
+    ],
+    "name": null
+   }
+  ],
+  "order": [],
+  "limit": null,
+  "offset": null
+ },
+ "result": {
+  "ok": true,
+  "error": null,
+  "columns": [
+   "count"
+  ],
+  "rows": [
+   [
+    1569
+   ]
+  ],
+  "fetched_rows": 1,
+  "truncated": false
+ },
+ "checks": [
+  {
+   "name": "not_empty",
+   "ok": true,
+   "text": "The query returned rows."
+  },
+  {
+   "name": "no_repeated_rows",
+   "ok": true,
+   "text": "No row is repeated."
+  },
+  {
+   "name": "values_in_range",
+   "ok": true,
+   "text": "No count, amount or share is outside its possible range."
+  },
+  {
+   "name": "result_size",
+   "ok": true,
+   "text": "The whole result fits."
+  }
+ ],
+ "chart_spec": null,
+ "statistics": null,
+ "confidence": {
+  "stated": 0.85,
+  "calibrated": 0.709,
+  "band": {
+   "range": [
+    0.7,
+    0.8
+   ],
+   "n": 156,
+   "accuracy": 0.7564,
+   "interval": [
+    0.6834,
+    0.8171
+   ],
+   "thin": false
+  },
+  "threshold": 0.7959,
+  "withheld": true
+ },
+ "status": "withheld",
+ "evaluation": {
+  "correct": true,
+  "rule": "execution accuracy"
+ },
+ "explanation": null,
+ "cost_usd": 0.003551,
+ "slot": "correct_below_threshold"
+}

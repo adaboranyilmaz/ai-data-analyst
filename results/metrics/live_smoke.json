@@ -1,0 +1,83 @@
+{
+ "note": "two real questions through the live service's runner, under the project ledger's phase cap; the guardrail ran in a sandbox container. The spend is the ledger's; a re-run of this script replays the cached responses, so it reports no new spend and no timings",
+ "counted_upper_usd": 0.1524,
+ "phase_spent_usd": 0.09879,
+ "phase_cap_usd": 0.5,
+ "results": [
+  {
+   "kind": "descriptive",
+   "question": "How many loans were granted in 1996?",
+   "event_types": [
+    "start",
+    "step",
+    "step",
+    "step",
+    "sql",
+    "rows",
+    "checks",
+    "answer",
+    "confidence",
+    "done"
+   ],
+   "status": "answered",
+   "error": null,
+   "had_statistics": false,
+   "answer": "There were loans granted in 1996 according to the loan table's date column; the query counts them.",
+   "notice": null,
+   "confidence": {
+    "type": "confidence",
+    "stated": 0.95,
+    "calibrated": 0.8267,
+    "band": {
+     "range": [
+      0.8,
+      0.9
+     ],
+     "n": 20,
+     "accuracy": 0.95,
+     "interval": [
+      0.7639,
+      0.9911
+     ],
+     "thin": false
+    },
+    "threshold": 0.7959,
+    "withheld": false
+   }
+  },
+  {
+   "kind": "comparative",
+   "question": "Did giving clients a card make them more likely to take out a loan?",
+   "event_types": [
+    "start",
+    "step",
+    "step",
+    "step",
+    "step",
+    "step",
+    "step",
+    "step",
+    "step",
+    "sql",
+    "statistics",
+    "answer",
+    "confidence",
+    "done"
+   ],
+   "status": "answered",
+   "error": null,
+   "had_statistics": true,
+   "answer": "Accounts with a card had a higher loan-taking rate (19.1%) than those without one (14.2%), a gap of about 4.9 percentage points (95% CI: +2.2 to +7.8, p < 0.001). This difference persists even after accounting for region and average salary, suggesting it's not simply explained by those factors. However, since cards were not randomly assigned, this is an observed association, not proof that having a card causes clients to take out loans. Other unmeasured factors related to both having a card and taking a loan could still be driving the pattern.\n\nStatistics (95% intervals):\n- 1 minus 0: +4.9 percentage points, interval +2.2 to +7.8; Newcombe's hybrid score interval; Fisher's exact test, p < 0.001\n- Compared within levels of region, avg_salary: +5.0 percentage points, interval +2.2 to +7.9; without them, on the same units: +4.9 percentage points, interval +2.0 to +7.7. So the result holds within these levels\n- Warning: avg_salary was cut into fifths to compare within it.\n- Verdict of the test (compared within the strata): the interval excludes zero, so the data show a difference.\n- These are observational records: the groups were not assigned at random, so a difference or a trend is an association and does not show that one thing causes another.",
+   "notice": null,
+   "confidence": {
+    "type": "confidence",
+    "stated": null,
+    "calibrated": null,
+    "band": null,
+    "threshold": null,
+    "withheld": false,
+    "not_calibrated": true
+   }
+  }
+ ]
+}

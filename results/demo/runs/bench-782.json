@@ -1,0 +1,246 @@
+{
+ "schema_version": 1,
+ "id": "bench-782",
+ "kind": "benchmark",
+ "source_run": "main/all-d1-claude-sonnet-5-evidence",
+ "question": "List the heroes' names whose eyes and hair colours are both black.",
+ "hint": "heroes' names refers to superhero_name; eyes and hair colours are both black refers to eye_colour_id AND hair_colour_id WHERE colour.colour = 'Black';",
+ "db_id": "superhero",
+ "category": null,
+ "difficulty": "moderate",
+ "design": "d1",
+ "model": "claude-sonnet-5",
+ "steps": [
+  {
+   "type": "step",
+   "kind": "model",
+   "text": "Read the question and the superhero database's tables and columns.",
+   "recorded_ms": null
+  },
+  {
+   "type": "step",
+   "kind": "submit",
+   "text": "Submitted an answer (95% confidence).",
+   "recorded_ms": null
+  }
+ ],
+ "answer": {
+  "text": "The query lists the names of superheroes whose eye colour and hair colour are both \"Black\".",
+  "sql": "SELECT s.superhero_name\nFROM superhero s\nJOIN colour ec ON s.eye_colour_id = ec.id\nJOIN colour hc ON s.hair_colour_id = hc.id\nWHERE ec.colour = 'Black' AND hc.colour = 'Black';",
+  "declined": false,
+  "decline_reason": null,
+  "clarifying_question": null,
+  "assumptions": [
+   "Colour matching is exact string 'Black' in the colour table (case-sensitive as stored)."
+  ],
+  "premise_correction": null
+ },
+ "sql_outline": {
+  "kind": "select",
+  "intermediate_results": [],
+  "tables": [
+   {
+    "name": "superhero"
+   },
+   {
+    "name": "colour"
+   }
+  ],
+  "links": [
+   {
+    "table": "colour",
+    "keep_unmatched": false,
+    "side": "inner",
+    "on": [
+     {
+      "phrase": [
+       {
+        "t": "col",
+        "v": "superhero.eye_colour_id"
+       },
+       {
+        "t": "op",
+        "v": "eq"
+       },
+       {
+        "t": "col",
+        "v": "colour.id"
+       }
+      ]
+     }
+    ],
+    "using": []
+   },
+   {
+    "table": "colour",
+    "keep_unmatched": false,
+    "side": "inner",
+    "on": [
+     {
+      "phrase": [
+       {
+        "t": "col",
+        "v": "superhero.hair_colour_id"
+       },
+       {
+        "t": "op",
+        "v": "eq"
+       },
+       {
+        "t": "col",
+        "v": "colour.id"
+       }
+      ]
+     }
+    ],
+    "using": []
+   }
+  ],
+  "filters": [
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "colour.colour"
+     },
+     {
+      "t": "op",
+      "v": "eq"
+     },
+     {
+      "t": "lit",
+      "v": "\"Black\""
+     }
+    ]
+   },
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "colour.colour"
+     },
+     {
+      "t": "op",
+      "v": "eq"
+     },
+     {
+      "t": "lit",
+      "v": "\"Black\""
+     }
+    ]
+   }
+  ],
+  "groups": [],
+  "group_filters": [],
+  "distinct": false,
+  "returns": [
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "superhero.superhero_name"
+     }
+    ],
+    "name": null
+   }
+  ],
+  "order": [],
+  "limit": null,
+  "offset": null
+ },
+ "result": {
+  "ok": true,
+  "error": null,
+  "columns": [
+   "superhero_name"
+  ],
+  "rows": [
+   [
+    "Armor"
+   ],
+   [
+    "Atom Girl"
+   ],
+   [
+    "Bizarro"
+   ],
+   [
+    "Galactus"
+   ],
+   [
+    "General Zod"
+   ],
+   [
+    "Match"
+   ],
+   [
+    "Negasonic Teenage Warhead"
+   ],
+   [
+    "Phantom Stranger"
+   ],
+   [
+    "Shadow Lass"
+   ],
+   [
+    "Sinestro"
+   ],
+   [
+    "Vulcan"
+   ]
+  ],
+  "fetched_rows": 11,
+  "truncated": false
+ },
+ "checks": [
+  {
+   "name": "not_empty",
+   "ok": true,
+   "text": "The query returned rows."
+  },
+  {
+   "name": "no_repeated_rows",
+   "ok": true,
+   "text": "No row is repeated."
+  },
+  {
+   "name": "values_in_range",
+   "ok": true,
+   "text": "No count, amount or share is outside its possible range."
+  },
+  {
+   "name": "result_size",
+   "ok": true,
+   "text": "The whole result fits."
+  }
+ ],
+ "chart_spec": null,
+ "statistics": null,
+ "confidence": {
+  "stated": 0.95,
+  "calibrated": 0.8267,
+  "band": {
+   "range": [
+    0.8,
+    0.9
+   ],
+   "n": 20,
+   "accuracy": 0.95,
+   "interval": [
+    0.7639,
+    0.9911
+   ],
+   "thin": false
+  },
+  "threshold": 0.7959,
+  "withheld": false
+ },
+ "status": "answered",
+ "evaluation": {
+  "correct": true,
+  "rule": "execution accuracy"
+ },
+ "explanation": null,
+ "cost_usd": 0.0062759,
+ "slot": "correct_above_threshold"
+}

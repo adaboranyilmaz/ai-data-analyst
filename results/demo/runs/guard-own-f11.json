@@ -1,0 +1,372 @@
+{
+ "schema_version": 1,
+ "id": "guard-own-f11",
+ "kind": "guardrail",
+ "source_run": "guardrail/own",
+ "question": "Are loans on accounts with a second authorised user repaid better, because two people share responsibility?",
+ "hint": null,
+ "db_id": "financial",
+ "category": "f",
+ "difficulty": null,
+ "design": "d1+guardrail",
+ "model": "claude-sonnet-5",
+ "steps": [
+  {
+   "type": "step",
+   "kind": "model",
+   "text": "Recognized a comparative or causal question: it needs an interval.",
+   "recorded_ms": null
+  },
+  {
+   "type": "step",
+   "kind": "tool",
+   "text": "Planned the comparison: compare groups of repaid_ok by disponent_group, one row per a loan.",
+   "recorded_ms": null
+  },
+  {
+   "type": "step",
+   "kind": "tool",
+   "text": "Pulled 682 rows through the read-only guard.",
+   "recorded_ms": null
+  },
+  {
+   "type": "step",
+   "kind": "tool",
+   "text": "Ran the analysis in the sandbox: no network, no files, a time limit.",
+   "recorded_ms": null
+  },
+  {
+   "type": "step",
+   "kind": "submit",
+   "text": "Wrote the answer from the computed result.",
+   "recorded_ms": null
+  }
+ ],
+ "answer": {
+  "text": "Loans on accounts with a second authorised user (disponent) were repaid in full in this sample: 145 of 145 such loans (100%) were repaid ok, versus 461 of 537 owner-only loans (85.8%) — a gap of about 14 percentage points that remains similar after accounting for loan amount and duration. The confidence interval for this difference excludes zero, so the pattern looks like a real association rather than noise. However, the 100% figure for the disponent group is based on a relatively small sample (145 loans, with none defaulting), so that estimate is less stable than it looks, and the bank's records are observational, not from a randomized assignment. So while accounts with a disponent do show notably better repayment, we cannot say this is because responsibility is \"shared\" — it may instead reflect that people who add a second authorised user differ in other ways (e.g. financial stability) from those who don't.\n\nStatistics (95% intervals):\n- has_disponent minus owner_only: +14.2 percentage points, interval +10.4 to +17.4; Newcombe's hybrid score interval; Fisher's exact test, p < 0.001\n- Compared within levels of amount, duration: +14.6 percentage points, interval +11.4 to +17.8; without them, on the same units: +14.2 percentage points, interval +11.2 to +17.1. So the result holds within these levels\n- Warning: amount was cut into fifths to compare within it.\n- Warning: Few units with (or without) the outcome in: has_disponent (145 of 145); counts this small rest on a few cases.\n- Warning: All or none of the units have the outcome in: has_disponent.\n- Verdict of the test (compared within the strata): the interval excludes zero, so the data show a difference.\n- These are observational records: the groups were not assigned at random, so a difference or a trend is an association and does not show that one thing causes another.",
+  "sql": "WITH disp_count AS (\n  SELECT account_id, COUNT(*) AS n_disp\n  FROM disp\n  GROUP BY account_id\n),\nloan_account AS (\n  SELECT l.loan_id, l.account_id, l.date, l.amount, l.duration, l.status,\n         a.district_id, d.n_disp,\n         CASE WHEN d.n_disp >= 2 THEN 'has_disponent' ELSE 'owner_only' END AS disponent_group,\n         CASE WHEN l.status IN ('A','C') THEN 1 ELSE 0 END AS repaid_ok\n  FROM loan l\n  JOIN account a ON a.account_id = l.account_id\n  JOIN disp_count d ON d.account_id = l.account_id\n  WHERE l.status IN ('A','B','C','D')\n)\nSELECT loan_id, account_id, amount, duration, date AS loan_date,\n       district_id, disponent_group, repaid_ok\nFROM loan_account",
+  "declined": false,
+  "decline_reason": null,
+  "clarifying_question": null,
+  "assumptions": [],
+  "premise_correction": null
+ },
+ "sql_outline": {
+  "kind": "select",
+  "intermediate_results": [
+   "disp_count",
+   "loan_account"
+  ],
+  "tables": [
+   {
+    "name": "disp"
+   },
+   {
+    "name": "loan"
+   },
+   {
+    "name": "account"
+   }
+  ],
+  "links": [],
+  "filters": [],
+  "groups": [],
+  "group_filters": [],
+  "distinct": false,
+  "returns": [
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "loan_id"
+     }
+    ],
+    "name": null
+   },
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "account_id"
+     }
+    ],
+    "name": null
+   },
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "amount"
+     }
+    ],
+    "name": null
+   },
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "duration"
+     }
+    ],
+    "name": null
+   },
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "date"
+     }
+    ],
+    "name": "loan_date"
+   },
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "district_id"
+     }
+    ],
+    "name": null
+   },
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "disponent_group"
+     }
+    ],
+    "name": null
+   },
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "repaid_ok"
+     }
+    ],
+    "name": null
+   }
+  ],
+  "order": [],
+  "limit": null,
+  "offset": null
+ },
+ "result": null,
+ "checks": [],
+ "chart_spec": null,
+ "statistics": {
+  "analysis": "compare_groups",
+  "comparisons": [
+   {
+    "ci": [
+     0.1042190471345886,
+     0.17355951031464512
+    ],
+    "estimate": 0.14152700186219735,
+    "group": "has_disponent",
+    "measure": "difference in rates",
+    "method": "Newcombe's hybrid score interval; Fisher's exact test",
+    "p_value": 6.4509346538483536e-09
+   }
+  ],
+  "detected": true,
+  "groups": [
+   {
+    "ci": [
+     0.9741909354347176,
+     1.0
+    ],
+    "estimate": 1.0,
+    "events": 145,
+    "label": "has_disponent",
+    "n": 145
+   },
+   {
+    "ci": [
+     0.8264404896853549,
+     0.8854132221944505
+    ],
+    "estimate": 0.8584729981378026,
+    "events": 461,
+    "label": "owner_only",
+    "n": 537
+   }
+  ],
+  "n": 682,
+  "n_dropped": 0,
+  "outcome_type": "binary",
+  "primary": "stratified",
+  "reference": "owner_only",
+  "stratified": {
+   "adjusted": {
+    "ci": [
+     0.1135716134129325,
+     0.1782363229597208
+    ],
+    "estimate": 0.14590396818632664,
+    "n": 682,
+    "p_value": 9.18624108935635e-19
+   },
+   "by_stratum": [
+    {
+     "estimate": 0.12962962962962965,
+     "group_estimate": 1.0,
+     "n": 136,
+     "n_group": 28,
+     "n_reference": 108,
+     "reference_estimate": 0.8703703703703703,
+     "stratum": "155630.4 to 239400.00000000003",
+     "variable": "amount"
+    },
+    {
+     "estimate": 0.2727272727272727,
+     "group_estimate": 1.0,
+     "n": 137,
+     "n_group": 27,
+     "n_reference": 110,
+     "reference_estimate": 0.7272727272727273,
+     "stratum": "239400.00000000003 to 590820",
+     "variable": "amount"
+    },
+    {
+     "estimate": 0.053097345132743334,
+     "group_estimate": 1.0,
+     "n": 137,
+     "n_group": 24,
+     "n_reference": 113,
+     "reference_estimate": 0.9469026548672567,
+     "stratum": "4980 to 53107.200000000004",
+     "variable": "amount"
+    },
+    {
+     "estimate": 0.1428571428571429,
+     "group_estimate": 1.0,
+     "n": 136,
+     "n_group": 38,
+     "n_reference": 98,
+     "reference_estimate": 0.8571428571428571,
+     "stratum": "53107.200000000004 to 91603.2",
+     "variable": "amount"
+    },
+    {
+     "estimate": 0.11111111111111116,
+     "group_estimate": 1.0,
+     "n": 136,
+     "n_group": 28,
+     "n_reference": 108,
+     "reference_estimate": 0.8888888888888888,
+     "stratum": "91603.2 to 155630.4",
+     "variable": "amount"
+    },
+    {
+     "estimate": 0.11340206185567014,
+     "group_estimate": 1.0,
+     "n": 131,
+     "n_group": 34,
+     "n_reference": 97,
+     "reference_estimate": 0.8865979381443299,
+     "stratum": "12",
+     "variable": "duration"
+    },
+    {
+     "estimate": 0.15596330275229353,
+     "group_estimate": 1.0,
+     "n": 138,
+     "n_group": 29,
+     "n_reference": 109,
+     "reference_estimate": 0.8440366972477065,
+     "stratum": "24",
+     "variable": "duration"
+    },
+    {
+     "estimate": 0.1428571428571429,
+     "group_estimate": 1.0,
+     "n": 130,
+     "n_group": 25,
+     "n_reference": 105,
+     "reference_estimate": 0.8571428571428571,
+     "stratum": "36",
+     "variable": "duration"
+    },
+    {
+     "estimate": 0.14414414414414412,
+     "group_estimate": 1.0,
+     "n": 138,
+     "n_group": 27,
+     "n_reference": 111,
+     "reference_estimate": 0.8558558558558559,
+     "stratum": "48",
+     "variable": "duration"
+    },
+    {
+     "estimate": 0.14782608695652177,
+     "group_estimate": 1.0,
+     "n": 145,
+     "n_group": 30,
+     "n_reference": 115,
+     "reference_estimate": 0.8521739130434782,
+     "stratum": "60",
+     "variable": "duration"
+    }
+   ],
+   "change": "stable",
+   "crude": {
+    "ci": [
+     0.11199088366429766,
+     0.17106312006009766
+    ],
+    "estimate": 0.14152700186219766,
+    "n": 682,
+    "p_value": 5.916370022072829e-21
+   },
+   "method": "linear probability model with an indicator per stratum, HC3 errors",
+   "strata": [
+    "amount",
+    "duration"
+   ],
+   "units_dropped": 0
+  },
+  "warnings": [
+   {
+    "bins": 5,
+    "kind": "binned_stratum",
+    "variable": "amount"
+   },
+   {
+    "groups": [
+     {
+      "events": 145,
+      "label": "has_disponent",
+      "n": 145
+     }
+    ],
+    "kind": "few_events"
+   },
+   {
+    "groups": [
+     "has_disponent"
+    ],
+    "kind": "all_or_none"
+   }
+  ]
+ },
+ "confidence": {
+  "stated": null,
+  "calibrated": null,
+  "band": null,
+  "threshold": null,
+  "withheld": false,
+  "not_calibrated": true
+ },
+ "status": "answered",
+ "evaluation": {
+  "reviewed_success": true
+ },
+ "explanation": null,
+ "before": {
+  "text": "Comparing loan outcomes for accounts that have a second authorised user (a DISPONENT disposition) against accounts with only an owner: the query computes, for each group, the count of loans, how many finished/are running with no problems (status A or C) versus how many finished unpaid or are currently in debt (status B or D), and the percentage that are \"OK\" (A or C). Based on the data, accounts with a DISPONENT do not show a meaningfully higher share of well-repaid loans than accounts without one — the repayment quality (share of A/C vs B/D) is very similar between the two groups, so having a second authorised user does not appear to improve repayment.",
+  "sql": "WITH acct_disponent AS (\n  SELECT account_id, COUNT(*) AS n_disponent\n  FROM disp\n  WHERE type = 'DISPONENT'\n  GROUP BY account_id\n)\nSELECT\n  CASE WHEN ad.account_id IS NOT NULL THEN 'has DISPONENT' ELSE 'no DISPONENT' END AS account_group,\n  COUNT(*) AS n_loans,\n  SUM(CASE WHEN l.status IN ('A','C') THEN 1 ELSE 0 END) AS n_ok,\n  SUM(CASE WHEN l.status IN ('B','D') THEN 1 ELSE 0 END) AS n_problem,\n  CAST(SUM(CASE WHEN l.status IN ('A','C') THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(*) AS pct_ok\nFROM loan l\nLEFT JOIN acct_disponent ad ON l.account_id = ad.account_id\nGROUP BY account_group;"
+ },
+ "cost_usd": 0.01197,
+ "slot": "reviewed_success"
+}

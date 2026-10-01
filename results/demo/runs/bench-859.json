@@ -1,0 +1,209 @@
+{
+ "schema_version": 1,
+ "id": "bench-859",
+ "kind": "benchmark",
+ "source_run": "main/all-d1-claude-sonnet-5-evidence",
+ "question": "What's Bruno Senna's Q1 result in the qualifying race No. 354?",
+ "hint": "race number refers to raceId; Bruno Senna refers to the full name of the driver; Full name of the driver refers to drivers.forename and drivers.surname;",
+ "db_id": "formula_1",
+ "category": null,
+ "difficulty": "simple",
+ "design": "d1",
+ "model": "claude-sonnet-5",
+ "steps": [
+  {
+   "type": "step",
+   "kind": "model",
+   "text": "Read the question and the formula_1 database's tables and columns.",
+   "recorded_ms": null
+  },
+  {
+   "type": "step",
+   "kind": "submit",
+   "text": "Submitted an answer (95% confidence).",
+   "recorded_ms": null
+  }
+ ],
+ "answer": {
+  "text": "The query returns Bruno Senna's Q1 time in race number 354.",
+  "sql": "SELECT q.q1\nFROM qualifying q\nJOIN drivers d ON q.driverid = d.driverid\nWHERE d.forename = 'Bruno' AND d.surname = 'Senna' AND q.raceid = 354;",
+  "declined": false,
+  "decline_reason": null,
+  "clarifying_question": null,
+  "assumptions": [
+   "Only one driver named Bruno Senna exists in the drivers table",
+   "raceId 354 exists and has a qualifying record for this driver"
+  ],
+  "premise_correction": null
+ },
+ "sql_outline": {
+  "kind": "select",
+  "intermediate_results": [],
+  "tables": [
+   {
+    "name": "qualifying"
+   },
+   {
+    "name": "drivers"
+   }
+  ],
+  "links": [
+   {
+    "table": "drivers",
+    "keep_unmatched": false,
+    "side": "inner",
+    "on": [
+     {
+      "phrase": [
+       {
+        "t": "col",
+        "v": "qualifying.driverid"
+       },
+       {
+        "t": "op",
+        "v": "eq"
+       },
+       {
+        "t": "col",
+        "v": "drivers.driverid"
+       }
+      ]
+     }
+    ],
+    "using": []
+   }
+  ],
+  "filters": [
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "drivers.forename"
+     },
+     {
+      "t": "op",
+      "v": "eq"
+     },
+     {
+      "t": "lit",
+      "v": "\"Bruno\""
+     }
+    ]
+   },
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "drivers.surname"
+     },
+     {
+      "t": "op",
+      "v": "eq"
+     },
+     {
+      "t": "lit",
+      "v": "\"Senna\""
+     }
+    ]
+   },
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "qualifying.raceid"
+     },
+     {
+      "t": "op",
+      "v": "eq"
+     },
+     {
+      "t": "lit",
+      "v": "354"
+     }
+    ]
+   }
+  ],
+  "groups": [],
+  "group_filters": [],
+  "distinct": false,
+  "returns": [
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "qualifying.q1"
+     }
+    ],
+    "name": null
+   }
+  ],
+  "order": [],
+  "limit": null,
+  "offset": null
+ },
+ "result": {
+  "ok": true,
+  "error": null,
+  "columns": [
+   "q1"
+  ],
+  "rows": [
+   [
+    "1:23.796"
+   ]
+  ],
+  "fetched_rows": 1,
+  "truncated": false
+ },
+ "checks": [
+  {
+   "name": "not_empty",
+   "ok": true,
+   "text": "The query returned rows."
+  },
+  {
+   "name": "no_repeated_rows",
+   "ok": true,
+   "text": "No row is repeated."
+  },
+  {
+   "name": "values_in_range",
+   "ok": true,
+   "text": "No count, amount or share is outside its possible range."
+  },
+  {
+   "name": "result_size",
+   "ok": true,
+   "text": "The whole result fits."
+  }
+ ],
+ "chart_spec": null,
+ "statistics": null,
+ "confidence": {
+  "stated": 0.95,
+  "calibrated": 0.8267,
+  "band": {
+   "range": [
+    0.8,
+    0.9
+   ],
+   "n": 20,
+   "accuracy": 0.95,
+   "interval": [
+    0.7639,
+    0.9911
+   ],
+   "thin": false
+  },
+  "threshold": 0.7959,
+  "withheld": false
+ },
+ "status": "answered",
+ "evaluation": {
+  "correct": true,
+  "rule": "execution accuracy"
+ },
+ "explanation": null,
+ "cost_usd": 0.0028079,
+ "slot": "correct_above_threshold"
+}

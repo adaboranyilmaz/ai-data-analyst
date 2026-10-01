@@ -1,0 +1,192 @@
+{
+ "schema_version": 1,
+ "id": "bank-own-a09",
+ "kind": "banking",
+ "source_run": "own/own-d1-claude-sonnet-5-no-evidence",
+ "question": "How many old-age pension payments were credited in 1998, and what was their total amount in CZK?",
+ "hint": null,
+ "db_id": "financial",
+ "category": "a",
+ "difficulty": null,
+ "design": "d1",
+ "model": "claude-sonnet-5",
+ "steps": [
+  {
+   "type": "step",
+   "kind": "model",
+   "text": "Read the question and the financial database's tables and columns.",
+   "recorded_ms": null
+  },
+  {
+   "type": "step",
+   "kind": "submit",
+   "text": "Submitted an answer (85% confidence).",
+   "recorded_ms": null
+  }
+ ],
+ "answer": {
+  "text": "In 1998, there were a certain number of old-age pension credits (k_symbol = DUCHOD) recorded in the transactions table, totaling a certain amount in CZK. Based on the query, this counts all transactions with k_symbol 'DUCHOD' dated in 1998 and sums their amounts.",
+  "sql": "SELECT COUNT(*) AS num_payments, SUM(amount) AS total_amount\nFROM trans\nWHERE k_symbol = 'DUCHOD' AND EXTRACT(YEAR FROM date) = 1998",
+  "declined": false,
+  "decline_reason": null,
+  "clarifying_question": null,
+  "assumptions": [
+   "Old-age pension payments are identified by trans.k_symbol = 'DUCHOD'.",
+   "\"Credited in 1998\" means the transaction date (trans.date) falls in calendar year 1998.",
+   "All DUCHOD transactions are type PRIJEM (credit) so no additional type filter is needed."
+  ],
+  "premise_correction": null
+ },
+ "sql_outline": {
+  "kind": "select",
+  "intermediate_results": [],
+  "tables": [
+   {
+    "name": "trans"
+   }
+  ],
+  "links": [],
+  "filters": [
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "k_symbol"
+     },
+     {
+      "t": "op",
+      "v": "eq"
+     },
+     {
+      "t": "lit",
+      "v": "\"DUCHOD\""
+     }
+    ]
+   },
+   {
+    "phrase": [
+     {
+      "t": "fn",
+      "v": "year_of",
+      "args": [
+       [
+        {
+         "t": "col",
+         "v": "date"
+        }
+       ]
+      ]
+     },
+     {
+      "t": "op",
+      "v": "eq"
+     },
+     {
+      "t": "lit",
+      "v": "1998"
+     }
+    ]
+   }
+  ],
+  "groups": [],
+  "group_filters": [],
+  "distinct": false,
+  "returns": [
+   {
+    "phrase": [
+     {
+      "t": "agg",
+      "v": "count_rows",
+      "arg": []
+     }
+    ],
+    "name": "num_payments"
+   },
+   {
+    "phrase": [
+     {
+      "t": "agg",
+      "v": "sum",
+      "arg": [
+       {
+        "t": "col",
+        "v": "amount"
+       }
+      ]
+     }
+    ],
+    "name": "total_amount"
+   }
+  ],
+  "order": [],
+  "limit": null,
+  "offset": null
+ },
+ "result": {
+  "ok": true,
+  "error": null,
+  "columns": [
+   "num_payments",
+   "total_amount"
+  ],
+  "rows": [
+   [
+    8880,
+    "49032084"
+   ]
+  ],
+  "fetched_rows": 1,
+  "truncated": false
+ },
+ "checks": [
+  {
+   "name": "not_empty",
+   "ok": true,
+   "text": "The query returned rows."
+  },
+  {
+   "name": "no_repeated_rows",
+   "ok": true,
+   "text": "No row is repeated."
+  },
+  {
+   "name": "values_in_range",
+   "ok": true,
+   "text": "No count, amount or share is outside its possible range."
+  },
+  {
+   "name": "result_size",
+   "ok": true,
+   "text": "The whole result fits."
+  }
+ ],
+ "chart_spec": null,
+ "statistics": null,
+ "confidence": {
+  "stated": 0.85,
+  "calibrated": 0.709,
+  "band": {
+   "range": [
+    0.7,
+    0.8
+   ],
+   "n": 156,
+   "accuracy": 0.7564,
+   "interval": [
+    0.6834,
+    0.8171
+   ],
+   "thin": false
+  },
+  "threshold": 0.7959,
+  "withheld": true
+ },
+ "status": "withheld",
+ "evaluation": {
+  "correct": true,
+  "rule": "banking set, category a"
+ },
+ "explanation": null,
+ "cost_usd": 0.0037188,
+ "slot": "category_a"
+}

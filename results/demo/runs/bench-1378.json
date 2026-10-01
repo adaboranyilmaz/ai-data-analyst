@@ -1,0 +1,137 @@
+{
+ "schema_version": 1,
+ "id": "bench-1378",
+ "kind": "benchmark",
+ "source_run": "main/all-d1-claude-sonnet-5-evidence",
+ "question": "What is the highest amount of budget spend for an event?",
+ "hint": "highest amount of budget spend refers to MAX(spent)",
+ "db_id": "student_club",
+ "category": null,
+ "difficulty": "simple",
+ "design": "d1",
+ "model": "claude-sonnet-5",
+ "steps": [
+  {
+   "type": "step",
+   "kind": "model",
+   "text": "Read the question and the student_club database's tables and columns.",
+   "recorded_ms": null
+  },
+  {
+   "type": "step",
+   "kind": "submit",
+   "text": "Submitted an answer (90% confidence).",
+   "recorded_ms": null
+  }
+ ],
+ "answer": {
+  "text": "The highest amount spent for a budgeted event category is the maximum value of the \"spent\" column in the budget table.",
+  "sql": "SELECT MAX(spent) AS max_spent FROM budget",
+  "declined": false,
+  "decline_reason": null,
+  "clarifying_question": null,
+  "assumptions": [
+   "\"budget spend\" refers to the 'spent' column in the budget table as stated in the hint"
+  ],
+  "premise_correction": null
+ },
+ "sql_outline": {
+  "kind": "select",
+  "intermediate_results": [],
+  "tables": [
+   {
+    "name": "budget"
+   }
+  ],
+  "links": [],
+  "filters": [],
+  "groups": [],
+  "group_filters": [],
+  "distinct": false,
+  "returns": [
+   {
+    "phrase": [
+     {
+      "t": "agg",
+      "v": "max",
+      "arg": [
+       {
+        "t": "col",
+        "v": "spent"
+       }
+      ]
+     }
+    ],
+    "name": "max_spent"
+   }
+  ],
+  "order": [],
+  "limit": null,
+  "offset": null
+ },
+ "result": {
+  "ok": true,
+  "error": null,
+  "columns": [
+   "max_spent"
+  ],
+  "rows": [
+   [
+    327.07
+   ]
+  ],
+  "fetched_rows": 1,
+  "truncated": false
+ },
+ "checks": [
+  {
+   "name": "not_empty",
+   "ok": true,
+   "text": "The query returned rows."
+  },
+  {
+   "name": "no_repeated_rows",
+   "ok": true,
+   "text": "No row is repeated."
+  },
+  {
+   "name": "values_in_range",
+   "ok": true,
+   "text": "No count, amount or share is outside its possible range."
+  },
+  {
+   "name": "result_size",
+   "ok": true,
+   "text": "The whole result fits."
+  }
+ ],
+ "chart_spec": null,
+ "statistics": null,
+ "confidence": {
+  "stated": 0.9,
+  "calibrated": 0.7732,
+  "band": {
+   "range": [
+    0.7,
+    0.8
+   ],
+   "n": 156,
+   "accuracy": 0.7564,
+   "interval": [
+    0.6834,
+    0.8171
+   ],
+   "thin": false
+  },
+  "threshold": 0.7959,
+  "withheld": true
+ },
+ "status": "withheld",
+ "evaluation": {
+  "correct": true,
+  "rule": "execution accuracy"
+ },
+ "explanation": null,
+ "cost_usd": 0.0021984,
+ "slot": "correct_below_threshold"
+}

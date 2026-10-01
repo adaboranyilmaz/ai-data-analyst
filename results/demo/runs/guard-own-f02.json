@@ -1,0 +1,599 @@
+{
+ "schema_version": 1,
+ "id": "guard-own-f02",
+ "kind": "guardrail",
+ "source_run": "guardrail/own",
+ "question": "Are loans to women repaid worse than loans to men?",
+ "hint": null,
+ "db_id": "financial",
+ "category": "f",
+ "difficulty": null,
+ "design": "d1+guardrail",
+ "model": "claude-sonnet-5",
+ "steps": [
+  {
+   "type": "step",
+   "kind": "model",
+   "text": "Recognized a comparative or causal question: it needs an interval.",
+   "recorded_ms": null
+  },
+  {
+   "type": "step",
+   "kind": "tool",
+   "text": "Planned the comparison: compare groups of bad_loan by gender, one row per a loan.",
+   "recorded_ms": null
+  },
+  {
+   "type": "step",
+   "kind": "tool",
+   "text": "Pulled 682 rows through the read-only guard.",
+   "recorded_ms": null
+  },
+  {
+   "type": "step",
+   "kind": "tool",
+   "text": "Ran the analysis in the sandbox: no network, no files, a time limit.",
+   "recorded_ms": null
+  },
+  {
+   "type": "step",
+   "kind": "submit",
+   "text": "Wrote the answer from the computed result.",
+   "recorded_ms": null
+  }
+ ],
+ "answer": {
+  "text": "Loans to women had a bad-loan rate of 11.8% (41 of 348) versus 10.5% (35 of 334) for men, a difference of only 1.3 percentage points. This gap is not statistically significant (95% CI: -3.5 to +6.1 points, p=0.627), and it remains insignificant after accounting for client age and district average salary. In short, the data do not show that loans to women are repaid worse than loans to men. As with any observational comparison, this only reflects association, not causation.\n\nStatistics (95% intervals):\n- female minus male: +1.3 percentage points, interval -3.5 to +6.1; Newcombe's hybrid score interval; Fisher's exact test, p 0.627\n- Compared within levels of client_age, district_avg_salary: +1.2 percentage points, interval -3.6 to +6.1; without them, on the same units: +1.3 percentage points, interval -3.4 to +6.0. So the result holds within these levels\n- Warning: client_age was cut into fifths to compare within it.\n- Warning: district_avg_salary was cut into fifths to compare within it.\n- Verdict of the test (compared within the strata): the interval includes zero, so the data do not show a difference.\n- These are observational records: the groups were not assigned at random, so a difference or a trend is an association and does not show that one thing causes another.",
+  "sql": "SELECT\n  l.loan_id,\n  CASE WHEN c.gender = 'F' THEN 'female' ELSE 'male' END AS gender,\n  CASE WHEN l.status IN ('B','D') THEN 1 ELSE 0 END AS bad_loan,\n  l.amount AS loan_amount,\n  EXTRACT(YEAR FROM AGE(l.date, c.birth_date)) AS client_age,\n  d.a11 AS district_avg_salary,\n  d.a13 AS district_unemployment_1996\nFROM loan l\nJOIN account a ON l.account_id = a.account_id\nJOIN disp dp ON dp.account_id = a.account_id AND dp.type = 'OWNER'\nJOIN client c ON c.client_id = dp.client_id\nJOIN district d ON d.district_id = c.district_id\nWHERE l.status IN ('A','B','C','D')",
+  "declined": false,
+  "decline_reason": null,
+  "clarifying_question": null,
+  "assumptions": [],
+  "premise_correction": null
+ },
+ "sql_outline": {
+  "kind": "select",
+  "intermediate_results": [],
+  "tables": [
+   {
+    "name": "loan"
+   },
+   {
+    "name": "account"
+   },
+   {
+    "name": "disp"
+   },
+   {
+    "name": "client"
+   },
+   {
+    "name": "district"
+   }
+  ],
+  "links": [
+   {
+    "table": "account",
+    "keep_unmatched": false,
+    "side": "inner",
+    "on": [
+     {
+      "phrase": [
+       {
+        "t": "col",
+        "v": "loan.account_id"
+       },
+       {
+        "t": "op",
+        "v": "eq"
+       },
+       {
+        "t": "col",
+        "v": "account.account_id"
+       }
+      ]
+     }
+    ],
+    "using": []
+   },
+   {
+    "table": "disp",
+    "keep_unmatched": false,
+    "side": "inner",
+    "on": [
+     {
+      "phrase": [
+       {
+        "t": "col",
+        "v": "disp.account_id"
+       },
+       {
+        "t": "op",
+        "v": "eq"
+       },
+       {
+        "t": "col",
+        "v": "account.account_id"
+       }
+      ]
+     },
+     {
+      "phrase": [
+       {
+        "t": "col",
+        "v": "disp.type"
+       },
+       {
+        "t": "op",
+        "v": "eq"
+       },
+       {
+        "t": "lit",
+        "v": "\"OWNER\""
+       }
+      ]
+     }
+    ],
+    "using": []
+   },
+   {
+    "table": "client",
+    "keep_unmatched": false,
+    "side": "inner",
+    "on": [
+     {
+      "phrase": [
+       {
+        "t": "col",
+        "v": "client.client_id"
+       },
+       {
+        "t": "op",
+        "v": "eq"
+       },
+       {
+        "t": "col",
+        "v": "disp.client_id"
+       }
+      ]
+     }
+    ],
+    "using": []
+   },
+   {
+    "table": "district",
+    "keep_unmatched": false,
+    "side": "inner",
+    "on": [
+     {
+      "phrase": [
+       {
+        "t": "col",
+        "v": "district.district_id"
+       },
+       {
+        "t": "op",
+        "v": "eq"
+       },
+       {
+        "t": "col",
+        "v": "client.district_id"
+       }
+      ]
+     }
+    ],
+    "using": []
+   }
+  ],
+  "filters": [
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "loan.status"
+     },
+     {
+      "t": "op",
+      "v": "in"
+     },
+     {
+      "t": "open"
+     },
+     {
+      "t": "lit",
+      "v": "\"A\""
+     },
+     {
+      "t": "op",
+      "v": "list_sep"
+     },
+     {
+      "t": "lit",
+      "v": "\"B\""
+     },
+     {
+      "t": "op",
+      "v": "list_sep"
+     },
+     {
+      "t": "lit",
+      "v": "\"C\""
+     },
+     {
+      "t": "op",
+      "v": "list_sep"
+     },
+     {
+      "t": "lit",
+      "v": "\"D\""
+     },
+     {
+      "t": "close"
+     }
+    ]
+   }
+  ],
+  "groups": [],
+  "group_filters": [],
+  "distinct": false,
+  "returns": [
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "loan.loan_id"
+     }
+    ],
+    "name": null
+   },
+   {
+    "phrase": [
+     {
+      "t": "fn",
+      "v": "case",
+      "args": [
+       [
+        {
+         "t": "lit",
+         "v": "\"female\""
+        }
+       ],
+       [
+        {
+         "t": "col",
+         "v": "client.gender"
+        },
+        {
+         "t": "op",
+         "v": "eq"
+        },
+        {
+         "t": "lit",
+         "v": "\"F\""
+        }
+       ],
+       [
+        {
+         "t": "lit",
+         "v": "\"male\""
+        }
+       ]
+      ]
+     }
+    ],
+    "name": "gender"
+   },
+   {
+    "phrase": [
+     {
+      "t": "fn",
+      "v": "case",
+      "args": [
+       [
+        {
+         "t": "lit",
+         "v": "1"
+        }
+       ],
+       [
+        {
+         "t": "col",
+         "v": "loan.status"
+        },
+        {
+         "t": "op",
+         "v": "in"
+        },
+        {
+         "t": "open"
+        },
+        {
+         "t": "lit",
+         "v": "\"B\""
+        },
+        {
+         "t": "op",
+         "v": "list_sep"
+        },
+        {
+         "t": "lit",
+         "v": "\"D\""
+        },
+        {
+         "t": "close"
+        }
+       ],
+       [
+        {
+         "t": "lit",
+         "v": "0"
+        }
+       ]
+      ]
+     }
+    ],
+    "name": "bad_loan"
+   },
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "loan.amount"
+     }
+    ],
+    "name": "loan_amount"
+   },
+   {
+    "phrase": [
+     {
+      "t": "fn",
+      "v": "whole_years",
+      "args": [
+       [
+        {
+         "t": "col",
+         "v": "client.birth_date"
+        }
+       ],
+       [
+        {
+         "t": "col",
+         "v": "loan.date"
+        }
+       ]
+      ]
+     }
+    ],
+    "name": "client_age"
+   },
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "district.a11"
+     }
+    ],
+    "name": "district_avg_salary"
+   },
+   {
+    "phrase": [
+     {
+      "t": "col",
+      "v": "district.a13"
+     }
+    ],
+    "name": "district_unemployment_1996"
+   }
+  ],
+  "order": [],
+  "limit": null,
+  "offset": null
+ },
+ "result": null,
+ "checks": [],
+ "chart_spec": null,
+ "statistics": {
+  "analysis": "compare_groups",
+  "comparisons": [
+   {
+    "ci": [
+     -0.034824946696918734,
+     0.06060345086818735
+    ],
+    "estimate": 0.013025672792346343,
+    "group": "female",
+    "measure": "difference in rates",
+    "method": "Newcombe's hybrid score interval; Fisher's exact test",
+    "p_value": 0.6274335491592815
+   }
+  ],
+  "detected": false,
+  "groups": [
+   {
+    "ci": [
+     0.08804483597700977,
+     0.15593283256841525
+    ],
+    "estimate": 0.11781609195402298,
+    "events": 41,
+    "label": "female",
+    "n": 348
+   },
+   {
+    "ci": [
+     0.07631658816602177,
+     0.14225178730350496
+    ],
+    "estimate": 0.10479041916167664,
+    "events": 35,
+    "label": "male",
+    "n": 334
+   }
+  ],
+  "n": 682,
+  "n_dropped": 0,
+  "outcome_type": "binary",
+  "primary": "stratified",
+  "reference": "male",
+  "stratified": {
+   "adjusted": {
+    "ci": [
+     -0.0355667377547633,
+     0.06052851551929538
+    ],
+    "estimate": 0.01248088888226604,
+    "n": 682,
+    "p_value": 0.6106668733955565
+   },
+   "by_stratum": [
+    {
+     "estimate": 0.08946877912395154,
+     "group_estimate": 0.17567567567567569,
+     "n": 132,
+     "n_group": 74,
+     "n_reference": 58,
+     "reference_estimate": 0.08620689655172414,
+     "stratum": "13 to 25",
+     "variable": "client_age"
+    },
+    {
+     "estimate": 0.010633484162895918,
+     "group_estimate": 0.10294117647058823,
+     "n": 133,
+     "n_group": 68,
+     "n_reference": 65,
+     "reference_estimate": 0.09230769230769231,
+     "stratum": "25 to 33",
+     "variable": "client_age"
+    },
+    {
+     "estimate": -0.04386317907444667,
+     "group_estimate": 0.07042253521126761,
+     "n": 141,
+     "n_group": 71,
+     "n_reference": 70,
+     "reference_estimate": 0.11428571428571428,
+     "stratum": "33 to 42",
+     "variable": "client_age"
+    },
+    {
+     "estimate": -0.0040322580645161255,
+     "group_estimate": 0.125,
+     "n": 134,
+     "n_group": 72,
+     "n_reference": 62,
+     "reference_estimate": 0.12903225806451613,
+     "stratum": "42 to 51",
+     "variable": "client_age"
+    },
+    {
+     "estimate": 0.00984528832630098,
+     "group_estimate": 0.1111111111111111,
+     "n": 142,
+     "n_group": 63,
+     "n_reference": 79,
+     "reference_estimate": 0.10126582278481013,
+     "stratum": "51 to 61",
+     "variable": "client_age"
+    },
+    {
+     "estimate": -0.05951417004048584,
+     "group_estimate": 0.07894736842105263,
+     "n": 141,
+     "n_group": 76,
+     "n_reference": 65,
+     "reference_estimate": 0.13846153846153847,
+     "stratum": "10177 to 12541",
+     "variable": "district_avg_salary"
+    },
+    {
+     "estimate": 0.05462365591397848,
+     "group_estimate": 0.16129032258064516,
+     "n": 137,
+     "n_group": 62,
+     "n_reference": 75,
+     "reference_estimate": 0.10666666666666667,
+     "stratum": "8110 to 8441.6",
+     "variable": "district_avg_salary"
+    },
+    {
+     "estimate": -0.024867957746478875,
+     "group_estimate": 0.08450704225352113,
+     "n": 135,
+     "n_group": 71,
+     "n_reference": 64,
+     "reference_estimate": 0.109375,
+     "stratum": "8441.6 to 8772",
+     "variable": "district_avg_salary"
+    },
+    {
+     "estimate": 0.045138888888888895,
+     "group_estimate": 0.1388888888888889,
+     "n": 136,
+     "n_group": 72,
+     "n_reference": 64,
+     "reference_estimate": 0.09375,
+     "stratum": "8772 to 9307",
+     "variable": "district_avg_salary"
+    },
+    {
+     "estimate": 0.05857078245137946,
+     "group_estimate": 0.13432835820895522,
+     "n": 133,
+     "n_group": 67,
+     "n_reference": 66,
+     "reference_estimate": 0.07575757575757576,
+     "stratum": "9307 to 10177",
+     "variable": "district_avg_salary"
+    }
+   ],
+   "change": "stable",
+   "crude": {
+    "ci": [
+     -0.03429618960649744,
+     0.060347535191190155
+    ],
+    "estimate": 0.013025672792346357,
+    "n": 682,
+    "p_value": 0.589546200426083
+   },
+   "method": "linear probability model with an indicator per stratum, HC3 errors",
+   "strata": [
+    "client_age",
+    "district_avg_salary"
+   ],
+   "units_dropped": 0
+  },
+  "warnings": [
+   {
+    "bins": 5,
+    "kind": "binned_stratum",
+    "variable": "client_age"
+   },
+   {
+    "bins": 5,
+    "kind": "binned_stratum",
+    "variable": "district_avg_salary"
+   }
+  ]
+ },
+ "confidence": {
+  "stated": null,
+  "calibrated": null,
+  "band": null,
+  "threshold": null,
+  "withheld": false,
+  "not_calibrated": true
+ },
+ "status": "answered",
+ "evaluation": {
+  "reviewed_success": false
+ },
+ "explanation": null,
+ "before": {
+  "text": "I computed, for the owner of each account with a loan, the share of loans that are \"bad\" — either finished but not paid (status B) or still running with the client in debt (status D) — broken down by the owner's gender (F = female, M = male). Comparing these percentages between the two groups shows whether loans to women are repaid worse than loans to men. Based on the underlying data, the bad-loan rates for men and women are close (roughly in the high single digits/low teens percent for each), so there isn't a large or clear difference — loans to women are not notably repaid worse than loans to men in this dataset.",
+  "sql": "WITH loan_client AS (\n  SELECT l.loan_id, l.status, c.gender\n  FROM loan l\n  JOIN account a ON l.account_id = a.account_id\n  JOIN disp d ON d.account_id = a.account_id AND d.type = 'OWNER'\n  JOIN client c ON c.client_id = d.client_id\n)\nSELECT gender,\n       COUNT(*) AS total_loans,\n       SUM(CASE WHEN status = 'B' THEN 1 ELSE 0 END) AS finished_not_paid,\n       SUM(CASE WHEN status = 'D' THEN 1 ELSE 0 END) AS running_in_debt,\n       CAST(SUM(CASE WHEN status IN ('B','D') THEN 1 ELSE 0 END) AS REAL) * 100 / COUNT(*) AS bad_loan_pct\nFROM loan_client\nGROUP BY gender\nORDER BY gender;"
+ },
+ "cost_usd": 0.0099,
+ "slot": "reviewed_failure"
+}
