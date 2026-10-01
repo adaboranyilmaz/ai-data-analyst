@@ -6401,13 +6401,13 @@ stages:
       size: 8870
     - path: src/tracking/registry.py
       hash: md5
-      md5: 27ec44f7152029fa887379fcf1f2e5b7
-      size: 12836
+      md5: e0c5c03a77839b241db2c8aabcf7f924
+      size: 13356
     outs:
     - path: results/registry/evaluations
       hash: md5
-      md5: 65175ee5cf7a6aba3508302af0db585a.dir
-      size: 9752
+      md5: 0332016ccff53fdb46256128190ff7c4.dir
+      size: 9740
       nfiles: 2
   eval_gate:
     cmd: uv run python scripts/89_eval_gate.py
@@ -6449,17 +6449,17 @@ stages:
       size: 27925
     - path: results/registry/evaluations
       hash: md5
-      md5: 65175ee5cf7a6aba3508302af0db585a.dir
-      size: 9752
+      md5: 0332016ccff53fdb46256128190ff7c4.dir
+      size: 9740
       nfiles: 2
     - path: results/registry/promotions.jsonl
       hash: md5
-      md5: a27a027ddcaaf36a145309ab2f723bb1
+      md5: 57b3a8a4bd5a86367e2ed1ca118e1047
       size: 2947
     - path: results/registry/state.json
       hash: md5
-      md5: 4c2d61c10d43fc2e9d3e2447d326edcb
-      size: 4074
+      md5: 6eef044f224a1f9f9e4314a080fe35bd
+      size: 4058
     - path: results/regression/bundle.json
       hash: md5
       md5: 6d617b23464efe1bb2094adcc95ddf46
@@ -6522,8 +6522,8 @@ stages:
       size: 10010
     - path: src/tracking/registry.py
       hash: md5
-      md5: 27ec44f7152029fa887379fcf1f2e5b7
-      size: 12836
+      md5: e0c5c03a77839b241db2c8aabcf7f924
+      size: 13356
     outs:
     - path: results/metrics/eval_gate.json
       hash: md5
@@ -6551,13 +6551,13 @@ stages:
       size: 27925
     - path: results/registry/evaluations
       hash: md5
-      md5: 65175ee5cf7a6aba3508302af0db585a.dir
-      size: 9752
+      md5: 0332016ccff53fdb46256128190ff7c4.dir
+      size: 9740
       nfiles: 2
     - path: results/registry/state.json
       hash: md5
-      md5: 4c2d61c10d43fc2e9d3e2447d326edcb
-      size: 4074
+      md5: 6eef044f224a1f9f9e4314a080fe35bd
+      size: 4058
     - path: results/runs/escalation
       hash: md5
       md5: 101edb4db0715157d1a4aa9740834613.dir
@@ -6596,10 +6596,10 @@ stages:
       size: 7660
     - path: src/tracking/registry.py
       hash: md5
-      md5: 27ec44f7152029fa887379fcf1f2e5b7
-      size: 12836
+      md5: e0c5c03a77839b241db2c8aabcf7f924
+      size: 13356
     outs:
     - path: results/metrics/drift_check.json
       hash: md5
-      md5: ac7ddc41bc3a247fc8f9c09dd9c90f92
-      size: 5977
+      md5: d90a92528712d6c7db239f871a087524
+      size: 5978

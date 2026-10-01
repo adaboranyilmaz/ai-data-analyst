@@ -1,6 +1,6 @@
 {
   "config_name": "d1-sonnet-5-opus-router",
-  "config_sha256": "3b35b9f1341fc4d830fc67d96c26f94d4fd2d18262f8610332b50eb35fd5655e",
+  "config_sha256": "3231af1a7a032caf04b36ae775cef6957ae2c037b585f06b7e0561c1dfbfa557",
   "note": "one run; the held-out questions; the system's answers come from the committed run files and its confidence is calibrated on the calibration split only; intervals are 95% bootstrap over questions; costs at the direct price from the recorded tokens",
   "split": "held_out",
   "routed_to_larger_model": 297,
@@ -40,17 +40,17 @@
       "undefined": 0
     },
     "ece": {
-      "estimate": 0.08687299841507792,
-      "low": 0.06445907978835562,
-      "high": 0.13230525868819598,
+      "estimate": 0.08687299841960266,
+      "low": 0.06445907979031544,
+      "high": 0.13230525869238152,
       "confidence": 0.95,
       "resamples": 10000,
       "undefined": 0
     },
     "brier": {
-      "estimate": 0.14288666434840208,
-      "low": 0.12150877403910065,
-      "high": 0.16515075547190283,
+      "estimate": 0.14288666434900757,
+      "low": 0.1215087740399249,
+      "high": 0.16515075547223643,
       "confidence": 0.95,
       "resamples": 10000,
       "undefined": 0
@@ -75,7 +75,7 @@
     "max_question_cost_usd": 0.1285838
   },
   "confidence": {
-    "decline_threshold": 0.8267368307780034,
+    "decline_threshold": 0.8267368308,
     "calibration_split": {
       "target_accuracy": 0.9,
       "min_answered": 15,
@@ -90,20 +90,20 @@
       }
     },
     "held_out": {
-      "threshold": 0.8267368307780034,
+      "threshold": 0.8267368308,
       "questions": 320,
-      "answered": 109,
+      "answered": 90,
       "coverage": {
-        "estimate": 0.340625,
-        "low": 0.2875,
-        "high": 0.39375,
+        "estimate": 0.28125,
+        "low": 0.23125,
+        "high": 0.33125,
         "confidence": 0.95,
         "resamples": 10000,
         "undefined": 0
       },
       "accuracy": {
-        "estimate": 0.981651376146789,
-        "low": 0.9523809523809523,
+        "estimate": 0.9888888888888889,
+        "low": 0.9629629629629629,
         "high": 1.0,
         "confidence": 0.95,
         "resamples": 10000,
@@ -112,7 +112,7 @@
       "reliability": [
         {
           "n": 5,
-          "mean_confidence": 0.171025681319952,
+          "mean_confidence": 0.17102568131529827,
           "accuracy": 0.4,
           "range": [
             0.1,
@@ -121,7 +121,7 @@
         },
         {
           "n": 10,
-          "mean_confidence": 0.24247455221270747,
+          "mean_confidence": 0.24247455220645006,
           "accuracy": 0.5,
           "range": [
             0.2,
@@ -130,7 +130,7 @@
         },
         {
           "n": 4,
-          "mean_confidence": 0.31708458827537866,
+          "mean_confidence": 0.31708458826778685,
           "accuracy": 0.5,
           "range": [
             0.3,
@@ -139,7 +139,7 @@
         },
         {
           "n": 26,
-          "mean_confidence": 0.4024554377133057,
+          "mean_confidence": 0.4024554377046358,
           "accuracy": 0.5769230769230769,
           "range": [
             0.4,
@@ -148,7 +148,7 @@
         },
         {
           "n": 10,
-          "mean_confidence": 0.5862953586678341,
+          "mean_confidence": 0.5862953586586082,
           "accuracy": 0.4,
           "range": [
             0.5,
@@ -157,7 +157,7 @@
         },
         {
           "n": 18,
-          "mean_confidence": 0.6444763491974715,
+          "mean_confidence": 0.6444763491886315,
           "accuracy": 0.5555555555555556,
           "range": [
             0.6,
@@ -166,7 +166,7 @@
         },
         {
           "n": 67,
-          "mean_confidence": 0.7513777233907383,
+          "mean_confidence": 0.7513777233835559,
           "accuracy": 0.7611940298507462,
           "range": [
             0.7,
@@ -175,7 +175,7 @@
         },
         {
           "n": 170,
-          "mean_confidence": 0.8369458706213048,
+          "mean_confidence": 0.8369458706163712,
           "accuracy": 0.9176470588235294,
           "range": [
             0.8,
@@ -184,7 +184,7 @@
         },
         {
           "n": 10,
-          "mean_confidence": 0.9029009244232309,
+          "mean_confidence": 0.902900924419457,
           "accuracy": 1.0,
           "range": [
             0.9,

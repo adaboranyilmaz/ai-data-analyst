@@ -45,6 +45,18 @@ def canonical(obj: Any) -> str:
     return json.dumps(obj, sort_keys=True, ensure_ascii=False, separators=(",", ":"))
 
 
+def rounded(obj: Any, digits: int = 10) -> Any:
+    """Floats rounded, for what is fitted here: an optimizer's last digits differ between platforms,
+    and a configuration must resolve to the same hash everywhere. Committed numbers stay exact."""
+    if isinstance(obj, float):
+        return round(obj, digits)
+    if isinstance(obj, dict):
+        return {k: rounded(v, digits) for k, v in obj.items()}
+    if isinstance(obj, list):
+        return [rounded(v, digits) for v in obj]
+    return obj
+
+
 def sha256_of(obj: Any) -> str:
     return hashlib.sha256(canonical(obj).encode("utf-8")).hexdigest()
 
@@ -86,7 +98,7 @@ def _opus_calibrator(root: Path, platt_source: str) -> dict[str, Any]:
         raise ValueError(f"{platt_source} must hold the whole calibration split")
     x = answered_confidence([r["confidence"] for r in records], [r["declined"] for r in records])
     fit = Platt.fit(x, [answered_correct(r) for r in records])
-    return {**fit.to_dict(), "fitted_on": "calibration split", "questions": len(records)}
+    return rounded({**fit.to_dict(), "fitted_on": "calibration split", "questions": len(records)})
 
 
 def resolve(name: str, root: Path = ROOT) -> dict[str, Any]:
@@ -139,9 +151,9 @@ def resolve(name: str, root: Path = ROOT) -> dict[str, Any]:
         }
         from src.eval import promotion
 
-        out["decline_threshold"] = promotion.decline_threshold(out, root, confidence["decline"])[
-            "threshold"
-        ]
+        out["decline_threshold"] = rounded(
+            promotion.decline_threshold(out, root, confidence["decline"])["threshold"]
+        )
     return out
 
 

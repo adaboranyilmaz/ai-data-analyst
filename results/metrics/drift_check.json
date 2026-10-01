@@ -127,8 +127,8 @@
           },
           "share_of_windows_above_warn": 0.006,
           "share_of_windows_above_alert": 0.0,
-          "withheld_share_psi_mean": 0.032,
-          "share_below_threshold": 0.6594,
+          "withheld_share_psi_mean": 0.0897,
+          "share_below_threshold": 0.7188,
           "reference_share_below_threshold": 0.5795
         },
         "held_out, simple questions only": {
@@ -141,8 +141,8 @@
           },
           "share_of_windows_above_warn": 0.99,
           "share_of_windows_above_alert": 0.268,
-          "withheld_share_psi_mean": 0.0577,
-          "share_below_threshold": 0.4639,
+          "withheld_share_psi_mean": 0.0052,
+          "share_below_threshold": 0.5876,
           "reference_share_below_threshold": 0.5795
         },
         "held_out, moderate questions only": {
@@ -155,8 +155,8 @@
           },
           "share_of_windows_above_warn": 0.11,
           "share_of_windows_above_alert": 0.0,
-          "withheld_share_psi_mean": 0.0757,
-          "share_below_threshold": 0.707,
+          "withheld_share_psi_mean": 0.128,
+          "share_below_threshold": 0.7452,
           "reference_share_below_threshold": 0.5795
         },
         "held_out, challenging questions only": {
@@ -169,8 +169,8 @@
           },
           "share_of_windows_above_warn": 1.0,
           "share_of_windows_above_alert": 0.636,
-          "withheld_share_psi_mean": 0.3358,
-          "share_below_threshold": 0.8333,
+          "withheld_share_psi_mean": 0.3839,
+          "share_below_threshold": 0.8485,
           "reference_share_below_threshold": 0.5795
         }
       }

@@ -72,7 +72,7 @@
      "source": "results/metrics/calibration.json",
      "target_accuracy": 0.9
     },
-    "decline_threshold": 0.8267368307780034,
+    "decline_threshold": 0.8267368308,
     "description": "The champion's design with Claude Opus 5.5 answering the questions Claude Sonnet 5 is not confident about.",
     "design": "d1",
     "evidence": false,
@@ -110,10 +110,10 @@
     "router": {
      "calibrator": {
       "fitted_on": "calibration split",
-      "intercept": -4.858739767875861,
+      "intercept": -4.8587397679,
       "method": "platt",
       "questions": 150,
-      "slope": 7.439158804319853
+      "slope": 7.4391588043
      },
      "model": "claude-opus-5-5",
      "request_settings": {
@@ -130,7 +130,7 @@
     },
     "samples": 1
    },
-   "config_sha256": "3b35b9f1341fc4d830fc67d96c26f94d4fd2d18262f8610332b50eb35fd5655e",
+   "config_sha256": "3231af1a7a032caf04b36ae775cef6957ae2c037b585f06b7e0561c1dfbfa557",
    "evaluation": "results/registry/evaluations/d1-sonnet-5-opus-router.json"
   }
  }
