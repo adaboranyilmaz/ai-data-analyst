@@ -29,7 +29,9 @@ from fastapi.responses import FileResponse, JSONResponse, Response, StreamingRes
 from pydantic import BaseModel, Field
 from starlette.concurrency import iterate_in_threadpool
 
+from src.serving import champion as champion_mod
 from src.serving import connections, replay
+from src.serving.drift import DriftMonitor
 from src.serving.live import LiveRunner
 from src.serving.meter import ROOT, Meter, config
 from src.serving.metrics import Metrics
@@ -48,6 +50,7 @@ class Settings:
     runner: LiveRunner | None = None
     store: RunStore | None = None
     meter: Meter | None = None
+    champion: champion_mod.Champion | None = None
 
     @classmethod
     def from_env(cls) -> Settings:
@@ -87,15 +90,20 @@ def normalize(question: str) -> str:
 
 def create_app(settings: Settings | None = None) -> FastAPI:
     s = settings or Settings.from_env()
-    cfg = s.cfg
-    meter = s.meter or Meter.load(cfg)
+    champion = s.champion or champion_mod.load()
+    cfg = champion.apply(s.cfg)  # the live section follows the registry's champion
+    # Recorded runs were described by the evaluated system's meter; a live question is described
+    # by the champion's own.
+    meter = s.meter or (Meter.load(cfg) if s.mode == "replay" else champion.meter(cfg))
     store = s.store or RunStore(
         ROOT / cfg["curated"]["out_dir"],
         ROOT / cfg["live"]["runs_dir"] if s.mode == "live" else None,
     )
     if s.mode == "live" and s.runner is None:
-        s.runner = LiveRunner.default(cfg, meter)
+        s.runner = LiveRunner.default(cfg, meter, champion)
     metrics = Metrics()
+    metrics.agent(champion.name, champion.config_sha256, champion.router is not None)
+    drift = DriftMonitor.from_meter(meter, **cfg["drift"])
     busy = asyncio.Semaphore(cfg["live"]["max_concurrent"])
     state: dict[str, Any] = {"connection": None}
 
@@ -158,6 +166,17 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             status_code=200 if not problems else 503,
         )
 
+    @app.get("/api/drift")
+    def drift_status() -> dict[str, Any]:
+        snap = drift.snapshot()
+        return {
+            **snap,
+            "psi_reading": drift.reading(snap["psi"]),
+            "withheld_share_reading": drift.reading(snap["below_psi"]),
+            "warn": drift.warn,
+            "alert": drift.alert,
+        }
+
     @app.get("/metrics")
     def prometheus() -> Response:
         return Response(metrics.render(), media_type=metrics.content_type)
@@ -167,6 +186,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         return {
             "mode": s.mode,
             "local_mode": s.local_mode,
+            "agent": champion.info(),
             "database": cfg["live"]["database"],
             "meter": meter.summary(),
             "connection": state["connection"].spec.public() if state["connection"] else None,
@@ -222,12 +242,21 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             live_stream(run_id, question), media_type="text/event-stream", headers=_SSE_HEADERS
         )
 
+    def observe(event: dict[str, Any]) -> None:
+        """What an event says about the service: step latency, the final query's outcome, the
+        calibrated confidence and its drift from the evaluation's."""
+        metrics.observe(event)
+        if event.get("type") == "confidence" and not event.get("not_calibrated"):
+            drift.observe(event.get("calibrated"))
+            metrics.drift(drift.snapshot())
+
     async def replayed(ev: dict[str, Any], mode: str):
         started = time.perf_counter()
         status = ev["status"]
         for event, delay in replay.events(ev, cfg["replay"] | _speed()):
             if delay:
                 await asyncio.sleep(delay)
+            observe(event)
             yield sse(event)
         metrics.ask(mode, status)
         metrics.run_seconds(mode, time.perf_counter() - started)
@@ -251,6 +280,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 if event["type"] == "done":
                     outcome = event["status"]
                     metrics.add_spend(event.get("cost_usd") or 0.0)
+                observe(event)
                 yield sse(event)
             metrics.ask("live", outcome)
             metrics.run_seconds("live", time.perf_counter() - started)

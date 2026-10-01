@@ -1,0 +1,13 @@
+# An agent configuration: what the service runs for a question. The registry resolves it to the
+# prompts' hashes, the model's settings and the calibration it reads from committed results
+# (src/tracking/registry.py). Which configuration is the champion is in results/registry/state.json.
+name: d1-sonnet-5
+description: Single-shot SQL from the full schema on Claude Sonnet 5, its stated confidence
+  calibrated by Platt scaling, a decline threshold and the statistical guardrail.
+design: d1
+model: claude-sonnet-5
+# The service asks without the benchmark's hint (a company has a data dictionary, not
+# per-question hints); the held-out numbers behind the confidence meter were measured with it.
+evidence: false
+router: null
+guardrail: true

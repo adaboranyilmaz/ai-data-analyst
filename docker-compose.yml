@@ -3,12 +3,14 @@
 #   docker compose up -d --wait        # start both, and wait until they are healthy
 #   docker compose up -d --wait postgres  # the database alone (tests, CI)
 #   ANALYST_SERVING_MODE=live docker compose up -d --wait   # live questions: key in .env
+#   docker compose --profile tracing up -d --wait   # also: MLflow (5000) and Langfuse (3000), see below
+#   docker compose --profile monitoring up -d --wait   # also: Prometheus (9090), Grafana (3001)
 #   docker compose down                # stop (add -v to delete the data volume)
 # Passwords come from .env; empty values fall back to the local-only defaults below. The port
 # is bound to 127.0.0.1 only, and the data is a public benchmark.
 services:
   postgres:
-    image: postgres:16.15
+    image: postgres:16.15@sha256:1a6ab3f5345eb6dbe04a1349529caabdb0ab09293a09590fad07b2246bfa4b54
     environment:
       POSTGRES_USER: analyst_admin
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-analyst-local-admin}
@@ -35,6 +37,7 @@ services:
     image: analyst-api:dev
     environment:
       ANALYST_SERVING_MODE: ${ANALYST_SERVING_MODE:-replay}
+      ANALYST_REPLAY_SPEED: ${ANALYST_REPLAY_SPEED:-} # empty: replay at the recorded speed
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
       ANALYST_DB_HOST: postgres
       ANALYST_DB_PORT: "5432"
@@ -49,6 +52,202 @@ services:
       postgres:
         condition: service_healthy
 
+  # ---- Tracing (profile `tracing`, off by default): the same spans in two tools. -------------
+  # The agent's OpenTelemetry spans go over OTLP/HTTP to an MLflow tracking server and to a
+  # self-hosted Langfuse (src/tracking/otlp.py). Local-only defaults throughout, ports bound to
+  # 127.0.0.1, public benchmark data. MLflow's image is the official one at the version the
+  # project last used; Langfuse needs its own PostgreSQL, ClickHouse, Redis and object storage.
+  mlflow:
+    profiles: ["tracing"]
+    image: ghcr.io/mlflow/mlflow:v3.16.0@sha256:470607da2a70fa38724d3d7db0a54a78b50fac708f7291bfebe1935fa95259ae
+    command: >
+      mlflow server --host 0.0.0.0 --port 5000 --workers 1
+      --backend-store-uri sqlite:////mlflow/mlflow.db
+      --default-artifact-root /mlflow/artifacts
+      --allowed-hosts localhost:5000,127.0.0.1:5000,mlflow:5000
+    ports:
+      - "127.0.0.1:${ANALYST_MLFLOW_PORT:-5000}:5000"
+    volumes:
+      - mlflow_data:/mlflow
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:5000/health')"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
+  langfuse-db:
+    profiles: ["tracing"]
+    image: postgres:16.15@sha256:1a6ab3f5345eb6dbe04a1349529caabdb0ab09293a09590fad07b2246bfa4b54
+    environment:
+      POSTGRES_USER: langfuse
+      POSTGRES_PASSWORD: langfuse-local
+      POSTGRES_DB: langfuse
+    volumes:
+      - langfuse_db:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U langfuse -d langfuse"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  langfuse-clickhouse:
+    profiles: ["tracing"]
+    image: clickhouse/clickhouse-server:25.8@sha256:0152dd511befe6a2c2ef53e930726179669b08116da78500b37c51c96ff5ee77
+    environment:
+      CLICKHOUSE_DB: default
+      CLICKHOUSE_USER: clickhouse
+      CLICKHOUSE_PASSWORD: clickhouse-local
+    volumes:
+      - langfuse_clickhouse:/var/lib/clickhouse
+    ulimits:
+      nofile: { soft: 262144, hard: 262144 }
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://localhost:8123/ping || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  langfuse-redis:
+    profiles: ["tracing"]
+    image: redis:7.4@sha256:c6eabf748fc7a61dbb5a705c78bcf3d6377b1127a97d0ce965c11c44ba46896f
+    command: ["redis-server", "--requirepass", "redis-local", "--maxmemory-policy", "noeviction"]
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a redis-local ping | grep -q PONG"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  langfuse-minio:
+    profiles: ["tracing"]
+    image: cgr.dev/chainguard/minio@sha256:4692462f35d97d7e82c30371d82f057703c5d9489bcae726010594c812f2d285
+    entrypoint: sh
+    command: -c 'mkdir -p /data/langfuse && minio server --address ":9000" --console-address ":9001" /data'
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: minio-local-secret
+    volumes:
+      - langfuse_minio:/data
+    healthcheck:
+      test: ["CMD-SHELL", "mc ready local || exit 1"]
+      interval: 3s
+      timeout: 5s
+      retries: 20
+
+  # The two Langfuse services share their settings. LANGFUSE_INIT_* creates the organization,
+  # project, API keys and one user on first start, so no sign-up is needed: log in at
+  # http://127.0.0.1:3000 with analyst@example.com and the password below.
+  langfuse-worker: &langfuse
+    profiles: ["tracing"]
+    image: langfuse/langfuse-worker:3@sha256:8a28c946bb5401eef488153fa294db5a79bd99dd5c90db8e4d39559374c9ebd3
+    depends_on: &langfuse_deps
+      langfuse-db: { condition: service_healthy }
+      langfuse-clickhouse: { condition: service_healthy }
+      langfuse-redis: { condition: service_healthy }
+      langfuse-minio: { condition: service_healthy }
+    environment: &langfuse_env
+      DATABASE_URL: postgresql://langfuse:langfuse-local@langfuse-db:5432/langfuse
+      SALT: local-only-salt
+      ENCRYPTION_KEY: "0000000000000000000000000000000000000000000000000000000000000000"
+      TELEMETRY_ENABLED: "false"
+      CLICKHOUSE_MIGRATION_URL: clickhouse://langfuse-clickhouse:9000
+      CLICKHOUSE_URL: http://langfuse-clickhouse:8123
+      CLICKHOUSE_USER: clickhouse
+      CLICKHOUSE_PASSWORD: clickhouse-local
+      CLICKHOUSE_CLUSTER_ENABLED: "false"
+      LANGFUSE_S3_EVENT_UPLOAD_BUCKET: langfuse
+      LANGFUSE_S3_EVENT_UPLOAD_REGION: auto
+      LANGFUSE_S3_EVENT_UPLOAD_ACCESS_KEY_ID: minio
+      LANGFUSE_S3_EVENT_UPLOAD_SECRET_ACCESS_KEY: minio-local-secret
+      LANGFUSE_S3_EVENT_UPLOAD_ENDPOINT: http://langfuse-minio:9000
+      LANGFUSE_S3_EVENT_UPLOAD_FORCE_PATH_STYLE: "true"
+      LANGFUSE_S3_EVENT_UPLOAD_PREFIX: events/
+      REDIS_HOST: langfuse-redis
+      REDIS_PORT: "6379"
+      REDIS_AUTH: redis-local
+      NEXTAUTH_URL: http://127.0.0.1:${ANALYST_LANGFUSE_PORT:-3000}
+      NEXTAUTH_SECRET: local-only-nextauth-secret
+      LANGFUSE_INIT_ORG_ID: analyst
+      LANGFUSE_INIT_ORG_NAME: analyst
+      LANGFUSE_INIT_PROJECT_ID: analyst
+      LANGFUSE_INIT_PROJECT_NAME: ai-data-analyst
+      LANGFUSE_INIT_PROJECT_PUBLIC_KEY: ${LANGFUSE_PUBLIC_KEY:-pk-lf-analyst-local}
+      LANGFUSE_INIT_PROJECT_SECRET_KEY: ${LANGFUSE_SECRET_KEY:-sk-lf-analyst-local}
+      LANGFUSE_INIT_USER_EMAIL: analyst@example.com
+      LANGFUSE_INIT_USER_NAME: analyst
+      LANGFUSE_INIT_USER_PASSWORD: analyst-local
+
+  langfuse-web:
+    profiles: ["tracing"]
+    image: langfuse/langfuse:3@sha256:a343f64e035eb01aeea358703a0428945d909d01e19452509a5a830862dda878
+    depends_on: *langfuse_deps
+    environment:
+      <<: *langfuse_env
+      HOSTNAME: 0.0.0.0 # the web server otherwise listens on the container's own name only
+    ports:
+      - "127.0.0.1:${ANALYST_LANGFUSE_PORT:-3000}:3000"
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://127.0.0.1:3000/api/public/health || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 40
+      start_period: 60s
+
+  # ---- Monitoring (profile `monitoring`, off by default): Prometheus and Grafana as code. ------
+  # Prometheus scrapes the API's /metrics and evaluates monitoring/alerts.yml; Grafana loads its
+  # datasource and the dashboard from monitoring/grafana/ (read-only, nothing to click). Local
+  # only: ports bound to 127.0.0.1, Grafana viewable without a login.
+  prometheus:
+    profiles: ["monitoring"]
+    image: prom/prometheus:latest@sha256:efd719c99d83b060d9daefdcf00360461adf279f45ef5391f8d111892118753e
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.retention.time=7d
+    ports:
+      - "127.0.0.1:${ANALYST_PROMETHEUS_PORT:-9090}:9090"
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - ./monitoring/alerts.yml:/etc/prometheus/alerts.yml:ro
+      - prometheus_data:/prometheus
+    depends_on:
+      api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://127.0.0.1:9090/-/healthy"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  grafana:
+    profiles: ["monitoring"]
+    image: grafana/grafana:latest@sha256:b28bae15e219c998fb0e0424ed724930cc61b1f61fb404d47c862f9a23f9e572
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Viewer
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:-analyst-local}
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_ANALYTICS_CHECK_FOR_UPDATES: "false"
+      GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH: /var/lib/grafana/dashboards/analyst.json
+    ports:
+      - "127.0.0.1:${ANALYST_GRAFANA_PORT:-3001}:3000"
+    volumes:
+      - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./monitoring/grafana/dashboards:/var/lib/grafana/dashboards:ro
+      - grafana_data:/var/lib/grafana
+    depends_on:
+      prometheus:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider http://127.0.0.1:3000/api/health || exit 1"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
+
 volumes:
   pgdata:
   serving_data:
+  mlflow_data:
+  langfuse_db:
+  langfuse_clickhouse:
+  langfuse_minio:
+  prometheus_data:
+  grafana_data:

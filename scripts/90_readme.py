@@ -476,6 +476,86 @@ def banking_causal() -> str:
     )
 
 
+@table
+def promotion_rule() -> str:
+    """The promotion rule's three conditions, as applied to the router."""
+    d = load("registry/promotions.jsonl")[-1]["decision"]["checks"]
+    ex, au, cost = (
+        d["execution_accuracy_not_lower"],
+        d["aurc_not_worse"],
+        d["worst_case_question_cost"],
+    )
+    rows = [
+        [
+            "Execution accuracy, router minus baseline",
+            f"lower bound at least {fmt(ex['required_at_least'], 'f0')}",
+            f"{fmt(ex['difference'], 'pp1')}, lower bound {fmt(ex['lower_bound'], 'pp1')}",
+            "met" if ex["passed"] else "not met",
+        ],
+        [
+            "Area under the risk-coverage curve (lower is better), router minus baseline",
+            f"upper bound at most {fmt(au['required_at_most'], 'f0')}",
+            f"{fmt(au['difference'], 'sf3')}, upper bound {fmt(au['upper_bound'], 'sf3')}",
+            "met" if au["passed"] else "not met",
+        ],
+        [
+            "The most one question can cost the router",
+            f"at most {fmt(cost['required_at_most'], 'usd2')}",
+            fmt(cost["max_question_cost_usd"], "usd3"),
+            "met" if cost["passed"] else "not met",
+        ],
+    ]
+    return md(
+        ["Condition", "Required", "Observed", ""],
+        rows,
+        "`results/registry/promotions.jsonl`, `configs/promotion.yaml` (one run, "
+        "95% paired bootstrap intervals over the held-out questions)",
+    )
+
+
+@table
+def drift_scenarios() -> str:
+    """How the drift monitor reads sets it should and should not alarm on."""
+    rows = []
+    for label, r in load("metrics/drift_check.json")["systems"]["d1-sonnet-5"]["scenarios"].items():
+        rows.append(
+            [
+                label.replace("held_out", "held-out"),
+                fmt(r["psi"]["mean"], "f2"),
+                fmt(r["share_of_windows_above_warn"], "pct0"),
+                fmt(r["share_of_windows_above_alert"], "pct0"),
+            ]
+        )
+    return md(
+        ["Windows drawn from", "Index, mean", "Over the warning level", "Over the alert level"],
+        rows,
+        "`results/metrics/drift_check.json` (the baseline's own meter; one run of recorded "
+        "answers, a window drawn with replacement; the synthetic rows are labeled as such)",
+    )
+
+
+@table
+def load_test() -> str:
+    """The replay service under load, by route and concurrency."""
+    rows = [
+        [
+            r["route"],
+            str(r["concurrency"]),
+            fmt(r["p50_ms"], "f1"),
+            fmt(r["p95_ms"], "f1"),
+            fmt(r["p99_ms"], "f1"),
+            fmt(r["requests_per_second"], "f0"),
+            str(r["errors"]),
+        ]
+        for r in load("metrics/load_test.json")["results"]
+    ]
+    return md(
+        ["Route", "Clients", "p50 (ms)", "p95 (ms)", "p99 (ms)", "Requests per second", "Errors"],
+        rows,
+        "`results/metrics/load_test.json` (one run on one laptop, the service in a container)",
+    )
+
+
 SANDBOX_CATEGORIES = {
     "network": "Reach the network or the host",
     "file_system": "Write, execute or read files",

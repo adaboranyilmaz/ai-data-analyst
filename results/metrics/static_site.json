@@ -1,0 +1,12 @@
+{
+  "note": "the recorded runs as plain files for the static demo; parity with the service is tested (tests/test_static_site.py)",
+  "replay": {
+    "default_ms": 700,
+    "cap_ms": 4000,
+    "speed": 1.0
+  },
+  "runs": 20,
+  "files": 41,
+  "bytes": 180401,
+  "sha256": "567ceb16115c1fd2787dbf284736839ec85640d247f79a21e2b8e47f43929068"
+}

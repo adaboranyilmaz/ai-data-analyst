@@ -1,0 +1,174 @@
+{
+  "note": "counted with the token-counting endpoint (free), priced at the direct list price; central: the mean evaluated output, the first call on each schema writing the cache and the rest reading it; upper: every call writes the cache (five minutes) and produces more than any evaluated call did; ceiling: every call writes the cache for an hour and produces max_tokens, which no call has come near",
+  "calls": 23,
+  "prompt_tokens": {
+    "mean": 8975.5,
+    "max": 16012
+  },
+  "central_usd": 0.4128,
+  "upper_usd": 0.8651,
+  "ceiling_usd": 1.8069,
+  "per_call": [
+    {
+      "id": "bench-782/claude-sonnet-5",
+      "prompt_tokens": 5271,
+      "central_usd": 0.0183,
+      "upper_usd": 0.02468,
+      "ceiling_usd": 0.04156
+    },
+    {
+      "id": "bench-782/claude-opus-5-5",
+      "prompt_tokens": 5078,
+      "central_usd": 0.03484,
+      "upper_usd": 0.04839,
+      "ceiling_usd": 0.20446
+    },
+    {
+      "id": "bench-573/claude-sonnet-5",
+      "prompt_tokens": 6825,
+      "central_usd": 0.02219,
+      "upper_usd": 0.02856,
+      "ceiling_usd": 0.04778
+    },
+    {
+      "id": "bench-573/claude-opus-5-5",
+      "prompt_tokens": 6632,
+      "central_usd": 0.04261,
+      "upper_usd": 0.05616,
+      "ceiling_usd": 0.2169
+    },
+    {
+      "id": "bench-859/claude-sonnet-5",
+      "prompt_tokens": 8484,
+      "central_usd": 0.02634,
+      "upper_usd": 0.03271,
+      "ceiling_usd": 0.05442
+    },
+    {
+      "id": "bench-859/claude-opus-5-5",
+      "prompt_tokens": 8291,
+      "central_usd": 0.0509,
+      "upper_usd": 0.06445,
+      "ceiling_usd": 0.23017
+    },
+    {
+      "id": "bench-533/claude-sonnet-5",
+      "prompt_tokens": 6836,
+      "central_usd": 0.00684,
+      "upper_usd": 0.02859,
+      "ceiling_usd": 0.04782
+    },
+    {
+      "id": "bench-829/claude-sonnet-5",
+      "prompt_tokens": 5326,
+      "central_usd": 0.00654,
+      "upper_usd": 0.02482,
+      "ceiling_usd": 0.04178
+    },
+    {
+      "id": "bench-1080/claude-sonnet-5",
+      "prompt_tokens": 16012,
+      "central_usd": 0.04516,
+      "upper_usd": 0.05153,
+      "ceiling_usd": 0.08453
+    },
+    {
+      "id": "bench-1254/claude-sonnet-5",
+      "prompt_tokens": 7154,
+      "central_usd": 0.02301,
+      "upper_usd": 0.02939,
+      "ceiling_usd": 0.0491
+    },
+    {
+      "id": "bench-1378/claude-sonnet-5",
+      "prompt_tokens": 5776,
+      "central_usd": 0.01956,
+      "upper_usd": 0.02594,
+      "ceiling_usd": 0.04358
+    },
+    {
+      "id": "bench-726/claude-sonnet-5",
+      "prompt_tokens": 5270,
+      "central_usd": 0.00652,
+      "upper_usd": 0.02467,
+      "ceiling_usd": 0.04156
+    },
+    {
+      "id": "bench-751/claude-sonnet-5",
+      "prompt_tokens": 5231,
+      "central_usd": 0.00652,
+      "upper_usd": 0.02458,
+      "ceiling_usd": 0.0414
+    },
+    {
+      "id": "bank-own-a09/claude-sonnet-5",
+      "prompt_tokens": 11429,
+      "central_usd": 0.0337,
+      "upper_usd": 0.04007,
+      "ceiling_usd": 0.0662
+    },
+    {
+      "id": "bank-own-b06/claude-sonnet-5",
+      "prompt_tokens": 11427,
+      "central_usd": 0.00776,
+      "upper_usd": 0.04007,
+      "ceiling_usd": 0.06619
+    },
+    {
+      "id": "bank-own-b12/claude-sonnet-5",
+      "prompt_tokens": 11426,
+      "central_usd": 0.00776,
+      "upper_usd": 0.04007,
+      "ceiling_usd": 0.06618
+    },
+    {
+      "id": "bank-own-c09/claude-sonnet-5",
+      "prompt_tokens": 11409,
+      "central_usd": 0.00775,
+      "upper_usd": 0.04002,
+      "ceiling_usd": 0.06612
+    },
+    {
+      "id": "bank-own-d03/claude-sonnet-5",
+      "prompt_tokens": 11419,
+      "central_usd": 0.00775,
+      "upper_usd": 0.04005,
+      "ceiling_usd": 0.06616
+    },
+    {
+      "id": "bank-own-e06/claude-sonnet-5",
+      "prompt_tokens": 11425,
+      "central_usd": 0.00775,
+      "upper_usd": 0.04006,
+      "ceiling_usd": 0.06618
+    },
+    {
+      "id": "bank-own-a01/claude-sonnet-5",
+      "prompt_tokens": 11424,
+      "central_usd": 0.00775,
+      "upper_usd": 0.04006,
+      "ceiling_usd": 0.06618
+    },
+    {
+      "id": "bank-own-a02/claude-sonnet-5",
+      "prompt_tokens": 11439,
+      "central_usd": 0.00776,
+      "upper_usd": 0.0401,
+      "ceiling_usd": 0.06624
+    },
+    {
+      "id": "bank-own-b01/claude-sonnet-5",
+      "prompt_tokens": 11423,
+      "central_usd": 0.00775,
+      "upper_usd": 0.04006,
+      "ceiling_usd": 0.06617
+    },
+    {
+      "id": "bank-own-b02/claude-sonnet-5",
+      "prompt_tokens": 11429,
+      "central_usd": 0.00776,
+      "upper_usd": 0.04007,
+      "ceiling_usd": 0.0662
+    }
+  ]
+}

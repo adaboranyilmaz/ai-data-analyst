@@ -80,7 +80,11 @@ class Meter:
             "accuracy": held["accuracy"],
             "coverage": held["coverage"],
         }
-        self.bands = [
+        self.larger: dict[str, float] | None = None  # a router's larger model's Platt calibrator
+        self.bands = self._bands(calibration["held_out"]["stated_platt"]["reliability"])
+
+    def _bands(self, reliability: list[dict[str, Any]]) -> list[Band]:
+        return [
             Band(
                 low=b["range"][0],
                 high=b["range"][1],
@@ -88,7 +92,7 @@ class Meter:
                 correct=round(b["accuracy"] * b["n"]),
                 interval=tuple(wilson(round(b["accuracy"] * b["n"]), b["n"]) or ()) or None,
             )
-            for b in calibration["held_out"]["stated_platt"]["reliability"]
+            for b in reliability
         ]
 
     @classmethod
@@ -97,9 +101,48 @@ class Meter:
         path = ROOT / cfg["meter"]["calibration"]
         return cls(json.loads(path.read_text(encoding="utf-8")), cfg)
 
-    def calibrate(self, stated: float) -> float:
-        z = self.slope * float(stated) + self.intercept
-        return 1.0 / (1.0 + math.exp(-z))
+    @classmethod
+    def from_registry(
+        cls, resolved: dict[str, Any], evaluation: dict[str, Any], cfg: dict[str, Any] | None = None
+    ) -> Meter:
+        """The meter of a registered agent configuration: its calibrators and decline threshold
+        (fitted and chosen on the calibration split) and the held-out record of its answers, from
+        its evaluation file. For the configuration without a router this is exactly the meter
+        `load` builds from the calibration results."""
+        conf = evaluation["confidence"]
+        held = conf["held_out"]
+        calibration = {
+            "calibration_split": {
+                "calibrators": {"platt": resolved["calibration"]["calibrator"]},
+                "questions": resolved["calibration"]["fitted_on_questions"],
+            },
+            "decline": {
+                "target_accuracy": resolved["calibration"]["target_accuracy"],
+                "held_out": {
+                    "threshold": resolved["decline_threshold"],
+                    "questions": held["questions"],
+                    "answered": held["answered"],
+                    "accuracy": held["accuracy"],
+                    "coverage": held["coverage"],
+                },
+            },
+            "held_out": {"stated_platt": {"reliability": held["reliability"]}},
+        }
+        meter = cls(calibration, cfg)
+        if resolved["router"]:
+            meter.larger = resolved["router"]["calibrator"]
+        return meter
+
+    def calibrate(self, stated: float, larger: bool = False) -> float:
+        """A stated confidence made calibrated: by the primary model's Platt curve, or (`larger`)
+        by the router's larger model's."""
+        if larger:
+            if self.larger is None:
+                raise ValueError("this meter has no larger model")
+            slope, intercept = self.larger["slope"], self.larger["intercept"]
+        else:
+            slope, intercept = self.slope, self.intercept
+        return 1.0 / (1.0 + math.exp(-(slope * float(stated) + intercept)))
 
     def band(self, calibrated: float) -> Band | None:
         """The held-out band a calibrated confidence falls in (a band's upper end is open)."""
@@ -109,8 +152,11 @@ class Meter:
         # above the highest band the held-out answers reach: no held-out record at all
         return None
 
-    def describe(self, stated: float | None, declined: bool) -> dict[str, Any]:
-        """The confidence block of an evidence record."""
+    def describe(
+        self, stated: float | None, declined: bool, larger: bool = False
+    ) -> dict[str, Any]:
+        """The confidence block of an evidence record. `larger`: the answer is a router's larger
+        model's, so its confidence is calibrated by that model's own curve."""
         if declined or stated is None:
             return {
                 "stated": stated,
@@ -119,7 +165,7 @@ class Meter:
                 "threshold": self.threshold,
                 "withheld": False,
             }
-        cal = self.calibrate(stated)
+        cal = self.calibrate(stated, larger)
         band = self.band(cal)
         return {
             "stated": stated,

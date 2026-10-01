@@ -35,6 +35,9 @@ The full technical report is in [TECHNICAL_REPORT.md](TECHNICAL_REPORT.md). A re
 - **The statistical guardrail keeps the answers true to the test, but not the test true to the question.** On copies of the bank's data with effects planted in them, answers that saw the test claimed an effect where none was planted on {{l2_none_guarded}} of the copies, against {{l2_none_numbers}} for answers written from the numbers alone, and never contradicted the test. But the analyst chooses what to compare within, and where a planted third factor produced the difference, it never chose that factor: its test reported the false effect on {{pl_ana_confounded}} of those copies, and the answers repeated it.
 - **On the banking set's comparative and causal questions**, the analysis ran to the end on {{gb_ran}} of {{gr_f_questions}}, each answer with an interval and the caveat that an association is not a cause; read against what each question's check asks for, {{gb_reviewed}} said all of it. Without the guardrail, the analyst had answered them without seeing any data, and none gave an interval.
 
+- **The router became the served analyst through a rule written beforehand.** The rule asks that a new configuration be no less accurate, rank its answers no worse and fit the service's per-question reserve, each with an interval. On the {{promo_questions}} held-out questions the router answered {{promo_challenger_ex}} correctly against {{promo_champion_ex}} for the single call it replaced ({{promo_ex_diff}}, {{promo_ex_diff_ci}}), and ranked its answers better (area under the risk-coverage curve {{promo_aurc_diff}}, {{promo_aurc_diff_ci}}). Its confidence is less well calibrated ({{promo_challenger_ece}} against {{promo_champion_ece}}) and a question costs {{promo_challenger_cost}} against {{promo_champion_cost}}. The rule was not blind to accuracy, which an earlier phase had reported.
+- **A change to the analyst is checked before it ships, and the running service watches its own confidence.** A gate replays {{gate_entries}} recorded model requests from the repository alone and finds {{gate_unchanged}} unchanged. A canary that sent {{canary_calls}} fixed questions to the model again, for {{canary_spent}}, got a valid answer to {{canary_valid}} of them and the same query for {{canary_sql_same}}. A drift monitor over the last {{drift_window}} answers raised no alert on {{drift_ref_alert}} of windows drawn from the held-out questions themselves, and alerted on the banking questions (index {{drift_bank_psi}}) and on traffic shifted on purpose.
+
 ![Risk-coverage curves on the held-out questions](results/plots/risk_coverage_held_out.png)
 
 *How often the analyst is wrong among the answers it keeps, keeping its most confident answers first (lower is better). Its own calibrated confidence (blue) and a second model's review (orange) rank the answers about equally well; the two combined (green, exploratory) do a little better. The dotted line is a perfect ranking. One run, {{held_questions}} held-out questions.*
@@ -178,6 +181,26 @@ Of the guardrail's {{gr_predictions}} predictions, fixed before the first paid c
 
 <sub>Source: `results/metrics/guardrail.json`, `results/metrics/planted_effects.json`, `results/reviews/guardrail_review.yaml`, `results/metrics/sandbox_security.json` (one run each)</sub>
 
+## Operating It
+
+The analyst is a service, so the questions are the ones any service raises: what did it do, which version is this, did a change make it worse, and is it drifting.
+
+- **Traces in two tools.** Every run writes one span per model call and tool call. They go over OpenTelemetry to MLflow and, by a second exporter, to a self-hosted Langfuse, so the same run can be read in both. Langfuse shows tokens and cost for each model call, which MLflow's trace view does not; MLflow keeps the traces beside the experiment runs. {{mlflow_runs_logged}} evaluated runs are logged to MLflow as a view rebuilt from the committed results, never the other way round.
+- **A registry.** An agent configuration is the prompt files, the model's request settings, the calibrators, the decline threshold and the router, hashed together. The committed registry names the champion; MLflow's model registry mirrors it. The service loads the champion at start.
+- **A rule for promotion**, in place before the challenger's ranking was computed (see the findings above), and a log of every decision.
+- **A gate in CI.** It rebuilds the model requests from the repository and compares them and the parsed answers with the recorded ones, so a prompt or schema change that alters what the model would be sent fails the build. It needs no database, no benchmark and no key.
+- **A canary.** A manual workflow with a spend cap sends {{canary_calls}} fixed requests to the model with no cache and compares with the recorded answers. Model outputs are samples, so a flag asks for a look and is not a verdict. The first run cost {{canary_spent}} against a cap of {{canary_cap}}.
+- **Drift and alerts.** The service measures how the calibrated confidence of its last {{drift_window}} answers differs from the held-out record its meter rests on (a population stability index; warning at {{drift_warn}}, alert at {{drift_alert}}), and the share of answers it holds back. Prometheus evaluates the alert rules, tested with its own tooling, and Grafana shows a dashboard that is code. Sent {{alert_answers}} answers of one kind, the index read {{alert_psi}} and the alert fired, then cleared after a restart.
+- **A static demo.** The same page reads the {{static_runs}} recorded runs from {{static_files}} plain files, so it can be hosted on GitHub Pages with no server behind it.
+
+Replayed traffic is not live traffic, and the drift numbers are from recorded answers: they show that the monitor does not cry wolf on its own reference and does sound on a real shift, not how often real traffic would shift. The technical report has the numbers and what they do not show.
+
+![The same recorded run in MLflow](results/plots/trace_mlflow.png)
+
+![The same recorded run in Langfuse](results/plots/trace_langfuse.png)
+
+*One recorded run of the self-correcting design, sent to both tools from the stored spans. The recorded batch calls carry no timing, so the model calls show no duration here.*
+
 ## Try It
 
 - **Public demo:** TBD. It will replay recorded runs only: no key and no database on the host.
@@ -248,7 +271,9 @@ uv run pytest
 | jsonschema, Vega-Lite schema | checking the analyst's chart designs |
 | NumPy | bootstrap intervals |
 | SciPy, statsmodels, pandas, in Docker | the guardrail's statistics, in a locked-down container |
-| MLflow, DVC | experiment tracking and data versioning |
+| MLflow, DVC | experiment tracking, a model registry view and data versioning |
+| OpenTelemetry (OTLP/HTTP exporter) | the traces sent to MLflow and Langfuse |
+| Langfuse, Prometheus, Grafana, in Docker | a second trace viewer, metrics, alerts and a dashboard |
 | LangGraph | the framework comparison only |
 | Matplotlib | the figures |
 | FastAPI, uvicorn | the service that streams a run's steps |

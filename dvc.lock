@@ -5927,8 +5927,8 @@ stages:
     deps:
     - path: results/metrics/api_spend.json
       hash: md5
-      md5: 538ecde1affd5ebfc425c1f3afe74143
-      size: 1893
+      md5: 4577a3676354c97c7547f7b83acfc1e0
+      size: 2122
     - path: results/reviews/guardrail_review.yaml
       hash: md5
       md5: f95ba590384d205becf395ca630f256e
@@ -5986,6 +5986,7 @@ stages:
           phase6: 0.0
           phase7: 6.5
           phase8: 0.5
+          phase9: 1.5
       configs/guardrail.yaml:
         phase: phase7
         planted.copies:
@@ -6112,16 +6113,16 @@ stages:
       size: 4391
     - path: src/serving/evidence.py
       hash: md5
-      md5: 438df4475fc92516c91c061a29be623b
-      size: 11107
+      md5: d8b79166e1ec20eba69843aeeed026ec
+      size: 11227
     - path: src/serving/explain.py
       hash: md5
       md5: 60d41996e15ad70d6f8e91f8d2254364
       size: 4755
     - path: src/serving/meter.py
       hash: md5
-      md5: 84d234585c2b0493566f9595aa28092c
-      size: 5396
+      md5: d414c55ae95bcd16eaa75a9ca39d3a34
+      size: 7660
     params:
       configs/serving.yaml:
         curated:
@@ -6192,9 +6193,9 @@ stages:
       size: 3701
     - path: src/serving
       hash: md5
-      md5: aa273d8808084947a60381ee9c34d0d6.dir
-      size: 77063
-      nfiles: 14
+      md5: 6b3061ebfc2c85f2d97179b4b5151b43.dir
+      size: 99818
+      nfiles: 18
     params:
       configs/serving.yaml:
         curated:
@@ -6282,3 +6283,323 @@ stages:
       hash: md5
       md5: e92ba1cdc1a948bef53bcf141b804503
       size: 35317
+  mlflow_runs:
+    cmd: uv run python scripts/84_mlflow_runs.py
+    deps:
+    - path: configs/agent.yaml
+      hash: md5
+      md5: 6205b65b0b4ece69bfe280261148094c
+      size: 5692
+    - path: results/metrics/ablation.json
+      hash: md5
+      md5: 1409cd2d3e59038899cc5e1dc6684028
+      size: 211300
+    - path: results/metrics/benchmark_main.json
+      hash: md5
+      md5: c990cf01fef42a50c3b9f154284df6e3
+      size: 125534
+    - path: results/metrics/calibration.json
+      hash: md5
+      md5: d4062628eb0644e3331efba381edad95
+      size: 27925
+    - path: results/metrics/escalation.json
+      hash: md5
+      md5: f94b4d9e9b82b3cd9fecb23190ff67fd
+      size: 38714
+    - path: results/metrics/framework_comparison.json
+      hash: md5
+      md5: 2eaee8f8531c2dff77a2454e16c0d5dd
+      size: 3429
+    - path: results/metrics/own_set.json
+      hash: md5
+      md5: 56da7e5f9abba78c159b379014ec3e40
+      size: 12915
+    - path: results/metrics/router.json
+      hash: md5
+      md5: ef9e0e395150ac32b0c1c7c6d0c03992
+      size: 8952
+    - path: scripts/84_mlflow_runs.py
+      hash: md5
+      md5: 0aa65106e0dbad12a3b81456706ed62b
+      size: 2282
+    - path: src/tracking/experiments.py
+      hash: md5
+      md5: 7c6203607d2904e9ead51976275b5d46
+      size: 11207
+    - path: src/tracking/mlflow_setup.py
+      hash: md5
+      md5: b8b57412e2ef277ad669536b1d14a321
+      size: 1178
+    outs:
+    - path: results/metrics/mlflow_runs.json
+      hash: md5
+      md5: 0a87c9a711171194447fcf1f77478f05
+      size: 21552
+  agent_evaluations:
+    cmd: uv run python scripts/86_registry.py evaluate
+    deps:
+    - path: configs/agent.yaml
+      hash: md5
+      md5: 6205b65b0b4ece69bfe280261148094c
+      size: 5692
+    - path: configs/agents
+      hash: md5
+      md5: 545b409e5dcc6fe56db2fbd7a9230384.dir
+      size: 1489
+      nfiles: 2
+    - path: configs/confidence.yaml
+      hash: md5
+      md5: 5c7ad9d543b8983ecdbfb11860f00936
+      size: 4194
+    - path: configs/eval.yaml
+      hash: md5
+      md5: bde39bbb524d7dd372448e6701bb5020
+      size: 3205
+    - path: configs/guardrail.yaml
+      hash: md5
+      md5: 35acc89710f4c35a0d820760f6caf2bd
+      size: 11074
+    - path: prompts
+      hash: md5
+      md5: 3e160060bb542e4101fb48f09e0587f4.dir
+      size: 27533
+      nfiles: 11
+    - path: results/metrics/ablation.json
+      hash: md5
+      md5: 1409cd2d3e59038899cc5e1dc6684028
+      size: 211300
+    - path: results/metrics/calibration.json
+      hash: md5
+      md5: d4062628eb0644e3331efba381edad95
+      size: 27925
+    - path: results/metrics/splits.json
+      hash: md5
+      md5: 8fb712fd3a959d31ac6aacc79f7b50c2
+      size: 9712
+    - path: results/runs/escalation
+      hash: md5
+      md5: 101edb4db0715157d1a4aa9740834613.dir
+      size: 192493
+      nfiles: 2
+    - path: results/runs/main
+      hash: md5
+      md5: b075bd245403301617a204942619ca2b.dir
+      size: 856822
+      nfiles: 2
+    - path: results/runs/router
+      hash: md5
+      md5: 43e35a55c4cee260896e1ac97cbb2e89.dir
+      size: 382701
+      nfiles: 1
+    - path: scripts/86_registry.py
+      hash: md5
+      md5: 2b23a88ada037f3bf11cb39048167dd6
+      size: 5207
+    - path: src/eval/promotion.py
+      hash: md5
+      md5: 9f9e135030ba649df683592280cf6542
+      size: 8870
+    - path: src/tracking/registry.py
+      hash: md5
+      md5: 27ec44f7152029fa887379fcf1f2e5b7
+      size: 12836
+    outs:
+    - path: results/registry/evaluations
+      hash: md5
+      md5: 65175ee5cf7a6aba3508302af0db585a.dir
+      size: 9752
+      nfiles: 2
+  eval_gate:
+    cmd: uv run python scripts/89_eval_gate.py
+    deps:
+    - path: configs/agent.yaml
+      hash: md5
+      md5: 6205b65b0b4ece69bfe280261148094c
+      size: 5692
+    - path: configs/agents
+      hash: md5
+      md5: 545b409e5dcc6fe56db2fbd7a9230384.dir
+      size: 1489
+      nfiles: 2
+    - path: configs/confidence.yaml
+      hash: md5
+      md5: 5c7ad9d543b8983ecdbfb11860f00936
+      size: 4194
+    - path: configs/guardrail.yaml
+      hash: md5
+      md5: 35acc89710f4c35a0d820760f6caf2bd
+      size: 11074
+    - path: configs/promotion.yaml
+      hash: md5
+      md5: 31b512900607871d306698aabd8d97ed
+      size: 1331
+    - path: dictionary
+      hash: md5
+      md5: 8b6308ec742b7e2e49c9c32ae0a0356d.dir
+      size: 276944
+      nfiles: 24
+    - path: prompts
+      hash: md5
+      md5: 3e160060bb542e4101fb48f09e0587f4.dir
+      size: 27533
+      nfiles: 11
+    - path: results/metrics/calibration.json
+      hash: md5
+      md5: d4062628eb0644e3331efba381edad95
+      size: 27925
+    - path: results/registry/evaluations
+      hash: md5
+      md5: 65175ee5cf7a6aba3508302af0db585a.dir
+      size: 9752
+      nfiles: 2
+    - path: results/registry/promotions.jsonl
+      hash: md5
+      md5: a27a027ddcaaf36a145309ab2f723bb1
+      size: 2947
+    - path: results/registry/state.json
+      hash: md5
+      md5: 4c2d61c10d43fc2e9d3e2447d326edcb
+      size: 4074
+    - path: results/regression/bundle.json
+      hash: md5
+      md5: 6d617b23464efe1bb2094adcc95ddf46
+      size: 66950
+    - path: results/runs/escalation
+      hash: md5
+      md5: 101edb4db0715157d1a4aa9740834613.dir
+      size: 192493
+      nfiles: 2
+    - path: results/runs/main
+      hash: md5
+      md5: b075bd245403301617a204942619ca2b.dir
+      size: 856822
+      nfiles: 2
+    - path: results/runs/own
+      hash: md5
+      md5: 03482bc85545a0679da5b64dab853ee9.dir
+      size: 89459
+      nfiles: 1
+    - path: results/runs/router
+      hash: md5
+      md5: 43e35a55c4cee260896e1ac97cbb2e89.dir
+      size: 382701
+      nfiles: 1
+    - path: scripts/89_eval_gate.py
+      hash: md5
+      md5: b1788e55f419daca2fb23da8f2798fbb
+      size: 2496
+    - path: src/agent/answer.py
+      hash: md5
+      md5: 65b8c23f03db9131160156ec03459f4c
+      size: 8786
+    - path: src/agent/conversation.py
+      hash: md5
+      md5: e5c267785b3f16095c152d28594daba9
+      size: 11089
+    - path: src/agent/run.py
+      hash: md5
+      md5: ac598a595ea6399f4f04feb2c48611b0
+      size: 17698
+    - path: src/dictionary/model.py
+      hash: md5
+      md5: 4a08607073cf7171706e07b3df67796f
+      size: 6975
+    - path: src/eval/promotion.py
+      hash: md5
+      md5: 9f9e135030ba649df683592280cf6542
+      size: 8870
+    - path: src/serving/larger.py
+      hash: md5
+      md5: 01a43d5c40d7008a8e7633b9adbf5532
+      size: 1368
+    - path: src/tools/schema.py
+      hash: md5
+      md5: b2a428a5a1e72e98203fd23b6b55968c
+      size: 2754
+    - path: src/tracking/gate.py
+      hash: md5
+      md5: 993770c648b09a8195f8f08b5f40200c
+      size: 10010
+    - path: src/tracking/registry.py
+      hash: md5
+      md5: 27ec44f7152029fa887379fcf1f2e5b7
+      size: 12836
+    outs:
+    - path: results/metrics/eval_gate.json
+      hash: md5
+      md5: 87a1858b1a56cdf39c9aeeecf7be2217
+      size: 513
+  drift_check:
+    cmd: uv run python scripts/93_drift_check.py
+    deps:
+    - path: configs/agents
+      hash: md5
+      md5: 545b409e5dcc6fe56db2fbd7a9230384.dir
+      size: 1489
+      nfiles: 2
+    - path: configs/promotion.yaml
+      hash: md5
+      md5: 31b512900607871d306698aabd8d97ed
+      size: 1331
+    - path: configs/serving.yaml
+      hash: md5
+      md5: a100fa4af120059fa50b1e38828256af
+      size: 4390
+    - path: results/metrics/calibration.json
+      hash: md5
+      md5: d4062628eb0644e3331efba381edad95
+      size: 27925
+    - path: results/registry/evaluations
+      hash: md5
+      md5: 65175ee5cf7a6aba3508302af0db585a.dir
+      size: 9752
+      nfiles: 2
+    - path: results/registry/state.json
+      hash: md5
+      md5: 4c2d61c10d43fc2e9d3e2447d326edcb
+      size: 4074
+    - path: results/runs/escalation
+      hash: md5
+      md5: 101edb4db0715157d1a4aa9740834613.dir
+      size: 192493
+      nfiles: 2
+    - path: results/runs/main
+      hash: md5
+      md5: b075bd245403301617a204942619ca2b.dir
+      size: 856822
+      nfiles: 2
+    - path: results/runs/own
+      hash: md5
+      md5: 03482bc85545a0679da5b64dab853ee9.dir
+      size: 89459
+      nfiles: 1
+    - path: results/runs/router
+      hash: md5
+      md5: 43e35a55c4cee260896e1ac97cbb2e89.dir
+      size: 382701
+      nfiles: 1
+    - path: scripts/93_drift_check.py
+      hash: md5
+      md5: 99319eb56f9de54709a16350fdfd56b5
+      size: 6910
+    - path: src/eval/promotion.py
+      hash: md5
+      md5: 9f9e135030ba649df683592280cf6542
+      size: 8870
+    - path: src/serving/drift.py
+      hash: md5
+      md5: b87e1f45274d1fa42e5cd496220d9fea
+      size: 5116
+    - path: src/serving/meter.py
+      hash: md5
+      md5: d414c55ae95bcd16eaa75a9ca39d3a34
+      size: 7660
+    - path: src/tracking/registry.py
+      hash: md5
+      md5: 27ec44f7152029fa887379fcf1f2e5b7
+      size: 12836
+    outs:
+    - path: results/metrics/drift_check.json
+      hash: md5
+      md5: ac7ddc41bc3a247fc8f9c09dd9c90f92
+      size: 5977

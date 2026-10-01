@@ -1,0 +1,723 @@
+{
+  "note": "every evaluated run as logged to MLflow; each number is read from the results file it names, so the store is a view that can be rebuilt (scripts/84_mlflow_runs.py)",
+  "runs_logged": 27,
+  "by_experiment": {
+    "analyst-ablation": 10,
+    "analyst-benchmark": 5,
+    "analyst-own-set": 1,
+    "analyst-escalation": 2,
+    "analyst-router": 3,
+    "analyst-calibration": 5,
+    "analyst-framework": 1
+  },
+  "runs": [
+    {
+      "experiment": "analyst-ablation",
+      "run": "claude-haiku-4-5/d1",
+      "source": "ablation.json",
+      "params": {
+        "design": "d1",
+        "model": "claude-haiku-4-5",
+        "evidence": "true",
+        "k": "1",
+        "questions_set": "ablation",
+        "single_run": "true"
+      },
+      "metrics": {
+        "ex": 0.49333333333333335,
+        "ex_low": 0.41333333333333333,
+        "ex_high": 0.5733333333333334,
+        "aurc": 0.36030575255754616,
+        "aurc_low": 0.2658181157211012,
+        "aurc_high": 0.4679509307118534,
+        "ece": 0.22546666666666673,
+        "ece_low": 0.15813333333333332,
+        "ece_high": 0.30100000000000005,
+        "cost_total_usd": 0.56674322,
+        "cost_per_question_usd": 0.0037782881333333334,
+        "questions": 150.0,
+        "declined": 0.0
+      }
+    },
+    {
+      "experiment": "analyst-ablation",
+      "run": "claude-haiku-4-5/d3",
+      "source": "ablation.json",
+      "params": {
+        "design": "d3",
+        "model": "claude-haiku-4-5",
+        "evidence": "true",
+        "k": "1",
+        "questions_set": "ablation",
+        "single_run": "true"
+      },
+      "metrics": {
+        "ex": 0.5666666666666667,
+        "ex_low": 0.4866666666666667,
+        "ex_high": 0.6466666666666666,
+        "aurc": 0.30436532702637425,
+        "aurc_low": 0.2254107769226234,
+        "aurc_high": 0.3967253727605007,
+        "ece": 0.32233333333333314,
+        "ece_low": 0.25466499999999986,
+        "ece_high": 0.4031333333333332,
+        "cost_total_usd": 3.66022058,
+        "cost_per_question_usd": 0.024401470533333334,
+        "questions": 150.0,
+        "declined": 1.0
+      }
+    },
+    {
+      "experiment": "analyst-ablation",
+      "run": "claude-sonnet-5/d1",
+      "source": "ablation.json",
+      "params": {
+        "design": "d1",
+        "model": "claude-sonnet-5",
+        "evidence": "true",
+        "k": "1",
+        "questions_set": "ablation",
+        "single_run": "true"
+      },
+      "metrics": {
+        "ex": 0.5933333333333334,
+        "ex_low": 0.5133333333333333,
+        "ex_high": 0.6733333333333333,
+        "aurc": 0.2342106420889294,
+        "aurc_low": 0.16258454783449136,
+        "aurc_high": 0.320208913291198,
+        "ece": 0.19320000000000007,
+        "ece_low": 0.12953000000000006,
+        "ece_high": 0.2695333333333333,
+        "cost_total_usd": 1.0632189499999998,
+        "cost_per_question_usd": 0.007088126333333332,
+        "questions": 150.0,
+        "declined": 0.0
+      }
+    },
+    {
+      "experiment": "analyst-ablation",
+      "run": "claude-sonnet-5/d2",
+      "source": "ablation.json",
+      "params": {
+        "design": "d2",
+        "model": "claude-sonnet-5",
+        "evidence": "true",
+        "k": "1",
+        "questions_set": "ablation",
+        "single_run": "true"
+      },
+      "metrics": {
+        "ex": 0.5333333333333333,
+        "ex_low": 0.4533333333333333,
+        "ex_high": 0.6133333333333333,
+        "aurc": 0.2981231158041824,
+        "aurc_low": 0.20657089982765983,
+        "aurc_high": 0.4004046039911391,
+        "ece": 0.281,
+        "ece_low": 0.20733166666666678,
+        "ece_high": 0.35640000000000005,
+        "cost_total_usd": 1.4394793,
+        "cost_per_question_usd": 0.009596528666666666,
+        "questions": 150.0,
+        "declined": 0.0
+      }
+    },
+    {
+      "experiment": "analyst-ablation",
+      "run": "claude-sonnet-5/d3",
+      "source": "ablation.json",
+      "params": {
+        "design": "d3",
+        "model": "claude-sonnet-5",
+        "evidence": "true",
+        "k": "1",
+        "questions_set": "ablation",
+        "single_run": "true"
+      },
+      "metrics": {
+        "ex": 0.52,
+        "ex_low": 0.44,
+        "ex_high": 0.6,
+        "aurc": 0.3037889060226373,
+        "aurc_low": 0.2174229027868588,
+        "aurc_high": 0.40240769619439887,
+        "ece": 0.3720666666666667,
+        "ece_low": 0.29806666666666687,
+        "ece_high": 0.44446666666666673,
+        "cost_total_usd": 2.55324325,
+        "cost_per_question_usd": 0.017021621666666667,
+        "questions": 150.0,
+        "declined": 1.0
+      }
+    },
+    {
+      "experiment": "analyst-ablation",
+      "run": "claude-sonnet-5/d4",
+      "source": "ablation.json",
+      "params": {
+        "design": "d4",
+        "model": "claude-sonnet-5",
+        "evidence": "true",
+        "k": "3",
+        "questions_set": "ablation",
+        "single_run": "true"
+      },
+      "metrics": {
+        "ex": 0.49333333333333335,
+        "ex_low": 0.41333333333333333,
+        "ex_high": 0.5733333333333334,
+        "aurc": 0.3678028399229821,
+        "aurc_low": 0.2797633500836603,
+        "aurc_high": 0.45798401949509143,
+        "ece": 0.3666666666666667,
+        "ece_low": 0.2977777777777778,
+        "ece_high": 0.43777777777777777,
+        "cost_total_usd": 7.68629275,
+        "cost_per_question_usd": 0.05124195166666667,
+        "questions": 150.0,
+        "declined": 1.0
+      }
+    },
+    {
+      "experiment": "analyst-ablation",
+      "run": "claude-sonnet-5/d5",
+      "source": "ablation.json",
+      "params": {
+        "design": "d5",
+        "model": "claude-sonnet-5",
+        "evidence": "true",
+        "k": "3",
+        "questions_set": "ablation",
+        "single_run": "true"
+      },
+      "metrics": {
+        "ex": 0.5266666666666666,
+        "ex_low": 0.44666666666666666,
+        "ex_high": 0.6066666666666667,
+        "aurc": 0.4006347754954209,
+        "aurc_low": 0.31229985504802577,
+        "aurc_high": 0.490835706550536,
+        "ece": 0.3555555555555555,
+        "ece_low": 0.28222222222222215,
+        "ece_high": 0.4344444444444444,
+        "cost_total_usd": 5.6430127500000005,
+        "cost_per_question_usd": 0.037620085000000004,
+        "questions": 150.0,
+        "declined": 1.0
+      }
+    },
+    {
+      "experiment": "analyst-ablation",
+      "run": "qwen2.5:3b-instruct/d1",
+      "source": "ablation.json",
+      "params": {
+        "design": "d1",
+        "model": "qwen2.5:3b-instruct",
+        "evidence": "true",
+        "k": "1",
+        "questions_set": "ablation",
+        "single_run": "true"
+      },
+      "metrics": {
+        "ex": 0.06666666666666667,
+        "ex_low": 0.02666666666666667,
+        "ex_high": 0.10666666666666667,
+        "aurc": 0.9139303932147875,
+        "aurc_low": 0.8516287379532859,
+        "aurc_high": 0.9649349082052778,
+        "ece": 0.5473999999999999,
+        "ece_low": 0.4716000000000001,
+        "ece_high": 0.6218016666666666,
+        "cost_total_usd": 0.0,
+        "cost_per_question_usd": 0.0,
+        "questions": 150.0,
+        "declined": 13.0
+      }
+    },
+    {
+      "experiment": "analyst-ablation",
+      "run": "qwen2.5:3b-instruct/d2",
+      "source": "ablation.json",
+      "params": {
+        "design": "d2",
+        "model": "qwen2.5:3b-instruct",
+        "evidence": "true",
+        "k": "1",
+        "questions_set": "ablation",
+        "single_run": "true"
+      },
+      "metrics": {
+        "ex": 0.1,
+        "ex_low": 0.05333333333333334,
+        "ex_high": 0.15333333333333332,
+        "aurc": 0.8438566614573056,
+        "aurc_low": 0.7583955084167807,
+        "aurc_high": 0.9184032082779815,
+        "ece": 0.6506,
+        "ece_low": 0.5757266666666667,
+        "ece_high": 0.7226683333333332,
+        "cost_total_usd": 0.0,
+        "cost_per_question_usd": 0.0,
+        "questions": 150.0,
+        "declined": 4.0
+      }
+    },
+    {
+      "experiment": "analyst-ablation",
+      "run": "qwen2.5:3b-instruct/d3",
+      "source": "ablation.json",
+      "params": {
+        "design": "d3",
+        "model": "qwen2.5:3b-instruct",
+        "evidence": "true",
+        "k": "1",
+        "questions_set": "ablation",
+        "single_run": "true"
+      },
+      "metrics": {
+        "ex": 0.11333333333333333,
+        "ex_low": 0.06666666666666667,
+        "ex_high": 0.16666666666666666,
+        "aurc": 0.7903217810248154,
+        "aurc_low": 0.6944217707289745,
+        "aurc_high": 0.8814096662068198,
+        "ece": 0.45466666666666655,
+        "ece_low": 0.37626666666666664,
+        "ece_high": 0.5325366666666665,
+        "cost_total_usd": 0.0,
+        "cost_per_question_usd": 0.0,
+        "questions": 150.0,
+        "declined": 19.0
+      }
+    },
+    {
+      "experiment": "analyst-benchmark",
+      "run": "d1/claude-sonnet-5/evidence/all",
+      "source": "benchmark_main.json",
+      "params": {
+        "design": "d1",
+        "model": "claude-sonnet-5",
+        "evidence": "true",
+        "k": "1",
+        "questions_set": "all",
+        "single_run": "true"
+      },
+      "metrics": {
+        "ex": 0.604,
+        "ex_low": 0.562,
+        "ex_high": 0.646,
+        "aurc": 0.22290137143604546,
+        "aurc_low": 0.18369104819660417,
+        "aurc_high": 0.2661897879092255,
+        "ece": 0.18105999999999994,
+        "ece_low": 0.14328000000000002,
+        "ece_high": 0.22124049999999992,
+        "cost_total_usd": 2.97450145,
+        "cost_per_question_usd": 0.0059490029,
+        "questions": 500.0,
+        "declined": 0.0
+      }
+    },
+    {
+      "experiment": "analyst-benchmark",
+      "run": "d1/claude-sonnet-5/evidence/held_out",
+      "source": "benchmark_main.json",
+      "params": {
+        "design": "d1",
+        "model": "claude-sonnet-5",
+        "evidence": "true",
+        "k": "1",
+        "questions_set": "held_out",
+        "single_run": "true"
+      },
+      "metrics": {
+        "ex": 0.60625,
+        "ex_low": 0.553125,
+        "ex_high": 0.659375,
+        "aurc": 0.21347799832467862,
+        "aurc_low": 0.1651527629773648,
+        "aurc_high": 0.26900051761825283,
+        "ece": 0.1804062500000001,
+        "ece_low": 0.13412421875000005,
+        "ece_high": 0.22975156249999995,
+        "cost_total_usd": 1.7579930000000001,
+        "cost_per_question_usd": 0.005493728125000001,
+        "questions": 320.0,
+        "declined": 0.0
+      }
+    },
+    {
+      "experiment": "analyst-benchmark",
+      "run": "d1/claude-sonnet-5/evidence/ablation",
+      "source": "benchmark_main.json",
+      "params": {
+        "design": "d1",
+        "model": "claude-sonnet-5",
+        "evidence": "true",
+        "k": "1",
+        "questions_set": "ablation",
+        "single_run": "true"
+      },
+      "metrics": {
+        "ex": 0.5933333333333334,
+        "ex_low": 0.5133333333333333,
+        "ex_high": 0.6733333333333333,
+        "aurc": 0.2342106420889294,
+        "aurc_low": 0.16258454783449136,
+        "aurc_high": 0.320208913291198,
+        "ece": 0.19320000000000007,
+        "ece_low": 0.12953000000000006,
+        "ece_high": 0.2695333333333333,
+        "cost_total_usd": 1.0632189499999998,
+        "cost_per_question_usd": 0.007088126333333332,
+        "questions": 150.0,
+        "declined": 0.0
+      }
+    },
+    {
+      "experiment": "analyst-benchmark",
+      "run": "d1/claude-sonnet-5/no-evidence/ablation",
+      "source": "benchmark_main.json",
+      "params": {
+        "design": "d1",
+        "model": "claude-sonnet-5",
+        "evidence": "false",
+        "k": "1",
+        "questions_set": "ablation",
+        "single_run": "true"
+      },
+      "metrics": {
+        "ex": 0.42,
+        "ex_low": 0.34,
+        "ex_high": 0.5,
+        "aurc": 0.4057110419934836,
+        "aurc_low": 0.30454293693737183,
+        "aurc_high": 0.5154600153470277,
+        "ece": 0.2872000000000001,
+        "ece_low": 0.21592999999999998,
+        "ece_high": 0.3635333333333334,
+        "cost_total_usd": 1.02273525,
+        "cost_per_question_usd": 0.006818235,
+        "questions": 150.0,
+        "declined": 1.0
+      }
+    },
+    {
+      "experiment": "analyst-benchmark",
+      "run": "d1/claude-haiku-4-5/evidence/ablation",
+      "source": "benchmark_main.json",
+      "params": {
+        "design": "d1",
+        "model": "claude-haiku-4-5",
+        "evidence": "true",
+        "k": "1",
+        "questions_set": "ablation",
+        "single_run": "true"
+      },
+      "metrics": {
+        "ex": 0.49333333333333335,
+        "ex_low": 0.41333333333333333,
+        "ex_high": 0.5733333333333334,
+        "aurc": 0.36030575255754616,
+        "aurc_low": 0.2658181157211012,
+        "aurc_high": 0.4679509307118534,
+        "ece": 0.22546666666666673,
+        "ece_low": 0.15813333333333332,
+        "ece_high": 0.30100000000000005,
+        "cost_total_usd": 0.56674322,
+        "cost_per_question_usd": 0.0037782881333333334,
+        "questions": 150.0,
+        "declined": 0.0
+      }
+    },
+    {
+      "experiment": "analyst-own-set",
+      "run": "d1/claude-sonnet-5/no-evidence/banking",
+      "source": "own_set.json",
+      "params": {
+        "design": "d1",
+        "model": "claude-sonnet-5",
+        "evidence": "false",
+        "k": "1",
+        "questions_set": "banking",
+        "single_run": "true"
+      },
+      "metrics": {
+        "ex": 0.5952380952380952,
+        "ex_low": 0.4523809523809524,
+        "ex_high": 0.7380952380952381,
+        "aurc": 0.1616460916639953,
+        "aurc_low": 0.06592741715856613,
+        "aurc_high": 0.30099011568908235,
+        "ece": 0.15880952380952376,
+        "ece_low": 0.1140476190476191,
+        "ece_high": 0.29452976190476177,
+        "cost_total_usd": 0.23670100000000002,
+        "cost_per_question_usd": 0.003945016666666667,
+        "questions": 60.0,
+        "declined": 12.0
+      }
+    },
+    {
+      "experiment": "analyst-escalation",
+      "run": "d1/claude-sonnet-5/evidence/ablation",
+      "source": "escalation.json",
+      "params": {
+        "design": "d1",
+        "model": "claude-sonnet-5",
+        "evidence": "true",
+        "k": "1",
+        "questions_set": "ablation",
+        "single_run": "true"
+      },
+      "metrics": {
+        "ex": 0.5933333333333334,
+        "ex_low": 0.5133333333333333,
+        "ex_high": 0.6733333333333333,
+        "aurc": 0.2342106420889294,
+        "aurc_low": 0.16258454783449136,
+        "aurc_high": 0.320208913291198,
+        "ece": 0.19320000000000007,
+        "ece_low": 0.12953000000000006,
+        "ece_high": 0.2695333333333333,
+        "cost_total_usd": 1.0632189499999998,
+        "cost_per_question_usd": 0.007088126333333332,
+        "questions": 150.0,
+        "declined": 0.0
+      }
+    },
+    {
+      "experiment": "analyst-escalation",
+      "run": "d1/claude-opus-5-5/evidence/ablation",
+      "source": "escalation.json",
+      "params": {
+        "design": "d1",
+        "model": "claude-opus-5-5",
+        "evidence": "true",
+        "k": "1",
+        "questions_set": "ablation",
+        "single_run": "true"
+      },
+      "metrics": {
+        "ex": 0.74,
+        "ex_low": 0.6666666666666666,
+        "ex_high": 0.8066666666666666,
+        "aurc": 0.11882624925119781,
+        "aurc_low": 0.0737226417040117,
+        "aurc_high": 0.1740703109831444,
+        "ece": 0.1086,
+        "ece_low": 0.057398333333333246,
+        "ece_high": 0.17993499999999987,
+        "cost_total_usd": 1.6554201,
+        "cost_per_question_usd": 0.011036134,
+        "questions": 150.0,
+        "declined": 0.0
+      }
+    },
+    {
+      "experiment": "analyst-router",
+      "run": "d1/routed/evidence/held_out",
+      "source": "router.json",
+      "params": {
+        "design": "d1",
+        "model": "claude-sonnet-5 -> claude-opus-5-5",
+        "evidence": "true",
+        "k": "1",
+        "questions_set": "held_out",
+        "single_run": "true"
+      },
+      "metrics": {
+        "ex": 0.796875,
+        "ex_low": 0.753125,
+        "ex_high": 0.840625,
+        "cost_total_usd": 4.866605999999999,
+        "cost_per_question_usd": 0.015208143749999996,
+        "questions": 320.0,
+        "declined": 0.0
+      }
+    },
+    {
+      "experiment": "analyst-router",
+      "run": "d1/sonnet-alone/evidence/held_out",
+      "source": "router.json",
+      "params": {
+        "design": "d1",
+        "model": "claude-sonnet-5",
+        "evidence": "true",
+        "k": "1",
+        "questions_set": "held_out",
+        "single_run": "true"
+      },
+      "metrics": {
+        "ex": 0.60625,
+        "ex_low": 0.553125,
+        "ex_high": 0.659375,
+        "cost_total_usd": 1.7579930000000001,
+        "cost_per_question_usd": 0.005493728125000001,
+        "questions": 320.0,
+        "declined": 0.0
+      }
+    },
+    {
+      "experiment": "analyst-router",
+      "run": "d1/opus-alone/evidence/held_out",
+      "source": "router.json",
+      "params": {
+        "design": "d1",
+        "model": "claude-opus-5-5",
+        "evidence": "true",
+        "k": "1",
+        "questions_set": "held_out",
+        "single_run": "true"
+      },
+      "metrics": {
+        "ex": 0.796875,
+        "ex_low": 0.753125,
+        "ex_high": 0.840625,
+        "cost_total_usd": 3.2791756000000003,
+        "cost_per_question_usd": 0.010247423750000002,
+        "questions": 320.0,
+        "declined": 0.0
+      }
+    },
+    {
+      "experiment": "analyst-calibration",
+      "run": "d1/claude-sonnet-5/stated-raw/held_out",
+      "source": "calibration.json",
+      "params": {
+        "design": "d1",
+        "model": "claude-sonnet-5",
+        "confidence": "stated-raw",
+        "questions_set": "held_out",
+        "single_run": "true"
+      },
+      "metrics": {
+        "ece": 0.1804062500000001,
+        "ece_low": 0.13412421875000005,
+        "ece_high": 0.22975156249999995,
+        "brier": 0.23079718749999997,
+        "brier_low": 0.20199780468749998,
+        "brier_high": 0.26115735937499995,
+        "auroc": 0.7651775486827033,
+        "auroc_low": 0.7116691822593764,
+        "auroc_high": 0.8151271333275578,
+        "questions": 320.0
+      }
+    },
+    {
+      "experiment": "analyst-calibration",
+      "run": "d1/claude-sonnet-5/stated-platt/held_out",
+      "source": "calibration.json",
+      "params": {
+        "design": "d1",
+        "model": "claude-sonnet-5",
+        "confidence": "stated-platt",
+        "questions_set": "held_out",
+        "single_run": "true"
+      },
+      "metrics": {
+        "ece": 0.04090323467198727,
+        "ece_low": 0.03322881997405704,
+        "ece_high": 0.09880921511655504,
+        "brier": 0.19015972348134147,
+        "brier_low": 0.17192603560191502,
+        "brier_high": 0.20944733379414665,
+        "auroc": 0.7651775486827033,
+        "auroc_low": 0.7116691822593764,
+        "auroc_high": 0.8151271333275578,
+        "questions": 320.0
+      }
+    },
+    {
+      "experiment": "analyst-calibration",
+      "run": "d1/claude-sonnet-5/stated-isotonic/held_out",
+      "source": "calibration.json",
+      "params": {
+        "design": "d1",
+        "model": "claude-sonnet-5",
+        "confidence": "stated-isotonic",
+        "questions_set": "held_out",
+        "single_run": "true"
+      },
+      "metrics": {
+        "ece": 0.027793282085561585,
+        "ece_low": 0.022483328807375105,
+        "ece_high": 0.08460057375222811,
+        "brier": 0.19033932086313649,
+        "brier_low": 0.17222135299701088,
+        "brier_high": 0.20923299228613026,
+        "auroc": 0.7575069546719031,
+        "auroc_low": 0.7042823802144668,
+        "auroc_high": 0.8070196776377366,
+        "questions": 320.0
+      }
+    },
+    {
+      "experiment": "analyst-calibration",
+      "run": "d1/claude-sonnet-5/critic-raw/held_out",
+      "source": "calibration.json",
+      "params": {
+        "design": "d1",
+        "model": "claude-sonnet-5",
+        "confidence": "critic-raw",
+        "questions_set": "held_out",
+        "single_run": "true"
+      },
+      "metrics": {
+        "ece": 0.15896875000000002,
+        "ece_low": 0.1253117187499999,
+        "ece_high": 0.2153757812500001,
+        "brier": 0.21723343750000002,
+        "brier_low": 0.182869203125,
+        "brier_high": 0.25283491406249997,
+        "auroc": 0.7500204549173621,
+        "auroc_low": 0.6950849969437164,
+        "auroc_high": 0.8029435516992768,
+        "questions": 320.0
+      }
+    },
+    {
+      "experiment": "analyst-calibration",
+      "run": "d1/claude-sonnet-5/critic-platt/held_out",
+      "source": "calibration.json",
+      "params": {
+        "design": "d1",
+        "model": "claude-sonnet-5",
+        "confidence": "critic-platt",
+        "questions_set": "held_out",
+        "single_run": "true"
+      },
+      "metrics": {
+        "ece": 0.06922671564951112,
+        "ece_low": 0.03892221830334841,
+        "ece_high": 0.12183462907770098,
+        "brier": 0.19399205168458505,
+        "brier_low": 0.1745990394250402,
+        "brier_high": 0.21386099995960986,
+        "auroc": 0.7500204549173621,
+        "auroc_low": 0.6950849969437164,
+        "auroc_high": 0.8029435516992768,
+        "questions": 320.0
+      }
+    },
+    {
+      "experiment": "analyst-framework",
+      "run": "graph-vs-own-loop/ablation",
+      "source": "framework_comparison.json",
+      "params": {
+        "design": "d1",
+        "model": "claude-sonnet-5",
+        "questions_set": "ablation"
+      },
+      "metrics": {
+        "ex_graph_minus_own_loop": 0.0,
+        "cost_per_correct_graph_usd": 0.020907868539325844,
+        "cost_per_correct_own_loop_usd": 0.020907868539325844,
+        "code_lines_graph": 331.0,
+        "code_lines_own_loop": 733.0,
+        "questions": 150.0
+      }
+    }
+  ]
+}

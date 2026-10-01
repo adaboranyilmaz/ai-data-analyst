@@ -1,0 +1,70 @@
+# The static demo on GitHub Pages: the same interface, reading the recorded runs from plain
+# files, no server, no database, no key. Built on every merge to main that touches what it
+# shows. Third-party actions that hold the deploy permission are pinned by commit.
+name: Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "ui/**"
+      - "results/demo/**"
+      - "results/registry/**"
+      - "src/serving/**"
+      - "configs/serving.yaml"
+      - "scripts/95_static_site.py"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  UV_VERSION: "0.11.3"
+  PYTHONUTF8: "1"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: ${{ env.UV_VERSION }}
+          enable-cache: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: ui/package-lock.json
+      - run: uv sync --frozen
+      - name: Build the page
+        working-directory: ui
+        run: |
+          npm ci
+          npm run build:static
+      - name: Write the recorded runs beside it
+        run: uv run python scripts/95_static_site.py
+      - uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5
+      - uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3
+        with:
+          path: ui/dist-static
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4

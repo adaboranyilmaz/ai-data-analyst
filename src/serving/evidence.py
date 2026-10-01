@@ -98,9 +98,11 @@ def from_run(
     trace: dict[str, Any],
     meter: Meter | None,
     source_run: str,
+    larger: bool = False,
 ) -> dict[str, Any]:
     """The evidence record of one recorded benchmark or banking-set run, or of a live one
-    (`meter` None: the confidence is shown as the model stated it, not calibrated)."""
+    (`meter` None: the confidence is shown as the model stated it, not calibrated; `larger`: a
+    router's larger model answered, so its own calibration curve applies)."""
     final = trace["final"]
     answer = final["answer"]
     result = final["result"]
@@ -114,7 +116,7 @@ def from_run(
             "not_calibrated": True,
         }
     else:
-        confidence = meter.describe(final["confidence"], bool(answer["declined"]))
+        confidence = meter.describe(final["confidence"], bool(answer["declined"]), larger)
     sql = None if answer["declined"] else final["sql"]
     requests = trace.get("requests") or []
     model_ms = requests[0]["latency_ms"] if requests else None

@@ -1,0 +1,197 @@
+{
+  "config_name": "d1-sonnet-5-opus-router",
+  "config_sha256": "3b35b9f1341fc4d830fc67d96c26f94d4fd2d18262f8610332b50eb35fd5655e",
+  "note": "one run; the held-out questions; the system's answers come from the committed run files and its confidence is calibrated on the calibration split only; intervals are 95% bootstrap over questions; costs at the direct price from the recorded tokens",
+  "split": "held_out",
+  "routed_to_larger_model": 297,
+  "system": {
+    "questions": 320,
+    "declined": 0,
+    "execution_accuracy": {
+      "estimate": 0.796875,
+      "low": 0.753125,
+      "high": 0.840625,
+      "confidence": 0.95,
+      "resamples": 10000,
+      "undefined": 0
+    },
+    "aurc": {
+      "estimate": 0.07185255139596972,
+      "low": 0.04905808046238913,
+      "high": 0.09934667397070851,
+      "confidence": 0.95,
+      "resamples": 10000,
+      "undefined": 0
+    },
+    "accuracy_at_80": {
+      "estimate": 0.87265625,
+      "low": 0.8222586495535715,
+      "high": 0.9122869318181819,
+      "confidence": 0.95,
+      "resamples": 10000,
+      "undefined": 0
+    },
+    "accuracy_at_90": {
+      "estimate": 0.828125,
+      "low": 0.7827929261982571,
+      "high": 0.8708333333333333,
+      "confidence": 0.95,
+      "resamples": 10000,
+      "undefined": 0
+    },
+    "ece": {
+      "estimate": 0.08687299841507792,
+      "low": 0.06445907978835562,
+      "high": 0.13230525868819598,
+      "confidence": 0.95,
+      "resamples": 10000,
+      "undefined": 0
+    },
+    "brier": {
+      "estimate": 0.14288666434840208,
+      "low": 0.12150877403910065,
+      "high": 0.16515075547190283,
+      "confidence": 0.95,
+      "resamples": 10000,
+      "undefined": 0
+    },
+    "auroc": {
+      "estimate": 0.7965309200603318,
+      "low": 0.7422763658360638,
+      "high": 0.8472388934265297,
+      "confidence": 0.95,
+      "resamples": 10000,
+      "undefined": 0
+    },
+    "cost_per_question_usd": 0.030416287499999993,
+    "cost_per_correct_answer_usd": {
+      "estimate": 0.03816945882352941,
+      "low": 0.03418128241037736,
+      "high": 0.042705009559483725,
+      "confidence": 0.95,
+      "resamples": 10000,
+      "undefined": 0
+    },
+    "max_question_cost_usd": 0.1285838
+  },
+  "confidence": {
+    "decline_threshold": 0.8267368307780034,
+    "calibration_split": {
+      "target_accuracy": 0.9,
+      "min_answered": 15,
+      "threshold": 0.8267368307780034,
+      "reached_target": true,
+      "fallback_used": false,
+      "chosen": {
+        "threshold": 0.8267368307780034,
+        "answered": 41,
+        "coverage": 0.2733333333333333,
+        "accuracy": 0.975609756097561
+      }
+    },
+    "held_out": {
+      "threshold": 0.8267368307780034,
+      "questions": 320,
+      "answered": 109,
+      "coverage": {
+        "estimate": 0.340625,
+        "low": 0.2875,
+        "high": 0.39375,
+        "confidence": 0.95,
+        "resamples": 10000,
+        "undefined": 0
+      },
+      "accuracy": {
+        "estimate": 0.981651376146789,
+        "low": 0.9523809523809523,
+        "high": 1.0,
+        "confidence": 0.95,
+        "resamples": 10000,
+        "undefined": 0
+      },
+      "reliability": [
+        {
+          "n": 5,
+          "mean_confidence": 0.171025681319952,
+          "accuracy": 0.4,
+          "range": [
+            0.1,
+            0.2
+          ]
+        },
+        {
+          "n": 10,
+          "mean_confidence": 0.24247455221270747,
+          "accuracy": 0.5,
+          "range": [
+            0.2,
+            0.3
+          ]
+        },
+        {
+          "n": 4,
+          "mean_confidence": 0.31708458827537866,
+          "accuracy": 0.5,
+          "range": [
+            0.3,
+            0.4
+          ]
+        },
+        {
+          "n": 26,
+          "mean_confidence": 0.4024554377133057,
+          "accuracy": 0.5769230769230769,
+          "range": [
+            0.4,
+            0.5
+          ]
+        },
+        {
+          "n": 10,
+          "mean_confidence": 0.5862953586678341,
+          "accuracy": 0.4,
+          "range": [
+            0.5,
+            0.6
+          ]
+        },
+        {
+          "n": 18,
+          "mean_confidence": 0.6444763491974715,
+          "accuracy": 0.5555555555555556,
+          "range": [
+            0.6,
+            0.7
+          ]
+        },
+        {
+          "n": 67,
+          "mean_confidence": 0.7513777233907383,
+          "accuracy": 0.7611940298507462,
+          "range": [
+            0.7,
+            0.8
+          ]
+        },
+        {
+          "n": 170,
+          "mean_confidence": 0.8369458706213048,
+          "accuracy": 0.9176470588235294,
+          "range": [
+            0.8,
+            0.9
+          ]
+        },
+        {
+          "n": 10,
+          "mean_confidence": 0.9029009244232309,
+          "accuracy": 1.0,
+          "range": [
+            0.9,
+            1.0
+          ]
+        }
+      ]
+    }
+  }
+}

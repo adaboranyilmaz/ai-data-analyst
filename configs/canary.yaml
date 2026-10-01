@@ -1,0 +1,33 @@
+# The canary: a fixed set of questions run live on demand, to notice a provider changing what a
+# model does with the same request (src/tracking/canary.py, scripts/91_canary.py). Each question's
+# request is rebuilt exactly as the evaluation sent it and sent again with no response cache; the
+# answer is compared with the recorded one. The set is fixed here and never chosen by how a
+# question answered.
+
+# Spend is charged to this phase's cap (configs/budget.yaml); a run also stops at its own
+# --max-usd.
+phase: phase9
+
+# The primary model answers every question; the larger model (the router's) the first `limit`
+# benchmark questions, enough to notice a change without paying for the whole set.
+primary: { model: claude-sonnet-5, design: d1 }
+larger: { model: claude-opus-5-5, limit: 3 }
+
+# Where each run's responses are kept (a fresh directory per run: a cache hit would hide a change).
+cache_root: data/canary
+
+# The history every run is appended to.
+history: results/metrics/canary_history.json
+
+# The questions. The benchmark ones are asked with the benchmark's hint, as they were evaluated;
+# the banking ones without. The curated demo questions, then four more banking questions
+# (categories a and b, the first two of each not already curated).
+benchmark: [782, 573, 859, 533, 829, 1080, 1254, 1378, 726, 751]
+banking: [own-a09, own-b06, own-b12, own-c09, own-d03, own-e06, own-a01, own-a02, own-b01, own-b02]
+
+# What a run flags (a flag is a prompt to look, not a verdict).
+flags:
+  min_valid_answers: 1.0 # every response must parse to an answer
+  min_sql_unchanged_rate: 0.5 # share of questions whose SQL is the recorded one, text for text
+  max_mean_confidence_shift: 0.10 # mean absolute change of the stated confidence
+  max_prompt_token_change: 0.02 # the same request should count the same tokens

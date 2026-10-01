@@ -1,0 +1,16 @@
+# An agent configuration: see d1-sonnet-5.yaml. The same system with a router: a question whose
+# calibrated confidence is below the decline threshold is asked again of a larger model, and its
+# answer is the one given. The larger model's own confidence is calibrated by a Platt fit on the
+# calibration split's answers of that model.
+name: d1-sonnet-5-opus-router
+description: The champion's design with Claude Opus 5.5 answering the questions Claude Sonnet 5
+  is not confident about.
+design: d1
+model: claude-sonnet-5
+evidence: false
+router:
+  model: claude-opus-5-5
+  # The larger model's settings are those of the measured escalation arm (configs/confidence.yaml).
+  settings_from: escalation
+  routes_below: decline_threshold
+guardrail: true

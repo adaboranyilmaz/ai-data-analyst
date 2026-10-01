@@ -1,0 +1,21 @@
+{
+  "note": "recorded model calls rebuilt from the repository and compared; the registry checked against the committed results; no model, database or key",
+  "regression": {
+    "entries": 26,
+    "unchanged": 26,
+    "changed_request": [],
+    "changed_answer": {},
+    "ok": true
+  },
+  "registry": {
+    "champion": "d1-sonnet-5-opus-router",
+    "challenger": null,
+    "versions": [
+      "d1-sonnet-5",
+      "d1-sonnet-5-opus-router"
+    ],
+    "promotions_logged": 1
+  },
+  "problems": [],
+  "ok": true
+}
