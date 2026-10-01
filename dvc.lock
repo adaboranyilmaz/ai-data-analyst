@@ -4675,3 +4675,1366 @@ stages:
       hash: md5
       md5: de53e0c2b187dbb420d31b2271590b03
       size: 86901
+  sandbox_security:
+    cmd: uv run python scripts/71_sandbox_security.py
+    deps:
+    - path: configs/sandbox_attacks.yaml
+      hash: md5
+      md5: 55689bf8d7dbe9273d80d47adac6c994
+      size: 11600
+    - path: sandbox
+      hash: md5
+      md5: f727b9dbfbcfd5771cc50b9725083cbf.dir
+      size: 39242
+      nfiles: 4
+    - path: scripts/71_sandbox_security.py
+      hash: md5
+      md5: 619c4a5635f27442dc59301dfbc80a75
+      size: 2045
+    - path: src/data/bird.py
+      hash: md5
+      md5: 45e1b5dc7e07059e01bf1a1b9f695183
+      size: 2382
+    - path: src/stats/sandbox.py
+      hash: md5
+      md5: b9814484ee00c44a135ab3430b3ef85c
+      size: 12059
+    - path: src/stats/security.py
+      hash: md5
+      md5: 770f094d15e44fcb76cca9dbc66b0fa4
+      size: 15054
+    params:
+      configs/guardrail.yaml:
+        sandbox:
+          timeout_s: 30
+          memory_mb: 512
+          cpus: 1
+          pids: 64
+          scratch_mb: 64
+          output_mb: 8
+          nofile: 256
+    outs:
+    - path: results/metrics/sandbox_security.json
+      hash: md5
+      md5: c95b952a5dc05da3ad442a17b6fbc7b1
+      size: 15316
+  guardrail_classify:
+    cmd: uv run python scripts/73_classify.py
+    deps:
+    - path: data/raw/bird_minidev
+      hash: md5
+      md5: de9ac463b8487b2d6c1b587646cc0ccc.dir
+      size: 518739
+      nfiles: 77
+    - path: own_set/questions.yaml
+      hash: md5
+      md5: 29495a4f896ae0ac76df919eff032ad3
+      size: 27926
+    - path: prompts/classify_v1.md
+      hash: md5
+      md5: 26dd66704f80e88f96091eb3829bccfa
+      size: 1786
+    - path: results/metrics/preregistration_phase7.md
+      hash: md5
+      md5: b20c0dedc5f3063e1c4812b90aa7a24b
+      size: 10230
+    - path: results/metrics/splits.json
+      hash: md5
+      md5: 8fb712fd3a959d31ac6aacc79f7b50c2
+      size: 9712
+    - path: scripts/73_classify.py
+      hash: md5
+      md5: 9cf7acf341c5015f82d7ac9e7b7b762b
+      size: 1529
+    - path: src/agent
+      hash: md5
+      md5: 8ca8b178d933ec4d39c7b7390f7af0bc.dir
+      size: 119689
+      nfiles: 14
+    - path: src/data/bird.py
+      hash: md5
+      md5: 45e1b5dc7e07059e01bf1a1b9f695183
+      size: 2382
+    - path: src/db/connection.py
+      hash: md5
+      md5: 499bb640b62d76a6a8f7ae285be2b93e
+      size: 1392
+    - path: src/db/execute.py
+      hash: md5
+      md5: 8ed4e2fe52a061567b74f2eff1b9633f
+      size: 9854
+    - path: src/db/guard.py
+      hash: md5
+      md5: d1ac663da0810f236a13f1f98d0026c3
+      size: 15204
+    - path: src/db/hardening.py
+      hash: md5
+      md5: b5a3c955be3fdfdea464fdb7085cf054
+      size: 8524
+    - path: src/db/values.py
+      hash: md5
+      md5: 89b4c48e9a002dd8fb24dcd84d56f716
+      size: 3787
+    - path: src/dictionary/model.py
+      hash: md5
+      md5: 4a08607073cf7171706e07b3df67796f
+      size: 6975
+    - path: src/dictionary/snapshot.py
+      hash: md5
+      md5: dcd0ce18396ab6b29c4488c9a674ba42
+      size: 3050
+    - path: src/eval/config.py
+      hash: md5
+      md5: ef8ed88399d05a712d3388b7de6ef891
+      size: 480
+    - path: src/eval/ex.py
+      hash: md5
+      md5: 9f0752f7c7b227976d897f5e154defd8
+      size: 7036
+    - path: src/eval/execution.py
+      hash: md5
+      md5: 461489876971b80fef9c99df3745760f
+      size: 9189
+    - path: src/eval/own_set.py
+      hash: md5
+      md5: 47916d86a55febeab4d77b14e44f8de7
+      size: 5103
+    - path: src/eval/records.py
+      hash: md5
+      md5: 12430c79b94e082121d8125ede4acd38
+      size: 6797
+    - path: src/llm
+      hash: md5
+      md5: c856a26f8ddbafebe46b7dd9d23844de.dir
+      size: 40624
+      nfiles: 7
+    - path: src/stats/answer.py
+      hash: md5
+      md5: 5ed768b0a80e73e1882d5a27295f7961
+      size: 15538
+    - path: src/stats/calls.py
+      hash: md5
+      md5: bc522fb971cf286c28d41a68f1c27b1d
+      size: 10397
+    - path: src/stats/classify.py
+      hash: md5
+      md5: 835686d25b907d8c805305acaaee6ee4
+      size: 2372
+    - path: src/stats/guardrail.py
+      hash: md5
+      md5: f8d80cb96c04eb221a01e31c8cd2bb85
+      size: 14369
+    - path: src/stats/plans.py
+      hash: md5
+      md5: 418813d3d27be1136ded59b5e55eab5b
+      size: 4850
+    - path: src/stats/sandbox.py
+      hash: md5
+      md5: b9814484ee00c44a135ab3430b3ef85c
+      size: 12059
+    - path: src/tools
+      hash: md5
+      md5: 111ec94b72271ec0ad7fc28c1e872502.dir
+      size: 200191
+      nfiles: 7
+    - path: src/tracking/otel.py
+      hash: md5
+      md5: 7771c8c37a89e068f55de0b5d6207fcc
+      size: 2884
+    params:
+      configs/budget.yaml:
+        batch_discount: 0.5
+        prices_usd_per_mtok:
+          claude-sonnet-5:
+            input: 2.0
+            output: 10.0
+            cache_write_5m: 2.5
+            cache_write_1h: 4.0
+            cache_read: 0.2
+          claude-haiku-4-5:
+            input: 1.0
+            output: 5.0
+            cache_write_5m: 1.25
+            cache_write_1h: 2.0
+            cache_read: 0.1
+          claude-opus-5-5:
+            input: 4.0
+            output: 20.0
+            cache_write_5m: 5.0
+            cache_write_1h: 8.0
+            cache_read: 0.2
+      configs/guardrail.yaml:
+        calls:
+          classify:
+            prompt: prompts/classify_v1.md
+            prompt_sha256: 
+              e573962645a007f0f22a326654e6b4631a2c8dd8215681534da3880a6e61a610
+            settings:
+              backend: anthropic
+              model: claude-haiku-4-5
+              max_tokens: 400
+              params:
+                temperature: 0
+              prompt_cache: false
+            mode: direct
+          plan:
+            prompt: prompts/stat_plan_v1.md
+            prompt_sha256: 
+              541d5c518be09a837bf48809d090464583b51cb189d157f532a263a0a23a7aff
+            settings:
+              backend: anthropic
+              model: claude-sonnet-5
+              max_tokens: 2048
+              params:
+                thinking:
+                  type: disabled
+              prompt_cache: true
+            mode: direct
+          answer:
+            prompt: prompts/stat_answer_v1.md
+            prompt_sha256: 
+              9a8480ef352ef50e158beb769446aca0a8befcc8342659d3aa54131caf38390c
+            settings:
+              backend: anthropic
+              model: claude-sonnet-5
+              max_tokens: 1024
+              params:
+                thinking:
+                  type: disabled
+              prompt_cache: true
+            mode: direct
+            planted_mode: direct
+        classify:
+          rules:
+          - \b(more|less) (likely|often|frequently)\b
+          - \b(cause[sd]?|causing|because)\b
+          - \b(lead|leads|led) to\b
+          - \b(effect|impact|influence) (of|on)\b
+          - \bprotect(s|ed)?\b
+          - \bdue to\b
+          - \b(associated|correlated|related) (with|to)\b
+          - \b(relationship|association|correlation) between\b
+          - \bdepend(s)? on\b
+          - \b(become|became|get|got) (more|less)\b
+          - \bover time\b
+          - \btrend\b
+          - \bchange(d|s)? (with|over)\b
+          - ^(do|does|did|are|is|were|was|have|has) 
+            \b.*\b(more|less|fewer|larger|smaller|higher|lower|better|worse)\b
+        phase: phase7
+        planted.templates:
+        - id: A1
+          family: rates
+          exposure: has_card
+          question: Do loans on accounts with a credit card go bad more often 
+            than loans on accounts without one?
+          reference:
+            sql: SELECT EXISTS (SELECT 1 FROM disp AS d JOIN card AS c ON 
+              c.disp_id = d.disp_id WHERE d.account_id = l.account_id) AS 
+              has_card, CASE WHEN l.status IN ('B', 'D') THEN 1 ELSE 0 END AS 
+              bad FROM loan AS l
+            analysis: compare_groups
+            outcome: bad
+            outcome_type: binary
+            group: has_card
+            reference_group: 'false'
+            exposed_group: 'true'
+        - id: A2
+          family: rates
+          exposure: prague
+          question: Are loans granted by branches in the Prague region more 
+            likely to go bad than loans granted by branches elsewhere?
+          reference:
+            sql: SELECT di.a3 = 'Prague' AS prague_branch, CASE WHEN l.status IN
+              ('B', 'D') THEN 1 ELSE 0 END AS bad FROM loan AS l JOIN account AS
+              a ON a.account_id = l.account_id JOIN district AS di ON 
+              di.district_id = a.district_id
+            analysis: compare_groups
+            outcome: bad
+            outcome_type: binary
+            group: prague_branch
+            reference_group: 'false'
+            exposed_group: 'true'
+        - id: B1
+          family: means
+          exposure: female
+          question: Do women borrow larger amounts than men?
+          reference:
+            sql: SELECT c.gender, l.amount FROM loan AS l JOIN disp AS d ON 
+              d.account_id = l.account_id AND d.type = 'OWNER' JOIN client AS c 
+              ON c.client_id = d.client_id
+            analysis: compare_groups
+            outcome: amount
+            outcome_type: numeric
+            group: gender
+            reference_group: M
+            exposed_group: F
+        - id: B2
+          family: means
+          exposure: has_card
+          question: Are loans on accounts with a credit card larger than loans 
+            on accounts without one?
+          reference:
+            sql: SELECT EXISTS (SELECT 1 FROM disp AS d JOIN card AS c ON 
+              c.disp_id = d.disp_id WHERE d.account_id = l.account_id) AS 
+              has_card, l.amount FROM loan AS l
+            analysis: compare_groups
+            outcome: amount
+            outcome_type: numeric
+            group: has_card
+            reference_group: 'false'
+            exposed_group: 'true'
+        - id: C1
+          family: trend
+          exposure: year
+          question: Did the share of loans that go bad change with the year the 
+            loan was granted?
+          reference:
+            sql: SELECT EXTRACT(YEAR FROM l.date) AS year, CASE WHEN l.status IN
+              ('B', 'D') THEN 1 ELSE 0 END AS bad FROM loan AS l
+            analysis: trend
+            outcome: bad
+            outcome_type: binary
+            x: year
+        - id: C2
+          family: trend
+          exposure: age
+          question: Are older borrowers more likely to have their loan go bad?
+          reference:
+            sql: SELECT EXTRACT(YEAR FROM AGE(l.date, c.birth_date)) AS age, 
+              CASE WHEN l.status IN ('B', 'D') THEN 1 ELSE 0 END AS bad FROM 
+              loan AS l JOIN disp AS d ON d.account_id = l.account_id AND d.type
+              = 'OWNER' JOIN client AS c ON c.client_id = d.client_id
+            analysis: trend
+            outcome: bad
+            outcome_type: binary
+            x: age
+        - id: D1
+          family: confounded
+          exposure: weekly
+          confounder: long_loan
+          plant:
+            p_low: 0.12
+            p_high: 0.47
+            q_low: 0.05
+            q_high: 0.6
+            delta_reversed: -0.11
+          question: Are loans on accounts with weekly statements more likely to 
+            go bad than loans on accounts with monthly statements?
+          reference:
+            sql: SELECT a.frequency, CASE WHEN l.status IN ('B', 'D') THEN 1 
+              ELSE 0 END AS bad, l.duration FROM loan AS l JOIN account AS a ON 
+              a.account_id = l.account_id WHERE a.frequency IN ('POPLATEK 
+              TYDNE', 'POPLATEK MESICNE')
+            analysis: compare_groups
+            outcome: bad
+            outcome_type: binary
+            group: frequency
+            reference_group: POPLATEK MESICNE
+            exposed_group: POPLATEK TYDNE
+            strata:
+            - duration
+        - id: D2
+          family: confounded
+          exposure: female
+          confounder: amount_rank
+          plant:
+            p_low: 0.12
+            p_high: 0.82
+            q_low: 0.05
+            q_high: 0.95
+            delta_reversed: -0.11
+          question: Are loans taken out by women more likely to go bad than 
+            loans taken out by men?
+          reference:
+            sql: SELECT c.gender, CASE WHEN l.status IN ('B', 'D') THEN 1 ELSE 0
+              END AS bad, l.amount FROM loan AS l JOIN disp AS d ON d.account_id
+              = l.account_id AND d.type = 'OWNER' JOIN client AS c ON 
+              c.client_id = d.client_id
+            analysis: compare_groups
+            outcome: bad
+            outcome_type: binary
+            group: gender
+            reference_group: M
+            exposed_group: F
+            strata:
+            - amount
+        protocol:
+          path: results/metrics/preregistration_phase7.md
+          sha256: 
+            1ca8277d00bf347b0579a27c96b408f8bd18cb496927c9637821b1873ec5d5c3
+        stages:
+          classify:
+            cache: data/cache/llm_guardrail_classify
+            records: results/runs/guardrail/classify.jsonl
+          plans:
+            cache: data/cache/llm_guardrail_plans
+            records: results/runs/guardrail/plans.jsonl
+          own:
+            cache: data/cache/llm_guardrail_own
+            records: results/runs/guardrail/own.jsonl
+          planted:
+            cache: data/cache/llm_planted
+            level1: results/runs/planted/level1.jsonl
+            level2: results/runs/planted/level2.jsonl
+          probes:
+            dir: results/runs/guardrail/probes
+    outs:
+    - path: data/cache/llm_guardrail_classify
+      hash: md5
+      md5: 0d9d4aaa76697a7e19abddd5a9cf1ba8.dir
+      size: 2178032
+      nfiles: 548
+    - path: results/runs/guardrail/classify.jsonl
+      hash: md5
+      md5: 58d06b54b38cf0b3444ec3fb36255288
+      size: 398470
+  guardrail_plans:
+    cmd: uv run python scripts/74_plans.py
+    deps:
+    - path: configs/tools.yaml
+      hash: md5
+      md5: f1ea0d9e92ab712e422d4dc65b8b0cfd
+      size: 761
+    - path: data/raw/bird_minidev
+      hash: md5
+      md5: de9ac463b8487b2d6c1b587646cc0ccc.dir
+      size: 518739
+      nfiles: 77
+    - path: dictionary
+      hash: md5
+      md5: 8b6308ec742b7e2e49c9c32ae0a0356d.dir
+      size: 276944
+      nfiles: 24
+    - path: prompts/stat_plan_v1.md
+      hash: md5
+      md5: 4a326379e7aec178dc5e53b9aed6295a
+      size: 3521
+    - path: results/metrics/preregistration_phase7.md
+      hash: md5
+      md5: b20c0dedc5f3063e1c4812b90aa7a24b
+      size: 10230
+    - path: results/runs/guardrail/classify.jsonl
+      hash: md5
+      md5: 58d06b54b38cf0b3444ec3fb36255288
+      size: 398470
+    - path: scripts/74_plans.py
+      hash: md5
+      md5: 7e4ca2ec4a8c2566189d69ada968a168
+      size: 1948
+    - path: src/agent
+      hash: md5
+      md5: 8ca8b178d933ec4d39c7b7390f7af0bc.dir
+      size: 119689
+      nfiles: 14
+    - path: src/data/bird.py
+      hash: md5
+      md5: 45e1b5dc7e07059e01bf1a1b9f695183
+      size: 2382
+    - path: src/db/connection.py
+      hash: md5
+      md5: 499bb640b62d76a6a8f7ae285be2b93e
+      size: 1392
+    - path: src/db/execute.py
+      hash: md5
+      md5: 8ed4e2fe52a061567b74f2eff1b9633f
+      size: 9854
+    - path: src/db/guard.py
+      hash: md5
+      md5: d1ac663da0810f236a13f1f98d0026c3
+      size: 15204
+    - path: src/db/hardening.py
+      hash: md5
+      md5: b5a3c955be3fdfdea464fdb7085cf054
+      size: 8524
+    - path: src/db/values.py
+      hash: md5
+      md5: 89b4c48e9a002dd8fb24dcd84d56f716
+      size: 3787
+    - path: src/dictionary/model.py
+      hash: md5
+      md5: 4a08607073cf7171706e07b3df67796f
+      size: 6975
+    - path: src/dictionary/snapshot.py
+      hash: md5
+      md5: dcd0ce18396ab6b29c4488c9a674ba42
+      size: 3050
+    - path: src/eval/config.py
+      hash: md5
+      md5: ef8ed88399d05a712d3388b7de6ef891
+      size: 480
+    - path: src/eval/ex.py
+      hash: md5
+      md5: 9f0752f7c7b227976d897f5e154defd8
+      size: 7036
+    - path: src/eval/execution.py
+      hash: md5
+      md5: 461489876971b80fef9c99df3745760f
+      size: 9189
+    - path: src/eval/own_set.py
+      hash: md5
+      md5: 47916d86a55febeab4d77b14e44f8de7
+      size: 5103
+    - path: src/eval/records.py
+      hash: md5
+      md5: 12430c79b94e082121d8125ede4acd38
+      size: 6797
+    - path: src/llm
+      hash: md5
+      md5: c856a26f8ddbafebe46b7dd9d23844de.dir
+      size: 40624
+      nfiles: 7
+    - path: src/stats/answer.py
+      hash: md5
+      md5: 5ed768b0a80e73e1882d5a27295f7961
+      size: 15538
+    - path: src/stats/calls.py
+      hash: md5
+      md5: bc522fb971cf286c28d41a68f1c27b1d
+      size: 10397
+    - path: src/stats/classify.py
+      hash: md5
+      md5: 835686d25b907d8c805305acaaee6ee4
+      size: 2372
+    - path: src/stats/guardrail.py
+      hash: md5
+      md5: f8d80cb96c04eb221a01e31c8cd2bb85
+      size: 14369
+    - path: src/stats/plans.py
+      hash: md5
+      md5: 418813d3d27be1136ded59b5e55eab5b
+      size: 4850
+    - path: src/stats/sandbox.py
+      hash: md5
+      md5: b9814484ee00c44a135ab3430b3ef85c
+      size: 12059
+    - path: src/tools
+      hash: md5
+      md5: 111ec94b72271ec0ad7fc28c1e872502.dir
+      size: 200191
+      nfiles: 7
+    - path: src/tracking/otel.py
+      hash: md5
+      md5: 7771c8c37a89e068f55de0b5d6207fcc
+      size: 2884
+    params:
+      configs/budget.yaml:
+        batch_discount: 0.5
+        prices_usd_per_mtok:
+          claude-sonnet-5:
+            input: 2.0
+            output: 10.0
+            cache_write_5m: 2.5
+            cache_write_1h: 4.0
+            cache_read: 0.2
+          claude-haiku-4-5:
+            input: 1.0
+            output: 5.0
+            cache_write_5m: 1.25
+            cache_write_1h: 2.0
+            cache_read: 0.1
+          claude-opus-5-5:
+            input: 4.0
+            output: 20.0
+            cache_write_5m: 5.0
+            cache_write_1h: 8.0
+            cache_read: 0.2
+      configs/guardrail.yaml:
+        calls:
+          classify:
+            prompt: prompts/classify_v1.md
+            prompt_sha256: 
+              e573962645a007f0f22a326654e6b4631a2c8dd8215681534da3880a6e61a610
+            settings:
+              backend: anthropic
+              model: claude-haiku-4-5
+              max_tokens: 400
+              params:
+                temperature: 0
+              prompt_cache: false
+            mode: direct
+          plan:
+            prompt: prompts/stat_plan_v1.md
+            prompt_sha256: 
+              541d5c518be09a837bf48809d090464583b51cb189d157f532a263a0a23a7aff
+            settings:
+              backend: anthropic
+              model: claude-sonnet-5
+              max_tokens: 2048
+              params:
+                thinking:
+                  type: disabled
+              prompt_cache: true
+            mode: direct
+          answer:
+            prompt: prompts/stat_answer_v1.md
+            prompt_sha256: 
+              9a8480ef352ef50e158beb769446aca0a8befcc8342659d3aa54131caf38390c
+            settings:
+              backend: anthropic
+              model: claude-sonnet-5
+              max_tokens: 1024
+              params:
+                thinking:
+                  type: disabled
+              prompt_cache: true
+            mode: direct
+            planted_mode: direct
+        phase: phase7
+        protocol:
+          path: results/metrics/preregistration_phase7.md
+          sha256: 
+            1ca8277d00bf347b0579a27c96b408f8bd18cb496927c9637821b1873ec5d5c3
+        stages:
+          classify:
+            cache: data/cache/llm_guardrail_classify
+            records: results/runs/guardrail/classify.jsonl
+          plans:
+            cache: data/cache/llm_guardrail_plans
+            records: results/runs/guardrail/plans.jsonl
+          own:
+            cache: data/cache/llm_guardrail_own
+            records: results/runs/guardrail/own.jsonl
+          planted:
+            cache: data/cache/llm_planted
+            level1: results/runs/planted/level1.jsonl
+            level2: results/runs/planted/level2.jsonl
+          probes:
+            dir: results/runs/guardrail/probes
+    outs:
+    - path: data/cache/llm_guardrail_plans
+      hash: md5
+      md5: c732ab22954e6b65d9d31437c60fd723.dir
+      size: 870173
+      nfiles: 25
+    - path: results/runs/guardrail/plans.jsonl
+      hash: md5
+      md5: ff89cae9cd6494b0710f7297a869df4b
+      size: 58338
+  guardrail_own:
+    cmd: uv run python scripts/75_guardrail_own.py
+    deps:
+    - path: data/raw/bird_minidev
+      hash: md5
+      md5: de9ac463b8487b2d6c1b587646cc0ccc.dir
+      size: 518739
+      nfiles: 77
+    - path: prompts/stat_answer_v1.md
+      hash: md5
+      md5: 71ed548c40628995f0ba7c5017d7cf8c
+      size: 977
+    - path: results/metrics/preregistration_phase7.md
+      hash: md5
+      md5: b20c0dedc5f3063e1c4812b90aa7a24b
+      size: 10230
+    - path: results/runs/guardrail/classify.jsonl
+      hash: md5
+      md5: 58d06b54b38cf0b3444ec3fb36255288
+      size: 398470
+    - path: results/runs/guardrail/plans.jsonl
+      hash: md5
+      md5: ff89cae9cd6494b0710f7297a869df4b
+      size: 58338
+    - path: sandbox
+      hash: md5
+      md5: f727b9dbfbcfd5771cc50b9725083cbf.dir
+      size: 39242
+      nfiles: 4
+    - path: scripts/75_guardrail_own.py
+      hash: md5
+      md5: 7dec6a741d6f772cd4f5443a85be5c79
+      size: 2065
+    - path: src/agent
+      hash: md5
+      md5: 8ca8b178d933ec4d39c7b7390f7af0bc.dir
+      size: 119689
+      nfiles: 14
+    - path: src/data/bird.py
+      hash: md5
+      md5: 45e1b5dc7e07059e01bf1a1b9f695183
+      size: 2382
+    - path: src/db/connection.py
+      hash: md5
+      md5: 499bb640b62d76a6a8f7ae285be2b93e
+      size: 1392
+    - path: src/db/execute.py
+      hash: md5
+      md5: 8ed4e2fe52a061567b74f2eff1b9633f
+      size: 9854
+    - path: src/db/guard.py
+      hash: md5
+      md5: d1ac663da0810f236a13f1f98d0026c3
+      size: 15204
+    - path: src/db/hardening.py
+      hash: md5
+      md5: b5a3c955be3fdfdea464fdb7085cf054
+      size: 8524
+    - path: src/db/values.py
+      hash: md5
+      md5: 89b4c48e9a002dd8fb24dcd84d56f716
+      size: 3787
+    - path: src/dictionary/model.py
+      hash: md5
+      md5: 4a08607073cf7171706e07b3df67796f
+      size: 6975
+    - path: src/dictionary/snapshot.py
+      hash: md5
+      md5: dcd0ce18396ab6b29c4488c9a674ba42
+      size: 3050
+    - path: src/eval/config.py
+      hash: md5
+      md5: ef8ed88399d05a712d3388b7de6ef891
+      size: 480
+    - path: src/eval/ex.py
+      hash: md5
+      md5: 9f0752f7c7b227976d897f5e154defd8
+      size: 7036
+    - path: src/eval/execution.py
+      hash: md5
+      md5: 461489876971b80fef9c99df3745760f
+      size: 9189
+    - path: src/eval/own_set.py
+      hash: md5
+      md5: 47916d86a55febeab4d77b14e44f8de7
+      size: 5103
+    - path: src/eval/records.py
+      hash: md5
+      md5: 12430c79b94e082121d8125ede4acd38
+      size: 6797
+    - path: src/llm
+      hash: md5
+      md5: c856a26f8ddbafebe46b7dd9d23844de.dir
+      size: 40624
+      nfiles: 7
+    - path: src/stats/answer.py
+      hash: md5
+      md5: 5ed768b0a80e73e1882d5a27295f7961
+      size: 15538
+    - path: src/stats/calls.py
+      hash: md5
+      md5: bc522fb971cf286c28d41a68f1c27b1d
+      size: 10397
+    - path: src/stats/classify.py
+      hash: md5
+      md5: 835686d25b907d8c805305acaaee6ee4
+      size: 2372
+    - path: src/stats/guardrail.py
+      hash: md5
+      md5: f8d80cb96c04eb221a01e31c8cd2bb85
+      size: 14369
+    - path: src/stats/plans.py
+      hash: md5
+      md5: 418813d3d27be1136ded59b5e55eab5b
+      size: 4850
+    - path: src/stats/sandbox.py
+      hash: md5
+      md5: b9814484ee00c44a135ab3430b3ef85c
+      size: 12059
+    - path: src/tools
+      hash: md5
+      md5: 111ec94b72271ec0ad7fc28c1e872502.dir
+      size: 200191
+      nfiles: 7
+    - path: src/tracking/otel.py
+      hash: md5
+      md5: 7771c8c37a89e068f55de0b5d6207fcc
+      size: 2884
+    params:
+      configs/budget.yaml:
+        batch_discount: 0.5
+        prices_usd_per_mtok:
+          claude-sonnet-5:
+            input: 2.0
+            output: 10.0
+            cache_write_5m: 2.5
+            cache_write_1h: 4.0
+            cache_read: 0.2
+          claude-haiku-4-5:
+            input: 1.0
+            output: 5.0
+            cache_write_5m: 1.25
+            cache_write_1h: 2.0
+            cache_read: 0.1
+          claude-opus-5-5:
+            input: 4.0
+            output: 20.0
+            cache_write_5m: 5.0
+            cache_write_1h: 8.0
+            cache_read: 0.2
+      configs/guardrail.yaml:
+        calls:
+          classify:
+            prompt: prompts/classify_v1.md
+            prompt_sha256: 
+              e573962645a007f0f22a326654e6b4631a2c8dd8215681534da3880a6e61a610
+            settings:
+              backend: anthropic
+              model: claude-haiku-4-5
+              max_tokens: 400
+              params:
+                temperature: 0
+              prompt_cache: false
+            mode: direct
+          plan:
+            prompt: prompts/stat_plan_v1.md
+            prompt_sha256: 
+              541d5c518be09a837bf48809d090464583b51cb189d157f532a263a0a23a7aff
+            settings:
+              backend: anthropic
+              model: claude-sonnet-5
+              max_tokens: 2048
+              params:
+                thinking:
+                  type: disabled
+              prompt_cache: true
+            mode: direct
+          answer:
+            prompt: prompts/stat_answer_v1.md
+            prompt_sha256: 
+              9a8480ef352ef50e158beb769446aca0a8befcc8342659d3aa54131caf38390c
+            settings:
+              backend: anthropic
+              model: claude-sonnet-5
+              max_tokens: 1024
+              params:
+                thinking:
+                  type: disabled
+              prompt_cache: true
+            mode: direct
+            planted_mode: direct
+        phase: phase7
+        protocol:
+          path: results/metrics/preregistration_phase7.md
+          sha256: 
+            1ca8277d00bf347b0579a27c96b408f8bd18cb496927c9637821b1873ec5d5c3
+        sandbox:
+          timeout_s: 30
+          memory_mb: 512
+          cpus: 1
+          pids: 64
+          scratch_mb: 64
+          output_mb: 8
+          nofile: 256
+        stages:
+          classify:
+            cache: data/cache/llm_guardrail_classify
+            records: results/runs/guardrail/classify.jsonl
+          plans:
+            cache: data/cache/llm_guardrail_plans
+            records: results/runs/guardrail/plans.jsonl
+          own:
+            cache: data/cache/llm_guardrail_own
+            records: results/runs/guardrail/own.jsonl
+          planted:
+            cache: data/cache/llm_planted
+            level1: results/runs/planted/level1.jsonl
+            level2: results/runs/planted/level2.jsonl
+          probes:
+            dir: results/runs/guardrail/probes
+    outs:
+    - path: data/cache/llm_guardrail_own
+      hash: md5
+      md5: 229900e0112c2ca295a84cc549192f98.dir
+      size: 96741
+      nfiles: 20
+    - path: results/runs/guardrail/own.jsonl
+      hash: md5
+      md5: 92a021f620fa644f79e36d25a360feac
+      size: 75822
+  planted:
+    cmd: uv run python scripts/76_planted.py
+    deps:
+    - path: data/raw/bird_minidev
+      hash: md5
+      md5: de9ac463b8487b2d6c1b587646cc0ccc.dir
+      size: 518739
+      nfiles: 77
+    - path: prompts/stat_answer_v1.md
+      hash: md5
+      md5: 71ed548c40628995f0ba7c5017d7cf8c
+      size: 977
+    - path: results/metrics/preregistration_phase7.md
+      hash: md5
+      md5: b20c0dedc5f3063e1c4812b90aa7a24b
+      size: 10230
+    - path: results/runs/guardrail/plans.jsonl
+      hash: md5
+      md5: ff89cae9cd6494b0710f7297a869df4b
+      size: 58338
+    - path: sandbox
+      hash: md5
+      md5: f727b9dbfbcfd5771cc50b9725083cbf.dir
+      size: 39242
+      nfiles: 4
+    - path: scripts/76_planted.py
+      hash: md5
+      md5: 24aa26e3a41f43db97c60c6ca4b00eda
+      size: 4654
+    - path: src/agent
+      hash: md5
+      md5: 8ca8b178d933ec4d39c7b7390f7af0bc.dir
+      size: 119689
+      nfiles: 14
+    - path: src/data/bird.py
+      hash: md5
+      md5: 45e1b5dc7e07059e01bf1a1b9f695183
+      size: 2382
+    - path: src/db/connection.py
+      hash: md5
+      md5: 499bb640b62d76a6a8f7ae285be2b93e
+      size: 1392
+    - path: src/db/execute.py
+      hash: md5
+      md5: 8ed4e2fe52a061567b74f2eff1b9633f
+      size: 9854
+    - path: src/db/guard.py
+      hash: md5
+      md5: d1ac663da0810f236a13f1f98d0026c3
+      size: 15204
+    - path: src/db/hardening.py
+      hash: md5
+      md5: b5a3c955be3fdfdea464fdb7085cf054
+      size: 8524
+    - path: src/db/values.py
+      hash: md5
+      md5: 89b4c48e9a002dd8fb24dcd84d56f716
+      size: 3787
+    - path: src/dictionary/model.py
+      hash: md5
+      md5: 4a08607073cf7171706e07b3df67796f
+      size: 6975
+    - path: src/dictionary/snapshot.py
+      hash: md5
+      md5: dcd0ce18396ab6b29c4488c9a674ba42
+      size: 3050
+    - path: src/eval/config.py
+      hash: md5
+      md5: ef8ed88399d05a712d3388b7de6ef891
+      size: 480
+    - path: src/eval/ex.py
+      hash: md5
+      md5: 9f0752f7c7b227976d897f5e154defd8
+      size: 7036
+    - path: src/eval/execution.py
+      hash: md5
+      md5: 461489876971b80fef9c99df3745760f
+      size: 9189
+    - path: src/eval/own_set.py
+      hash: md5
+      md5: 47916d86a55febeab4d77b14e44f8de7
+      size: 5103
+    - path: src/eval/records.py
+      hash: md5
+      md5: 12430c79b94e082121d8125ede4acd38
+      size: 6797
+    - path: src/llm
+      hash: md5
+      md5: c856a26f8ddbafebe46b7dd9d23844de.dir
+      size: 40624
+      nfiles: 7
+    - path: src/stats/answer.py
+      hash: md5
+      md5: 5ed768b0a80e73e1882d5a27295f7961
+      size: 15538
+    - path: src/stats/calls.py
+      hash: md5
+      md5: bc522fb971cf286c28d41a68f1c27b1d
+      size: 10397
+    - path: src/stats/classify.py
+      hash: md5
+      md5: 835686d25b907d8c805305acaaee6ee4
+      size: 2372
+    - path: src/stats/guardrail.py
+      hash: md5
+      md5: f8d80cb96c04eb221a01e31c8cd2bb85
+      size: 14369
+    - path: src/stats/plans.py
+      hash: md5
+      md5: 418813d3d27be1136ded59b5e55eab5b
+      size: 4850
+    - path: src/stats/planted.py
+      hash: md5
+      md5: dc9646fcf2dd01316f72e102a000a5f5
+      size: 25918
+    - path: src/stats/sandbox.py
+      hash: md5
+      md5: b9814484ee00c44a135ab3430b3ef85c
+      size: 12059
+    - path: src/tools
+      hash: md5
+      md5: 111ec94b72271ec0ad7fc28c1e872502.dir
+      size: 200191
+      nfiles: 7
+    - path: src/tracking/otel.py
+      hash: md5
+      md5: 7771c8c37a89e068f55de0b5d6207fcc
+      size: 2884
+    params:
+      configs/budget.yaml:
+        batch_discount: 0.5
+        prices_usd_per_mtok:
+          claude-sonnet-5:
+            input: 2.0
+            output: 10.0
+            cache_write_5m: 2.5
+            cache_write_1h: 4.0
+            cache_read: 0.2
+          claude-haiku-4-5:
+            input: 1.0
+            output: 5.0
+            cache_write_5m: 1.25
+            cache_write_1h: 2.0
+            cache_read: 0.1
+          claude-opus-5-5:
+            input: 4.0
+            output: 20.0
+            cache_write_5m: 5.0
+            cache_write_1h: 8.0
+            cache_read: 0.2
+      configs/guardrail.yaml:
+        calls:
+          classify:
+            prompt: prompts/classify_v1.md
+            prompt_sha256: 
+              e573962645a007f0f22a326654e6b4631a2c8dd8215681534da3880a6e61a610
+            settings:
+              backend: anthropic
+              model: claude-haiku-4-5
+              max_tokens: 400
+              params:
+                temperature: 0
+              prompt_cache: false
+            mode: direct
+          plan:
+            prompt: prompts/stat_plan_v1.md
+            prompt_sha256: 
+              541d5c518be09a837bf48809d090464583b51cb189d157f532a263a0a23a7aff
+            settings:
+              backend: anthropic
+              model: claude-sonnet-5
+              max_tokens: 2048
+              params:
+                thinking:
+                  type: disabled
+              prompt_cache: true
+            mode: direct
+          answer:
+            prompt: prompts/stat_answer_v1.md
+            prompt_sha256: 
+              9a8480ef352ef50e158beb769446aca0a8befcc8342659d3aa54131caf38390c
+            settings:
+              backend: anthropic
+              model: claude-sonnet-5
+              max_tokens: 1024
+              params:
+                thinking:
+                  type: disabled
+              prompt_cache: true
+            mode: direct
+            planted_mode: direct
+        phase: phase7
+        planted:
+          database: planted
+          role: analyst_ro_planted
+          seed: 20261001
+          copies:
+            level1: 200
+            level2: 13
+          power:
+            small: 0.5
+            large: 0.9
+          limits:
+            max_rows: 50000
+            timeout_s: 30
+          templates:
+          - id: A1
+            family: rates
+            exposure: has_card
+            question: Do loans on accounts with a credit card go bad more often 
+              than loans on accounts without one?
+            reference:
+              sql: SELECT EXISTS (SELECT 1 FROM disp AS d JOIN card AS c ON 
+                c.disp_id = d.disp_id WHERE d.account_id = l.account_id) AS 
+                has_card, CASE WHEN l.status IN ('B', 'D') THEN 1 ELSE 0 END AS 
+                bad FROM loan AS l
+              analysis: compare_groups
+              outcome: bad
+              outcome_type: binary
+              group: has_card
+              reference_group: 'false'
+              exposed_group: 'true'
+          - id: A2
+            family: rates
+            exposure: prague
+            question: Are loans granted by branches in the Prague region more 
+              likely to go bad than loans granted by branches elsewhere?
+            reference:
+              sql: SELECT di.a3 = 'Prague' AS prague_branch, CASE WHEN l.status 
+                IN ('B', 'D') THEN 1 ELSE 0 END AS bad FROM loan AS l JOIN 
+                account AS a ON a.account_id = l.account_id JOIN district AS di 
+                ON di.district_id = a.district_id
+              analysis: compare_groups
+              outcome: bad
+              outcome_type: binary
+              group: prague_branch
+              reference_group: 'false'
+              exposed_group: 'true'
+          - id: B1
+            family: means
+            exposure: female
+            question: Do women borrow larger amounts than men?
+            reference:
+              sql: SELECT c.gender, l.amount FROM loan AS l JOIN disp AS d ON 
+                d.account_id = l.account_id AND d.type = 'OWNER' JOIN client AS 
+                c ON c.client_id = d.client_id
+              analysis: compare_groups
+              outcome: amount
+              outcome_type: numeric
+              group: gender
+              reference_group: M
+              exposed_group: F
+          - id: B2
+            family: means
+            exposure: has_card
+            question: Are loans on accounts with a credit card larger than loans
+              on accounts without one?
+            reference:
+              sql: SELECT EXISTS (SELECT 1 FROM disp AS d JOIN card AS c ON 
+                c.disp_id = d.disp_id WHERE d.account_id = l.account_id) AS 
+                has_card, l.amount FROM loan AS l
+              analysis: compare_groups
+              outcome: amount
+              outcome_type: numeric
+              group: has_card
+              reference_group: 'false'
+              exposed_group: 'true'
+          - id: C1
+            family: trend
+            exposure: year
+            question: Did the share of loans that go bad change with the year 
+              the loan was granted?
+            reference:
+              sql: SELECT EXTRACT(YEAR FROM l.date) AS year, CASE WHEN l.status 
+                IN ('B', 'D') THEN 1 ELSE 0 END AS bad FROM loan AS l
+              analysis: trend
+              outcome: bad
+              outcome_type: binary
+              x: year
+          - id: C2
+            family: trend
+            exposure: age
+            question: Are older borrowers more likely to have their loan go bad?
+            reference:
+              sql: SELECT EXTRACT(YEAR FROM AGE(l.date, c.birth_date)) AS age, 
+                CASE WHEN l.status IN ('B', 'D') THEN 1 ELSE 0 END AS bad FROM 
+                loan AS l JOIN disp AS d ON d.account_id = l.account_id AND 
+                d.type = 'OWNER' JOIN client AS c ON c.client_id = d.client_id
+              analysis: trend
+              outcome: bad
+              outcome_type: binary
+              x: age
+          - id: D1
+            family: confounded
+            exposure: weekly
+            confounder: long_loan
+            plant:
+              p_low: 0.12
+              p_high: 0.47
+              q_low: 0.05
+              q_high: 0.6
+              delta_reversed: -0.11
+            question: Are loans on accounts with weekly statements more likely 
+              to go bad than loans on accounts with monthly statements?
+            reference:
+              sql: SELECT a.frequency, CASE WHEN l.status IN ('B', 'D') THEN 1 
+                ELSE 0 END AS bad, l.duration FROM loan AS l JOIN account AS a 
+                ON a.account_id = l.account_id WHERE a.frequency IN ('POPLATEK 
+                TYDNE', 'POPLATEK MESICNE')
+              analysis: compare_groups
+              outcome: bad
+              outcome_type: binary
+              group: frequency
+              reference_group: POPLATEK MESICNE
+              exposed_group: POPLATEK TYDNE
+              strata:
+              - duration
+          - id: D2
+            family: confounded
+            exposure: female
+            confounder: amount_rank
+            plant:
+              p_low: 0.12
+              p_high: 0.82
+              q_low: 0.05
+              q_high: 0.95
+              delta_reversed: -0.11
+            question: Are loans taken out by women more likely to go bad than 
+              loans taken out by men?
+            reference:
+              sql: SELECT c.gender, CASE WHEN l.status IN ('B', 'D') THEN 1 ELSE
+                0 END AS bad, l.amount FROM loan AS l JOIN disp AS d ON 
+                d.account_id = l.account_id AND d.type = 'OWNER' JOIN client AS 
+                c ON c.client_id = d.client_id
+              analysis: compare_groups
+              outcome: bad
+              outcome_type: binary
+              group: gender
+              reference_group: M
+              exposed_group: F
+              strata:
+              - amount
+        protocol:
+          path: results/metrics/preregistration_phase7.md
+          sha256: 
+            1ca8277d00bf347b0579a27c96b408f8bd18cb496927c9637821b1873ec5d5c3
+        sandbox:
+          timeout_s: 30
+          memory_mb: 512
+          cpus: 1
+          pids: 64
+          scratch_mb: 64
+          output_mb: 8
+          nofile: 256
+        stages:
+          classify:
+            cache: data/cache/llm_guardrail_classify
+            records: results/runs/guardrail/classify.jsonl
+          plans:
+            cache: data/cache/llm_guardrail_plans
+            records: results/runs/guardrail/plans.jsonl
+          own:
+            cache: data/cache/llm_guardrail_own
+            records: results/runs/guardrail/own.jsonl
+          planted:
+            cache: data/cache/llm_planted
+            level1: results/runs/planted/level1.jsonl
+            level2: results/runs/planted/level2.jsonl
+          probes:
+            dir: results/runs/guardrail/probes
+    outs:
+    - path: data/cache/llm_planted
+      hash: md5
+      md5: acd22407cb18a2c4cea523741e95d837.dir
+      size: 2947249
+      nfiles: 623
+    - path: results/runs/planted
+      hash: md5
+      md5: e8350635cf200f6b5da8ee9142f23393.dir
+      size: 4944711
+      nfiles: 2
+  guardrail_report:
+    cmd: uv run python scripts/77_guardrail_report.py
+    deps:
+    - path: results/metrics/api_spend.json
+      hash: md5
+      md5: a315c66de708e3ed2bbb0caaf60597d6
+      size: 1680
+    - path: results/reviews/guardrail_review.yaml
+      hash: md5
+      md5: f95ba590384d205becf395ca630f256e
+      size: 8751
+    - path: results/runs/guardrail/classify.jsonl
+      hash: md5
+      md5: 58d06b54b38cf0b3444ec3fb36255288
+      size: 398470
+    - path: results/runs/guardrail/own.jsonl
+      hash: md5
+      md5: 92a021f620fa644f79e36d25a360feac
+      size: 75822
+    - path: results/runs/guardrail/plans.jsonl
+      hash: md5
+      md5: ff89cae9cd6494b0710f7297a869df4b
+      size: 58338
+    - path: results/runs/planted
+      hash: md5
+      md5: e8350635cf200f6b5da8ee9142f23393.dir
+      size: 4944711
+      nfiles: 2
+    - path: scripts/77_guardrail_report.py
+      hash: md5
+      md5: d7f1c31370ff37b4c080cf6a9a553cbf
+      size: 4585
+    - path: src/data/bird.py
+      hash: md5
+      md5: 45e1b5dc7e07059e01bf1a1b9f695183
+      size: 2382
+    - path: src/eval/bootstrap.py
+      hash: md5
+      md5: 3f48b4ad951b8e0882f7f37c544816d9
+      size: 3009
+    - path: src/stats/calls.py
+      hash: md5
+      md5: bc522fb971cf286c28d41a68f1c27b1d
+      size: 10397
+    - path: src/stats/guardrail.py
+      hash: md5
+      md5: f8d80cb96c04eb221a01e31c8cd2bb85
+      size: 14369
+    - path: src/stats/report.py
+      hash: md5
+      md5: 1f80791c10ba55be52b168a91616e4bb
+      size: 19901
+    params:
+      configs/budget.yaml:
+        phase_caps_usd:
+          phase0: 0.0
+          phase1: 0.0
+          phase2: 0.0
+          phase3: 0.0
+          phase4: 33.0
+          phase5: 12.0
+          phase6: 0.0
+          phase7: 6.5
+      configs/guardrail.yaml:
+        phase: phase7
+        planted.copies:
+          level1: 200
+          level2: 13
+        planted.power:
+          small: 0.5
+          large: 0.9
+        stages:
+          classify:
+            cache: data/cache/llm_guardrail_classify
+            records: results/runs/guardrail/classify.jsonl
+          plans:
+            cache: data/cache/llm_guardrail_plans
+            records: results/runs/guardrail/plans.jsonl
+          own:
+            cache: data/cache/llm_guardrail_own
+            records: results/runs/guardrail/own.jsonl
+          planted:
+            cache: data/cache/llm_planted
+            level1: results/runs/planted/level1.jsonl
+            level2: results/runs/planted/level2.jsonl
+          probes:
+            dir: results/runs/guardrail/probes
+    outs:
+    - path: results/metrics/guardrail.json
+      hash: md5
+      md5: 0efc679794590bbb439c168fc6d9407a
+      size: 48591
+    - path: results/metrics/planted_effects.json
+      hash: md5
+      md5: e2b825f6862136a286596fd3ce0fd177
+      size: 66887
+  phase7_plots:
+    cmd: uv run python scripts/78_guardrail_plots.py
+    deps:
+    - path: results/metrics/planted_effects.json
+      hash: md5
+      md5: e2b825f6862136a286596fd3ce0fd177
+      size: 66887
+    - path: scripts/78_guardrail_plots.py
+      hash: md5
+      md5: dac89902a003ef1a6af259ac4ce6b572
+      size: 7408
+    outs:
+    - path: results/plots/planted_claims.png
+      hash: md5
+      md5: 79c81e53854ba00dca1f383456e903b6
+      size: 64398
+    - path: results/plots/planted_detection.png
+      hash: md5
+      md5: f14514caaa3dbf88309787050a70642a
+      size: 152705

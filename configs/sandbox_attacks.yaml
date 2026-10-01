@@ -1,0 +1,289 @@
+# The sandbox security suite's attacks (run by src/stats/security.py; results in
+# results/metrics/sandbox_security.json). The guardrail's analyses are tested code, but the
+# container is locked down as if it ran hostile code, so the suite runs hostile code in it: every
+# attack below runs as a Python program under exactly the flags the guardrail uses
+# (src/stats/sandbox.py), with only the time limit shortened to the suite's. The `input` attacks
+# instead send hostile input to the sandbox's own entry point, as the guardrail does.
+#
+# The program reports what it achieved with `report(achieved, how, detail)`; `attempt(fn)` runs
+# one action and reports its result or why it failed. Outcomes that count as blocked:
+#   denied     the operating system or the runtime refused (permission, read-only, unreachable)
+#   absent     the target does not exist in the container (no such file, device or socket)
+#   contained  stopped by a limit: time, memory, processes, open files, scratch size or output
+#   rejected   the entry point refused the input with an error
+#   handled    the entry point returned a valid result (input attacks whose aim is a crash or hang)
+# Anything the attack achieved is a `breach`, as is a container left behind or a connection
+# reaching the suite's listener on the host.
+#
+# `control`: the same attack with only that protection relaxed, run once to show the attack is
+# real: its goal must then be achieved (a control that fails leaves the attack proving nothing).
+# Only attacks that are safe without the protection have one (never a fork bomb), and the
+# controls reach nothing outside this machine: the network's control connects to the suite's own
+# listener on the host (the database is just another such service, so it has no control of its
+# own, and need not be running).
+#
+# Placeholders filled in by the suite: LISTENER_PORT (the suite's TCP listener on the host),
+# TIMEOUT_S, SCRATCH_MB, MEMORY_MB, PIDS (the limits of the run), IMAGE_ENV (the names of the
+# variables the image itself defines, and HOSTNAME, which Docker sets).
+
+settings:
+  timeout_s: 5 # the suite's time limit; the guardrail's is longer, the mechanism is the same
+
+attacks:
+  # --- network ------------------------------------------------------------------------------
+  - id: net-interfaces
+    category: network
+    code: |
+      nics = sorted(os.listdir("/sys/class/net"))
+      report(nics != ["lo"], "denied", f"interfaces: {nics}")
+    control: { network: bridge }
+  - id: net-dns
+    category: network
+    code: |
+      attempt(lambda: socket.getaddrinfo("example.com", 443))
+  - id: net-public-address
+    category: network
+    code: |
+      attempt(lambda: socket.create_connection(("1.1.1.1", 443), timeout=3))
+  - id: net-host-service
+    category: network
+    code: |
+      attempt(lambda: socket.create_connection(("host.docker.internal", LISTENER_PORT), timeout=3))
+    control: { network: bridge, add_host: ["host.docker.internal:host-gateway"] }
+  - id: net-gateway-address
+    category: network
+    code: |
+      attempt(lambda: socket.create_connection(("172.17.0.1", LISTENER_PORT), timeout=3))
+  - id: net-database
+    category: network
+    code: |
+      attempt(lambda: socket.create_connection(("host.docker.internal", 5432), timeout=3))
+  - id: net-raw-socket
+    category: network
+    code: |
+      attempt(lambda: socket.socket(socket.AF_INET, socket.SOCK_RAW, socket.IPPROTO_ICMP))
+  - id: net-docker-socket
+    category: network
+    code: |
+      attempt(lambda: socket.socket(socket.AF_UNIX).connect("/var/run/docker.sock"))
+
+  # --- file system --------------------------------------------------------------------------
+  - id: fs-tamper-code
+    category: file_system
+    code: |
+      attempt(lambda: open("/opt/sandbox/analysis.py", "a").write("# changed"))
+  - id: fs-write-etc
+    category: file_system
+    code: |
+      attempt(lambda: open("/etc/passwd", "a").write("x:0:0::/:/bin/sh\n"))
+  - id: fs-write-tmp
+    category: file_system
+    code: |
+      attempt(lambda: open("/tmp/planted", "w").write("x"))
+    control: { read_only: false }
+  - id: fs-write-usr
+    category: file_system
+    code: |
+      attempt(lambda: open("/usr/local/lib/python3.12/site-packages/planted.py", "w").write("x"))
+  - id: fs-exec-scratch
+    category: file_system
+    code: |
+      import subprocess
+      path = "/scratch/run.sh"
+      with open(path, "w") as f:
+          f.write("#!/bin/sh\necho ran\n")
+      os.chmod(path, 0o755)
+      attempt(lambda: subprocess.run([path], capture_output=True, check=True).stdout)
+    control: { scratch_noexec: false }
+  - id: fs-fill-scratch
+    category: file_system
+    code: |
+      written = 0
+      try:
+          with open("/scratch/fill", "wb") as f:
+              while written < (SCRATCH_MB + 64) * 1024 * 1024:
+                  f.write(b"\0" * 1048576)
+                  f.flush()
+                  written += 1048576
+      except OSError as e:
+          report(False, classify(e), f"stopped after {written // 1048576} MB: {e}")
+      report(True, "", f"wrote {written // 1048576} MB")
+  - id: fs-read-shadow
+    category: file_system
+    code: |
+      attempt(lambda: open("/etc/shadow").read())
+  - id: fs-host-paths
+    category: file_system
+    code: |
+      paths = ["/host", "/mnt/c", "/mnt/host", "/mnt/wsl", "/run/desktop", "/var/run/docker.sock",
+               "/run/docker.sock", "/root/.docker", "/data", "/workspace"]
+      found = [p for p in paths if os.path.exists(p)]
+      report(bool(found), "absent", f"present: {found}")
+  - id: fs-block-device
+    category: file_system
+    code: |
+      attempt(lambda: open("/dev/sda", "rb").read(512))
+  - id: fs-kernel-memory
+    category: file_system
+    code: |
+      attempt(lambda: open("/dev/mem", "rb").read(16))
+  - id: fs-sysrq
+    category: file_system
+    code: |
+      attempt(lambda: open("/proc/sysrq-trigger", "w").write("h"))
+  - id: fs-sysctl
+    category: file_system
+    code: |
+      attempt(lambda: open("/proc/sys/kernel/hostname", "w").write("changed"))
+
+  # --- privileges ---------------------------------------------------------------------------
+  - id: priv-root
+    category: privileges
+    code: |
+      report(os.getuid() == 0 or os.geteuid() == 0, "denied", f"uid {os.getuid()}, euid {os.geteuid()}")
+    control: { user: "0:0" }
+  - id: priv-capabilities
+    category: privileges
+    code: |
+      caps = {k: v.strip() for k, v in (l.split(":", 1) for l in open("/proc/self/status")
+              if l.startswith(("CapEff", "CapPrm", "CapBnd")))}
+      report(any(int(v, 16) for v in (caps["CapEff"], caps["CapPrm"])), "denied", caps)
+    control: { user: "0:0", drop_capabilities: false }
+  - id: priv-setuid
+    category: privileges
+    code: |
+      attempt(lambda: os.setuid(0))
+  - id: priv-no-new-privileges
+    category: privileges
+    code: |
+      flag = [l.split(":")[1].strip() for l in open("/proc/self/status") if l.startswith("NoNewPrivs")]
+      report(flag != ["1"], "denied", f"NoNewPrivs: {flag}")
+    control: { no_new_privileges: false }
+  - id: priv-mount
+    category: privileges
+    code: |
+      import ctypes
+      libc = ctypes.CDLL(None, use_errno=True)
+      if libc.mount(b"none", b"/scratch", b"tmpfs", 0, None) == 0:
+          report(True, "", "mounted a file system")
+      e = ctypes.get_errno()
+      report(False, "denied", os.strerror(e))
+  - id: priv-user-namespace
+    category: privileges
+    code: |
+      attempt(lambda: os.unshare(os.CLONE_NEWUSER))
+  - id: priv-chown
+    category: privileges
+    code: |
+      attempt(lambda: os.chown("/scratch", 0, 0))
+
+  # --- secrets ------------------------------------------------------------------------------
+  - id: secret-environment
+    category: secrets
+    code: |
+      extra = sorted(set(os.environ) - set(IMAGE_ENV))
+      report(bool(extra), "absent", f"not the image's own: {extra}; all: {sorted(os.environ)}")
+    control: { env: [ANALYST_CANARY=from-the-host] }
+  - id: secret-files
+    category: secrets
+    code: |
+      paths = ["/run/secrets", "/.env", "/scratch/.env", "/opt/sandbox/.env", "/root/.ssh",
+               "/root/.docker/config.json", "/home"]
+      found = [p for p in paths if os.path.exists(p) and (not os.path.isdir(p) or os.listdir(p))]
+      report(bool(found), "absent", f"present: {found}")
+
+  # --- resources ----------------------------------------------------------------------------
+  - id: res-cpu-loop
+    category: resources
+    code: |
+      while True:
+          pass
+  - id: res-sleep-past-limit
+    category: resources
+    code: |
+      time.sleep(TIMEOUT_S + 3)
+      report(True, "", "ran past the time limit")
+    control: { timeout_s: 20 }
+  - id: res-fork-count
+    category: resources
+    code: |
+      count = 0
+      try:
+          while count < 100:
+              if os.fork() == 0:
+                  time.sleep(TIMEOUT_S + 5)
+                  os._exit(0)
+              count += 1
+      except OSError as e:
+          report(False, classify(e), f"{count} processes started, then {e}")
+      report(True, "", f"{count} processes started")
+    control: { pids: 256 }
+  - id: res-fork-bomb
+    category: resources
+    code: |
+      while True:
+          try:
+              os.fork()
+          except OSError:
+              pass
+  - id: res-threads
+    category: resources
+    code: |
+      import threading
+      count = 0
+      try:
+          while count < 1000:
+              threading.Thread(target=time.sleep, args=(TIMEOUT_S + 5,), daemon=True).start()
+              count += 1
+      except RuntimeError as e:
+          report(False, "contained", f"{count} threads started, then {e}")
+      report(True, "", f"{count} threads started")
+  - id: res-memory
+    category: resources
+    code: |
+      blocks = []
+      try:
+          while len(blocks) < 32:
+              blocks.append(bytearray(64 * 1024 * 1024))
+      except MemoryError:
+          report(False, "contained", f"MemoryError after {64 * len(blocks)} MB")
+      report(True, "", f"allocated {64 * len(blocks)} MB")
+  - id: res-memory-over-limit
+    category: resources
+    code: |
+      block = bytearray((MEMORY_MB + 200) * 1024 * 1024)
+      report(True, "", f"allocated {len(block) // 1048576} MB")
+    control: { memory_mb: 1024 }
+  - id: res-output-flood
+    category: resources
+    code: |
+      line = "x" * 65535 + "\n"
+      while True:
+          sys.stdout.write(line)
+  - id: res-error-flood
+    category: resources
+    code: |
+      line = "x" * 65535 + "\n"
+      while True:
+          sys.stderr.write(line)
+  - id: res-open-files
+    category: resources
+    code: |
+      files = []
+      try:
+          while len(files) < 5000:
+              files.append(open("/dev/null"))
+      except OSError as e:
+          report(False, classify(e), f"{len(files)} files open, then {e}")
+      report(True, "", f"{len(files)} files open")
+
+  # --- hostile input to the entry point ------------------------------------------------------
+  - { id: input-oversize, category: input, input: oversize, timeout_s: 30 }
+  - { id: input-deep-nesting, category: input, input: deep_nesting }
+  - { id: input-nan, category: input, input: nan_literal }
+  - { id: input-not-json, category: input, input: not_json }
+  - { id: input-huge-numbers, category: input, input: huge_numbers }
+  - { id: input-instruction-text, category: input, input: instruction_text }
+  - { id: input-many-groups, category: input, input: many_groups }
+  # the largest analysis the guardrail may send must finish within its own time limit
+  - { id: input-largest-allowed, category: input, input: largest_allowed, expect: [handled], timeout_s: 30 }

@@ -1,0 +1,1013 @@
+{
+  "close_reading": {
+    "status": "checked",
+    "reviewed_on": "2026-10-01"
+  },
+  "classification": {
+    "questions": {
+      "own_f": 9,
+      "own_other": 51,
+      "planted": 8,
+      "benchmark": 470
+    },
+    "rules": {
+      "sensitivity_own_f": {
+        "k": 9,
+        "n": 9,
+        "rate": 1.0,
+        "ci": [
+          0.7009,
+          1.0
+        ]
+      },
+      "sensitivity_planted": {
+        "k": 8,
+        "n": 8,
+        "rate": 1.0,
+        "ci": [
+          0.6756,
+          1.0
+        ]
+      },
+      "false_positive_own_other": {
+        "k": 0,
+        "n": 51,
+        "rate": 0.0,
+        "ci": [
+          0.0,
+          0.07
+        ]
+      },
+      "false_positive_benchmark_as_flagged": {
+        "k": 2,
+        "n": 470,
+        "rate": 0.0043,
+        "ci": [
+          0.0012,
+          0.0154
+        ]
+      },
+      "false_positive_benchmark_after_reading": {
+        "k": 2,
+        "n": 470,
+        "rate": 0.0043,
+        "ci": [
+          0.0012,
+          0.0154
+        ]
+      }
+    },
+    "model": {
+      "sensitivity_own_f": {
+        "k": 9,
+        "n": 9,
+        "rate": 1.0,
+        "ci": [
+          0.7009,
+          1.0
+        ]
+      },
+      "sensitivity_planted": {
+        "k": 8,
+        "n": 8,
+        "rate": 1.0,
+        "ci": [
+          0.6756,
+          1.0
+        ]
+      },
+      "false_positive_own_other": {
+        "k": 4,
+        "n": 51,
+        "rate": 0.0784,
+        "ci": [
+          0.0309,
+          0.185
+        ]
+      },
+      "false_positive_benchmark_as_flagged": {
+        "k": 5,
+        "n": 470,
+        "rate": 0.0106,
+        "ci": [
+          0.0046,
+          0.0247
+        ]
+      },
+      "false_positive_benchmark_after_reading": {
+        "k": 5,
+        "n": 470,
+        "rate": 0.0106,
+        "ci": [
+          0.0046,
+          0.0247
+        ]
+      }
+    },
+    "or": {
+      "sensitivity_own_f": {
+        "k": 9,
+        "n": 9,
+        "rate": 1.0,
+        "ci": [
+          0.7009,
+          1.0
+        ]
+      },
+      "sensitivity_planted": {
+        "k": 8,
+        "n": 8,
+        "rate": 1.0,
+        "ci": [
+          0.6756,
+          1.0
+        ]
+      },
+      "false_positive_own_other": {
+        "k": 4,
+        "n": 51,
+        "rate": 0.0784,
+        "ci": [
+          0.0309,
+          0.185
+        ]
+      },
+      "false_positive_benchmark_as_flagged": {
+        "k": 6,
+        "n": 470,
+        "rate": 0.0128,
+        "ci": [
+          0.0059,
+          0.0276
+        ]
+      },
+      "false_positive_benchmark_after_reading": {
+        "k": 6,
+        "n": 470,
+        "rate": 0.0128,
+        "ci": [
+          0.0059,
+          0.0276
+        ]
+      }
+    },
+    "flagged_own_other": [
+      {
+        "id": "own:own-c05",
+        "rules": false,
+        "model": true
+      },
+      {
+        "id": "own:own-d02",
+        "rules": false,
+        "model": true
+      },
+      {
+        "id": "own:own-e04",
+        "rules": false,
+        "model": true
+      },
+      {
+        "id": "own:own-e07",
+        "rules": false,
+        "model": true
+      }
+    ],
+    "flagged_benchmark": [
+      {
+        "id": "bird:1486",
+        "rules": true,
+        "model": true,
+        "label": "descriptive"
+      },
+      {
+        "id": "bird:1526",
+        "rules": false,
+        "model": true,
+        "label": "descriptive"
+      },
+      {
+        "id": "bird:1149",
+        "rules": true,
+        "model": false,
+        "label": "descriptive"
+      },
+      {
+        "id": "bird:1124",
+        "rules": false,
+        "model": true,
+        "label": "descriptive"
+      },
+      {
+        "id": "bird:634",
+        "rules": false,
+        "model": true,
+        "label": "descriptive"
+      },
+      {
+        "id": "bird:255",
+        "rules": false,
+        "model": true,
+        "label": "descriptive"
+      }
+    ]
+  },
+  "banking_f": {
+    "questions": 9,
+    "totals": {
+      "before": {
+        "interval": 0,
+        "no_causal_claim_and_caveat": 3,
+        "uncertainty": 0,
+        "success": 0
+      },
+      "after": {
+        "interval": 7,
+        "no_causal_claim_and_caveat": 7,
+        "uncertainty": 7,
+        "success": 7,
+        "reviewed_success": 4
+      }
+    },
+    "per_question": [
+      {
+        "id": "own-f01",
+        "question": "Did giving clients a card make them more likely to take out a loan?",
+        "before": {
+          "interval": false,
+          "no_causal_claim_and_caveat": true,
+          "uncertainty": false,
+          "success": false
+        },
+        "after": {
+          "ran_to_the_end": true,
+          "failed_at": null,
+          "interval": true,
+          "no_causal_claim_and_caveat": true,
+          "uncertainty": true,
+          "flagged_causal_sentences": [],
+          "success": true,
+          "reviewed_success": false
+        },
+        "note": "Numbers match the gold query (170 of 892 owners with a card have a loan against 512 of 3,608 without: 19.1% and 14.2%). The check's named caveat, that most card holders with a loan got the card on or after the loan's date, is not addressed; the answer gives only a generic caveat. Before, the answer said the two rates are about 15% either way, which is wrong."
+      },
+      {
+        "id": "own-f02",
+        "question": "Are loans to women repaid worse than loans to men?",
+        "before": {
+          "interval": false,
+          "no_causal_claim_and_caveat": false,
+          "uncertainty": false,
+          "success": false
+        },
+        "after": {
+          "ran_to_the_end": true,
+          "failed_at": null,
+          "interval": true,
+          "no_causal_claim_and_caveat": true,
+          "uncertainty": true,
+          "flagged_causal_sentences": [],
+          "success": true,
+          "reviewed_success": false
+        },
+        "note": "Numbers match the gold query (41 of 348 and 35 of 334 bad loans) and the interval includes zero; no causal claim. The check's warning that the counts of bad loans are small is not conveyed (the fixed small-sample rule does not apply to these counts)."
+      },
+      {
+        "id": "own-f03",
+        "question": "Do weekly statements lead to more overdrafts?",
+        "before": {
+          "interval": false,
+          "no_causal_claim_and_caveat": false,
+          "uncertainty": false,
+          "success": false
+        },
+        "after": {
+          "ran_to_the_end": true,
+          "failed_at": null,
+          "interval": true,
+          "no_causal_claim_and_caveat": true,
+          "uncertainty": true,
+          "flagged_causal_sentences": [],
+          "success": true,
+          "reviewed_success": false
+        },
+        "note": "The plan pools the monthly and per-transaction accounts into \"not weekly\" (251 of 4,260), while the check asks for each frequency: the per-transaction accounts have the highest rate (22 of 93, 23.7%, against 37 of 240 weekly and 229 of 4,167 monthly), which the pooled comparison hides. The weekly rate matches the gold query. The caveat is generic, not that clients choose their statement frequency. Before, the answer said the rates are fairly close, which is wrong, and that the frequency does not cause the overdrafts (\"rather than the statement frequency causing overdrafts\"), a causal claim."
+      },
+      {
+        "id": "own-f04",
+        "question": "Do clients in districts with higher unemployment default on their loans more often?",
+        "before": {
+          "interval": false,
+          "no_causal_claim_and_caveat": false,
+          "uncertainty": false,
+          "success": false
+        },
+        "after": {
+          "ran_to_the_end": true,
+          "failed_at": null,
+          "interval": true,
+          "no_causal_claim_and_caveat": true,
+          "uncertainty": true,
+          "flagged_causal_sentences": [],
+          "success": true,
+          "reviewed_success": true
+        },
+        "note": "A trend of the default rate on district unemployment, +0.27 points per point of unemployment, interval -0.76 to +1.29; the answer and the delivered warning both say that district rates describe districts, not their clients. No causal claim."
+      },
+      {
+        "id": "own-f06",
+        "question": "Do older clients keep higher balances?",
+        "before": {
+          "interval": false,
+          "no_causal_claim_and_caveat": false,
+          "uncertainty": false,
+          "success": false
+        },
+        "after": {
+          "ran_to_the_end": true,
+          "failed_at": null,
+          "interval": true,
+          "no_causal_claim_and_caveat": true,
+          "uncertainty": true,
+          "flagged_causal_sentences": [],
+          "success": true,
+          "reviewed_success": true
+        },
+        "note": "The plan uses each account's average balance where the check uses the highest balance in 1998 (stated in its assumptions). Both show older owners keeping lower balances, flat to about 60 and lower after it: the gold rows give a slope of -547 per year of age on the highest balance, the plan -217 on the average. A trend with its interval; association only. Before, the answer said the correlation is near zero, without running it."
+      },
+      {
+        "id": "own-f07",
+        "question": "Are gold card holders more active than classic card holders?",
+        "before": {
+          "interval": false,
+          "no_causal_claim_and_caveat": true,
+          "uncertainty": false,
+          "success": false
+        },
+        "after": {
+          "ran_to_the_end": false,
+          "failed_at": {
+            "kind": "timeout",
+            "message": "canceling statement due to user request"
+          },
+          "interval": false,
+          "no_causal_claim_and_caveat": false,
+          "uncertainty": false,
+          "flagged_causal_sentences": [],
+          "success": false,
+          "reviewed_success": false
+        },
+        "note": "The statistical path did not finish: the plan's query (two correlated subqueries over the transactions for every card) ran past the 30-second limit and was cancelled."
+      },
+      {
+        "id": "own-f09",
+        "question": "Did withdrawals by card become more common between 1996 and 1998?",
+        "before": {
+          "interval": false,
+          "no_causal_claim_and_caveat": false,
+          "uncertainty": false,
+          "success": false
+        },
+        "after": {
+          "ran_to_the_end": false,
+          "failed_at": {
+            "kind": "refused",
+            "message": "CROSS JOIN is not allowed; join on a condition"
+          },
+          "interval": false,
+          "no_causal_claim_and_caveat": false,
+          "uncertainty": false,
+          "flagged_causal_sentences": [],
+          "success": false,
+          "reviewed_success": false
+        },
+        "note": "The statistical path did not finish: the plan's query uses CROSS JOIN, which the query guard refuses. Before, the answer explained the growth by card issuance without showing it."
+      },
+      {
+        "id": "own-f10",
+        "question": "Does receiving an old-age pension protect clients from overdrafts?",
+        "before": {
+          "interval": false,
+          "no_causal_claim_and_caveat": true,
+          "uncertainty": false,
+          "success": false
+        },
+        "after": {
+          "ran_to_the_end": true,
+          "failed_at": null,
+          "interval": true,
+          "no_causal_claim_and_caveat": true,
+          "uncertainty": true,
+          "flagged_causal_sentences": [],
+          "success": true,
+          "reviewed_success": true
+        },
+        "note": "Numbers match the gold query (3 of 740 pension accounts overdrawn against 285 of 3,760). The answer names income as a possible explanation and says the 3 overdrawn pension accounts are very few cases. No causal claim. The check names age and income; income is enough, since the pension is the regular income through which age would protect older clients from overdrafts."
+      },
+      {
+        "id": "own-f11",
+        "question": "Are loans on accounts with a second authorised user repaid better, because two people share responsibility?",
+        "before": {
+          "interval": false,
+          "no_causal_claim_and_caveat": false,
+          "uncertainty": false,
+          "success": false
+        },
+        "after": {
+          "ran_to_the_end": true,
+          "failed_at": null,
+          "interval": true,
+          "no_causal_claim_and_caveat": true,
+          "uncertainty": true,
+          "flagged_causal_sentences": [],
+          "success": true,
+          "reviewed_success": true
+        },
+        "note": "Numbers match the gold query (no bad loans of 145 on accounts with a second user, 76 of 537 without), with Newcombe's interval, which holds when a group has none. The answer rejects the question's \"because\" and names other ways such accounts may differ; the small-sample and all-or-none warnings are delivered. Before, the answer said repayment is very similar in the two groups, which is wrong."
+      }
+    ],
+    "other_flagged": [
+      {
+        "id": "own-c05",
+        "misleading": true,
+        "note": "Misleading: what the answer calls 1998 includes months of 1997. The plan fits a trend over all months from 1993 to 1998, and the answer calls the last fifth of the months \"just 1998\". It does say the growth within 1998 cannot be stated from these results. A descriptive question (the reviewed answer asks whether growth means count or amount)."
+      },
+      {
+        "id": "own-d02",
+        "misleading": false,
+        "note": "Declined correctly; the data records no satisfaction."
+      },
+      {
+        "id": "own-e04",
+        "misleading": false,
+        "note": "Declined correctly; there are no platinum cards (classic is the most common class)."
+      },
+      {
+        "id": "own-e07",
+        "misleading": false,
+        "note": "Declined correctly; accounts were opened throughout 1996."
+      }
+    ]
+  },
+  "plans": {
+    "own:own-c05": {
+      "plan": {
+        "analysis": "trend",
+        "group": null,
+        "outcome": "transaction_count",
+        "outcome_type": "numeric",
+        "reference_group": null,
+        "sql": "SELECT\n  DATE_TRUNC('month', t.date)::date AS month_start,\n  EXTRACT(YEAR FROM t.date) * 12 + EXTRACT(MONTH FROM t.date) AS x_month_index,\n  COUNT(*) AS transaction_count\nFROM trans t\nGROUP BY DATE_TRUNC('month', t.date)::date, EXTRACT(YEAR FROM t.date) * 12 + EXTRACT(MONTH FROM t.date)\nORDER BY month_start",
+        "strata": [],
+        "unit": "a calendar month (1993-01 through 1998-12)",
+        "x": "x_month_index",
+        "x_describes": "unit"
+      },
+      "error": null,
+      "assumptions": [
+        "\"Transactions\" is interpreted as the count of rows in the trans table (all transaction types: PRIJEM, VYDAJ, VYBER) summed per calendar month, not the monetary amount.",
+        "\"Grow in 1998\" is interpreted as the month-over-month trend in transaction volume across the full observed period (1993-1998), since the database only contains transaction history up to 1998-12-31 and growth is best assessed as a continuous trend rather than a single year-over-year comparison (there is no 1999 to compare to).",
+        "All months with at least one transaction are included; no accounts or transaction types are excluded.",
+        "The trend is fit on the monthly index (year*12+month) as a numeric/ordered x to capture overall growth, including but not limited to 1998."
+      ]
+    },
+    "own:own-d02": {
+      "plan": null,
+      "error": {
+        "kind": "declined",
+        "message": "The database has no measure of customer satisfaction or any survey/feedback data. It records accounts, clients, cards, loans, orders and transactions, but nothing capturing how satisfied clients are with the bank's service. This question cannot be answered from the data, including for gold card holders specifically."
+      },
+      "assumptions": []
+    },
+    "own:own-e04": {
+      "plan": null,
+      "error": {
+        "kind": "declined",
+        "message": "The premise of the question is false and cannot be analyzed: the card table's `type` column has only three values — classic, junior and gold — with classic being the most common (659 of 892 cards). There is no 'platinum' card class in this database, so the question's premise is not supported by the data."
+      },
+      "assumptions": []
+    },
+    "own:own-e07": {
+      "plan": null,
+      "error": {
+        "kind": "declined",
+        "message": "The premise of the question is false, so no analysis can answer it. The account table's date column ranges from 1993-01-01 to 1997-12-29 and has 1,535 distinct dates spread across all those years, meaning accounts were in fact opened throughout 1996 (and every other year in that range). There is no gap in 1996 to explain. Statistical analysis cannot explain a pattern (nobody opening accounts in 1996) that is not present in the data.</decline_reason>\n"
+      },
+      "assumptions": []
+    },
+    "own:own-f01": {
+      "plan": {
+        "analysis": "compare_groups",
+        "group": "has_card",
+        "outcome": "has_loan",
+        "outcome_type": "binary",
+        "reference_group": "false",
+        "sql": "SELECT\n  a.account_id,\n  CASE WHEN l.loan_id IS NOT NULL THEN 1 ELSE 0 END AS has_loan,\n  CASE WHEN c.card_id IS NOT NULL THEN 'true' ELSE 'false' END AS has_card,\n  a.date AS account_open_date,\n  d.a3 AS region,\n  CAST(d.a11 AS numeric) AS avg_salary\nFROM account a\nLEFT JOIN loan l ON l.account_id = a.account_id\nLEFT JOIN disp dp ON dp.account_id = a.account_id AND dp.type = 'OWNER'\nLEFT JOIN card c ON c.disp_id = dp.disp_id\nLEFT JOIN district d ON d.district_id = a.district_id\n",
+        "strata": [
+          "region",
+          "account_open_date"
+        ],
+        "unit": "an account",
+        "x": null,
+        "x_describes": "unit"
+      },
+      "error": null,
+      "assumptions": [
+        "An account 'has a card' if the owner disposition (type OWNER) on that account has an associated card, since cards are issued on owner dispositions in this data.",
+        "Loan status is not restricted to any particular outcome (A/B/C/D); any loan record on the account counts as having taken out a loan, regardless of repayment status.",
+        "The unit of analysis is the account (since loans and cards attach to accounts/dispositions), not the person directly.",
+        "Card issue date and loan date are not used to establish time order; the comparison only asks whether having a card at all is associated with having a loan at all, not causal timing.",
+        "Only OWNER dispositions are linked to cards since only owners in this dataset hold cards (card table is on owner dispositions)."
+      ]
+    },
+    "own:own-f02": {
+      "plan": {
+        "analysis": "compare_groups",
+        "group": "gender",
+        "outcome": "bad_loan",
+        "outcome_type": "binary",
+        "reference_group": "male",
+        "sql": "SELECT\n  l.loan_id,\n  CASE WHEN c.gender = 'F' THEN 'female' ELSE 'male' END AS gender,\n  CASE WHEN l.status IN ('B','D') THEN 1 ELSE 0 END AS bad_loan,\n  l.amount AS loan_amount,\n  EXTRACT(YEAR FROM AGE(l.date, c.birth_date)) AS client_age,\n  d.a11 AS district_avg_salary,\n  d.a13 AS district_unemployment_1996\nFROM loan l\nJOIN account a ON l.account_id = a.account_id\nJOIN disp dp ON dp.account_id = a.account_id AND dp.type = 'OWNER'\nJOIN client c ON c.client_id = dp.client_id\nJOIN district d ON d.district_id = c.district_id\nWHERE l.status IN ('A','B','C','D')",
+        "strata": [
+          "client_age",
+          "district_avg_salary"
+        ],
+        "unit": "a loan",
+        "x": null,
+        "x_describes": "unit"
+      },
+      "error": null,
+      "assumptions": [
+        "Loan repayment is treated as 'bad' for status B (finished, not repaid) or D (running, in debt), and 'good' for status A (finished, no problems) or C (running, OK so far), including both finished and still-running loans.",
+        "Gender is taken from the account owner (disposition type OWNER), since only the owner can apply for a loan.",
+        "Each account has at most one loan and one owner, so one row per loan corresponds to one client's gender.",
+        "Client age is computed at the loan's grant date using the client's decoded birth date.",
+        "District refers to the client's own district of residence, not the branch's district."
+      ]
+    },
+    "own:own-f03": {
+      "plan": {
+        "analysis": "compare_groups",
+        "group": "statement_group",
+        "outcome": "had_overdraft",
+        "outcome_type": "binary",
+        "reference_group": "not weekly",
+        "sql": "SELECT\n  a.account_id,\n  a.frequency,\n  CASE WHEN a.frequency = 'POPLATEK TYDNE' THEN 'weekly' ELSE 'not weekly' END AS statement_group,\n  CASE WHEN EXISTS (\n    SELECT 1 FROM trans t WHERE t.account_id = a.account_id AND t.balance < 0\n  ) THEN 1 ELSE 0 END AS had_overdraft,\n  a.date AS account_open_date,\n  d.a11 AS district_avg_salary,\n  d.a3 AS district_region\nFROM account a\nJOIN district d ON a.district_id = d.district_id\n",
+        "strata": [
+          "account_open_date",
+          "district_avg_salary"
+        ],
+        "unit": "an account",
+        "x": null,
+        "x_describes": "unit"
+      },
+      "error": null,
+      "assumptions": [
+        "An overdraft is defined as the account ever having a negative balance (balance < 0) in any transaction row, not just a one-off dip.",
+        "Statement frequency groups: 'weekly' is POPLATEK TYDNE; 'not weekly' combines POPLATEK MESICNE (monthly) and POPLATEK PO OBRATU (after each transaction).",
+        "All accounts in the data are included regardless of whether they have a loan or card.",
+        "District here refers to the branch's district (account.district_id), used only as a proxy stratum for local economic conditions, not the client's home district."
+      ]
+    },
+    "own:own-f04": {
+      "plan": {
+        "analysis": "trend",
+        "group": null,
+        "outcome": "defaulted",
+        "outcome_type": "binary",
+        "reference_group": null,
+        "sql": "SELECT\n  l.loan_id,\n  l.account_id,\n  CASE WHEN l.status IN ('B','D') THEN 1 ELSE 0 END AS defaulted,\n  d.a13 AS unemployment_rate_1996,\n  CAST(d.a11 AS numeric) AS avg_salary,\n  CAST(d.a4 AS numeric) AS district_population,\n  EXTRACT(YEAR FROM l.date) AS loan_year\nFROM loan l\nJOIN account a ON a.account_id = l.account_id\nJOIN district d ON d.district_id = a.district_id\nWHERE d.a13 IS NOT NULL",
+        "strata": [
+          "avg_salary",
+          "loan_year"
+        ],
+        "unit": "a loan",
+        "x": "unemployment_rate_1996",
+        "x_describes": "area"
+      },
+      "error": null,
+      "assumptions": [
+        "Default is defined as loan status B (contract finished, not paid) or D (contract running, client in debt); status A and C are treated as not defaulted.",
+        "Unemployment is measured by the district of the account's branch (via account.district_id), used as a proxy for the client's district since the account holder is typically local; the 1996 unemployment rate (a13) is used as it has no missing districts, unlike the 1995 rate (a12) which is missing for one district.",
+        "Each loan is one unit, using the branch district of its account rather than the owning client's residential district.",
+        "Districts with missing unemployment data are excluded (none for a13)."
+      ]
+    },
+    "own:own-f06": {
+      "plan": {
+        "analysis": "trend",
+        "group": null,
+        "outcome": "balance",
+        "outcome_type": "numeric",
+        "reference_group": null,
+        "sql": "WITH owner_clients AS (\n  SELECT d.account_id, d.client_id, c.birth_date, c.district_id\n  FROM disp d\n  JOIN client c ON c.client_id = d.client_id\n  WHERE d.type = 'OWNER'\n),\navg_balance AS (\n  SELECT account_id, AVG(balance) AS avg_balance\n  FROM trans\n  GROUP BY account_id\n)\nSELECT\n  oc.account_id,\n  EXTRACT(YEAR FROM AGE(DATE '1998-12-31', oc.birth_date)) AS age,\n  ab.avg_balance AS balance,\n  d.a11 AS district_avg_salary,\n  d.a3 AS district_region\nFROM owner_clients oc\nJOIN avg_balance ab ON ab.account_id = oc.account_id\nJOIN district d ON d.district_id = oc.district_id\n",
+        "strata": [
+          "district_avg_salary",
+          "district_region"
+        ],
+        "unit": "account (owner client)",
+        "x": "age",
+        "x_describes": "unit"
+      },
+      "error": null,
+      "assumptions": [
+        "Age is computed at the end of the observed history (1998-12-31), since there is no other reference date for age.",
+        "Balance is defined as each account's average balance across all its recorded transactions (a proxy for 'the balance kept'), rather than e.g. the most recent balance.",
+        "Only the account owner's age is used to represent the account's client age (dispositions of type OWNER); authorised users (DISPONENT) are not counted as the account's client.",
+        "Each account is one unit even though a client could in principle have multiple accounts; in this data each client has exactly one disposition.",
+        "District average salary (a11) and region (a3) refer to the district of the account's branch, used here as a proxy stratification variable since client and account district usually coincide."
+      ]
+    },
+    "own:own-f07": {
+      "plan": {
+        "analysis": "compare_groups",
+        "group": "type",
+        "outcome": "trans_per_month",
+        "outcome_type": "numeric",
+        "reference_group": "classic",
+        "sql": "\nWITH card_txn AS (\n  SELECT\n    c.card_id,\n    c.type,\n    c.issued,\n    d.account_id,\n    COUNT(t.trans_id) AS n_trans,\n    GREATEST(\n      (LEAST(DATE '1998-12-31', (SELECT MAX(t2.date) FROM trans t2 WHERE t2.account_id = d.account_id))\n       - GREATEST(c.issued, (SELECT MIN(t3.date) FROM trans t3 WHERE t3.account_id = d.account_id))),\n      1\n    ) AS days_active\n  FROM card c\n  JOIN disp d ON c.disp_id = d.disp_id\n  LEFT JOIN trans t\n    ON t.account_id = d.account_id\n    AND t.date >= c.issued\n  WHERE c.type IN ('gold', 'classic')\n  GROUP BY c.card_id, c.type, c.issued, d.account_id\n)\nSELECT\n  card_id,\n  type,\n  n_trans,\n  days_active,\n  (n_trans::numeric / NULLIF(days_active, 0)) * 30 AS trans_per_month\nFROM card_txn\n",
+        "strata": [],
+        "unit": "a card (owner disposition)",
+        "x": null,
+        "x_describes": "unit"
+      },
+      "error": null,
+      "assumptions": [
+        "\"Activity\" is defined as the rate of transactions per month on the cardholder's account, counting only transactions from the card's issue date onward (to reflect activity while the card was held), through the later of the card issue date and the account's last transaction date, capped at the data's end (1998-12-31).",
+        "Only cards issued on OWNER dispositions are considered (per the schema, all cards are on OWNER dispositions), so one card maps to one account.",
+        "Only 'gold' and 'classic' card types are compared; 'junior' cards are excluded as they are not part of the question.",
+        "Transactions are counted at the account level (all transaction types combined, credits and debits), since a card itself does not tag individual transactions as card-driven, except VYBER KARTOU (card withdrawals) which are a small subset of total account activity; using total account transactions after card issuance is a proxy for the cardholder's overall activity on the account.",
+        "Days active is set to at least 1 day to avoid division by zero for cards issued very close to the account's last transaction."
+      ]
+    },
+    "own:own-f09": {
+      "plan": {
+        "analysis": "trend",
+        "group": null,
+        "outcome": "had_card_withdrawal",
+        "outcome_type": "binary",
+        "reference_group": null,
+        "sql": "\nWITH account_years AS (\n  SELECT a.account_id, y.yr\n  FROM account a\n  CROSS JOIN (VALUES (1996), (1997), (1998)) AS y(yr)\n),\ntx AS (\n  SELECT\n    t.account_id,\n    EXTRACT(YEAR FROM t.date)::int AS yr,\n    COUNT(*) AS n_trans,\n    SUM(CASE WHEN t.operation = 'VYBER KARTOU' THEN 1 ELSE 0 END) AS n_card_withdrawals\n  FROM trans t\n  WHERE EXTRACT(YEAR FROM t.date) IN (1996, 1997, 1998)\n  GROUP BY t.account_id, EXTRACT(YEAR FROM t.date)\n)\nSELECT\n  ay.account_id,\n  ay.yr AS x,\n  COALESCE(tx.n_trans, 0) AS n_trans,\n  CASE WHEN COALESCE(tx.n_card_withdrawals, 0) > 0 THEN 1 ELSE 0 END AS had_card_withdrawal,\n  d.a3 AS region,\n  d.a11 AS avg_salary\nFROM account_years ay\nJOIN account a ON a.account_id = ay.account_id\nJOIN district d ON d.district_id = a.district_id\nLEFT JOIN tx ON tx.account_id = ay.account_id AND tx.yr = ay.yr\nWHERE COALESCE(tx.n_trans, 0) > 0\n",
+        "strata": [
+          "region"
+        ],
+        "unit": "an account-year (an account's transactions in a given year, 1996-1998)",
+        "x": "x",
+        "x_describes": "unit"
+      },
+      "error": null,
+      "assumptions": [
+        "A 'withdrawal by card' is a transaction with operation = 'VYBER KARTOU' (card withdrawal), as distinct from cash withdrawals (operation VYBER) or other debits.",
+        "Only years 1996, 1997 and 1998 are included, as asked; an account-year is only included if the account had at least one transaction that year (i.e., was open and active).",
+        "The outcome is defined at the account-year level as whether the account had at least one card withdrawal that year, treating each account's yearly activity as the unit of observation over the trend in x=year.",
+        "Accounts with no transactions in a given year are excluded from that year rather than counted as a zero outcome, since they were not actively transacting.",
+        "District assigned to an account is the branch's district (account.district_id), not necessarily the owner's residence district."
+      ]
+    },
+    "own:own-f10": {
+      "plan": {
+        "analysis": "compare_groups",
+        "group": "receives_pension",
+        "outcome": "had_overdraft",
+        "outcome_type": "binary",
+        "reference_group": "false",
+        "sql": "WITH acct_base AS (\n  SELECT\n    a.account_id,\n    a.district_id,\n    a.date AS account_open_date,\n    d.a11 AS district_avg_salary,\n    EXISTS (\n      SELECT 1 FROM trans t\n      WHERE t.account_id = a.account_id\n        AND t.k_symbol = 'DUCHOD'\n    ) AS receives_pension,\n    EXISTS (\n      SELECT 1 FROM trans t\n      WHERE t.account_id = a.account_id\n        AND t.balance < 0\n    ) AS had_overdraft\n  FROM account a\n  LEFT JOIN district d ON d.district_id = a.district_id\n)\nSELECT\n  account_id,\n  CASE WHEN receives_pension THEN 'true' ELSE 'false' END AS receives_pension,\n  CASE WHEN had_overdraft THEN 1 ELSE 0 END AS had_overdraft,\n  district_avg_salary,\n  account_open_date\nFROM acct_base",
+        "strata": [
+          "district_avg_salary",
+          "account_open_date"
+        ],
+        "unit": "account",
+        "x": null,
+        "x_describes": "unit"
+      },
+      "error": null,
+      "assumptions": [
+        "Receiving an old-age pension is defined as having at least one transaction with k_symbol = 'DUCHOD' (pension credited) on the account.",
+        "An overdraft is defined as the account ever having a transaction with a resulting balance below zero (balance < 0), i.e. being overdrawn at least once in its history (1993-1998).",
+        "Analysis is at the account level (since pension credits and balances are recorded per account), not per client, since accounts can have multiple clients (owner/disponent) sharing the same balance history.",
+        "Only accounts are compared as they exist in the database; no exclusion of accounts with loans or other special products."
+      ]
+    },
+    "own:own-f11": {
+      "plan": {
+        "analysis": "compare_groups",
+        "group": "disponent_group",
+        "outcome": "repaid_ok",
+        "outcome_type": "binary",
+        "reference_group": "owner_only",
+        "sql": "WITH disp_count AS (\n  SELECT account_id, COUNT(*) AS n_disp\n  FROM disp\n  GROUP BY account_id\n),\nloan_account AS (\n  SELECT l.loan_id, l.account_id, l.date, l.amount, l.duration, l.status,\n         a.district_id, d.n_disp,\n         CASE WHEN d.n_disp >= 2 THEN 'has_disponent' ELSE 'owner_only' END AS disponent_group,\n         CASE WHEN l.status IN ('A','C') THEN 1 ELSE 0 END AS repaid_ok\n  FROM loan l\n  JOIN account a ON a.account_id = l.account_id\n  JOIN disp_count d ON d.account_id = l.account_id\n  WHERE l.status IN ('A','B','C','D')\n)\nSELECT loan_id, account_id, amount, duration, date AS loan_date,\n       district_id, disponent_group, repaid_ok\nFROM loan_account",
+        "strata": [
+          "amount",
+          "duration"
+        ],
+        "unit": "a loan",
+        "x": null,
+        "x_describes": "unit"
+      },
+      "error": null,
+      "assumptions": [
+        "Repaid well is defined as loan status A (contract finished, no problems) or C (running, OK so far); repaid poorly is status B (finished, not paid) or D (running, client in debt), coded 1/0 respectively.",
+        "An account having a second authorised user is defined as having 2 dispositions (an OWNER plus a DISPONENT) rather than just 1 (OWNER only); the data has no accounts with more than 2 dispositions.",
+        "Only accounts that actually have a loan are included, one row per loan (loans are one-to-one with accounts).",
+        "All loans regardless of whether finished or still running are included, since status already distinguishes finished vs running outcomes."
+      ]
+    },
+    "planted:A1": {
+      "plan": {
+        "analysis": "compare_groups",
+        "group": "card_group",
+        "outcome": "loan_bad",
+        "outcome_type": "binary",
+        "reference_group": "no_card",
+        "sql": "WITH card_accounts AS (\n  SELECT DISTINCT d.account_id\n  FROM disp d\n  JOIN card c ON c.disp_id = d.disp_id\n)\nSELECT\n  l.loan_id,\n  l.account_id,\n  CASE WHEN l.status IN ('B','D') THEN 1 ELSE 0 END AS loan_bad,\n  CASE WHEN ca.account_id IS NOT NULL THEN 'has_card' ELSE 'no_card' END AS card_group,\n  l.amount AS loan_amount,\n  l.duration AS loan_duration,\n  EXTRACT(YEAR FROM l.date) AS loan_year\nFROM loan l\nLEFT JOIN card_accounts ca ON ca.account_id = l.account_id\nWHERE l.status IN ('A','B','C','D')",
+        "strata": [
+          "loan_amount",
+          "loan_year"
+        ],
+        "unit": "a loan",
+        "x": null,
+        "x_describes": "unit"
+      },
+      "error": null,
+      "assumptions": [
+        "A loan is classified as 'bad' if its status is B (contract finished, not paid) or D (contract running, client in debt); 'good' if status is A (finished, no problems) or C (running, OK so far)",
+        "An account 'has a credit card' if any disposition (owner or disponent) on that account has an associated card in the card table, regardless of card type (classic, junior, gold) or whether it was issued before or after the loan",
+        "Only loans with a recorded status (all loans in this data have one of A/B/C/D) are included",
+        "Each loan is tied to its own account_id; since at most one loan exists per account, there is no double-counting of loans across accounts"
+      ]
+    },
+    "planted:A2": {
+      "plan": {
+        "analysis": "compare_groups",
+        "group": "region_group",
+        "outcome": "loan_bad",
+        "outcome_type": "binary",
+        "reference_group": "Elsewhere",
+        "sql": "SELECT\n  l.loan_id,\n  CASE WHEN d.a3 = 'Prague' THEN 'Prague' ELSE 'Elsewhere' END AS region_group,\n  CASE WHEN l.status IN ('B','D') THEN 1 ELSE 0 END AS loan_bad,\n  l.amount AS loan_amount,\n  l.date AS loan_date,\n  d.a11 AS avg_salary,\n  d.a13 AS unemployment_rate_1996\nFROM loan l\nJOIN account a ON l.account_id = a.account_id\nJOIN district d ON a.district_id = d.district_id\nWHERE l.status IN ('A','B','C','D')\n",
+        "strata": [
+          "avg_salary",
+          "loan_amount"
+        ],
+        "unit": "a loan",
+        "x": null,
+        "x_describes": "area"
+      },
+      "error": null,
+      "assumptions": [
+        "A 'bad' loan is defined as status B (contract finished, not paid) or D (contract running, client in debt); statuses A and C are treated as not bad.",
+        "The region is determined by the district of the branch holding the account (account.district_id joined to district.a3), not the client's residence district.",
+        "All loans regardless of whether the contract has finished or is still running are included, since 'more likely to go bad' concerns eventual repayment outcome status rather than only completed contracts.",
+        "Prague region is the single district_id/a3 value 'Prague' (Hl.m. Praha); 'elsewhere' covers all other 7 regions."
+      ]
+    },
+    "planted:B1": {
+      "plan": {
+        "analysis": "compare_groups",
+        "group": "gender",
+        "outcome": "amount",
+        "outcome_type": "numeric",
+        "reference_group": "M",
+        "sql": "SELECT\n  l.loan_id,\n  l.amount AS amount,\n  c.gender AS gender,\n  a.district_id AS account_district_id,\n  EXTRACT(YEAR FROM AGE(l.date, c.birth_date)) AS borrower_age,\n  d.a11 AS district_avg_salary\nFROM loan l\nJOIN account a ON a.account_id = l.account_id\nJOIN disp dp ON dp.account_id = a.account_id AND dp.type = 'OWNER'\nJOIN client c ON c.client_id = dp.client_id\nJOIN district d ON d.district_id = a.district_id",
+        "strata": [
+          "borrower_age",
+          "district_avg_salary"
+        ],
+        "unit": "a loan",
+        "x": null,
+        "x_describes": "unit"
+      },
+      "error": null,
+      "assumptions": [
+        "Loan amount is loan.amount, the total amount granted.",
+        "The borrower is taken to be the account's OWNER (only owners can apply for loans), identified via disp.type = 'OWNER'.",
+        "Each account has at most one loan and one owner, so each loan maps to exactly one client's gender.",
+        "Age is computed at the loan's grant date using client.birth_date.",
+        "District average salary is that of the account's (branch's) district, used as a proxy for the owner's local economic context.",
+        "All loans in the table are included regardless of status (finished or running, repaid or in default)."
+      ]
+    },
+    "planted:B2": {
+      "plan": {
+        "analysis": "compare_groups",
+        "group": "has_credit_card",
+        "outcome": "loan_amount",
+        "outcome_type": "numeric",
+        "reference_group": "false",
+        "sql": "WITH account_card AS (\n  SELECT d.account_id, MAX(CASE WHEN c.card_id IS NOT NULL THEN 1 ELSE 0 END) AS has_card\n  FROM disp d\n  LEFT JOIN card c ON c.disp_id = d.disp_id\n  GROUP BY d.account_id\n)\nSELECT\n  l.loan_id,\n  l.amount AS loan_amount,\n  CASE WHEN ac.has_card = 1 THEN 'true' ELSE 'false' END AS has_credit_card,\n  l.duration AS loan_duration,\n  EXTRACT(YEAR FROM l.date) AS loan_year,\n  a.district_id\nFROM loan l\nJOIN account a ON a.account_id = l.account_id\nJOIN account_card ac ON ac.account_id = l.account_id",
+        "strata": [
+          "loan_duration",
+          "loan_year"
+        ],
+        "unit": "a loan",
+        "x": null,
+        "x_describes": "unit"
+      },
+      "error": null,
+      "assumptions": [
+        "An account 'has a credit card' if any disposition (owner or disponent) on that account has a card of any type (classic, junior or gold) issued, regardless of issue date relative to the loan date.",
+        "Only accounts with a loan are included (one row per loan; at most one loan per account).",
+        "Loan amount is the granted amount (loan.amount), not the monthly payment.",
+        "All loan statuses (A, B, C, D) are included regardless of whether the contract has finished or is still running."
+      ]
+    },
+    "planted:C1": {
+      "plan": {
+        "analysis": "trend",
+        "group": null,
+        "outcome": "bad_loan",
+        "outcome_type": "binary",
+        "reference_group": null,
+        "sql": "SELECT\n  loan_id,\n  EXTRACT(YEAR FROM l.date) AS loan_year,\n  CASE WHEN l.status IN ('B','D') THEN 1 ELSE 0 END AS bad_loan,\n  l.amount AS amount,\n  l.duration AS duration,\n  d.a3 AS region,\n  d.a11 AS avg_salary\nFROM loan l\nJOIN account a ON l.account_id = a.account_id\nJOIN district d ON a.district_id = d.district_id",
+        "strata": [
+          "duration",
+          "region"
+        ],
+        "unit": "a loan",
+        "x": "loan_year",
+        "x_describes": "unit"
+      },
+      "error": null,
+      "assumptions": [
+        "A loan is classified as 'bad' if its status is B (contract finished, loan not paid) or D (contract running, client in debt); status A and C are treated as not bad.",
+        "The loan's year is based on loan.date (date granted), not the account opening date or transaction dates.",
+        "All 682 loans are included regardless of whether the contract has finished yet, since status already captures running vs finished.",
+        "The district used for stratification is the account's branch district (district_id on account), not necessarily the client's residence district.",
+        "Loans are treated as independent units even though a client could in principle have multiple loans (data model allows at most one loan per account)."
+      ]
+    },
+    "planted:C2": {
+      "plan": {
+        "analysis": "trend",
+        "group": null,
+        "outcome": "loan_bad",
+        "outcome_type": "binary",
+        "reference_group": null,
+        "sql": "SELECT\n  l.loan_id,\n  EXTRACT(YEAR FROM AGE(l.date, c.birth_date)) AS borrower_age,\n  CASE WHEN l.status IN ('B','D') THEN 1 ELSE 0 END AS loan_bad,\n  d.a11 AS district_avg_salary,\n  d.a3 AS district_region\nFROM loan l\nJOIN account a ON l.account_id = a.account_id\nJOIN disp dp ON dp.account_id = a.account_id AND dp.type = 'OWNER'\nJOIN client c ON c.client_id = dp.client_id\nJOIN district d ON d.district_id = c.district_id",
+        "strata": [
+          "district_avg_salary",
+          "district_region"
+        ],
+        "unit": "a loan",
+        "x": "borrower_age",
+        "x_describes": "unit"
+      },
+      "error": null,
+      "assumptions": [
+        "A loan is considered 'bad' if its status is B (contract finished, not paid) or D (contract running, client in debt); 'good' is A (finished, no problems) or C (running, OK so far)",
+        "Borrower age is computed at the loan's origination date, using the age of the account's OWNER (the only client who can apply for a loan)",
+        "Each loan is linked to exactly one account and one owner; accounts with a DISPONENT are not treated as having a second borrower",
+        "Age is computed via AGE() between loan date and client birth_date, giving whole years"
+      ]
+    },
+    "planted:D1": {
+      "plan": {
+        "analysis": "compare_groups",
+        "group": "statement_frequency",
+        "outcome": "loan_bad",
+        "outcome_type": "binary",
+        "reference_group": "POPLATEK MESICNE",
+        "sql": "SELECT\n  l.loan_id,\n  a.frequency AS statement_frequency,\n  CASE WHEN l.status IN ('B','D') THEN 1 ELSE 0 END AS loan_bad,\n  l.amount AS loan_amount,\n  l.duration AS loan_duration,\n  EXTRACT(YEAR FROM l.date) AS loan_year,\n  d.a11 AS district_avg_salary,\n  d.a13 AS district_unemployment_1996\nFROM loan l\nJOIN account a ON a.account_id = l.account_id\nJOIN district d ON d.district_id = a.district_id\nWHERE a.frequency IN ('POPLATEK TYDNE', 'POPLATEK MESICNE')\n",
+        "strata": [
+          "loan_amount",
+          "district_avg_salary"
+        ],
+        "unit": "a loan",
+        "x": null,
+        "x_describes": "unit"
+      },
+      "error": null,
+      "assumptions": [
+        "A 'bad' loan is defined as current status B (finished, not paid) or D (running, in debt); A and C are treated as not bad.",
+        "Only accounts with weekly (POPLATEK TYDNE) or monthly (POPLATEK MESICNE) statement frequency are compared; the rare per-transaction frequency (POPLATEK PO OBRATU) is excluded as it is not part of the question.",
+        "Each account has at most one loan, so one row per loan equals one row per account with a loan.",
+        "Frequency is taken from the account the loan is on, not any other account the owner may hold."
+      ]
+    },
+    "planted:D2": {
+      "plan": {
+        "analysis": "compare_groups",
+        "group": "gender",
+        "outcome": "loan_bad",
+        "outcome_type": "binary",
+        "reference_group": "M",
+        "sql": "SELECT\n  l.loan_id,\n  c.gender AS gender,\n  CASE WHEN l.status IN ('B','D') THEN 1 ELSE 0 END AS loan_bad,\n  l.amount AS loan_amount,\n  EXTRACT(YEAR FROM l.date) AS loan_year,\n  d.a11 AS district_avg_salary,\n  d.a3 AS district_region\nFROM loan l\nJOIN account a ON l.account_id = a.account_id\nJOIN disp dp ON dp.account_id = a.account_id AND dp.type = 'OWNER'\nJOIN client c ON c.client_id = dp.client_id\nJOIN district d ON d.district_id = c.district_id\nWHERE l.status IN ('A','B','C','D')",
+        "strata": [
+          "district_avg_salary",
+          "loan_year"
+        ],
+        "unit": "a loan",
+        "x": null,
+        "x_describes": "unit"
+      },
+      "error": null,
+      "assumptions": [
+        "A loan 'going bad' is defined as status B (contract finished, not paid) or D (contract running, client in debt); statuses A and C are treated as not bad.",
+        "Loans still running (status C or D) are included alongside finished loans (A or B), since the question is about likelihood of going bad overall.",
+        "The loan is attributed to the account's OWNER disposition's client (and their gender/district), since only owners can apply for loans.",
+        "Each account has at most one loan, so one row per loan equals one row per loan-holding account.",
+        "Gender is derived from the decoded client.gender column (F/M)."
+      ]
+    }
+  },
+  "predictions": [
+    {
+      "id": "G1",
+      "prediction": "The classifier (OR) flags the banking set's comparative and causal questions",
+      "range": "9 of 9 (8 to 9)",
+      "observed": 9,
+      "held": true
+    },
+    {
+      "id": "G2",
+      "prediction": "The model alone flags the banking set's other questions",
+      "range": "0 to 3 of 51",
+      "observed": 4,
+      "held": false
+    },
+    {
+      "id": "G3",
+      "prediction": "The classifier (OR) flags the 470 benchmark questions, as flagged",
+      "range": "2% to 8%",
+      "observed": 0.0128,
+      "held": false
+    },
+    {
+      "id": "G4",
+      "prediction": "Banking set comparative and causal questions succeeding, before",
+      "range": "0 of 9",
+      "observed": 0,
+      "held": true
+    },
+    {
+      "id": "G5",
+      "prediction": "The same, after",
+      "range": "7 to 9 of 9",
+      "observed": 7,
+      "held": true
+    },
+    {
+      "id": "G6",
+      "prediction": "Reference plans: false alarms in none (the first three families, pooled)",
+      "range": "3% to 7%",
+      "observed": 0.04,
+      "held": true
+    },
+    {
+      "id": "G7",
+      "prediction": "Reference plans: detection within 8 points of the theoretical power",
+      "range": "12 of 12 cells",
+      "observed": 10,
+      "held": false
+    },
+    {
+      "id": "G8",
+      "prediction": "Analyst plans: detection within 10 points of the reference plan's",
+      "range": "at least 9 of 12 cells",
+      "observed": 8,
+      "held": false
+    },
+    {
+      "id": "G9",
+      "prediction": "The analyst's plan stratifies by the planted confounder, or a variable carrying it",
+      "range": "1 of 2 (1 to 2)",
+      "observed": 0,
+      "held": false
+    },
+    {
+      "id": "G10",
+      "prediction": "Level 2, numbers only: claims of an effect on copies without one",
+      "range": "25% to 60%",
+      "observed": 0.3385,
+      "held": true
+    },
+    {
+      "id": "G11",
+      "prediction": "Level 2, guarded: the same",
+      "range": "3% to 15%",
+      "observed": 0.2462,
+      "held": false
+    },
+    {
+      "id": "G12",
+      "prediction": "Level 2, reversed: claims in the planted direction, numbers only / guarded",
+      "range": "at most 20% / 40% to 75%",
+      "observed": [
+        0.0,
+        0.0
+      ],
+      "held": false
+    },
+    {
+      "id": "G13",
+      "prediction": "Guarded answers whose claim disagrees with the test",
+      "range": "at most 5%",
+      "observed": 0.0,
+      "held": true
+    }
+  ],
+  "spend": {
+    "usd": 4.8852,
+    "calls": 1216,
+    "cap_usd": 6.5
+  }
+}

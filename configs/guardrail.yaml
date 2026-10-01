@@ -1,0 +1,248 @@
+# The statistical guardrail (src/stats/): the sandbox that runs its analyses, and the rest of its
+# settings as they are added.
+
+# The sandbox (src/stats/sandbox.py): one fresh container per call, with no network, a read-only
+# file system but a small scratch directory, a non-root user and no capabilities. The analyses
+# of one call are small (at most 50,000 rows), so these limits leave room for them and little else.
+sandbox:
+  timeout_s: 30 # wall clock, from the container's start; it is killed when the time runs out
+  memory_mb: 512 # swap included (the same value is the swap limit)
+  cpus: 1
+  pids: 64 # processes and threads together
+  scratch_mb: 64 # the writable /scratch directory (in memory)
+  output_mb: 8 # output read from the container; more stops it
+  nofile: 256 # open files
+
+# The planted-effect checks (src/stats/planted.py). Copies of the Czech bank database in their own
+# local database, each with an effect of known size planted in it (or none), answer the same
+# questions. Each copy keeps the real data except the columns an effect is planted in, which are
+# drawn again from a seeded model; the guardrail should find the effects that are there and report
+# none where there is none. Every question runs with the analyst's plan (written once per question
+# from the schema, before any data is seen, so the same plan serves every copy) and with the
+# reference plan below; the confounded family also with a crude reference plan (no strata), which
+# shows what a comparison without the stratified check would conclude.
+planted:
+  database: planted
+  role: analyst_ro_planted
+  seed: 20261001
+  copies: { level1: 200, level2: 13 }
+  # Effects are sized for these powers of the reference plan's test (normal approximation, from
+  # the real group sizes); the level-1 copies measure the powers actually reached.
+  power: { small: 0.5, large: 0.9 }
+  limits: { max_rows: 50000, timeout_s: 30 }
+  # The confounded family (each question's `plant`): a loan goes bad with probability
+  # p_low + (p_high - p_low) * z + delta * g, where z is the confounder (a long loan, 0 or 1; the
+  # loan amount's rank, 0 to 1) and g the group; the group's probability is
+  # q_low + (q_high - q_low) * z where it is confounded, its mean where it is not (`none`). delta is
+  # 0 except in `reversed`. The values make the crude comparison clearly wrong while leaving the
+  # stratified one a fair chance (checked on level-1 copies before any analyst plan exists).
+  templates:
+    - id: A1
+      family: rates
+      exposure: has_card
+      question: Do loans on accounts with a credit card go bad more often than loans on accounts without one?
+      reference:
+        sql: >-
+          SELECT EXISTS (SELECT 1 FROM disp AS d JOIN card AS c ON c.disp_id = d.disp_id
+          WHERE d.account_id = l.account_id) AS has_card,
+          CASE WHEN l.status IN ('B', 'D') THEN 1 ELSE 0 END AS bad FROM loan AS l
+        analysis: compare_groups
+        outcome: bad
+        outcome_type: binary
+        group: has_card
+        reference_group: "false"
+        exposed_group: "true"
+    - id: A2
+      family: rates
+      exposure: prague
+      question: Are loans granted by branches in the Prague region more likely to go bad than loans granted by branches elsewhere?
+      reference:
+        sql: >-
+          SELECT di.a3 = 'Prague' AS prague_branch,
+          CASE WHEN l.status IN ('B', 'D') THEN 1 ELSE 0 END AS bad FROM loan AS l
+          JOIN account AS a ON a.account_id = l.account_id
+          JOIN district AS di ON di.district_id = a.district_id
+        analysis: compare_groups
+        outcome: bad
+        outcome_type: binary
+        group: prague_branch
+        reference_group: "false"
+        exposed_group: "true"
+    - id: B1
+      family: means
+      exposure: female
+      question: Do women borrow larger amounts than men?
+      reference:
+        sql: >-
+          SELECT c.gender, l.amount FROM loan AS l
+          JOIN disp AS d ON d.account_id = l.account_id AND d.type = 'OWNER'
+          JOIN client AS c ON c.client_id = d.client_id
+        analysis: compare_groups
+        outcome: amount
+        outcome_type: numeric
+        group: gender
+        reference_group: M
+        exposed_group: F
+    - id: B2
+      family: means
+      exposure: has_card
+      question: Are loans on accounts with a credit card larger than loans on accounts without one?
+      reference:
+        sql: >-
+          SELECT EXISTS (SELECT 1 FROM disp AS d JOIN card AS c ON c.disp_id = d.disp_id
+          WHERE d.account_id = l.account_id) AS has_card, l.amount FROM loan AS l
+        analysis: compare_groups
+        outcome: amount
+        outcome_type: numeric
+        group: has_card
+        reference_group: "false"
+        exposed_group: "true"
+    - id: C1
+      family: trend
+      exposure: year
+      question: Did the share of loans that go bad change with the year the loan was granted?
+      reference:
+        sql: >-
+          SELECT EXTRACT(YEAR FROM l.date) AS year,
+          CASE WHEN l.status IN ('B', 'D') THEN 1 ELSE 0 END AS bad FROM loan AS l
+        analysis: trend
+        outcome: bad
+        outcome_type: binary
+        x: year
+    - id: C2
+      family: trend
+      exposure: age
+      question: Are older borrowers more likely to have their loan go bad?
+      reference:
+        sql: >-
+          SELECT EXTRACT(YEAR FROM AGE(l.date, c.birth_date)) AS age,
+          CASE WHEN l.status IN ('B', 'D') THEN 1 ELSE 0 END AS bad FROM loan AS l
+          JOIN disp AS d ON d.account_id = l.account_id AND d.type = 'OWNER'
+          JOIN client AS c ON c.client_id = d.client_id
+        analysis: trend
+        outcome: bad
+        outcome_type: binary
+        x: age
+    - id: D1
+      family: confounded
+      exposure: weekly
+      confounder: long_loan
+      plant: { p_low: 0.12, p_high: 0.47, q_low: 0.05, q_high: 0.60, delta_reversed: -0.11 }
+      question: Are loans on accounts with weekly statements more likely to go bad than loans on accounts with monthly statements?
+      reference:
+        sql: >-
+          SELECT a.frequency, CASE WHEN l.status IN ('B', 'D') THEN 1 ELSE 0 END AS bad,
+          l.duration FROM loan AS l JOIN account AS a ON a.account_id = l.account_id
+          WHERE a.frequency IN ('POPLATEK TYDNE', 'POPLATEK MESICNE')
+        analysis: compare_groups
+        outcome: bad
+        outcome_type: binary
+        group: frequency
+        reference_group: POPLATEK MESICNE
+        exposed_group: POPLATEK TYDNE
+        strata: [duration]
+    - id: D2
+      family: confounded
+      exposure: female
+      confounder: amount_rank
+      plant: { p_low: 0.12, p_high: 0.82, q_low: 0.05, q_high: 0.95, delta_reversed: -0.11 }
+      question: Are loans taken out by women more likely to go bad than loans taken out by men?
+      reference:
+        sql: >-
+          SELECT c.gender, CASE WHEN l.status IN ('B', 'D') THEN 1 ELSE 0 END AS bad, l.amount
+          FROM loan AS l JOIN disp AS d ON d.account_id = l.account_id AND d.type = 'OWNER'
+          JOIN client AS c ON c.client_id = d.client_id
+        analysis: compare_groups
+        outcome: bad
+        outcome_type: binary
+        group: gender
+        reference_group: M
+        exposed_group: F
+        strata: [amount]
+
+# Which questions need statistics (src/stats/classify.py). Keyword rules (a transparent baseline)
+# and a model; a question takes the statistical path if either says so. The rules look for the
+# forms of a general claim: likelihood, cause, relationship, change, or a yes/no comparison.
+classify:
+  rules:
+    - '\b(more|less) (likely|often|frequently)\b'
+    - '\b(cause[sd]?|causing|because)\b'
+    - '\b(lead|leads|led) to\b'
+    - '\b(effect|impact|influence) (of|on)\b'
+    - '\bprotect(s|ed)?\b'
+    - '\bdue to\b'
+    - '\b(associated|correlated|related) (with|to)\b'
+    - '\b(relationship|association|correlation) between\b'
+    - '\bdepend(s)? on\b'
+    - '\b(become|became|get|got) (more|less)\b'
+    - '\bover time\b'
+    - '\btrend\b'
+    - '\bchange(d|s)? (with|over)\b'
+    - '^(do|does|did|are|is|were|was|have|has) \b.*\b(more|less|fewer|larger|smaller|higher|lower|better|worse)\b'
+
+# Spend is charged to this phase's cap (configs/budget.yaml).
+phase: phase7
+
+# The model calls (src/stats/calls.py): one forced tool call each. Each prompt is frozen by its
+# sha256 (LF line endings) after its format has been checked on the probes below; the runs refuse
+# a prompt that does not match. `mode`: `batch` (Message Batches, half price) or `direct`.
+calls:
+  classify:
+    prompt: prompts/classify_v1.md
+    prompt_sha256: e573962645a007f0f22a326654e6b4631a2c8dd8215681534da3880a6e61a610
+    # Claude Haiku 4.5 accepts sampling parameters: temperature 0 for a classifier
+    settings:
+      backend: anthropic
+      model: claude-haiku-4-5
+      max_tokens: 400
+      params: { temperature: 0 }
+      prompt_cache: false # the prompt is below Haiku's 4,096-token minimum for caching
+    mode: direct
+  plan:
+    prompt: prompts/stat_plan_v1.md
+    prompt_sha256: 541d5c518be09a837bf48809d090464583b51cb189d157f532a263a0a23a7aff
+    settings:
+      backend: anthropic
+      model: claude-sonnet-5
+      max_tokens: 2048
+      params: { thinking: { type: disabled } }
+      prompt_cache: true # the schema is the same for every question
+    mode: direct
+  answer:
+    prompt: prompts/stat_answer_v1.md
+    prompt_sha256: 9a8480ef352ef50e158beb769446aca0a8befcc8342659d3aa54131caf38390c
+    settings:
+      backend: anthropic
+      model: claude-sonnet-5
+      max_tokens: 1024
+      params: { thinking: { type: disabled } }
+      prompt_cache: true
+    mode: direct
+    planted_mode: direct
+
+# Where each stage keeps its response cache (DVC-tracked) and its records.
+stages:
+  classify: { cache: data/cache/llm_guardrail_classify, records: results/runs/guardrail/classify.jsonl }
+  plans: { cache: data/cache/llm_guardrail_plans, records: results/runs/guardrail/plans.jsonl }
+  own: { cache: data/cache/llm_guardrail_own, records: results/runs/guardrail/own.jsonl }
+  planted:
+    cache: data/cache/llm_planted
+    level1: results/runs/planted/level1.jsonl
+    level2: results/runs/planted/level2.jsonl
+  probes: { dir: results/runs/guardrail/probes }
+
+# The probes: questions used only to check each prompt's format before it is frozen, never
+# evaluated. The classifier's are the first ten of the benchmark's pilot questions (in no
+# comparison; the classifier is evaluated on the other 470); the plan and answer calls' are these
+# two questions on the Czech bank, neither in the banking set nor among the planted questions.
+probes:
+  classify_pilot: 10
+  questions:
+    - Are clients from districts with higher average salaries given larger loans?
+    - Do accounts with more standing orders go overdrawn more often?
+
+# The guardrail's pre-registration: frozen by its sha256 (LF line endings) before the first paid
+# call; every run refuses to start unless the file matches.
+protocol:
+  path: results/metrics/preregistration_phase7.md
+  sha256: 1ca8277d00bf347b0579a27c96b408f8bd18cb496927c9637821b1873ec5d5c3

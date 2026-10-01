@@ -1151,3 +1151,269 @@ stages:
           cache: false
       - results/plots/cost_of_declining.png:
           cache: false
+
+  # The statistical guardrail. The sandbox's security suite: every attack under the container's
+  # flags, and a control for each protection. Needs Docker and the image (scripts/70_build_sandbox.py,
+  # which needs the network and is not a stage).
+  sandbox_security:
+    cmd: uv run python scripts/71_sandbox_security.py
+    deps:
+      - scripts/71_sandbox_security.py
+      - src/data/bird.py
+      - src/stats/sandbox.py
+      - src/stats/security.py
+      - sandbox
+      - configs/sandbox_attacks.yaml
+    params:
+      - configs/guardrail.yaml:
+          - sandbox
+    outs:
+      - results/metrics/sandbox_security.json:
+          cache: false
+
+  # Which questions are statistical: keyword rules and a model on the banking set, the benchmark's
+  # questions outside the pilot split and the planted questions.
+  guardrail_classify:
+    cmd: uv run python scripts/73_classify.py
+    deps:
+      - scripts/73_classify.py
+      - src/agent
+      - src/llm
+      - src/tools
+      - src/data/bird.py
+      - src/db/connection.py
+      - src/db/execute.py
+      - src/db/guard.py
+      - src/db/hardening.py
+      - src/db/values.py
+      - src/dictionary/model.py
+      - src/dictionary/snapshot.py
+      - src/eval/config.py
+      - src/eval/ex.py
+      - src/eval/execution.py
+      - src/eval/own_set.py
+      - src/eval/records.py
+      - src/stats/answer.py
+      - src/stats/calls.py
+      - src/stats/classify.py
+      - src/stats/guardrail.py
+      - src/stats/plans.py
+      - src/stats/sandbox.py
+      - src/tracking/otel.py
+      - prompts/classify_v1.md
+      - results/metrics/preregistration_phase7.md
+      - own_set/questions.yaml
+      - data/raw/bird_minidev
+      - results/metrics/splits.json
+    params:
+      - configs/guardrail.yaml:
+          - phase
+          - calls
+          - classify
+          - planted.templates
+          - stages
+          - protocol
+      - configs/budget.yaml:
+          - prices_usd_per_mtok
+          - batch_discount
+    outs:
+      - data/cache/llm_guardrail_classify:
+          persist: true
+      - results/runs/guardrail/classify.jsonl:
+          cache: false
+
+  # The analysis plans of the flagged banking questions and the planted questions, written from the
+  # schema as the winning design reads it.
+  guardrail_plans:
+    cmd: uv run python scripts/74_plans.py
+    deps:
+      - scripts/74_plans.py
+      - src/agent
+      - src/llm
+      - src/tools
+      - src/data/bird.py
+      - src/db/connection.py
+      - src/db/execute.py
+      - src/db/guard.py
+      - src/db/hardening.py
+      - src/db/values.py
+      - src/dictionary/model.py
+      - src/dictionary/snapshot.py
+      - src/eval/config.py
+      - src/eval/ex.py
+      - src/eval/execution.py
+      - src/eval/own_set.py
+      - src/eval/records.py
+      - src/stats/answer.py
+      - src/stats/calls.py
+      - src/stats/classify.py
+      - src/stats/guardrail.py
+      - src/stats/plans.py
+      - src/stats/sandbox.py
+      - src/tracking/otel.py
+      - prompts/stat_plan_v1.md
+      - results/metrics/preregistration_phase7.md
+      - configs/tools.yaml
+      - dictionary
+      - data/raw/bird_minidev
+      - results/runs/guardrail/classify.jsonl
+    params:
+      - configs/guardrail.yaml:
+          - phase
+          - calls
+          - stages
+          - protocol
+      - configs/budget.yaml:
+          - prices_usd_per_mtok
+          - batch_discount
+    outs:
+      - data/cache/llm_guardrail_plans:
+          persist: true
+      - results/runs/guardrail/plans.jsonl:
+          cache: false
+
+  # The banking set's statistical questions: each plan's rows pulled through the guards, analyzed
+  # in the sandbox, and answered with and without the statistics. Needs Docker and the image.
+  guardrail_own:
+    cmd: uv run python scripts/75_guardrail_own.py
+    deps:
+      - scripts/75_guardrail_own.py
+      - src/agent
+      - src/llm
+      - src/tools
+      - src/data/bird.py
+      - src/db/connection.py
+      - src/db/execute.py
+      - src/db/guard.py
+      - src/db/hardening.py
+      - src/db/values.py
+      - src/dictionary/model.py
+      - src/dictionary/snapshot.py
+      - src/eval/config.py
+      - src/eval/ex.py
+      - src/eval/execution.py
+      - src/eval/own_set.py
+      - src/eval/records.py
+      - src/stats/answer.py
+      - src/stats/calls.py
+      - src/stats/classify.py
+      - src/stats/guardrail.py
+      - src/stats/plans.py
+      - src/stats/sandbox.py
+      - src/tracking/otel.py
+      - sandbox
+      - prompts/stat_answer_v1.md
+      - results/metrics/preregistration_phase7.md
+      - data/raw/bird_minidev
+      - results/runs/guardrail/classify.jsonl
+      - results/runs/guardrail/plans.jsonl
+    params:
+      - configs/guardrail.yaml:
+          - phase
+          - sandbox
+          - calls
+          - stages
+          - protocol
+      - configs/budget.yaml:
+          - prices_usd_per_mtok
+          - batch_discount
+    outs:
+      - data/cache/llm_guardrail_own:
+          persist: true
+      - results/runs/guardrail/own.jsonl:
+          cache: false
+
+  # The planted effects: copies of the Czech bank database with effects of known size, analyzed
+  # with the reference and the analyst's plans (level 1, no model call), and answered from the
+  # analyst plan's result with and without the statistics on the first copies (level 2).
+  planted:
+    cmd: uv run python scripts/76_planted.py
+    deps:
+      - scripts/76_planted.py
+      - src/agent
+      - src/llm
+      - src/tools
+      - src/data/bird.py
+      - src/db/connection.py
+      - src/db/execute.py
+      - src/db/guard.py
+      - src/db/hardening.py
+      - src/db/values.py
+      - src/dictionary/model.py
+      - src/dictionary/snapshot.py
+      - src/eval/config.py
+      - src/eval/ex.py
+      - src/eval/execution.py
+      - src/eval/own_set.py
+      - src/eval/records.py
+      - src/stats/answer.py
+      - src/stats/calls.py
+      - src/stats/classify.py
+      - src/stats/guardrail.py
+      - src/stats/planted.py
+      - src/stats/plans.py
+      - src/stats/sandbox.py
+      - src/tracking/otel.py
+      - sandbox
+      - prompts/stat_answer_v1.md
+      - results/metrics/preregistration_phase7.md
+      - data/raw/bird_minidev
+      - results/runs/guardrail/plans.jsonl
+    params:
+      - configs/guardrail.yaml:
+          - phase
+          - sandbox
+          - planted
+          - calls
+          - stages
+          - protocol
+      - configs/budget.yaml:
+          - prices_usd_per_mtok
+          - batch_discount
+    outs:
+      - data/cache/llm_planted:
+          persist: true
+      - results/runs/planted:
+          cache: false
+
+  # The guardrail's results and the predictions they are checked against, from the stored runs
+  # and the close reading (no model call).
+  guardrail_report:
+    cmd: uv run python scripts/77_guardrail_report.py
+    deps:
+      - scripts/77_guardrail_report.py
+      - src/data/bird.py
+      - src/eval/bootstrap.py
+      - src/stats/guardrail.py
+      - src/stats/calls.py
+      - src/stats/report.py
+      - results/runs/guardrail/classify.jsonl
+      - results/runs/guardrail/plans.jsonl
+      - results/runs/guardrail/own.jsonl
+      - results/runs/planted
+      - results/reviews/guardrail_review.yaml
+      - results/metrics/api_spend.json
+    params:
+      - configs/guardrail.yaml:
+          - phase
+          - planted.power
+          - planted.copies
+          - stages
+      - configs/budget.yaml:
+          - phase_caps_usd
+    outs:
+      - results/metrics/guardrail.json:
+          cache: false
+      - results/metrics/planted_effects.json:
+          cache: false
+
+  phase7_plots:
+    cmd: uv run python scripts/78_guardrail_plots.py
+    deps:
+      - scripts/78_guardrail_plots.py
+      - results/metrics/planted_effects.json
+    outs:
+      - results/plots/planted_detection.png:
+          cache: false
+      - results/plots/planted_claims.png:
+          cache: false

@@ -105,7 +105,7 @@ def _duration(s: float) -> str:
 
 def fmt(value: Any, spec: str) -> str:
     """f3 -> 0.179 | sf2 -> +0.04 | pct1 -> 17.9% | pp1 -> +1.2 pp | ppci1 -> [−1.0, +1.7] |
-    int -> 1,234 | usd2 -> $0.62 | dur -> 1.7 h | ci2 -> [0.27, 0.75] |
+    int -> 1,234 | usd2 -> $0.62 | dur -> 1.7 h | ci2 -> [0.27, 0.75] | pctci1 -> [0.6, 2.8] |
     pm3 -> 0.080 ± 0.012 (a spread) | s1 -> seconds with one decimal | str
     An interval as the reports write it ({estimate, low, high}): pctiv1 -> [55.3, 65.9] (a
     share, in percent) | ppiv1 -> [+10.7, +24.0] (a difference, in points) | civ2 -> [0.71, 0.82]"""
@@ -136,6 +136,8 @@ def fmt(value: Any, spec: str) -> str:
         return f"${value:,.{d}f}"
     if kind == "ci":
         return f"[{_num(value[0], d)}, {_num(value[1], d)}]"
+    if kind == "pctci":  # an interval of a share, as a [low, high] list, in percent
+        return f"[{_num(100 * value[0], d)}, {_num(100 * value[1], d)}]"
     if kind == "ppci":  # an interval of a difference, in percentage points
         lo, hi = (fmt(v, f"pp{d}").removesuffix(" pp") for v in value)
         return f"[{lo}, {hi}]"
@@ -413,6 +415,93 @@ def predictions() -> str:
         "`results/metrics/benchmark_main.json`, `results/metrics/own_set.json`, "
         "`results/metrics/calibration.json`, `results/metrics/escalation.json`, "
         "`results/metrics/framework_comparison.json` (one run each; intervals 95%)",
+    )
+
+
+GUARDRAIL_OBSERVED = {  # how each prediction's observed value is written
+    "G1": "{} of 9",
+    "G2": "{} of 51",
+    "G4": "{} of 9",
+    "G5": "{} of 9",
+    "G7": "{} of 12 cells",
+    "G8": "{} of 12 cells",
+    "G9": "{} of 2",
+}
+
+
+@table
+def guardrail_predictions() -> str:
+    """The guardrail's pre-registered predictions beside what was observed."""
+    rows = []
+    for p in load("metrics/guardrail.json")["predictions"]:
+        obs = p["observed"]
+        if isinstance(obs, list):
+            text = " / ".join(fmt(x, "pct0") for x in obs)
+        elif p["id"] in GUARDRAIL_OBSERVED:
+            text = GUARDRAIL_OBSERVED[p["id"]].format(obs)
+        else:
+            text = fmt(obs, "pct1")
+        rows.append([p["id"], p["prediction"], p["range"], text, "held" if p["held"] else "missed"])
+    return md(
+        ["", "Prediction", "Predicted", "Observed", ""],
+        rows,
+        "`results/metrics/preregistration_phase7.md` (the predictions), "
+        "`results/metrics/guardrail.json`, `results/metrics/planted_effects.json` (one run)",
+    )
+
+
+@table
+def banking_causal() -> str:
+    """The banking set's comparative and causal questions, before and after the guardrail."""
+    rows = []
+    for q in load("metrics/guardrail.json")["banking_f"]["per_question"]:
+        a = q["after"]
+        failed = a["failed_at"]
+        ran = "yes" if a["ran_to_the_end"] else f"no ({failed['kind'] if failed else 'not run'})"
+        rows.append(
+            [
+                q["id"],
+                q["question"],
+                "yes" if q["before"]["success"] else "no",
+                ran,
+                "yes" if a["success"] else "no",
+                "yes" if a["reviewed_success"] else "no",
+            ]
+        )
+    return md(
+        ["", "Question", "Before", "Path ran", "After", "After, reviewed"],
+        rows,
+        "`results/metrics/guardrail.json`, `results/reviews/guardrail_review.yaml` (one run; "
+        "reviewed by reading against each question's recorded check and the expert query's result)",
+    )
+
+
+SANDBOX_CATEGORIES = {
+    "network": "Reach the network or the host",
+    "file_system": "Write, execute or read files",
+    "privileges": "Gain privileges",
+    "secrets": "Find secrets",
+    "resources": "Exhaust time, memory, processes or output",
+    "input": "Malformed or oversized input",
+}
+
+
+@table
+def sandbox_attacks() -> str:
+    """The sandbox's attacks per kind, and how each was stopped."""
+    suite = load("metrics/sandbox_security.json")
+    rows = []
+    for key, label in SANDBOX_CATEGORIES.items():
+        recs = [r for r in suite["records"] if r["category"] == key]
+        outcomes = {}
+        for r in recs:
+            outcomes[r["outcome"]] = outcomes.get(r["outcome"], 0) + 1
+        how = ", ".join(f"{n} {o}" for o, n in sorted(outcomes.items()))
+        rows.append([label, str(len(recs)), str(sum(r["passed"] for r in recs)), how])
+    return md(
+        ["Kind of attack", "Attacks", "Blocked", "How"],
+        rows,
+        "`results/metrics/sandbox_security.json` (one run)",
     )
 
 

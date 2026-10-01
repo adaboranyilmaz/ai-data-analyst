@@ -5,7 +5,7 @@
 
 This project builds an AI analyst that answers questions about a bank's database by writing and running SQL. Every answer comes with its evidence and a confidence, and the analyst declines when it is unsure. The project measures whether that confidence can be trusted.
 
-**Status: under construction. The analyst is built, five designs of it have been compared, the chosen one has been evaluated on the benchmark and on the hand-written banking set, its confidence has been calibrated, turned into a point at which it declines, and used to route uncertain questions to a larger model, and its wrong answers have been sorted by where they go wrong and priced. The statistical guardrail and the demo come next.**
+**Status: under construction. The analyst is built, five designs of it have been compared, the chosen one has been evaluated on the benchmark and on the hand-written banking set, its confidence has been calibrated, turned into a point at which it declines, and used to route uncertain questions to a larger model, and its wrong answers have been sorted by where they go wrong and priced. A statistical guardrail now checks its comparative and causal answers. The demo comes next.**
 
 **Auditable** means that every answer can be traced to the exact SQL, the rows it used and the checks it ran, and that it comes with a calibrated confidence. It does not mean guaranteed correct.
 
@@ -17,6 +17,7 @@ The full technical report is in [TECHNICAL_REPORT.md](TECHNICAL_REPORT.md). A re
 - **Execution accuracy** is the share of questions for which the analyst's query returns the same rows as a query written by an expert.
 - **Calibration** means the confidence matches reality: of the answers given a confidence of eight in ten, about eight in ten should be right.
 - **Declining** means the analyst says it cannot answer reliably, and why, instead of guessing.
+- **A statistical question** asks whether a difference, a trend or a relationship really holds, beyond the rows at hand, or whether one thing affects another. An honest answer gives the uncertainty (an interval) and says that a pattern in records nobody assigned at random need not be a cause.
 - Accuracy tells you how often the analyst is right. This project measures whether it knows *which* of its answers are right, where and why it goes wrong, and what its mistakes cost.
 
 ## Key Findings
@@ -32,6 +33,8 @@ The full technical report is in [TECHNICAL_REPORT.md](TECHNICAL_REPORT.md). A re
 - **Most wrong answers are wrong in their logic, not their form.** Of the 126 wrong held-out answers, 29 had the right rows in the wrong shape and 12 returned nothing; the rest read other tables (27), filtered differently (23) or calculated differently (18). Reading 30 of them closely found that in 8 the benchmark's own expert query does not answer the question as asked.
 - **Once a wrong answer costs more than $0.025, the larger model is the cheaper one**, although each answer costs more ($0.0102 against $0.0055): it makes fewer mistakes. Declining pays when a person's answer costs less than 0.42 times what a wrong answer costs. The router is never the cheapest choice.
 - **On the hand-written banking questions**, which no model can have seen, it answered 87.5% of the standard and multi-step questions correctly, declined 100.0% of the unanswerable ones and corrected 100.0% of the false premises, while asking a clarifying question on only 4.2% of the clear questions.
+- **The statistical guardrail keeps the answers true to the test, but not the test true to the question.** On copies of the bank's data with effects planted in them, answers that saw the test claimed an effect where none was planted on 5.8% of the copies, against 17.3% for answers written from the numbers alone, and never contradicted the test. But the analyst chooses what to compare within, and where a planted third factor produced the difference, it never chose that factor: its test reported the false effect on 99.5% of those copies, and the answers repeated it.
+- **On the banking set's comparative and causal questions**, the analysis ran to the end on 7 of 9, each answer with an interval and the caveat that an association is not a cause; read against what each question's check asks for, 4 said all of it. Without the guardrail, the analyst had answered them without seeing any data, and none gave an interval.
 
 ![Risk-coverage curves on the held-out questions](results/plots/risk_coverage_held_out.png)
 
@@ -46,6 +49,7 @@ The design, being built in stages:
 - **A hand-written banking test set.** 60 questions written for this project and fixed before the analyst sees them, including ambiguous, unanswerable and false-premise questions. Unlike a public benchmark, they cannot be in any model's training data.
 - **The analyst.** An agent loop built directly on the Anthropic SDK, with tools to list and describe tables, look at sample rows, run queries and check chart designs.
 - **Two independent guards on the database.** A SQL checker accepts only a single read-only query over the analyst's own tables. Separately, the database itself runs every query under a role that can read that one database's tables and nothing else, and stops it at a time limit. Each guard is tested on its own against the same attacks (see Results).
+- **A statistical guardrail.** Comparative and causal questions take a second path: the analyst plans an analysis, its query pulls one row per unit, a tested statistics program computes the intervals in a locked-down container, and the answer is written from that result, with the observational caveat attached (see below).
 - **The evaluation.** Accuracy is scored exactly as BIRD's official evaluator scores it, checked against the official code query by query (see Results). Beyond accuracy: how accuracy rises as the analyst declines its least confident answers (a risk–coverage curve), and whether its confidence is calibrated on questions it was not tuned on. The benchmark's questions are split once, before any run: 30 to write the prompts on, 150 to choose the design and calibrate confidence on, and 320 held out for the reported results. How the design will be chosen, and what is expected, is written down before the first run.
 
 ## Results
@@ -94,29 +98,6 @@ The design, being built in stages:
 
 <sub>Source: `results/metrics/escalation.json`, `results/metrics/router.json` (one run per model)</sub>
 
-**Where the analyst gets it wrong.** Each of the 126 wrong held-out answers was put in one category by the first part of its query that differs from the expert's:
-
-- 12 returned no result (9 refused by the SQL checker, 3 failed), and 29 had the right rows in the wrong shape.
-- The rest are mistakes of logic: 27 read other tables, 23 used other conditions, 18 calculated differently, 8 returned other columns, 5 joined the right tables wrongly and 1 kept other rows. In 79 of the 126, more than one part differs.
-- A close reading of 30 of them agreed with the automatic category on 17; where they differ, the automatic one had mostly stopped at a harmless first difference, before the real mistake. It also found 8 whose expert query does not answer the question as asked, for example counting lab records where the question asks for patients. The author checked 5 of the answers flagged this way and kept the flag on 4, dropping the other from the count.
-
-![Where the wrong answers go wrong](results/plots/errors_by_category.png)
-
-<sub>Source: `results/metrics/error_analysis.json`, `results/reviews/error_hand_check.yaml` (one run)</sub>
-
-**What errors cost.** Nobody knows in general what a wrong answer costs, or what it costs for a person to answer a question the analyst declines, so no price is assumed. Instead, each system's expected cost per question was worked out for every pair of costs, from a cent to $10,000 for a wrong answer and from a cent to $1,000 for a declined question:
-
-- Opus alone is cheaper than Sonnet alone once a wrong answer costs more than $0.025 (95% interval $0.017 to $0.036). Below that, the cheaper model's extra mistakes cost less than the larger model's price.
-- The router is never the cheapest: it gets exactly the same questions wrong as Opus alone and costs $0.0050 more per question.
-- Declining is worth it only when a person's answer is cheap next to a wrong one: for Sonnet, below 0.42 times the cost of a wrong answer.
-- Deciding question by question from the calibrated confidence works only as well as the calibration does. It is the cheapest rule in principle, but for Opus, whose confidence was calibrated on few questions, the fixed threshold sometimes did better.
-
-![The cheapest system at each cost of a wrong answer and of declining](results/plots/cheapest_system.png)
-
-*Which system has the lowest expected cost per question, at each cost of a wrong answer (across) and of a declined question (up). Blue is Sonnet and orange is Opus; the hatched areas decline their least confident questions. Opus declining is exploratory: its threshold was chosen the same way as Sonnet's. One run per model, 320 held-out questions, batch prices.*
-
-<sub>Source: `results/metrics/decision_analysis.json` (one run per model, no model calls)</sub>
-
 **The same pipeline in a framework.** Rebuilt with LangGraph (an orchestrator routing between a SQL agent and the reviewing model), the pipeline sent exactly the same requests on all 150 questions, so its answers and accuracy are identical. Its overhead per question was 37 ms at the median, against 30 ms for the hand-written loop, and it saved 7 checkpoints of its state each time. The hand-written loop stays the main system.
 
 <sub>Source: `results/metrics/framework_comparison.json` (one run, from stored responses)</sub>
@@ -149,6 +130,100 @@ The design, being built in stages:
 - The database cannot hide the names of its tables from a user who can connect. Only the checker stops the 4 queries that list them; the data behind the names stays out of reach.
 - All 500 expert queries of the benchmark pass the checker, and return exactly the same rows through the analyst's tools.
 
+## Where It Goes Wrong and What Errors Cost
+
+**Where the analyst gets it wrong.** Each of the 126 wrong held-out answers was put in one category by the first part of its query that differs from the expert's:
+
+- 12 returned no result (9 refused by the SQL checker, 3 failed), and 29 had the right rows in the wrong shape.
+- 82 are mistakes of logic: 27 read other tables, 23 used other conditions, 18 calculated differently, 8 returned other columns, 5 joined the right tables wrongly and 1 kept other rows. In 79 of the 126, more than one part differs.
+- In the last 3, none of these parts differs from the expert's query, and the difference lies elsewhere.
+- A close reading of 30 of them agreed with the automatic category on 17; where they differ, the automatic one had mostly stopped at a harmless first difference, before the real mistake. It also found 8 whose expert query does not answer the question as asked, for example counting lab records where the question asks for patients. The author checked 5 of the answers flagged this way and kept the flag on 4, dropping the other from the count.
+
+![Where the wrong answers go wrong](results/plots/errors_by_category.png)
+
+<sub>Source: `results/metrics/error_analysis.json`, `results/reviews/error_hand_check.yaml` (one run)</sub>
+
+**What errors cost.** Nobody knows in general what a wrong answer costs, or what it costs for a person to answer a question the analyst declines, so no price is assumed. Instead, each system's expected cost per question was worked out for every pair of costs, from a cent to $10,000 for a wrong answer and from a cent to $1,000 for a declined question:
+
+- Opus alone is cheaper than Sonnet alone once a wrong answer costs more than $0.025 (95% interval $0.017 to $0.036). Below that, the cheaper model's extra mistakes cost less than the larger model's price.
+- The router is never the cheapest: it gets exactly the same questions wrong as Opus alone and costs $0.0050 more per question.
+- Declining is worth it only when a person's answer is cheap next to a wrong one: for Sonnet, below 0.42 times the cost of a wrong answer.
+- Deciding question by question from the calibrated confidence works only as well as the calibration does. It is the cheapest rule in principle, but for Opus, whose confidence was calibrated on few questions, the fixed threshold sometimes did better.
+
+![The cheapest system at each cost of a wrong answer and of declining](results/plots/cheapest_system.png)
+
+*Which system has the lowest expected cost per question, at each cost of a wrong answer (across) and of a declined question (up). Blue is Sonnet and orange is Opus; the hatched areas decline their least confident questions. Opus declining is exploratory: its threshold was chosen the same way as Sonnet's. One run per model, 320 held-out questions, batch prices.*
+
+<sub>Source: `results/metrics/decision_analysis.json` (one run per model, no model calls)</sub>
+
+## The Statistical Guardrail
+
+Some questions ask whether something holds, not what the rows say: do loans to women go bad more often, did card withdrawals become more common, does a pension protect against overdrafts? Answered from the rows alone, such a question invites a confident claim that the data cannot support. The guardrail sends these questions down a second path:
+
+1. **Flag.** Keyword rules and Claude Haiku 4.5, reading the question alone, flag it as statistical if either says so.
+2. **Plan.** Claude Sonnet 5, reading the schema but no data, plans the analysis: a query returning one row per unit (a loan, a client), the outcome, the groups or the trend to compare, and up to two variables to compare within, in case one of them produces the difference.
+3. **Analyze.** The query runs through both database guards. A tested statistics program computes the intervals and tests in a container with no network, a read-only file system and no privileges, and checks whether the result holds within the chosen variables.
+4. **Answer.** Sonnet writes the answer from that result. The reader gets it with the interval, any warning (few cases, or areas rather than people), a correction wherever the answer's claim and the test disagree, and the caveat that records nobody assigned at random show associations, not causes.
+
+**Which questions it flags.** It flagged 9 of the 9 comparative and causal questions in the banking set and 8 of the 8 planted ones (below). It also flagged 4 of the banking set's other 51 questions, most of which the plan then declined (the data does not record what they ask about, or their premise is false), and 6 of the 470 benchmark questions (1.3%), all of them counts or lookups on reading.
+
+**The banking set's comparative and causal questions.** Before the guardrail, the analyst answered them in one call, without seeing any data; none gave an interval, and several said "no real difference" where the data shows a clear one.
+
+|  | Question | Before | Path ran | After | After, reviewed |
+|---|---|---|---|---|---|
+| own-f01 | Did giving clients a card make them more likely to take out a loan? | no | yes | yes | no |
+| own-f02 | Are loans to women repaid worse than loans to men? | no | yes | yes | no |
+| own-f03 | Do weekly statements lead to more overdrafts? | no | yes | yes | no |
+| own-f04 | Do clients in districts with higher unemployment default on their loans more often? | no | yes | yes | yes |
+| own-f06 | Do older clients keep higher balances? | no | yes | yes | yes |
+| own-f07 | Are gold card holders more active than classic card holders? | no | no (timeout) | no | no |
+| own-f09 | Did withdrawals by card become more common between 1996 and 1998? | no | no (refused) | no | no |
+| own-f10 | Does receiving an old-age pension protect clients from overdrafts? | no | yes | yes | yes |
+| own-f11 | Are loans on accounts with a second authorised user repaid better, because two people share responsibility? | no | yes | yes | yes |
+
+<sub>Source: `results/metrics/guardrail.json`, `results/reviews/guardrail_review.yaml` (one run; reviewed by reading against each question's recorded check and the expert query's result)</sub>
+
+- On 7 of 9, the path ran to the end and the answer met every criterion fixed in advance: an interval, no causal claim, the caveat, and a warning where the counts are small. Of the other two, one plan's query ran past the time limit and the SQL checker refused the other's cross join.
+- Read against what each question's check asks for, 4 said all of it. The others missed the specific caveat the check names (for example, that most card holders got their card only after their loan was granted, so the card cannot have led to it), or pooled groups the check asks to compare.
+
+**Planted effects: does the test find what is there?** Effects of known size were planted in copies of the bank's loans: 200 copies of each of eight questions under each condition, two questions each on rates, means and trends (no effect, a small one or a large one), and two where a third factor produces a difference or hides a real one pointing the other way. Each copy was analyzed with the analyst's plan and with a reference plan written beforehand.
+
+- **The test is sound.** With the reference plans, it found an effect where none was planted in 4.0% of the copies (it is built for one in twenty), found planted effects about as often as theory predicts in 10 of 12 cases, and saw through a planted third factor: a false effect in 5.5% of those copies, against 100% without comparing within the factor.
+- **The analyst's plans are the weak point.** It never chose to compare within the planted third factor, so its test reported the false effect on 99.5% of those copies, and where a real effect pointed the other way, it found that effect pointing the wrong way in 60% of the copies and the right way in none. Comparing within a variable that nearly fixes the groups also cost it power: a district's average salary nearly decides whether the branch is in Prague, and on one question the analyst's plan found a large planted effect in 74% of the copies, against 98% for the reference plan.
+
+![How often the test finds an effect in the planted copies](results/plots/planted_detection.png)
+
+*Per question and condition, the share of 200 copies in which the test found an effect, in the planted direction where one was planted (hollow marks: found in the opposite direction). Gray: the reference plan; blue: the analyst's; orange: the reference plan without comparing within the third factor. Black ticks: the theoretical power. One run.*
+
+**Planted effects: what do the answers say?** On the first 13 copies of each question and condition, Sonnet answered twice: once from the numbers alone (each group's size and share or mean) and once from the guarded input, with the test.
+
+- Where nothing was planted, the guarded answers claimed an effect on 5.8% of the copies, only where the test itself had a false alarm, against 17.3% from the numbers alone. Over all copies without an effect, the pre-registered measure, the guardrail lowered the claims from 33.9% to 24.6% (−9.2 pp, [−15.4, −3.8]); it did not lower them more because, where a third factor produced the difference, both kinds of answer claimed it every time: the guarded answer follows the test, and the test followed the analyst's plan.
+- The guarded answers never contradicted the test (0 of 311); those from the numbers alone did 48 times. Where a small effect was planted, the guarded answers claimed it less often (49% against 65%): the test finds a small effect only about half the time, and the guarded answers claim no more than it finds.
+- Read sentence by sentence, 0 guarded answers and 1 from the numbers alone claimed a cause, counting a claim that one thing does not affect another.
+
+![What the answers claim](results/plots/planted_claims.png)
+
+*The share of answers that claim an effect where none was planted (top two rows) and that claim the planted direction where one was (bottom three), from the numbers alone (gray) and guarded (blue). One run, 13 copies per question and condition.*
+
+**The sandbox.** Each analysis runs in a fresh container with no network, a read-only file system, an unprivileged user and limits on time, memory, processes and output. It was attacked as if it ran hostile code:
+
+| Kind of attack | Attacks | Blocked | How |
+|---|---|---|---|
+| Reach the network or the host | 8 | 8 | 1 absent, 7 denied |
+| Write, execute or read files | 12 | 12 | 3 absent, 1 contained, 8 denied |
+| Gain privileges | 7 | 7 | 7 denied |
+| Find secrets | 2 | 2 | 2 absent |
+| Exhaust time, memory, processes or output | 10 | 10 | 10 contained |
+| Malformed or oversized input | 8 | 8 | 3 handled, 5 rejected |
+
+<sub>Source: `results/metrics/sandbox_security.json` (one run)</sub>
+
+- 47 of the 47 attacks were blocked: what they looked for was absent, the operating system denied it, a limit contained it, or the runner rejected or correctly handled the malformed input. For each protection, the same attack was also run with that protection switched off, and it succeeded (11 of 11), so the attacks are real and each protection is what stops them.
+
+Of the guardrail's 13 predictions, fixed before the first paid call, 6 held; the technical report lists them.
+
+<sub>Source: `results/metrics/guardrail.json`, `results/metrics/planted_effects.json`, `results/reviews/guardrail_review.yaml`, `results/metrics/sandbox_security.json` (one run each)</sub>
+
 ## Try It
 
 TBD.
@@ -175,6 +250,8 @@ uv run pytest
 - The cost analysis prices every wrong answer the same and assumes a person answers a declined question correctly. It shows which system is cheapest for any pair of costs, not what the costs are.
 - The error categories read the structure of a query, not its intent, so a harmless difference can hide the real mistake behind it.
 - The security results are from one run of a fixed set of attacks. They show that each guard stops these attacks, not that no other attack exists.
+- The guardrail is only as good as the analysis the analyst plans: it computes the plan's test correctly but cannot see a third factor the plan leaves out, and the planted copies show that the analyst missed such factors. Its planted effects are simple and of known form; real effects are not.
+- Whether a guarded answer meets each question's check was judged by reading, by one reader, on nine questions.
 - BIRD's questions are public and may be in the models' training data. The hand-written banking set exists to check for that.
 
 ## Dependencies
@@ -189,6 +266,7 @@ uv run pytest
 | sqlglot | the SQL checker's parser |
 | jsonschema, Vega-Lite schema | checking the analyst's chart designs |
 | NumPy | bootstrap intervals |
+| SciPy, statsmodels, pandas, in Docker | the guardrail's statistics, in a locked-down container |
 | MLflow, DVC | experiment tracking and data versioning |
 | LangGraph | the framework comparison only |
 | Matplotlib | the figures |

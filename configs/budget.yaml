@@ -17,6 +17,11 @@ phase_caps_usd:
   # on pilot questions first; then the critic and escalation runs; a router only if escalation
   # is adopted), to at most $15. The cap is the phase's total, earlier steps included.
   phase5: 12.0
+  phase6: 0.0 # error analysis and what errors cost: no API calls
+  # the statistical guardrail: raised in steps, each from a counted dry run (format probes first;
+  # then the classifier, plan and answer runs, all direct), to at most $6.50. The cap is the
+  # phase's total.
+  phase7: 6.50
 batch_discount: 0.5 # Message Batches: half of every token price
 
 # USD per million tokens, Anthropic first-party list prices from

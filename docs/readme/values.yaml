@@ -284,6 +284,94 @@ values:
   replay_runs: {file: metrics/replay_check.json, path: runs, count_where: {}, fmt: int}
   replay_records: {file: metrics/replay_check.json, path: runs, sum_of: records, fmt: int}
 
+  # the statistical guardrail: which questions are statistical
+  gr_f_flagged: {file: metrics/guardrail.json, path: classification/or/sensitivity_own_f/k, fmt: int}
+  gr_f_questions: {file: metrics/guardrail.json, path: classification/questions/own_f, fmt: int}
+  gr_other_flagged: {file: metrics/guardrail.json, path: classification/or/false_positive_own_other/k, fmt: int}
+  gr_other_questions: {file: metrics/guardrail.json, path: classification/questions/own_other, fmt: int}
+  gr_other_rules: {file: metrics/guardrail.json, path: classification/rules/false_positive_own_other/k, fmt: int}
+  gr_planted_flagged: {file: metrics/guardrail.json, path: classification/or/sensitivity_planted/k, fmt: int}
+  gr_planted_questions: {file: metrics/guardrail.json, path: classification/questions/planted, fmt: int}
+  gr_bench_questions: {file: metrics/guardrail.json, path: classification/questions/benchmark, fmt: int}
+  gr_bench_flagged: {file: metrics/guardrail.json, path: classification/or/false_positive_benchmark_as_flagged/k, fmt: int}
+  gr_bench_rate: {file: metrics/guardrail.json, path: classification/or/false_positive_benchmark_as_flagged/rate, fmt: pct1}
+  gr_bench_ci: {file: metrics/guardrail.json, path: classification/or/false_positive_benchmark_as_flagged/ci, fmt: pctci1}
+  gr_bench_rules: {file: metrics/guardrail.json, path: classification/rules/false_positive_benchmark_as_flagged/k, fmt: int}
+  gr_bench_model: {file: metrics/guardrail.json, path: classification/model/false_positive_benchmark_as_flagged/k, fmt: int}
+  gr_bench_statistical: {file: metrics/guardrail.json, path: classification/flagged_benchmark, count_where: {label: statistical}, fmt: int}
+  gr_plans: {file: metrics/guardrail.json, path: plans, count_where: {}, fmt: int}
+  gr_plans_usable: {file: metrics/guardrail.json, path: plans, count_where: {error: null}, fmt: int}
+  # the banking set's comparative and causal questions
+  gb_ran: {file: metrics/guardrail.json, path: banking_f/totals/after/interval, fmt: int}
+  gb_reviewed: {file: metrics/guardrail.json, path: banking_f/totals/after/reviewed_success, fmt: int}
+  gb_before_caveat: {file: metrics/guardrail.json, path: banking_f/totals/before/no_causal_claim_and_caveat, fmt: int}
+  # the planted effects, level 1 (the test)
+  pl_copies: {file: metrics/planted_effects.json, path: copies/level1, fmt: int}
+  pl_copies2: {file: metrics/planted_effects.json, path: copies/level2, fmt: int}
+  pl_ref_false_alarms: {file: metrics/planted_effects.json, path: level1/headline/false_alarms_none/reference/rate, fmt: pct1}
+  pl_ref_false_alarms_ci: {file: metrics/planted_effects.json, path: level1/headline/false_alarms_none/reference/ci, fmt: pctci1}
+  pl_ana_false_alarms: {file: metrics/planted_effects.json, path: level1/headline/false_alarms_none/analyst/rate, fmt: pct1}
+  pl_ref_confounded: {file: metrics/planted_effects.json, path: level1/headline/confounded_detected/reference/rate, fmt: pct1}
+  pl_crude_confounded: {file: metrics/planted_effects.json, path: level1/headline/confounded_detected/crude/rate, fmt: pct0}
+  pl_ana_confounded: {file: metrics/planted_effects.json, path: level1/headline/confounded_detected/analyst/rate, fmt: pct1}
+  pl_ref_reversed: {file: metrics/planted_effects.json, path: level1/headline/reversed_planted_direction/reference/rate, fmt: pct0}
+  pl_ana_reversed_opposite: {file: metrics/planted_effects.json, path: level1/headline/reversed_opposite_direction/analyst/rate, fmt: pct0}
+  pl_crude_reversed_opposite: {file: metrics/planted_effects.json, path: level1/headline/reversed_opposite_direction/crude/rate, fmt: pct0}
+  pl_power_within: {file: metrics/planted_effects.json, path: level1/power_checks/reference_vs_power, count_where: {within: true}, fmt: int}
+  pl_power_cells: {file: metrics/planted_effects.json, path: level1/power_checks/reference_vs_power, count_where: {}, fmt: int}
+  pl_analyst_within: {file: metrics/planted_effects.json, path: level1/power_checks/analyst_vs_reference, count_where: {within: true}, fmt: int}
+  # (cell 3 of the analyst-against-reference checks is A2 large; cell 6 is B2 small)
+  pl_a2_large_ref: {file: metrics/planted_effects.json, path: level1/power_checks/analyst_vs_reference/3/reference, fmt: pct0}
+  pl_a2_large_ana: {file: metrics/planted_effects.json, path: level1/power_checks/analyst_vs_reference/3/analyst, fmt: pct0}
+  pl_b2_small_ref: {file: metrics/planted_effects.json, path: level1/power_checks/analyst_vs_reference/6/reference, fmt: pct0}
+  pl_b2_small_ana: {file: metrics/planted_effects.json, path: level1/power_checks/analyst_vs_reference/6/analyst, fmt: pct0}
+  # level 2 (the words)
+  l2_answers_guarded: {file: metrics/planted_effects.json, path: level2/arms/guarded/answers, fmt: int}
+  l2_primary_guarded: {file: metrics/planted_effects.json, path: level2/primary/guarded, fmt: pct1}
+  l2_primary_numbers: {file: metrics/planted_effects.json, path: level2/primary/numbers_only, fmt: pct1}
+  l2_primary_diff: {file: metrics/planted_effects.json, path: level2/primary/difference/estimate, fmt: pp1}
+  l2_primary_diff_ci: {file: metrics/planted_effects.json, path: level2/primary/difference, fmt: ppiv1}
+  l2_primary_copies: {file: metrics/planted_effects.json, path: level2/primary/copies, fmt: int}
+  l2_none_guarded: {file: metrics/planted_effects.json, path: level2/arms/guarded/claims_on_no_effect_by_condition/none/rate, fmt: pct1}
+  l2_none_numbers: {file: metrics/planted_effects.json, path: level2/arms/numbers_only/claims_on_no_effect_by_condition/none/rate, fmt: pct1}
+  l2_confounded_guarded: {file: metrics/planted_effects.json, path: level2/arms/guarded/claims_on_no_effect_by_condition/confounded/rate, fmt: pct0}
+  l2_confounded_numbers: {file: metrics/planted_effects.json, path: level2/arms/numbers_only/claims_on_no_effect_by_condition/confounded/rate, fmt: pct0}
+  l2_small_guarded: {file: metrics/planted_effects.json, path: level2/arms/guarded/planted_direction_by_condition/small/rate, fmt: pct0}
+  l2_small_numbers: {file: metrics/planted_effects.json, path: level2/arms/numbers_only/planted_direction_by_condition/small/rate, fmt: pct0}
+  l2_large_guarded: {file: metrics/planted_effects.json, path: level2/arms/guarded/planted_direction_by_condition/large/rate, fmt: pct0}
+  l2_large_numbers: {file: metrics/planted_effects.json, path: level2/arms/numbers_only/planted_direction_by_condition/large/rate, fmt: pct0}
+  l2_disagree_guarded: {file: metrics/planted_effects.json, path: level2/arms/guarded/disagrees_with_test/k, fmt: int}
+  l2_disagree_guarded_n: {file: metrics/planted_effects.json, path: level2/arms/guarded/disagrees_with_test/n, fmt: int}
+  l2_disagree_numbers: {file: metrics/planted_effects.json, path: level2/arms/numbers_only/disagrees_with_test/k, fmt: int}
+  l2_unclear_numbers: {file: metrics/planted_effects.json, path: level2/arms/numbers_only/claims_unclear/k, fmt: int}
+  l2_causal_flagged_guarded: {file: metrics/planted_effects.json, path: level2/arms/guarded/causal_sentences_flagged, fmt: int}
+  l2_causal_flagged_numbers: {file: metrics/planted_effects.json, path: level2/arms/numbers_only/causal_sentences_flagged, fmt: int}
+  l2_causal_read_guarded: {file: metrics/planted_effects.json, path: level2/arms/guarded/causal_claims_on_reading, fmt: int}
+  l2_causal_read_numbers: {file: metrics/planted_effects.json, path: level2/arms/numbers_only/causal_claims_on_reading, fmt: int}
+  pl_a2_small_ref: {file: metrics/planted_effects.json, path: level1/power_checks/reference_vs_power/2/reference, fmt: pct0}
+  pl_a2_small_ana: {file: metrics/planted_effects.json, path: level1/power_checks/analyst_vs_reference/2/analyst, fmt: pct0}
+  l2_reversed_guarded: {file: metrics/planted_effects.json, path: level2/arms/guarded/planted_direction_by_condition/reversed/rate, fmt: pct0}
+  l2_reversed_numbers: {file: metrics/planted_effects.json, path: level2/arms/numbers_only/planted_direction_by_condition/reversed/rate, fmt: pct0}
+  l2_unclear_guarded: {file: metrics/planted_effects.json, path: level2/arms/guarded/claims_unclear/k, fmt: int}
+  l2_failed_guarded: {file: metrics/planted_effects.json, path: level2/arms/guarded/failed, count_where: {}, fmt: int}
+  gr_spend_calls: {file: metrics/guardrail.json, path: spend/calls, fmt: int}
+  gr_cap: {file: metrics/guardrail.json, path: spend/cap_usd, fmt: usd2}
+  pl_power_small: {file: metrics/planted_effects.json, path: power/small, fmt: pct0}
+  pl_power_large: {file: metrics/planted_effects.json, path: power/large, fmt: pct0}
+  # the sandbox
+  sb_attacks: {file: metrics/sandbox_security.json, path: attacks, fmt: int}
+  sb_controls: {file: metrics/sandbox_security.json, path: controls/run, fmt: int}
+  sb_controls_achieved: {file: metrics/sandbox_security.json, path: controls/achieved, fmt: int}
+  sb_blocked: {file: metrics/sandbox_security.json, path: records, count_where: {passed: true}, fmt: int}
+  sb_timeout: {file: metrics/sandbox_security.json, path: policy/timeout_s, fmt: int}
+  sb_memory: {file: metrics/sandbox_security.json, path: policy/memory_mb, fmt: int}
+  sb_pids: {file: metrics/sandbox_security.json, path: policy/pids, fmt: int}
+  sb_scratch: {file: metrics/sandbox_security.json, path: policy/scratch_mb, fmt: int}
+  sb_output: {file: metrics/sandbox_security.json, path: policy/output_mb, fmt: int}
+  gr_predictions_held: {file: metrics/guardrail.json, path: predictions, count_where: {held: true}, fmt: int}
+  gr_predictions: {file: metrics/guardrail.json, path: predictions, count_where: {}, fmt: int}
+  phase7_usd: {file: metrics/api_spend.json, path: by_phase/phase7/usd, fmt: usd2}
+
 # Decimals and percentages the templates may contain outside a placeholder: version numbers,
 # never results.
 allowed_literals:
