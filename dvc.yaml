@@ -1484,3 +1484,104 @@ stages:
     outs:
       - results/metrics/mcp_security.json:
           cache: false
+
+  # MLflow experiments rebuilt from the committed results files (a view of them, never a source).
+  mlflow_runs:
+    cmd: uv run python scripts/84_mlflow_runs.py
+    deps:
+      - scripts/84_mlflow_runs.py
+      - src/tracking/experiments.py
+      - src/tracking/mlflow_setup.py
+      - configs/agent.yaml
+      - results/metrics/ablation.json
+      - results/metrics/benchmark_main.json
+      - results/metrics/own_set.json
+      - results/metrics/escalation.json
+      - results/metrics/router.json
+      - results/metrics/calibration.json
+      - results/metrics/framework_comparison.json
+    outs:
+      - results/metrics/mlflow_runs.json:
+          cache: false
+
+  # Each registered agent configuration scored on the held-out questions, from the committed run
+  # files (no model call): the evaluation file the registry and the promotion rule read.
+  agent_evaluations:
+    cmd: uv run python scripts/86_registry.py evaluate
+    deps:
+      - scripts/86_registry.py
+      - src/tracking/registry.py
+      - src/eval/promotion.py
+      - configs/agents
+      - configs/agent.yaml
+      - configs/guardrail.yaml
+      - configs/confidence.yaml
+      - configs/eval.yaml
+      - prompts
+      - results/metrics/calibration.json
+      - results/metrics/splits.json
+      - results/metrics/ablation.json
+      - results/runs/main
+      - results/runs/router
+      - results/runs/escalation
+    outs:
+      - results/registry/evaluations:
+          cache: false
+
+  # The evaluation gate: recorded model calls rebuilt from the repository and compared, and the
+  # registry checked against the committed results. No model, database or key.
+  eval_gate:
+    cmd: uv run python scripts/89_eval_gate.py
+    deps:
+      - scripts/89_eval_gate.py
+      - src/tracking/gate.py
+      - src/tracking/registry.py
+      - src/eval/promotion.py
+      - src/serving/larger.py
+      - src/agent/run.py
+      - src/agent/conversation.py
+      - src/agent/answer.py
+      - src/tools/schema.py
+      - src/dictionary/model.py
+      - configs/agents
+      - configs/agent.yaml
+      - configs/confidence.yaml
+      - configs/guardrail.yaml
+      - configs/promotion.yaml
+      - prompts
+      - dictionary
+      - results/regression/bundle.json
+      - results/registry/state.json
+      - results/registry/promotions.jsonl
+      - results/registry/evaluations
+      - results/metrics/calibration.json
+      - results/runs/main
+      - results/runs/own
+      - results/runs/router
+      - results/runs/escalation
+    outs:
+      - results/metrics/eval_gate.json:
+          cache: false
+
+  # How the drift monitor behaves on sets it should and should not alarm on (offline).
+  drift_check:
+    cmd: uv run python scripts/93_drift_check.py
+    deps:
+      - scripts/93_drift_check.py
+      - src/serving/drift.py
+      - src/serving/meter.py
+      - src/eval/promotion.py
+      - src/tracking/registry.py
+      - configs/serving.yaml
+      - configs/agents
+      - configs/promotion.yaml
+      - results/registry/state.json
+      - results/registry/evaluations
+      - results/metrics/calibration.json
+      - results/runs/main
+      - results/runs/own
+      - results/runs/router
+      - results/runs/escalation
+    outs:
+      - results/metrics/drift_check.json:
+          cache: false

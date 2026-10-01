@@ -13,6 +13,7 @@ dependencies = [
     "fastapi>=0.141.1",
     "jsonschema>=4.26",
     "mcp>=2.2.0",
+    "opentelemetry-exporter-otlp-proto-http>=1.45.0",
     "opentelemetry-sdk>=1.45",
     "prometheus-client>=0.26.0",
     "psycopg[binary]>=3.2",

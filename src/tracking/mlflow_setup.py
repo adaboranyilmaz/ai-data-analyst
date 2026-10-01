@@ -8,6 +8,7 @@ MLflow. `MLFLOW_TRACKING_URI` points it elsewhere, such as a tracking server.
 from __future__ import annotations
 
 import os
+import sys
 
 DEFAULT_TRACKING_URI = "sqlite:///mlflow.db"
 
@@ -24,3 +25,12 @@ def configure(experiment: str) -> str:
     mlflow.set_tracking_uri(uri)
     mlflow.set_experiment(experiment)
     return uri
+
+
+def tolerant_console() -> None:
+    """MLflow's client prints an emoji when a run ends on a tracking server; a console whose code
+    page cannot encode it (Windows) would raise in the middle of a logging call. Write what the
+    console cannot show as a replacement character instead."""
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(errors="replace")

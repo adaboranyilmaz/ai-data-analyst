@@ -1,0 +1,50 @@
+# The canary, on demand: the fixed set of recorded requests (configs/canary.yaml) sent live, with no
+# response cache, and the answers compared with the recorded ones. It spends API money, so it runs
+# only when someone starts it, and stops at the cap given here. It needs the repository secret
+# ANTHROPIC_API_KEY. The run is uploaded as an artifact; `scripts/91_canary.py --merge FILE`
+# appends it to results/metrics/canary_history.json. (This job has no benchmark database, so the
+# rows of the new SQL are not compared; run the script locally with --score for that.)
+name: Canary
+
+on:
+  workflow_dispatch:
+    inputs:
+      max_usd:
+        description: "Stop the run when it has spent this much (USD)"
+        required: true
+        default: "0.75"
+
+concurrency:
+  group: canary
+  cancel-in-progress: false
+
+env:
+  UV_VERSION: "0.11.3"
+  PYTHONUTF8: "1"
+
+permissions:
+  contents: read
+
+jobs:
+  canary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: ${{ env.UV_VERSION }}
+          enable-cache: true
+      - run: uv sync --frozen
+      - name: Run the canary
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: >
+          uv run python scripts/91_canary.py --run
+          --max-usd "${{ inputs.max_usd }}"
+          --label "manual workflow run ${{ github.run_id }}"
+          --out canary_run.json
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: canary-run
+          path: canary_run.json

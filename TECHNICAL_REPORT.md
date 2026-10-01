@@ -117,6 +117,22 @@ For an answer the evaluation scored wrong, the record also holds an explanation:
 A person's own PostgreSQL can be connected in live mode on the local machine only. The connection is checked first and refused if its role is a superuser, can create roles, databases or objects, can change data on any table, or belongs to a role that can write files or run programs on the server; the reasons name what to change. The analyst then reads the schema from the catalog (there is no dictionary) through the same query checker, read-only transaction and limits.
 
 The MCP server exposes five read-only tools over stdio (list tables, describe a table, sample rows, look up the dictionary, run one query) through the same tool layer. The security suite was run through it: the Phase 2 attacks were sent as query calls from an MCP client to a server process, each followed by the same checks of effects, together with attacks that exist only at the tool boundary (arguments of the wrong type, table names carrying SQL, out-of-range counts, an unknown tool, a huge search term).
+### Operating it: traces, a registry, a gate, a canary, drift and alerts
+
+**Traces.** The agent's spans (one per run, model call and tool call) are exported over OTLP/HTTP, without either vendor's SDK: to an MLflow tracking server, and by a second exporter to a self-hosted Langfuse, which takes the same spans with its own attribute names added at export. Both run in Docker behind a compose profile, with images pinned by digest. The spans of an evaluated run were written when it was evaluated and can be sent again with their original identifiers and timestamps, so a run is viewed in both tools without a new model call. MLflow's experiments are a view rebuilt from the committed results files; each number is read from the file it names, and the store is never a source.
+
+**The agent configuration and the registry.** An agent configuration is the resolved settings the service runs on: the prompt files and their hashes, the model's request settings, the Platt calibrators and the number of questions they were fitted on, the decline threshold, and the router if there is one. Its hash is its version. A committed registry (`results/registry/`) records each version with the evaluation it was judged on, the alias `champion`, a log of every promotion decision, and a check that registry, evaluations and results agree. MLflow's model registry mirrors the committed state with the aliases `champion` and `challenger`; the service reads the committed state, optionally the mirror.
+
+**The promotion rule.** Fixed in `configs/promotion.yaml` before the router's ranking was computed, and recorded by its hash with every decision: on the held-out questions, with the confidence each system reports calibrated on the calibration split only (the router has its own calibrator, since its answers come from two models), the challenger's execution accuracy minus the champion's must have a 95% paired bootstrap interval whose lower bound is not below zero; the same difference in the area under the risk-coverage curve must have an upper bound not above zero; and the most one question can cost the challenger, at the direct price, must fit the service's per-question reserve. A system's own decline threshold is chosen on the calibration split. The challenger's accuracy on the held-out questions was known from an earlier phase when the rule was fixed, so the rule was not blind on accuracy; its ranking and its cost under the rule were computed afterwards.
+
+**The evaluation gate.** For each recorded model call of the regression set (the curated runs), the gate rebuilds the request from the repository (prompts, schema from committed files, settings) and compares its hash with the recorded one, then parses the recorded response and compares the answer with the recorded evaluation. It also checks the registry. It needs no database, benchmark or key, so it runs in CI and again before every publish of the service image.
+
+**The canary.** A fixed list of requests (`configs/canary.yaml`) is sent to the model again with no response cache and under a spend cap checked before each call, from a manual workflow or locally. Each reply is compared with the recorded one: whether the answer parses, the query, the stated confidence, the prompt size, the stop reason and, where the database is available, whether the rows match. Each run is appended to a history. A flag is a prompt to look: model outputs are samples.
+
+**Drift and alerts.** The service keeps the calibrated confidence of its last answers and compares their distribution, by bins of the held-out record the meter rests on, with the held-out table, as a population stability index with smoothing; the share of answers held back or declined is compared the same way. Two thresholds (warning, alert) and the window are in `configs/serving.yaml`. Prometheus scrapes the service, evaluates the rules in `monitoring/alerts.yml` (tested with `promtool` on series built to trip each, and to stay quiet), and Grafana loads its datasource and dashboard from files. The dashboard shows requests, latency by step, tool errors and blocked queries, spend, the rate of declined and held-back answers, the confidence distribution and the drift indices. A test holds every series the rules and dashboard use to the series the service exposes.
+
+**The static demo.** A build step writes the recorded runs as plain JSON (the evidence records, the streams with the wait before each event, and the metadata the page reads), and the same page, built in a static mode, reads them instead of calling the service. A test compares every file with what the service returns for the same run; the page is tested in a browser, served from a path by a file server with no API.
+
 ## Results
 
 ### Choosing the design
@@ -354,6 +370,70 @@ Every one of the 20 curated runs, as the service serves it, was compared field b
 The live service ran two real questions once, an ordinary count and a comparison that the guardrail analyzed in its sandbox; both were answered, and the model calls cost $0.0988 against a counted upper bound of $0.1524.
 
 <sub>Source: `results/metrics/serving_check.json`, `results/metrics/mcp_security.json`, `results/metrics/live_smoke.json` (one run)</sub>
+### Operating it
+
+**The promotion.** The rule's three conditions, as applied to the router (the challenger) against the single call it replaced:
+
+| Condition | Required | Observed |  |
+|---|---|---|---|
+| Execution accuracy, router minus baseline | lower bound at least 0 | +19.1 pp, lower bound +14.4 pp | met |
+| Area under the risk-coverage curve (lower is better), router minus baseline | upper bound at most 0 | −0.142, upper bound −0.101 | met |
+| The most one question can cost the router | at most $0.20 | $0.129 | met |
+
+<sub>Source: `results/registry/promotions.jsonl`, `configs/promotion.yaml` (one run, 95% paired bootstrap intervals over the held-out questions)</sub>
+
+On the 320 held-out questions the router answered 79.7% correctly against 60.6%: a difference of +19.1 pp [+14.4, +23.8]. Its ranking of its answers was better (a difference in the area under the risk-coverage curve of −0.142, [−0.188, −0.101]). It sent 297 of the questions to the larger model. It is not better on every count: its confidence is less well calibrated (calibration error 0.087 against 0.041), and a question costs $0.030 against $0.011. The earlier finding that the larger model alone is cheaper than the router stands; the rule compares a challenger with the champion it would replace, not with every alternative. The router is the champion in the committed registry, so the service serves it.
+
+**The gate.** Of 26 recorded model requests, 26 were rebuilt from the repository with the same hash, and the parsed answers matched the recorded evaluations. The check is built to fail: a changed prompt, a changed schema rendering or a changed request setting each changes a request hash, and the tests name each. It covers the curated runs that carry a model call; the four guarded comparisons, whose analysis runs in a sandbox, are not in it.
+
+**The canary.** The first run sent 23 fixed requests (Claude Sonnet 5 for each question and the larger model where the router escalates), with no cache, for $0.35 under a cap of $0.75. A dry run had counted the prompts with the token-counting endpoint, which is free, and priced a central case at $0.41, an upper case at $0.87 and a ceiling at $1.81, where every call writes the cache for an hour and produces the most tokens allowed. 100% of the answers were valid, 70% had the same query as the recorded one, 96% returned the recorded rows, and the mean shift in the stated confidence was +0.019. The prompts were token for token the same. This is one sample of a model that does not return the same text twice, and the workflow is manual because every run spends money. It cannot score rows against the database, since CI has none.
+
+**Drift.** Windows of 200 answers (the service judges a window once it holds 50) were drawn with replacement, 1,000 per scenario, from sets of recorded answers, and read by the real monitor against each system's own held-out table:
+
+| Windows drawn from | Index, mean | Over the warning level | Over the alert level |
+|---|---|---|---|
+| held-out (the reference's own population) | 0.04 | 0% | 0% |
+| held-out, simple questions only | 0.24 | 100% | 41% |
+| held-out, moderate questions only | 0.09 | 37% | 0% |
+| held-out, challenging questions only | 0.32 | 100% | 84% |
+| banking questions (another domain) | 1.03 | 100% | 100% |
+| synthetic: every stated confidence lowered by 0.25 | 5.22 | 100% | 100% |
+| synthetic: every stated confidence raised by 0.25 | 3.89 | 100% | 100% |
+
+<sub>Source: `results/metrics/drift_check.json` (the baseline's own meter; one run of recorded answers, a window drawn with replacement; the synthetic rows are labeled as such)</sub>
+
+Windows drawn from the held-out questions themselves, the reference's own population, had a mean index of 0.038 for the router, were over the warning level in 0.6% of windows and over the alert level in 0.0%. The subset of challenging questions alone, a shift in the mix of questions, read 0.27 and was over the alert level in 64% of windows: a shift in what is asked is a shift the monitor reports, and it cannot tell that from a model that got worse. The banking questions read 1.03, and a confidence lowered by a fixed amount on every answer, a synthetic stand-in for a changed prompt or model, read 5.2. The thresholds were set before these runs and not tuned to them. They are one run of recorded answers: the curated demo runs, which the replay serves, are weighted toward confident answers and four of them carry no confidence, so replayed traffic is not a model of live traffic.
+
+**The alert, end to end.** Against the running stack, after a restart gave an empty window, 20 answers left the window too small to judge, and no drift series or alert existed. Then 140 answers of one recorded run (the one with the highest calibrated confidence), replayed through the service, put the index at 6.3; Prometheus moved the drift alert to firing, and after a restart emptied the window it cleared. This shows the path from the service's metric through Prometheus's rule to a firing alert; it does not show how often real traffic would shift.
+
+**The two trace viewers.** The same recorded run, sent to both, is in the README. Langfuse shows the tokens and the cost of each model call and a total for the run; MLflow's trace view shows the span attributes and keeps the traces next to the experiment runs. A batched call carries no timing, so neither shows a duration for the model calls of a recorded run.
+
+**The service under load.** The replay service was loaded with 200 requests per row, replayed at a high speed so a run takes milliseconds rather than the seconds it was recorded with:
+
+| Route | Clients | p50 (ms) | p95 (ms) | p99 (ms) | Requests per second | Errors |
+|---|---|---|---|---|---|---|
+| GET /api/meta | 1 | 2.7 | 4.0 | 9.4 | 317 | 0 |
+| GET /api/meta | 8 | 17.0 | 23.8 | 26.1 | 456 | 0 |
+| GET /api/meta | 32 | 69.8 | 81.7 | 88.2 | 436 | 0 |
+| GET /runs/{id} | 1 | 2.5 | 3.8 | 4.2 | 377 | 0 |
+| GET /runs/{id} | 8 | 15.1 | 21.5 | 58.5 | 460 | 0 |
+| GET /runs/{id} | 32 | 73.2 | 99.0 | 103.1 | 411 | 0 |
+| POST /ask | 1 | 35.9 | 55.2 | 56.3 | 25 | 0 |
+| POST /ask | 8 | 44.6 | 69.1 | 86.5 | 161 | 0 |
+| POST /ask | 32 | 144.6 | 226.2 | 265.8 | 192 | 0 |
+
+<sub>Source: `results/metrics/load_test.json` (one run on one laptop, the service in a container)</sub>
+
+There were 0 errors, and the container held 87.86MiB / 7.435GiB after the load. These are one laptop's numbers, the client on the same machine, and show where latency starts to climb as the clients multiply, not a capacity for any other machine.
+
+**The static demo.** 20 runs in 41 files; a test compares each file with what the service returns, and a browser test runs the page from a path with no API behind it.
+
+**A clean rebuild.** A copy of the repository's files, the data pulled with DVC and a fresh PostgreSQL, was rebuilt with `dvc repro --force` in replay-only mode, so no model could be called, and the rebuilt results were compared with the committed ones file by file (117 files; JSON compared by content, everything else byte for byte). 77 were identical. 35 differed only in fields that record the run: how long something took, or a duration or an ephemeral port written inside a recorded string, each named by a rule with its reason. 5 differed in a result, from one cause: PostgreSQL returns the rows of a query with no ORDER BY in an order that depends on the database's physical layout, or, with parallel workers, varies from run to run. Execution accuracy compares row sets and is not affected. What moved is what depends on row order: the soft-F1 of one local-model record (and the interval of that run's mean), the ordered hash of one expert query, the count of expert queries whose rows come in another order than the public layout's, and the official evaluator's count of expert queries it scores wrong under parallel plans. The report lists each field with both values, and a rebuild that changes anything else in those files still fails. The stages that the phase added (the drift check) were run on the rebuilt inputs afterwards, since the rebuilt copy was taken before they existed.
+
+The phase's model spend, all of it the canary's calls, was $0.35.
+
+<sub>Source: `results/registry/promotions.jsonl`, `results/metrics/eval_gate.json`, `results/metrics/canary_history.json`, `results/metrics/phase9_dry_run.json`, `results/metrics/drift_check.json`, `results/metrics/alert_check.json`, `results/metrics/load_test.json`, `results/metrics/static_site.json`, `results/metrics/api_spend.json` (one run each)</sub>
+
 ### Cost and replay
 
 The analyst's model calls from the pilot to the banking set cost $26.64; the critic, the escalation arm and the router, with their trial runs on pilot questions, cost $8.60; the framework arm ran from stored responses and cost nothing, and the error and cost analyses made no model calls. The guardrail's 1,216 calls cost $4.89, under a cap of $6.50, all sent as direct calls (batches were stalling for hours); the plan calls ran one at a time, so the schema was written to the prompt cache once and read after. Every run replays from its stored responses: 3,253 records in 27 runs were rebuilt that way, at no cost, and matched the committed records field by field. The guardrail's runs were rebuilt the same way, in replay-only mode, and matched their records byte for byte.
@@ -426,7 +506,9 @@ The page states the result in one line built from the rows, because design 1 wri
 | Inter, JetBrains Mono | see `ui/package-lock.json` | the page's fonts, bundled |
 | Playwright, axe-core | see `ui/package-lock.json` | browser tests and an automated accessibility audit |
 | BIRD's official evaluator | pinned commit, files pinned by hash, not redistributed | checking the project's scorer; run with psycopg2 2.9.9, func-timeout 4.3.5 and PyMySQL 1.1.1, the versions its requirements pin |
-| MLflow, DVC | see `uv.lock` | experiment tracking; data versioning |
+| MLflow, DVC | see `uv.lock` | experiment tracking, a model registry view; data versioning |
+| opentelemetry-exporter-otlp-proto-http | see `uv.lock` | the traces sent to MLflow and Langfuse |
+| Langfuse, Prometheus, Grafana, ClickHouse, Redis, MinIO | images pinned by digest in `docker-compose.yml` | a second trace viewer; metrics, alerts and a dashboard, each behind a compose profile |
 
 <sub>Source: `pyproject.toml`, `uv.lock`, `docker-compose.yml`</sub>
 

@@ -34,3 +34,8 @@ dist/
 node_modules/
 ui/test-results/
 ui/playwright-report/
+
+# canary run files (the history in results/metrics/ holds each run)
+results/canary/
+data/canary/
+ui/dist-static/

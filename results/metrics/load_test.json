@@ -1,0 +1,100 @@
+{
+  "note": "one machine: the service in a container on a laptop, the client on the same laptop; the shape, not a capacity for another machine. A replayed run is paced to its recorded timing divided by the replay speed.",
+  "replay_speed": 100.0,
+  "requests_per_row": 200,
+  "runs": 20,
+  "container_memory_after": "87.86MiB / 7.435GiB",
+  "results": [
+    {
+      "route": "GET /api/meta",
+      "concurrency": 1,
+      "requests": 200,
+      "errors": 0,
+      "p50_ms": 2.7,
+      "p95_ms": 4.0,
+      "p99_ms": 9.4,
+      "requests_per_second": 316.7
+    },
+    {
+      "route": "GET /api/meta",
+      "concurrency": 8,
+      "requests": 200,
+      "errors": 0,
+      "p50_ms": 17.0,
+      "p95_ms": 23.8,
+      "p99_ms": 26.1,
+      "requests_per_second": 456.4
+    },
+    {
+      "route": "GET /api/meta",
+      "concurrency": 32,
+      "requests": 200,
+      "errors": 0,
+      "p50_ms": 69.8,
+      "p95_ms": 81.7,
+      "p99_ms": 88.2,
+      "requests_per_second": 435.8
+    },
+    {
+      "route": "GET /runs/{id}",
+      "concurrency": 1,
+      "requests": 200,
+      "errors": 0,
+      "p50_ms": 2.5,
+      "p95_ms": 3.8,
+      "p99_ms": 4.2,
+      "requests_per_second": 376.9
+    },
+    {
+      "route": "GET /runs/{id}",
+      "concurrency": 8,
+      "requests": 200,
+      "errors": 0,
+      "p50_ms": 15.1,
+      "p95_ms": 21.5,
+      "p99_ms": 58.5,
+      "requests_per_second": 459.9
+    },
+    {
+      "route": "GET /runs/{id}",
+      "concurrency": 32,
+      "requests": 200,
+      "errors": 0,
+      "p50_ms": 73.2,
+      "p95_ms": 99.0,
+      "p99_ms": 103.1,
+      "requests_per_second": 411.0
+    },
+    {
+      "route": "POST /ask",
+      "concurrency": 1,
+      "requests": 200,
+      "errors": 0,
+      "p50_ms": 35.9,
+      "p95_ms": 55.2,
+      "p99_ms": 56.3,
+      "requests_per_second": 25.2
+    },
+    {
+      "route": "POST /ask",
+      "concurrency": 8,
+      "requests": 200,
+      "errors": 0,
+      "p50_ms": 44.6,
+      "p95_ms": 69.1,
+      "p99_ms": 86.5,
+      "requests_per_second": 161.2
+    },
+    {
+      "route": "POST /ask",
+      "concurrency": 32,
+      "requests": 200,
+      "errors": 0,
+      "p50_ms": 144.6,
+      "p95_ms": 226.2,
+      "p99_ms": 265.8,
+      "requests_per_second": 192.4
+    }
+  ],
+  "errors_total": 0
+}

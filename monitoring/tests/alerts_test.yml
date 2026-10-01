@@ -1,0 +1,186 @@
+# promtool test rules monitoring/tests/alerts_test.yml
+# Each alert fires on a series built to trip it, and stays quiet on one built not to.
+rule_files:
+  - ../alerts.yml
+evaluation_interval: 1m
+
+tests:
+  - interval: 1m
+    name: the service goes away
+    input_series:
+      - series: 'up{job="analyst-api"}'
+        values: "1 1 0 0 0 0"
+    alert_rule_test:
+      - eval_time: 2m
+        alertname: AnalystDown
+        exp_alerts: []
+      - eval_time: 5m
+        alertname: AnalystDown
+        exp_alerts:
+          - exp_labels: { severity: critical, job: analyst-api }
+            exp_annotations:
+              summary: The analyst service is not answering its metrics scrape.
+
+  - interval: 1m
+    name: server errors above 5 percent for five minutes
+    input_series:
+      - series: 'analyst_http_requests_total{status="200",path="/ask"}'
+        values: "0+90x15"
+      - series: 'analyst_http_requests_total{status="500",path="/ask"}'
+        values: "0+10x15"
+    alert_rule_test:
+      - eval_time: 12m
+        alertname: HighErrorRate
+        exp_alerts:
+          - exp_labels: { severity: warning }
+            exp_annotations:
+              summary: More than 5% of requests failed with a server error over the last 5 minutes.
+
+  - interval: 1m
+    name: a few server errors do not alert
+    input_series:
+      - series: 'analyst_http_requests_total{status="200",path="/ask"}'
+        values: "0+99x15"
+      - series: 'analyst_http_requests_total{status="500",path="/ask"}'
+        values: "0+1x15"
+    alert_rule_test:
+      - eval_time: 12m
+        alertname: HighErrorRate
+        exp_alerts: []
+
+  - interval: 1m
+    name: a burst of blocked queries
+    input_series:
+      - series: 'analyst_sql_results_total{outcome="refused"}'
+        values: "0 0 0 2 4 6 8 10 10 10"
+      - series: 'analyst_sql_results_total{outcome="ok"}'
+        values: "0+3x9"
+    alert_rule_test:
+      - eval_time: 8m
+        alertname: BlockedQueries
+        exp_alerts:
+          - exp_labels: { severity: warning }
+            exp_annotations:
+              summary: The query guard blocked more than 5 queries in 15 minutes; look at what is being asked.
+
+  - interval: 1m
+    name: failing queries need volume to alert
+    input_series:
+      - series: 'analyst_sql_results_total{outcome="timeout"}'
+        values: "0+1x20"
+      - series: 'analyst_sql_results_total{outcome="ok"}'
+        values: "0+1x20"
+    alert_rule_test:
+      - eval_time: 20m
+        alertname: QueryFailures
+        exp_alerts:
+          - exp_labels: { severity: warning }
+            exp_annotations:
+              summary: Over 20% of final queries failed (not blocked, failed) in the last 15 minutes.
+
+  - interval: 1m
+    name: spend rate above half the cap in an hour
+    input_series:
+      - series: "analyst_live_spend_usd_total"
+        values: "0+0.02x120"
+    alert_rule_test:
+      - eval_time: 90m
+        alertname: SpendRateHigh
+        exp_alerts:
+          - exp_labels: { severity: warning }
+            exp_annotations:
+              summary: Live model spend over the last hour is above half the deployment's cap.
+      - eval_time: 10m
+        alertname: SpendRateHigh
+        exp_alerts: []
+
+  - interval: 1m
+    name: confidence drift fires when the index stays high
+    input_series:
+      - series: "analyst_confidence_psi"
+        values: "0.05 0.05 0.4 0.4 0.4 0.4 0.4 0.4"
+      - series: "analyst_withheld_share_psi"
+        values: "0.02 0.02 0.02 0.02 0.02 0.02 0.02 0.02"
+    alert_rule_test:
+      - eval_time: 2m
+        alertname: ConfidenceDrift
+        exp_alerts: []
+      - eval_time: 4m
+        alertname: ConfidenceDrift
+        exp_alerts:
+          - exp_labels: { severity: critical }
+            exp_annotations:
+              summary: >-
+                The distribution of calibrated confidence has moved far from the held-out one
+                (population stability index 0.40, above 0.25): the confidence meter's record no
+                longer describes these answers.
+      - eval_time: 4m
+        alertname: WithheldShareDrift
+        exp_alerts: []
+
+  - interval: 1m
+    name: a one-minute blip in the index does not alert
+    input_series:
+      - series: "analyst_confidence_psi"
+        values: "0.05 0.4 0.05 0.05 0.05 0.05"
+    alert_rule_test:
+      - eval_time: 3m
+        alertname: ConfidenceDrift
+        exp_alerts: []
+      - eval_time: 5m
+        alertname: ConfidenceDrift
+        exp_alerts: []
+
+  - interval: 1m
+    name: a moderate shift is only information, and only when it lasts
+    input_series:
+      - series: "analyst_confidence_psi"
+        values: "0.15x20"
+    alert_rule_test:
+      - eval_time: 5m
+        alertname: ConfidenceDriftModerate
+        exp_alerts: []
+      - eval_time: 15m
+        alertname: ConfidenceDriftModerate
+        exp_alerts:
+          - exp_labels: { severity: info }
+            exp_annotations:
+              summary: The distribution of calibrated confidence has shifted moderately (index above 0.10).
+      - eval_time: 15m
+        alertname: ConfidenceDrift
+        exp_alerts: []
+
+  - interval: 1m
+    name: the share withheld drifts
+    input_series:
+      - series: "analyst_withheld_share_psi"
+        values: "0.3x10"
+    alert_rule_test:
+      - eval_time: 5m
+        alertname: WithheldShareDrift
+        exp_alerts:
+          - exp_labels: { severity: critical }
+            exp_annotations:
+              summary: >-
+                The share of answers withheld or declined has moved far from the held-out share
+                (index 0.30).
+
+  - interval: 1m
+    name: the slowest runs take more than a minute
+    input_series:
+      - series: 'analyst_run_seconds_bucket{le="32",mode="live"}'
+        values: "0x30"
+      - series: 'analyst_run_seconds_bucket{le="64",mode="live"}'
+        values: "0x30"
+      - series: 'analyst_run_seconds_bucket{le="+Inf",mode="live"}'
+        values: "0+5x30"
+    alert_rule_test:
+      - eval_time: 5m
+        alertname: SlowRuns
+        exp_alerts: []
+      - eval_time: 25m
+        alertname: SlowRuns
+        exp_alerts:
+          - exp_labels: { severity: warning, mode: live }
+            exp_annotations:
+              summary: The slowest 5% of runs take more than a minute (live mode).

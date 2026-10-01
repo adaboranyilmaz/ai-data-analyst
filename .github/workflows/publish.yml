@@ -1,0 +1,77 @@
+# Continuous delivery: on every merge to main, the evaluation gate runs once more, then the
+# service image (the API with the built UI) is built and published to the GitHub container
+# registry, tagged with the commit and `main`. Its digest is printed in the run's summary: that
+# is what the compose file and any deployment pin. Third-party actions are pinned by commit.
+name: Publish
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: publish
+  cancel-in-progress: false
+
+env:
+  UV_VERSION: "0.11.3"
+  PYTHONUTF8: "1"
+  ANALYST_REPLAY_ONLY: "1"
+
+permissions:
+  contents: read
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: ${{ env.UV_VERSION }}
+          enable-cache: true
+      - run: uv sync --frozen
+      - name: Evaluation gate
+        run: |
+          uv run python scripts/86_registry.py check
+          uv run python scripts/89_eval_gate.py
+
+  image:
+    needs: gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
+      - uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - id: meta
+        uses: docker/metadata-action@c299e40c65443455700f0fdfc63efafe5b349051 # v5
+        with:
+          images: ghcr.io/${{ github.repository }}/api
+          tags: |
+            type=sha,prefix=sha-
+            type=raw,value=main
+      - id: build
+        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Digest
+        run: |
+          {
+            echo "### Published image"
+            echo
+            echo "ghcr.io/${{ github.repository }}/api@${{ steps.build.outputs.digest }}"
+          } >> "$GITHUB_STEP_SUMMARY"

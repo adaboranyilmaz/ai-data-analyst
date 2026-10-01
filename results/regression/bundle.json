@@ -1,0 +1,1691 @@
+{
+  "note": "recorded model calls of the curated demo questions: each request's cache key and the response the model gave; scripts/89_eval_gate.py rebuilds the requests and checks them (src/tracking/gate.py)",
+  "entries": [
+    {
+      "id": "bank-own-a09/claude-sonnet-5",
+      "model": "claude-sonnet-5",
+      "source_run": "own/own-d1-claude-sonnet-5-no-evidence",
+      "question": {
+        "question_id": "own-a09",
+        "source": "own",
+        "db_id": "financial",
+        "question": "How many old-age pension payments were credited in 1998, and what was their total amount in CZK?",
+        "evidence": null
+      },
+      "design": "d1",
+      "evidence": false,
+      "request_key": "ff4f7ce3796131e1ffa37a5959086dd5d1b336d78e4c5321afcaecb1de250a3d",
+      "response": {
+        "text": "",
+        "content": [
+          {
+            "id": "toolu_0182oU1v7Twj62VJUxnbKYzw",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "sql": "SELECT COUNT(*) AS num_payments, SUM(amount) AS total_amount\nFROM trans\nWHERE k_symbol = 'DUCHOD' AND EXTRACT(YEAR FROM date) = 1998",
+              "answer": "In 1998, there were a certain number of old-age pension credits (k_symbol = DUCHOD) recorded in the transactions table, totaling a certain amount in CZK. Based on the query, this counts all transactions with k_symbol 'DUCHOD' dated in 1998 and sums their amounts.",
+              "confidence": 0.85,
+              "declined": false,
+              "decline_reason": null,
+              "clarifying_question": null,
+              "assumptions": [
+                "Old-age pension payments are identified by trans.k_symbol = 'DUCHOD'.",
+                "\"Credited in 1998\" means the transaction date (trans.date) falls in calendar year 1998.",
+                "All DUCHOD transactions are type PRIJEM (credit) so no additional type filter is needed."
+              ],
+              "premise_correction": null,
+              "chart_spec": null
+            },
+            "name": "submit_answer",
+            "type": "tool_use"
+          }
+        ],
+        "model_reported": "claude-sonnet-5",
+        "stop_reason": "tool_use",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 11378,
+          "inference_geo": "global",
+          "input_tokens": 51,
+          "output_tokens": 506,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "batch"
+        },
+        "latency_ms": 0.0,
+        "created_utc": "2026-09-28T22:49:01+00:00",
+        "request_id": null,
+        "extra": {
+          "service": "batch",
+          "batch_id": "msgbatch_017qvQHZe4VCbFF5GDbnrhfc"
+        }
+      }
+    },
+    {
+      "id": "bank-own-b06/claude-sonnet-5",
+      "model": "claude-sonnet-5",
+      "source_run": "own/own-d1-claude-sonnet-5-no-evidence",
+      "question": {
+        "question_id": "own-b06",
+        "source": "own",
+        "db_id": "financial",
+        "question": "Which ten account owners were charged the most penalty interest in total? List their client IDs.",
+        "evidence": null
+      },
+      "design": "d1",
+      "evidence": false,
+      "request_key": "6bca567777ef4cedf9a32731e919f519a49548ee51ad98959a0caa4298a1376f",
+      "response": {
+        "text": "",
+        "content": [
+          {
+            "id": "toolu_018Q5w86gRHmMmx8nswyeKPe",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "sql": "SELECT d.client_id, SUM(t.amount) AS total_penalty\nFROM trans t\nJOIN account a ON t.account_id = a.account_id\nJOIN disp d ON d.account_id = a.account_id AND d.type = 'OWNER'\nWHERE t.k_symbol = 'SANKC. UROK'\nGROUP BY d.client_id\nORDER BY total_penalty DESC\nLIMIT 10;",
+              "answer": "The query groups transactions with purpose \"penalty interest for a negative balance\" (k_symbol = SANKC. UROK) by account, joins to the account owner via the disp table (type = OWNER), sums the amounts, and returns the 10 client IDs with the highest total penalty interest charged.",
+              "confidence": 0.8,
+              "declined": false,
+              "decline_reason": null,
+              "clarifying_question": null,
+              "assumptions": [
+                "\"Account owners\" means clients with disp.type = 'OWNER' on the account where the penalty was charged (not disponents).",
+                "Penalty interest is identified by trans.k_symbol = 'SANKC. UROK'.",
+                "Ranking is by total summed amount per owner client, descending, limited to top 10."
+              ],
+              "premise_correction": null,
+              "chart_spec": null
+            },
+            "name": "submit_answer",
+            "type": "tool_use"
+          }
+        ],
+        "model_reported": "claude-sonnet-5",
+        "stop_reason": "tool_use",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 11378,
+          "inference_geo": "global",
+          "input_tokens": 49,
+          "output_tokens": 569,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "batch"
+        },
+        "latency_ms": 0.0,
+        "created_utc": "2026-09-28T22:49:00+00:00",
+        "request_id": null,
+        "extra": {
+          "service": "batch",
+          "batch_id": "msgbatch_017qvQHZe4VCbFF5GDbnrhfc"
+        }
+      }
+    },
+    {
+      "id": "bank-own-b12/claude-sonnet-5",
+      "model": "claude-sonnet-5",
+      "source_run": "own/own-d1-claude-sonnet-5-no-evidence",
+      "question": {
+        "question_id": "own-b12",
+        "source": "own",
+        "db_id": "financial",
+        "question": "How many clients own an account that has both a loan and a standing order for an insurance premium?",
+        "evidence": null
+      },
+      "design": "d1",
+      "evidence": false,
+      "request_key": "777c4dd7a8e8f490e5571871b68671bd100cb88d203527aed062b2bf7dbcc295",
+      "response": {
+        "text": "",
+        "content": [
+          {
+            "id": "toolu_0158XUK7V2hbKb9DCgGHBvvb",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "sql": "SELECT COUNT(DISTINCT c.client_id)\nFROM client c\nJOIN disp d ON d.client_id = c.client_id AND d.type = 'OWNER'\nJOIN account a ON a.account_id = d.account_id\nJOIN loan l ON l.account_id = a.account_id\nJOIN \"order\" o ON o.account_id = a.account_id AND o.k_symbol = 'POJISTNE'",
+              "answer": "This counts distinct clients who are the OWNER of an account that has both a loan and a standing order for an insurance premium (k_symbol = POJISTNE).",
+              "confidence": 0.75,
+              "declined": false,
+              "decline_reason": null,
+              "clarifying_question": "Should \"own\" include only account owners (OWNER disposition) or also authorized users (DISPONENT)?",
+              "assumptions": [
+                "\"Own\" means the client has the OWNER disposition on the account (not a DISPONENT).",
+                "\"Standing order for an insurance premium\" means order.k_symbol = 'POJISTNE'.",
+                "A client is counted once even if they own multiple qualifying accounts."
+              ],
+              "premise_correction": null,
+              "chart_spec": null
+            },
+            "name": "submit_answer",
+            "type": "tool_use"
+          }
+        ],
+        "model_reported": "claude-sonnet-5",
+        "stop_reason": "tool_use",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 11378,
+          "inference_geo": "global",
+          "input_tokens": 48,
+          "output_tokens": 542,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "batch"
+        },
+        "latency_ms": 0.0,
+        "created_utc": "2026-09-28T22:49:01+00:00",
+        "request_id": null,
+        "extra": {
+          "service": "batch",
+          "batch_id": "msgbatch_017qvQHZe4VCbFF5GDbnrhfc"
+        }
+      }
+    },
+    {
+      "id": "bank-own-c09/claude-sonnet-5",
+      "model": "claude-sonnet-5",
+      "source_run": "own/own-d1-claude-sonnet-5-no-evidence",
+      "question": {
+        "question_id": "own-c09",
+        "source": "own",
+        "db_id": "financial",
+        "question": "How many young clients do we have?",
+        "evidence": null
+      },
+      "design": "d1",
+      "evidence": false,
+      "request_key": "0736ebc22b4807d331420f3f5fd3183d99eafa4415e82ab344875c85d5c8ed87",
+      "response": {
+        "text": "",
+        "content": [
+          {
+            "id": "toolu_01FZxTMXvTGsPh3ix2JHZyZQ",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "sql": "SELECT COUNT(*) AS young_client_count\nFROM client\nWHERE DATE_PART('year', AGE(DATE '1998-12-31', birth_date)) < 18",
+              "answer": "Using an age cutoff of under 18 years old (calculated as of 1998-12-31, the last date in the transaction history, since there is no other reference date), there are essentially no clients that young in this dataset — the query counts clients whose computed age is under 18. Given the data's minimum birth_date range, this count is very likely 0, meaning the bank has no clients recorded as minors.",
+              "confidence": 0.25,
+              "declined": false,
+              "decline_reason": null,
+              "clarifying_question": "What age threshold defines a \"young\" client (e.g., under 18, under 25, under 30), and what reference date should be used to compute age?",
+              "assumptions": [
+                "\"Young\" means under 18 years old (a minor)",
+                "Age is computed as of 1998-12-31, the last date covered by the transaction history, since there's no explicit reference date in the data"
+              ],
+              "premise_correction": null,
+              "chart_spec": null
+            },
+            "name": "submit_answer",
+            "type": "tool_use"
+          }
+        ],
+        "model_reported": "claude-sonnet-5",
+        "stop_reason": "tool_use",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 11378,
+          "inference_geo": "global",
+          "input_tokens": 31,
+          "output_tokens": 509,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "batch"
+        },
+        "latency_ms": 0.0,
+        "created_utc": "2026-09-28T22:49:01+00:00",
+        "request_id": null,
+        "extra": {
+          "service": "batch",
+          "batch_id": "msgbatch_017qvQHZe4VCbFF5GDbnrhfc"
+        }
+      }
+    },
+    {
+      "id": "bank-own-d03/claude-sonnet-5",
+      "model": "claude-sonnet-5",
+      "source_run": "own/own-d1-claude-sonnet-5-no-evidence",
+      "question": {
+        "question_id": "own-d03",
+        "source": "own",
+        "db_id": "financial",
+        "question": "What interest rate was charged on each loan granted in 1996?",
+        "evidence": null
+      },
+      "design": "d1",
+      "evidence": false,
+      "request_key": "b93be721dd477a1a21c9a3d2341bb5b03843a182d637706bb25c94c5d0d966eb",
+      "response": {
+        "text": "",
+        "content": [
+          {
+            "id": "toolu_01CMXmaN6JSq19b1H7yhXc6z",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "sql": null,
+              "answer": "The database does not record an interest rate for loans. The loan table only gives the amount granted, duration, monthly payment, and status; amount equals duration times payments exactly, so no interest is charged or stored separately anywhere in the data.",
+              "confidence": 0.9,
+              "declined": true,
+              "decline_reason": "The loan table (and the rest of the schema) has no interest rate column. The data dictionary explicitly notes that loan amount equals duration × payments exactly, meaning no interest is charged or recorded separately in this database.",
+              "clarifying_question": null,
+              "assumptions": [],
+              "premise_correction": "The premise that loans carry a recorded interest rate is false: the loan table shows amount = duration × payments with no separate interest component, so no interest rate exists in this database for any loan.",
+              "chart_spec": null
+            },
+            "name": "submit_answer",
+            "type": "tool_use"
+          }
+        ],
+        "model_reported": "claude-sonnet-5",
+        "stop_reason": "tool_use",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 11378,
+          "inference_geo": "global",
+          "input_tokens": 41,
+          "output_tokens": 423,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "batch"
+        },
+        "latency_ms": 0.0,
+        "created_utc": "2026-09-28T22:49:01+00:00",
+        "request_id": null,
+        "extra": {
+          "service": "batch",
+          "batch_id": "msgbatch_017qvQHZe4VCbFF5GDbnrhfc"
+        }
+      }
+    },
+    {
+      "id": "bank-own-e06/claude-sonnet-5",
+      "model": "claude-sonnet-5",
+      "source_run": "own/own-d1-claude-sonnet-5-no-evidence",
+      "question": {
+        "question_id": "own-e06",
+        "source": "own",
+        "db_id": "financial",
+        "question": "Given that all our loans run for 12 months, what is the average monthly instalment?",
+        "evidence": null
+      },
+      "design": "d1",
+      "evidence": false,
+      "request_key": "938193f6d96aaf8c12161a5a263127f35a9d17a5f1a5229af0d2f30bd16ca44d",
+      "response": {
+        "text": "",
+        "content": [
+          {
+            "id": "toolu_01G39M6ea9iRRNy1CCfSLH66",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "sql": "SELECT AVG(payments) AS avg_monthly_instalment\nFROM loan\nWHERE duration = 12",
+              "answer": "The premise is false: not all loans run for 12 months (durations in the data are 12, 24, 36, 48 or 60 months). Restricting to the 12-month loans, the average monthly instalment (payments column) works out from the query above.",
+              "confidence": 0.75,
+              "declined": false,
+              "decline_reason": null,
+              "clarifying_question": null,
+              "assumptions": [
+                "Interpreted 'monthly instalment' as the loan.payments column.",
+                "Since the premise that all loans run 12 months is false, computed the average only over loans with duration = 12 months."
+              ],
+              "premise_correction": "Not all loans run for 12 months: loan durations in the data are 12, 24, 36, 48 or 60 months (5 distinct values).\"",
+              "chart_spec": null
+            },
+            "name": "submit_answer",
+            "type": "tool_use"
+          }
+        ],
+        "model_reported": "claude-sonnet-5",
+        "stop_reason": "tool_use",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 11378,
+          "inference_geo": "global",
+          "input_tokens": 47,
+          "output_tokens": 443,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "batch"
+        },
+        "latency_ms": 0.0,
+        "created_utc": "2026-09-28T22:49:00+00:00",
+        "request_id": null,
+        "extra": {
+          "service": "batch",
+          "batch_id": "msgbatch_017qvQHZe4VCbFF5GDbnrhfc"
+        }
+      }
+    },
+    {
+      "id": "bench-1080/claude-sonnet-5",
+      "model": "claude-sonnet-5",
+      "source_run": "main/all-d1-claude-sonnet-5-evidence",
+      "question": {
+        "question_id": 1080,
+        "source": "bird",
+        "db_id": "european_football_2",
+        "question": "Among the players whose preferred foot was the left foot when attacking, how many of them would remain in his position when the team attacked?",
+        "evidence": "preferred foot when attacking was the left refers to preferred_foot = 'left'; players who would remain in his position when the team attacked refers to attacking_work_rate = 'low';"
+      },
+      "design": "d1",
+      "evidence": true,
+      "request_key": "bfe3e490f8dd4cae0471e5c6ad4853a569fd436211bcb19cfcaf40fb17feee95",
+      "response": {
+        "text": "",
+        "content": [
+          {
+            "id": "toolu_01QKMvfNJKm7JeGAFQzrvFtV",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "sql": "SELECT COUNT(*) FROM player_attributes WHERE preferred_foot = 'left' AND attacking_work_rate = 'low';",
+              "answer": "The number of player_attributes records with preferred_foot = 'left' and attacking_work_rate = 'low' gives the count of left-footed players who remain in position during attack.",
+              "confidence": 0.85,
+              "declined": false,
+              "decline_reason": null,
+              "clarifying_question": null,
+              "assumptions": [
+                "Counting rows in player_attributes (not distinct players), since a player can have multiple attribute records over time matching the criteria."
+              ],
+              "premise_correction": null,
+              "chart_spec": null
+            },
+            "name": "submit_answer",
+            "type": "tool_use"
+          }
+        ],
+        "model_reported": "claude-sonnet-5",
+        "stop_reason": "tool_use",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 15890,
+          "inference_geo": "global",
+          "input_tokens": 122,
+          "output_tokens": 368,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "batch"
+        },
+        "latency_ms": 0.0,
+        "created_utc": "2026-09-28T22:27:07+00:00",
+        "request_id": null,
+        "extra": {
+          "service": "batch",
+          "batch_id": "msgbatch_01NVx59neUGGdYiZt9cYWnVV"
+        }
+      }
+    },
+    {
+      "id": "bench-1080/claude-opus-5-5",
+      "model": "claude-opus-5-5",
+      "source_run": "router/held_out-d1-claude-opus-5-5-evidence",
+      "question": {
+        "question_id": 1080,
+        "source": "bird",
+        "db_id": "european_football_2",
+        "question": "Among the players whose preferred foot was the left foot when attacking, how many of them would remain in his position when the team attacked?",
+        "evidence": "preferred foot when attacking was the left refers to preferred_foot = 'left'; players who would remain in his position when the team attacked refers to attacking_work_rate = 'low';"
+      },
+      "design": "d1",
+      "evidence": true,
+      "request_key": "27531365c9903fd5f6abdd4fb23ab88de6cf2082aeeaf4037b4467a195d15411",
+      "response": {
+        "text": "Following the BIRD convention, I count distinct players rather than attribute rows.",
+        "content": [
+          {
+            "text": "Following the BIRD convention, I count distinct players rather than attribute rows.",
+            "type": "text"
+          },
+          {
+            "id": "toolu_014T7J3BKq16jfcArj7wteuR",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "sql": "SELECT COUNT(DISTINCT player_api_id) FROM player_attributes WHERE preferred_foot = 'left' AND attacking_work_rate = 'low'",
+              "answer": "The query counts the distinct players who have at least one attribute record with preferred foot left ('left') and a low attacking work rate ('low'), meaning they stay in position when the team attacks.",
+              "confidence": 0.6,
+              "declined": false,
+              "decline_reason": null,
+              "clarifying_question": "Should each player be counted once, or should every attribute record (rating snapshot) that matches be counted?",
+              "assumptions": [
+                "Each player is counted once (distinct player_api_id), even if several of their attribute snapshots match."
+              ],
+              "premise_correction": null,
+              "chart_spec": null
+            },
+            "name": "submit_answer",
+            "type": "tool_use"
+          }
+        ],
+        "model_reported": "claude-opus-5-5",
+        "stop_reason": "tool_use",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 15815
+          },
+          "cache_creation_input_tokens": 15815,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "global",
+          "input_tokens": 4,
+          "output_tokens": 447,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "batch"
+        },
+        "latency_ms": 0.0,
+        "created_utc": "2026-09-30T13:47:10+00:00",
+        "request_id": null,
+        "extra": {
+          "service": "batch",
+          "batch_id": "msgbatch_017eu4K2NkAkfGH9BroWJRMQ"
+        }
+      }
+    },
+    {
+      "id": "bench-1254/claude-sonnet-5",
+      "model": "claude-sonnet-5",
+      "source_run": "main/all-d1-claude-sonnet-5-evidence",
+      "question": {
+        "question_id": 1254,
+        "source": "bird",
+        "db_id": "thrombosis_prediction",
+        "question": "How many patients with a normal Ig A level came to the hospital after 1990/1/1?",
+        "evidence": "normal Ig A level refers to IGA > 80 AND IGA < 500; came to the hospital after 1990/1/1 refers to YEAR(`First Date`) > = 1990;"
+      },
+      "design": "d1",
+      "evidence": true,
+      "request_key": "260eb04028da7d1ad63cf89f302af6fe819d1865876f7faa62be31a3ed1953f9",
+      "response": {
+        "text": "",
+        "content": [
+          {
+            "id": "toolu_01C6BUde22cL7kHoTWaH3dgg",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "sql": "SELECT COUNT(DISTINCT p.id)\nFROM patient p\nJOIN laboratory l ON p.id = l.id\nWHERE l.iga > 80 AND l.iga < 500\nAND p.\"First Date\" >= '1990-01-01';",
+              "answer": "The query counts distinct patients who have a normal IgA level (between 80 and 500) recorded in the laboratory table and whose First Date at the hospital is on or after 1990-01-01.",
+              "confidence": 0.7,
+              "declined": false,
+              "decline_reason": null,
+              "clarifying_question": null,
+              "assumptions": [
+                "Interpreted 'YEAR(First Date) >= 1990' as First Date >= 1990-01-01, matching the hint's wording 'after 1990/1/1'.",
+                "Counted distinct patients since a patient may have multiple laboratory records; a patient qualifies if any of their IgA records is normal."
+              ],
+              "premise_correction": null,
+              "chart_spec": null
+            },
+            "name": "submit_answer",
+            "type": "tool_use"
+          }
+        ],
+        "model_reported": "claude-sonnet-5",
+        "stop_reason": "tool_use",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 7038,
+          "inference_geo": "global",
+          "input_tokens": 116,
+          "output_tokens": 472,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "batch"
+        },
+        "latency_ms": 0.0,
+        "created_utc": "2026-09-28T22:34:47+00:00",
+        "request_id": null,
+        "extra": {
+          "service": "batch",
+          "batch_id": "msgbatch_01WoVubrXn9SecVDhUxRSrof"
+        }
+      }
+    },
+    {
+      "id": "bench-1254/claude-opus-5-5",
+      "model": "claude-opus-5-5",
+      "source_run": "router/held_out-d1-claude-opus-5-5-evidence",
+      "question": {
+        "question_id": 1254,
+        "source": "bird",
+        "db_id": "thrombosis_prediction",
+        "question": "How many patients with a normal Ig A level came to the hospital after 1990/1/1?",
+        "evidence": "normal Ig A level refers to IGA > 80 AND IGA < 500; came to the hospital after 1990/1/1 refers to YEAR(`First Date`) > = 1990;"
+      },
+      "design": "d1",
+      "evidence": true,
+      "request_key": "454d24ec4d9607e9c2840ecdc7f3f06a4312a452cf7209cf364d6e4a3d252b06",
+      "response": {
+        "text": "",
+        "content": [
+          {
+            "id": "toolu_01AYaRidaGiEFH87vsrChZFf",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "sql": "SELECT COUNT(DISTINCT p.id) FROM patient p JOIN laboratory l ON p.id = l.id WHERE l.iga > 80 AND l.iga < 500 AND EXTRACT(YEAR FROM p.\"First Date\") >= 1990",
+              "answer": "The query counts the distinct patients who first came to the hospital in 1990 or later and who have at least one lab result with a normal Ig A level (above 80 and below 500).",
+              "confidence": 0.85,
+              "declined": false,
+              "decline_reason": null,
+              "clarifying_question": null,
+              "assumptions": [
+                "A patient counts once if any one of their lab records shows a normal Ig A level.",
+                "Following the hint, 'after 1990/1/1' means a first-visit year of 1990 or later."
+              ],
+              "premise_correction": null,
+              "chart_spec": null
+            },
+            "name": "submit_answer",
+            "type": "tool_use"
+          }
+        ],
+        "model_reported": "claude-opus-5-5",
+        "stop_reason": "tool_use",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 97
+          },
+          "cache_creation_input_tokens": 97,
+          "cache_read_input_tokens": 6860,
+          "inference_geo": "global",
+          "input_tokens": 4,
+          "output_tokens": 447,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard"
+        },
+        "latency_ms": 4547.036900010426,
+        "created_utc": "2026-09-30T13:52:18+00:00",
+        "request_id": "req_011CfZjYN23PKZ6MQkaCrqNf",
+        "extra": {}
+      }
+    },
+    {
+      "id": "bench-1378/claude-sonnet-5",
+      "model": "claude-sonnet-5",
+      "source_run": "main/all-d1-claude-sonnet-5-evidence",
+      "question": {
+        "question_id": 1378,
+        "source": "bird",
+        "db_id": "student_club",
+        "question": "What is the highest amount of budget spend for an event?",
+        "evidence": "highest amount of budget spend refers to MAX(spent)"
+      },
+      "design": "d1",
+      "evidence": true,
+      "request_key": "8e3afa3321b4756840139f2ad2f2e037397395e0bb2689ea867062540822d8e0",
+      "response": {
+        "text": "",
+        "content": [
+          {
+            "id": "toolu_01AYohQUvqYCk2TaQ4d7PzF4",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "sql": "SELECT MAX(spent) AS max_spent FROM budget",
+              "answer": "The highest amount spent for a budgeted event category is the maximum value of the \"spent\" column in the budget table.",
+              "confidence": 0.9,
+              "declined": false,
+              "decline_reason": null,
+              "clarifying_question": null,
+              "assumptions": [
+                "\"budget spend\" refers to the 'spent' column in the budget table as stated in the hint"
+              ],
+              "premise_correction": null,
+              "chart_spec": null
+            },
+            "name": "submit_answer",
+            "type": "tool_use"
+          }
+        ],
+        "model_reported": "claude-sonnet-5",
+        "stop_reason": "tool_use",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 5714,
+          "inference_geo": "global",
+          "input_tokens": 62,
+          "output_tokens": 313,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "batch"
+        },
+        "latency_ms": 0.0,
+        "created_utc": "2026-09-28T22:34:47+00:00",
+        "request_id": null,
+        "extra": {
+          "service": "batch",
+          "batch_id": "msgbatch_01WoVubrXn9SecVDhUxRSrof"
+        }
+      }
+    },
+    {
+      "id": "bench-1378/claude-opus-5-5",
+      "model": "claude-opus-5-5",
+      "source_run": "router/held_out-d1-claude-opus-5-5-evidence",
+      "question": {
+        "question_id": 1378,
+        "source": "bird",
+        "db_id": "student_club",
+        "question": "What is the highest amount of budget spend for an event?",
+        "evidence": "highest amount of budget spend refers to MAX(spent)"
+      },
+      "design": "d1",
+      "evidence": true,
+      "request_key": "3f5dadc2f72fd8bb3c945668bbb12cbe924456f79951f1408a9d03d5302f3e3c",
+      "response": {
+        "text": "",
+        "content": [
+          {
+            "id": "toolu_01HG8DpiMXxL765sKH9rqwxc",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "sql": "SELECT MAX(spent) FROM budget",
+              "answer": "The query returns the largest amount spent on any single budget line, which is one category for one event, in dollars.",
+              "confidence": 0.85,
+              "declined": false,
+              "decline_reason": null,
+              "clarifying_question": null,
+              "assumptions": [
+                "Following the hint, this is the maximum 'spent' over individual budget rows, not spending added up per event."
+              ],
+              "premise_correction": null,
+              "chart_spec": null
+            },
+            "name": "submit_answer",
+            "type": "tool_use"
+          }
+        ],
+        "model_reported": "claude-opus-5-5",
+        "stop_reason": "tool_use",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 43
+          },
+          "cache_creation_input_tokens": 43,
+          "cache_read_input_tokens": 5536,
+          "inference_geo": "global",
+          "input_tokens": 4,
+          "output_tokens": 323,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard"
+        },
+        "latency_ms": 4628.14410001738,
+        "created_utc": "2026-09-30T13:50:31+00:00",
+        "request_id": "req_011CfZjQTzjmxeyDagEodoWk",
+        "extra": {}
+      }
+    },
+    {
+      "id": "bench-533/claude-sonnet-5",
+      "model": "claude-sonnet-5",
+      "source_run": "main/all-d1-claude-sonnet-5-evidence",
+      "question": {
+        "question_id": 533,
+        "source": "bird",
+        "db_id": "codebase_community",
+        "question": "How many users last accessed the website after 2014/9/1?",
+        "evidence": "last accessed after 2014/9/1 refers to LastAccessDate > '2014-09-01'"
+      },
+      "design": "d1",
+      "evidence": true,
+      "request_key": "ffec0fc4307b7197c4b45c4f2ba4fee927147693b1e2dbe53b4f5dcf2cba2e86",
+      "response": {
+        "text": "",
+        "content": [
+          {
+            "id": "toolu_01MUPG8L8faR31wAKxxNpRVi",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "sql": "SELECT COUNT(*) FROM users WHERE lastaccessdate > '2014-09-01'",
+              "answer": "The query counts users whose LastAccessDate is after September 1, 2014.",
+              "confidence": 0.95,
+              "declined": false,
+              "decline_reason": null,
+              "clarifying_question": null,
+              "assumptions": [
+                "'after 2014/9/1' means strictly greater than the timestamp 2014-09-01 00:00:00, as stated in the hint"
+              ],
+              "premise_correction": null,
+              "chart_spec": null
+            },
+            "name": "submit_answer",
+            "type": "tool_use"
+          }
+        ],
+        "model_reported": "claude-sonnet-5",
+        "stop_reason": "tool_use",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 6759,
+          "inference_geo": "global",
+          "input_tokens": 77,
+          "output_tokens": 329,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "batch"
+        },
+        "latency_ms": 0.0,
+        "created_utc": "2026-09-28T22:27:07+00:00",
+        "request_id": null,
+        "extra": {
+          "service": "batch",
+          "batch_id": "msgbatch_01NVx59neUGGdYiZt9cYWnVV"
+        }
+      }
+    },
+    {
+      "id": "bench-533/claude-opus-5-5",
+      "model": "claude-opus-5-5",
+      "source_run": "router/held_out-d1-claude-opus-5-5-evidence",
+      "question": {
+        "question_id": 533,
+        "source": "bird",
+        "db_id": "codebase_community",
+        "question": "How many users last accessed the website after 2014/9/1?",
+        "evidence": "last accessed after 2014/9/1 refers to LastAccessDate > '2014-09-01'"
+      },
+      "design": "d1",
+      "evidence": true,
+      "request_key": "c10f82b98d251a078f9ac8a6463ed3da6c456777608a817061442042c6a587b9",
+      "response": {
+        "text": "",
+        "content": [
+          {
+            "id": "toolu_01ANGyjx13N893J4PugsjJ4r",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "sql": "SELECT COUNT(id) FROM users WHERE lastaccessdate > '2014-09-01'",
+              "answer": "The query counts the users whose last access date is later than 2014-09-01.",
+              "confidence": 0.93,
+              "declined": false,
+              "decline_reason": null,
+              "clarifying_question": null,
+              "assumptions": [
+                "The date '2014-09-01' is read as midnight in the session's time zone, so any access later on 1 September 2014 is counted."
+              ],
+              "premise_correction": null,
+              "chart_spec": null
+            },
+            "name": "submit_answer",
+            "type": "tool_use"
+          }
+        ],
+        "model_reported": "claude-opus-5-5",
+        "stop_reason": "tool_use",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 58
+          },
+          "cache_creation_input_tokens": 58,
+          "cache_read_input_tokens": 6581,
+          "inference_geo": "global",
+          "input_tokens": 4,
+          "output_tokens": 341,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "batch"
+        },
+        "latency_ms": 0.0,
+        "created_utc": "2026-09-29T22:00:07+00:00",
+        "request_id": null,
+        "extra": {
+          "service": "batch",
+          "batch_id": "msgbatch_01PTUoXcD7YmAzVg69Uj1KgF"
+        }
+      }
+    },
+    {
+      "id": "bench-573/claude-sonnet-5",
+      "model": "claude-sonnet-5",
+      "source_run": "main/all-d1-claude-sonnet-5-evidence",
+      "question": {
+        "question_id": 573,
+        "source": "bird",
+        "db_id": "codebase_community",
+        "question": "Write the contents of comments with a score of 17.",
+        "evidence": "score of 17 refers to Score = 17; contents of comments refers to Text"
+      },
+      "design": "d1",
+      "evidence": true,
+      "request_key": "71043d3796b3fa15027855abaf29c2dfa5064be821d5cb42955ca924738d9b68",
+      "response": {
+        "text": "",
+        "content": [
+          {
+            "id": "toolu_01UqPKaQKbc7BS2eUaudrZEr",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "sql": "SELECT text FROM comments WHERE score = 17;",
+              "answer": "The query returns the Text field of all comments whose Score equals 17.",
+              "confidence": 0.95,
+              "declined": false,
+              "decline_reason": null,
+              "clarifying_question": null,
+              "assumptions": [],
+              "premise_correction": null,
+              "chart_spec": null
+            },
+            "name": "submit_answer",
+            "type": "tool_use"
+          }
+        ],
+        "model_reported": "claude-sonnet-5",
+        "stop_reason": "tool_use",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 6759,
+          "inference_geo": "global",
+          "input_tokens": 66,
+          "output_tokens": 266,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "batch"
+        },
+        "latency_ms": 0.0,
+        "created_utc": "2026-09-28T22:27:07+00:00",
+        "request_id": null,
+        "extra": {
+          "service": "batch",
+          "batch_id": "msgbatch_01NVx59neUGGdYiZt9cYWnVV"
+        }
+      }
+    },
+    {
+      "id": "bench-573/claude-opus-5-5",
+      "model": "claude-opus-5-5",
+      "source_run": "router/held_out-d1-claude-opus-5-5-evidence",
+      "question": {
+        "question_id": 573,
+        "source": "bird",
+        "db_id": "codebase_community",
+        "question": "Write the contents of comments with a score of 17.",
+        "evidence": "score of 17 refers to Score = 17; contents of comments refers to Text"
+      },
+      "design": "d1",
+      "evidence": true,
+      "request_key": "3bffaa4446acd4aecb1d20060bd2faea288905c7c35e631deef2a009778a9dfe",
+      "response": {
+        "text": "",
+        "content": [
+          {
+            "id": "toolu_016wt3VHYWZJrrQpZCt3iNTy",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "sql": "SELECT text FROM comments WHERE score = 17",
+              "answer": "The query returns the text of every comment that has a score of 17.",
+              "confidence": 0.95,
+              "declined": false,
+              "decline_reason": null,
+              "clarifying_question": null,
+              "assumptions": [],
+              "premise_correction": null,
+              "chart_spec": null
+            },
+            "name": "submit_answer",
+            "type": "tool_use"
+          }
+        ],
+        "model_reported": "claude-opus-5-5",
+        "stop_reason": "tool_use",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 6628
+          },
+          "cache_creation_input_tokens": 6628,
+          "cache_read_input_tokens": 0,
+          "inference_geo": "global",
+          "input_tokens": 4,
+          "output_tokens": 279,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "batch"
+        },
+        "latency_ms": 0.0,
+        "created_utc": "2026-09-29T22:00:07+00:00",
+        "request_id": null,
+        "extra": {
+          "service": "batch",
+          "batch_id": "msgbatch_01PTUoXcD7YmAzVg69Uj1KgF"
+        }
+      }
+    },
+    {
+      "id": "bench-726/claude-sonnet-5",
+      "model": "claude-sonnet-5",
+      "source_run": "main/all-d1-claude-sonnet-5-evidence",
+      "question": {
+        "question_id": 726,
+        "source": "bird",
+        "db_id": "superhero",
+        "question": "Rank heroes published by Marvel Comics by their height in descending order.",
+        "evidence": "name refers to superhero_name; the tallest hero refers to MAX(height_cm); published by Marvel Comics refers to publisher_name = 'Marvel Comics'"
+      },
+      "design": "d1",
+      "evidence": true,
+      "request_key": "536e99f4266c5cbe6edf8ea8713e766e7e95f7ba56701210c00a9afcf1a574f4",
+      "response": {
+        "text": "",
+        "content": [
+          {
+            "id": "toolu_01JA41LHmSx7J5Sohr8jya9k",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "sql": "SELECT s.superhero_name, s.height_cm,\n       RANK() OVER (ORDER BY s.height_cm DESC) AS height_rank\nFROM superhero s\nJOIN publisher p ON s.publisher_id = p.id\nWHERE p.publisher_name = 'Marvel Comics'\nORDER BY s.height_cm DESC;",
+              "answer": "The query lists superhero names and heights for heroes published by Marvel Comics, ranked in descending order of height using RANK() (ties get the same rank).",
+              "confidence": 0.85,
+              "declined": false,
+              "decline_reason": null,
+              "clarifying_question": null,
+              "assumptions": [
+                "Ranking uses standard RANK() with ties sharing rank, ordered by height_cm descending",
+                "Heroes with null height_cm are included and ranked last"
+              ],
+              "premise_correction": null,
+              "chart_spec": null
+            },
+            "name": "submit_answer",
+            "type": "tool_use"
+          }
+        ],
+        "model_reported": "claude-sonnet-5",
+        "stop_reason": "tool_use",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 3250
+          },
+          "cache_creation_input_tokens": 3250,
+          "cache_read_input_tokens": 1914,
+          "inference_geo": "global",
+          "input_tokens": 106,
+          "output_tokens": 446,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "batch"
+        },
+        "latency_ms": 0.0,
+        "created_utc": "2026-09-28T22:34:47+00:00",
+        "request_id": null,
+        "extra": {
+          "service": "batch",
+          "batch_id": "msgbatch_01WoVubrXn9SecVDhUxRSrof"
+        }
+      }
+    },
+    {
+      "id": "bench-726/claude-opus-5-5",
+      "model": "claude-opus-5-5",
+      "source_run": "router/held_out-d1-claude-opus-5-5-evidence",
+      "question": {
+        "question_id": 726,
+        "source": "bird",
+        "db_id": "superhero",
+        "question": "Rank heroes published by Marvel Comics by their height in descending order.",
+        "evidence": "name refers to superhero_name; the tallest hero refers to MAX(height_cm); published by Marvel Comics refers to publisher_name = 'Marvel Comics'"
+      },
+      "design": "d1",
+      "evidence": true,
+      "request_key": "e18c839d02112c682de6d09c3cba175aea12e3c26892291026fa078777528256",
+      "response": {
+        "text": "I read \"rank\" as returning the names of Marvel Comics heroes in order of height, tallest first, with no separate rank number.",
+        "content": [
+          {
+            "text": "I read \"rank\" as returning the names of Marvel Comics heroes in order of height, tallest first, with no separate rank number.",
+            "type": "text"
+          },
+          {
+            "id": "toolu_01YRv51yoj8n9PKj9wWpjxaU",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "sql": "SELECT s.superhero_name FROM superhero s JOIN publisher p ON s.publisher_id = p.id WHERE p.publisher_name = 'Marvel Comics' ORDER BY s.height_cm DESC",
+              "answer": "The query lists the names of all heroes published by Marvel Comics, from tallest to shortest by height in centimetres. In PostgreSQL, heroes with no height recorded (null) sort first when ordering descending, and heroes with a height of 0 (also missing) sort last.",
+              "confidence": 0.7,
+              "declined": false,
+              "decline_reason": null,
+              "clarifying_question": null,
+              "assumptions": [
+                "\"Rank\" means sorting the hero names by height, not adding a separate rank number column.",
+                "Heroes with missing heights (null or 0) are kept in the list."
+              ],
+              "premise_correction": null,
+              "chart_spec": null
+            },
+            "name": "submit_answer",
+            "type": "tool_use"
+          }
+        ],
+        "model_reported": "claude-opus-5-5",
+        "stop_reason": "tool_use",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 3227
+          },
+          "cache_creation_input_tokens": 3227,
+          "cache_read_input_tokens": 1846,
+          "inference_geo": "global",
+          "input_tokens": 4,
+          "output_tokens": 501,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard"
+        },
+        "latency_ms": 5484.748099988792,
+        "created_utc": "2026-09-30T13:50:57+00:00",
+        "request_id": "req_011CfZjSG1UN1sjcQXDy8EDq",
+        "extra": {}
+      }
+    },
+    {
+      "id": "bench-751/claude-sonnet-5",
+      "model": "claude-sonnet-5",
+      "source_run": "main/all-d1-claude-sonnet-5-evidence",
+      "question": {
+        "question_id": 751,
+        "source": "bird",
+        "db_id": "superhero",
+        "question": "List down at least five superpowers of male superheroes.",
+        "evidence": "male refers to gender = 'Male'; superpowers refers to power_name;"
+      },
+      "design": "d1",
+      "evidence": true,
+      "request_key": "bb9f14c8e33d5c457aa9f3b6fb9d1e400257fb5b1a331d6c5b40327adc6da884",
+      "response": {
+        "text": "",
+        "content": [
+          {
+            "id": "toolu_01HgH8F4Umx1ef2T9w4qfnSK",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "sql": "SELECT DISTINCT sp.power_name\nFROM hero_power hp\nJOIN superhero sh ON sh.id = hp.hero_id\nJOIN gender g ON g.id = sh.gender_id\nJOIN superpower sp ON sp.id = hp.power_id\nWHERE g.gender = 'Male'\nLIMIT 5;",
+              "answer": "Some superpowers held by male superheroes include, for example, powers such as Agility, Stamina, Super Strength, Durability, and Super Speed (the exact five returned depend on the query's order, but any 5 distinct power names linked to male heroes satisfy the request).",
+              "confidence": 0.75,
+              "declined": false,
+              "decline_reason": null,
+              "clarifying_question": null,
+              "assumptions": [
+                "\"at least five\" is interpreted as returning exactly five distinct example superpower names",
+                "gender text value is exactly 'Male' as stated in the hint"
+              ],
+              "premise_correction": null,
+              "chart_spec": null
+            },
+            "name": "submit_answer",
+            "type": "tool_use"
+          }
+        ],
+        "model_reported": "claude-sonnet-5",
+        "stop_reason": "tool_use",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 5164,
+          "inference_geo": "global",
+          "input_tokens": 67,
+          "output_tokens": 480,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "batch"
+        },
+        "latency_ms": 0.0,
+        "created_utc": "2026-09-28T22:34:47+00:00",
+        "request_id": null,
+        "extra": {
+          "service": "batch",
+          "batch_id": "msgbatch_01WoVubrXn9SecVDhUxRSrof"
+        }
+      }
+    },
+    {
+      "id": "bench-751/claude-opus-5-5",
+      "model": "claude-opus-5-5",
+      "source_run": "router/held_out-d1-claude-opus-5-5-evidence",
+      "question": {
+        "question_id": 751,
+        "source": "bird",
+        "db_id": "superhero",
+        "question": "List down at least five superpowers of male superheroes.",
+        "evidence": "male refers to gender = 'Male'; superpowers refers to power_name;"
+      },
+      "design": "d1",
+      "evidence": true,
+      "request_key": "5b56fc4d982a881a7e59c45c5c878e568d0cde660f72b4a4f23857754a726f49",
+      "response": {
+        "text": "",
+        "content": [
+          {
+            "id": "toolu_01MomVssQKQ1d5FJ39Vbo8s1",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "sql": "SELECT DISTINCT sp.power_name FROM superhero s JOIN gender g ON s.gender_id = g.id JOIN hero_power hp ON hp.hero_id = s.id JOIN superpower sp ON sp.id = hp.power_id WHERE g.gender = 'Male' LIMIT 5",
+              "answer": "The query returns five different superpower names (power_name) held by at least one male superhero. Which five come back is arbitrary, because the query sets no order.",
+              "confidence": 0.75,
+              "declined": false,
+              "decline_reason": null,
+              "clarifying_question": null,
+              "assumptions": [
+                "'At least five' is read as returning exactly five distinct powers, in no particular order."
+              ],
+              "premise_correction": null,
+              "chart_spec": null
+            },
+            "name": "submit_answer",
+            "type": "tool_use"
+          }
+        ],
+        "model_reported": "claude-opus-5-5",
+        "stop_reason": "tool_use",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 48
+          },
+          "cache_creation_input_tokens": 48,
+          "cache_read_input_tokens": 4986,
+          "inference_geo": "global",
+          "input_tokens": 4,
+          "output_tokens": 422,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard"
+        },
+        "latency_ms": 4050.675600010436,
+        "created_utc": "2026-09-30T13:51:04+00:00",
+        "request_id": "req_011CfZjSwXW1RJxQtv5mjvU6",
+        "extra": {}
+      }
+    },
+    {
+      "id": "bench-782/claude-sonnet-5",
+      "model": "claude-sonnet-5",
+      "source_run": "main/all-d1-claude-sonnet-5-evidence",
+      "question": {
+        "question_id": 782,
+        "source": "bird",
+        "db_id": "superhero",
+        "question": "List the heroes' names whose eyes and hair colours are both black.",
+        "evidence": "heroes' names refers to superhero_name; eyes and hair colours are both black refers to eye_colour_id AND hair_colour_id WHERE colour.colour = 'Black';"
+      },
+      "design": "d1",
+      "evidence": true,
+      "request_key": "3a1a6e614868cc8a41714f1dabd7ebd518ac79494fc5619a9068efb19355f232",
+      "response": {
+        "text": "",
+        "content": [
+          {
+            "id": "toolu_01G78hsUGwyR6fvGavoGtKZs",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "sql": "SELECT s.superhero_name\nFROM superhero s\nJOIN colour ec ON s.eye_colour_id = ec.id\nJOIN colour hc ON s.hair_colour_id = hc.id\nWHERE ec.colour = 'Black' AND hc.colour = 'Black';",
+              "answer": "The query lists the names of superheroes whose eye colour and hair colour are both \"Black\".",
+              "confidence": 0.95,
+              "declined": false,
+              "decline_reason": null,
+              "clarifying_question": null,
+              "assumptions": [
+                "Colour matching is exact string 'Black' in the colour table (case-sensitive as stored)."
+              ],
+              "premise_correction": null,
+              "chart_spec": null
+            },
+            "name": "submit_answer",
+            "type": "tool_use"
+          }
+        ],
+        "model_reported": "claude-sonnet-5",
+        "stop_reason": "tool_use",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 3250
+          },
+          "cache_creation_input_tokens": 3250,
+          "cache_read_input_tokens": 1914,
+          "inference_geo": "global",
+          "input_tokens": 107,
+          "output_tokens": 383,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "batch"
+        },
+        "latency_ms": 0.0,
+        "created_utc": "2026-09-28T22:34:47+00:00",
+        "request_id": null,
+        "extra": {
+          "service": "batch",
+          "batch_id": "msgbatch_01WoVubrXn9SecVDhUxRSrof"
+        }
+      }
+    },
+    {
+      "id": "bench-782/claude-opus-5-5",
+      "model": "claude-opus-5-5",
+      "source_run": "router/held_out-d1-claude-opus-5-5-evidence",
+      "question": {
+        "question_id": 782,
+        "source": "bird",
+        "db_id": "superhero",
+        "question": "List the heroes' names whose eyes and hair colours are both black.",
+        "evidence": "heroes' names refers to superhero_name; eyes and hair colours are both black refers to eye_colour_id AND hair_colour_id WHERE colour.colour = 'Black';"
+      },
+      "design": "d1",
+      "evidence": true,
+      "request_key": "ca6e79fd9f5cc3bec36663d4559105f2d151d1bd7306adfc7d7db2f4be23fd48",
+      "response": {
+        "text": "",
+        "content": [
+          {
+            "id": "toolu_01EByM1zYu15BCtTaupNNmNH",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "sql": "SELECT s.superhero_name FROM superhero s JOIN colour e ON s.eye_colour_id = e.id JOIN colour h ON s.hair_colour_id = h.id WHERE e.colour = 'Black' AND h.colour = 'Black'",
+              "answer": "The query returns the name of every superhero whose eye colour and hair colour are both 'Black' in the colour table.",
+              "confidence": 0.93,
+              "declined": false,
+              "decline_reason": null,
+              "clarifying_question": null,
+              "assumptions": [
+                "Black is stored in the colour table exactly as 'Black', with that capitalisation."
+              ],
+              "premise_correction": null,
+              "chart_spec": null
+            },
+            "name": "submit_answer",
+            "type": "tool_use"
+          }
+        ],
+        "model_reported": "claude-opus-5-5",
+        "stop_reason": "tool_use",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 88
+          },
+          "cache_creation_input_tokens": 88,
+          "cache_read_input_tokens": 4986,
+          "inference_geo": "global",
+          "input_tokens": 4,
+          "output_tokens": 393,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard"
+        },
+        "latency_ms": 4407.140799972694,
+        "created_utc": "2026-09-30T13:51:20+00:00",
+        "request_id": "req_011CfZjU3CM8Th34psD4wAdc",
+        "extra": {}
+      }
+    },
+    {
+      "id": "bench-829/claude-sonnet-5",
+      "model": "claude-sonnet-5",
+      "source_run": "main/all-d1-claude-sonnet-5-evidence",
+      "question": {
+        "question_id": 829,
+        "source": "bird",
+        "db_id": "superhero",
+        "question": "Which publisher created more superheroes: DC or Marvel Comics? Find the difference in the number of superheroes.",
+        "evidence": "DC refers to publisher_name = 'DC Comics'; Marvel Comics refers to publisher_name = 'Marvel Comics'; difference = SUBTRACT(SUM(publisher_name = 'DC Comics'), SUM(publisher_name = 'Marvel Comics'));"
+      },
+      "design": "d1",
+      "evidence": true,
+      "request_key": "6614b3fd133279833871850c0ce50381725be129515f2971cc0185edad49fab1",
+      "response": {
+        "text": "",
+        "content": [
+          {
+            "id": "toolu_01SoEnhVWLqi5bZ75dd69f8t",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "sql": "SELECT\n  SUM(CASE WHEN p.publisher_name = 'DC Comics' THEN 1 ELSE 0 END)\n  - SUM(CASE WHEN p.publisher_name = 'Marvel Comics' THEN 1 ELSE 0 END) AS difference\nFROM superhero s\nJOIN publisher p ON s.publisher_id = p.id\nWHERE p.publisher_name IN ('DC Comics', 'Marvel Comics');",
+              "answer": "Marvel Comics created more superheroes than DC Comics. Computing (count of DC Comics heroes) minus (count of Marvel Comics heroes) yields a negative number, indicating DC Comics has fewer heroes than Marvel Comics; the magnitude of this difference is the answer returned by the query.",
+              "confidence": 0.9,
+              "declined": false,
+              "decline_reason": null,
+              "clarifying_question": null,
+              "assumptions": [
+                "Each superhero has at most one publisher_id, so counting rows equals counting superheroes.",
+                "The difference is computed as DC Comics count minus Marvel Comics count, per the hint's formula."
+              ],
+              "premise_correction": null,
+              "chart_spec": null
+            },
+            "name": "submit_answer",
+            "type": "tool_use"
+          }
+        ],
+        "model_reported": "claude-sonnet-5",
+        "stop_reason": "tool_use",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 3250
+          },
+          "cache_creation_input_tokens": 3250,
+          "cache_read_input_tokens": 1914,
+          "inference_geo": "global",
+          "input_tokens": 162,
+          "output_tokens": 551,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "batch"
+        },
+        "latency_ms": 0.0,
+        "created_utc": "2026-09-28T22:34:47+00:00",
+        "request_id": null,
+        "extra": {
+          "service": "batch",
+          "batch_id": "msgbatch_01WoVubrXn9SecVDhUxRSrof"
+        }
+      }
+    },
+    {
+      "id": "bench-829/claude-opus-5-5",
+      "model": "claude-opus-5-5",
+      "source_run": "router/held_out-d1-claude-opus-5-5-evidence",
+      "question": {
+        "question_id": 829,
+        "source": "bird",
+        "db_id": "superhero",
+        "question": "Which publisher created more superheroes: DC or Marvel Comics? Find the difference in the number of superheroes.",
+        "evidence": "DC refers to publisher_name = 'DC Comics'; Marvel Comics refers to publisher_name = 'Marvel Comics'; difference = SUBTRACT(SUM(publisher_name = 'DC Comics'), SUM(publisher_name = 'Marvel Comics'));"
+      },
+      "design": "d1",
+      "evidence": true,
+      "request_key": "9b39c1272dceb93d3435f168368df79e3d7f57b1ae6139ad45c0580f7c859b09",
+      "response": {
+        "text": "",
+        "content": [
+          {
+            "id": "toolu_01DgWnFXF9JWnEqcH98oxWnx",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "sql": "SELECT CASE WHEN SUM(CASE WHEN p.publisher_name = 'DC Comics' THEN 1 ELSE 0 END) > SUM(CASE WHEN p.publisher_name = 'Marvel Comics' THEN 1 ELSE 0 END) THEN 'DC Comics' ELSE 'Marvel Comics' END AS publisher, ABS(SUM(CASE WHEN p.publisher_name = 'DC Comics' THEN 1 ELSE 0 END) - SUM(CASE WHEN p.publisher_name = 'Marvel Comics' THEN 1 ELSE 0 END)) AS difference FROM superhero s JOIN publisher p ON s.publisher_id = p.id",
+              "answer": "The query compares the number of superheroes from DC Comics and from Marvel Comics. It returns whichever publisher has more, and the absolute difference between the two counts.",
+              "confidence": 0.8,
+              "declined": false,
+              "decline_reason": null,
+              "clarifying_question": null,
+              "assumptions": [
+                "The difference is given as a positive number (absolute value). The hint's DC minus Marvel would come out negative if Marvel has more."
+              ],
+              "premise_correction": null,
+              "chart_spec": null
+            },
+            "name": "submit_answer",
+            "type": "tool_use"
+          }
+        ],
+        "model_reported": "claude-opus-5-5",
+        "stop_reason": "tool_use",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 143
+          },
+          "cache_creation_input_tokens": 143,
+          "cache_read_input_tokens": 4986,
+          "inference_geo": "global",
+          "input_tokens": 4,
+          "output_tokens": 590,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard"
+        },
+        "latency_ms": 12528.778300038539,
+        "created_utc": "2026-09-30T13:51:45+00:00",
+        "request_id": "req_011CfZjVLuVCbFGsRdDWkuLz",
+        "extra": {}
+      }
+    },
+    {
+      "id": "bench-859/claude-sonnet-5",
+      "model": "claude-sonnet-5",
+      "source_run": "main/all-d1-claude-sonnet-5-evidence",
+      "question": {
+        "question_id": 859,
+        "source": "bird",
+        "db_id": "formula_1",
+        "question": "What's Bruno Senna's Q1 result in the qualifying race No. 354?",
+        "evidence": "race number refers to raceId; Bruno Senna refers to the full name of the driver; Full name of the driver refers to drivers.forename and drivers.surname;"
+      },
+      "design": "d1",
+      "evidence": true,
+      "request_key": "986b293eef71ee53d92320675b142d281bab9ff308e9dbc7d04cceccc9c5d183",
+      "response": {
+        "text": "",
+        "content": [
+          {
+            "id": "toolu_01G6gnVtCDKyUoyr6iLaGVga",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "sql": "SELECT q.q1\nFROM qualifying q\nJOIN drivers d ON q.driverid = d.driverid\nWHERE d.forename = 'Bruno' AND d.surname = 'Senna' AND q.raceid = 354;",
+              "answer": "The query returns Bruno Senna's Q1 time in race number 354.",
+              "confidence": 0.95,
+              "declined": false,
+              "decline_reason": null,
+              "clarifying_question": null,
+              "assumptions": [
+                "Only one driver named Bruno Senna exists in the drivers table",
+                "raceId 354 exists and has a qualifying record for this driver"
+              ],
+              "premise_correction": null,
+              "chart_spec": null
+            },
+            "name": "submit_answer",
+            "type": "tool_use"
+          }
+        ],
+        "model_reported": "claude-sonnet-5",
+        "stop_reason": "tool_use",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 0
+          },
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 8379,
+          "inference_geo": "global",
+          "input_tokens": 105,
+          "output_tokens": 373,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "batch"
+        },
+        "latency_ms": 0.0,
+        "created_utc": "2026-09-28T22:27:07+00:00",
+        "request_id": null,
+        "extra": {
+          "service": "batch",
+          "batch_id": "msgbatch_01NVx59neUGGdYiZt9cYWnVV"
+        }
+      }
+    },
+    {
+      "id": "bench-859/claude-opus-5-5",
+      "model": "claude-opus-5-5",
+      "source_run": "router/held_out-d1-claude-opus-5-5-evidence",
+      "question": {
+        "question_id": 859,
+        "source": "bird",
+        "db_id": "formula_1",
+        "question": "What's Bruno Senna's Q1 result in the qualifying race No. 354?",
+        "evidence": "race number refers to raceId; Bruno Senna refers to the full name of the driver; Full name of the driver refers to drivers.forename and drivers.surname;"
+      },
+      "design": "d1",
+      "evidence": true,
+      "request_key": "edca39e9fa1f0e062492460a3a8e2cbf4e75be425f3694085637ccd2799221b3",
+      "response": {
+        "text": "",
+        "content": [
+          {
+            "id": "toolu_01PM1AwDr4nbm3V31bwE4Vga",
+            "caller": {
+              "type": "direct"
+            },
+            "input": {
+              "sql": "SELECT q.q1 FROM qualifying q JOIN drivers d ON d.driverid = q.driverid WHERE q.raceid = 354 AND d.forename = 'Bruno' AND d.surname = 'Senna'",
+              "answer": "The query looks up Bruno Senna's Q1 lap time in qualifying for race 354 (raceId 354). I haven't seen the result, so the time itself isn't stated here.",
+              "confidence": 0.93,
+              "declined": false,
+              "decline_reason": null,
+              "clarifying_question": null,
+              "assumptions": [
+                "\"Q1 result\" means the q1 time column of the qualifying table."
+              ],
+              "premise_correction": null,
+              "chart_spec": null
+            },
+            "name": "submit_answer",
+            "type": "tool_use"
+          }
+        ],
+        "model_reported": "claude-opus-5-5",
+        "stop_reason": "tool_use",
+        "usage": {
+          "cache_creation": {
+            "ephemeral_1h_input_tokens": 0,
+            "ephemeral_5m_input_tokens": 86
+          },
+          "cache_creation_input_tokens": 86,
+          "cache_read_input_tokens": 8201,
+          "inference_geo": "global",
+          "input_tokens": 4,
+          "output_tokens": 403,
+          "output_tokens_details": {
+            "thinking_tokens": 0
+          },
+          "service_tier": "standard"
+        },
+        "latency_ms": 5300.024899945129,
+        "created_utc": "2026-09-30T13:49:08+00:00",
+        "request_id": "req_011CfZjJG6xFpJJCjCDeguiF",
+        "extra": {}
+      }
+    }
+  ]
+}

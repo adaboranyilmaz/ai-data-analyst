@@ -1,0 +1,479 @@
+{
+  "note": "results/ as committed, copied before a forced rebuild (dvc repro --force with ANALYST_REPLAY_ONLY=1, no model call), compared with the rebuilt results/",
+  "exempt": [
+    {
+      "files": "*",
+      "field": "\\.(updated_utc|run_utc|evaluated_at|utc)$",
+      "reason": "when the run happened",
+      "abs_tol": null
+    },
+    {
+      "files": "*",
+      "field": "\\.(latency_s|latency_ms|seconds|elapsed_s|duration_s)$|\\.(p50|p95|p99|mean)_(ms|s)$|\\.[a-z_]*_seconds$|\\.(max|min)_ms$|\\.latency_s\\.(p50|p95|p99|mean)$|\\.seconds_per_question_cached_calls\\.[a-z_]+\\.(p50|p95|mean)$",
+      "reason": "measured wall-clock time",
+      "abs_tol": null
+    },
+    {
+      "files": "metrics/gold_execution*.json",
+      "field": "\\.summary\\.slowest\\[\\d+\\]\\.question_id$",
+      "reason": "which questions were slowest is a ranking of measured time",
+      "abs_tol": null
+    }
+  ],
+  "masked": [
+    {
+      "files": "metrics/mcp_security.json",
+      "field": "\\.boundary\\[\\d+\\]\\.detail$",
+      "reason": "measured wall-clock time inside a recorded tool reply"
+    },
+    {
+      "files": "metrics/security_suite.json",
+      "field": "\\.records\\[\\d+\\]\\.modes\\.[a-z]+\\.detail$",
+      "reason": "measured wall-clock time inside a recorded detail"
+    },
+    {
+      "files": "metrics/mcp_security.json",
+      "field": "\\.records\\[\\d+\\]\\.detail$",
+      "reason": "measured wall-clock time inside a recorded detail"
+    },
+    {
+      "files": "metrics/sandbox_security.json",
+      "field": "\\.control_records\\[\\d+\\]\\.detail$",
+      "reason": "the ports and container addresses of a socket's repr"
+    }
+  ],
+  "known_nondeterministic_rules": [
+    {
+      "files": "metrics/data_stats.json",
+      "field": "\\.gold\\.public_vs_schema_layout\\.[a-z ,]+$",
+      "reason": "the row order of an unordered query differs between loads of the database",
+      "abs_tol": 1
+    },
+    {
+      "files": "metrics/gold_execution.json",
+      "field": "\\.compared_with_public_layout\\.counts\\.[a-z ,]+$",
+      "reason": "the row order of an unordered query differs between loads of the database",
+      "abs_tol": 1
+    },
+    {
+      "files": "metrics/gold_execution.json",
+      "field": "\\.compared_with_public_layout\\.not_identical\\.\\d+$",
+      "reason": "the row order of an unordered query differs between loads of the database",
+      "abs_tol": null
+    },
+    {
+      "files": "metrics/gold_execution.json",
+      "field": "\\.questions\\[439\\]\\.ordered_hash$",
+      "reason": "the row order of an unordered query differs between loads of the database",
+      "abs_tol": null
+    },
+    {
+      "files": "metrics/ablation.json",
+      "field": "\\.runs\\.qwen2\\.5:3b-instruct/d2\\.soft_f1\\.(estimate|low|high)$",
+      "reason": "the row order of an unordered query differs between loads of the database",
+      "abs_tol": 0.01
+    },
+    {
+      "files": "runs/ablation/ablation-d2-qwen2.5_3b-instruct-evidence.jsonl",
+      "field": "\\[50\\]\\.soft_f1$",
+      "reason": "the row order of an unordered query differs between loads of the database",
+      "abs_tol": 0.5
+    },
+    {
+      "files": "metrics/ex_validation.json",
+      "field": "\\.parallel_plans\\.official_ex_1$",
+      "reason": "parallel query workers return an unordered query's rows in an order that varies",
+      "abs_tol": 3
+    },
+    {
+      "files": "metrics/ex_validation.json",
+      "field": "\\.parallel_plans\\.scored_0$",
+      "reason": "parallel query workers return an unordered query's rows in an order that varies",
+      "abs_tol": null
+    }
+  ],
+  "counts": {
+    "identical": 77,
+    "known_nondeterministic": 5,
+    "exempt_only": 35
+  },
+  "files_compared": 117,
+  "passed": true,
+  "reproduced_exactly": false,
+  "failures": {},
+  "known_nondeterministic": {
+    "metrics/ablation.json": {
+      "status": "known_nondeterministic",
+      "n_fields": 3,
+      "seen": [
+        {
+          "field": ".runs.qwen2.5:3b-instruct/d2.soft_f1.estimate",
+          "committed": 0.09693614205830879,
+          "rebuilt": 0.09960280872497546,
+          "reason": "the row order of an unordered query differs between loads of the database"
+        },
+        {
+          "field": ".runs.qwen2.5:3b-instruct/d2.soft_f1.high",
+          "committed": 0.14470205852221793,
+          "rebuilt": 0.14801273850685104,
+          "reason": "the row order of an unordered query differs between loads of the database"
+        },
+        {
+          "field": ".runs.qwen2.5:3b-instruct/d2.soft_f1.low",
+          "committed": 0.05341483224484569,
+          "rebuilt": 0.05582004844837158,
+          "reason": "the row order of an unordered query differs between loads of the database"
+        }
+      ]
+    },
+    "metrics/data_stats.json": {
+      "status": "known_nondeterministic",
+      "n_fields": 2,
+      "seen": [
+        {
+          "field": ".gold.public_vs_schema_layout.identical",
+          "committed": 497,
+          "rebuilt": 496,
+          "reason": "the row order of an unordered query differs between loads of the database"
+        },
+        {
+          "field": ".gold.public_vs_schema_layout.same rows, different order",
+          "committed": 3,
+          "rebuilt": 4,
+          "reason": "the row order of an unordered query differs between loads of the database"
+        }
+      ]
+    },
+    "metrics/ex_validation.json": {
+      "status": "known_nondeterministic",
+      "n_fields": 2,
+      "seen": [
+        {
+          "field": ".parallel_plans.official_ex_1",
+          "committed": 498,
+          "rebuilt": 499,
+          "reason": "parallel query workers return an unordered query's rows in an order that varies"
+        },
+        {
+          "field": ".parallel_plans.scored_0",
+          "committed": [
+            1473,
+            1482
+          ],
+          "rebuilt": [
+            1482
+          ],
+          "reason": "parallel query workers return an unordered query's rows in an order that varies"
+        }
+      ]
+    },
+    "metrics/gold_execution.json": {
+      "status": "known_nondeterministic",
+      "n_fields": 4,
+      "seen": [
+        {
+          "field": ".compared_with_public_layout.counts.identical",
+          "committed": 497,
+          "rebuilt": 496,
+          "reason": "the row order of an unordered query differs between loads of the database"
+        },
+        {
+          "field": ".compared_with_public_layout.counts.same rows, different order",
+          "committed": 3,
+          "rebuilt": 4,
+          "reason": "the row order of an unordered query differs between loads of the database"
+        },
+        {
+          "field": ".compared_with_public_layout.not_identical.11",
+          "committed": null,
+          "rebuilt": "same rows, different order",
+          "reason": "the row order of an unordered query differs between loads of the database"
+        },
+        {
+          "field": ".questions[439].ordered_hash",
+          "committed": "b5a535df4e76f04835390aae44b25e44001c29a1e870e1d23d92afc720fdb054",
+          "rebuilt": "b020d09becadd9083eb4d21b284556eacaf85a4ebcb3997e2c43aa7c395423e7",
+          "reason": "the row order of an unordered query differs between loads of the database"
+        }
+      ]
+    },
+    "runs/ablation/ablation-d2-qwen2.5_3b-instruct-evidence.jsonl": {
+      "status": "known_nondeterministic",
+      "n_fields": 1,
+      "seen": [
+        {
+          "field": "[50].soft_f1",
+          "committed": 0,
+          "rebuilt": 0.4,
+          "reason": "the row order of an unordered query differs between loads of the database"
+        }
+      ]
+    }
+  },
+  "exempt_only": {
+    "metrics/bird_load.json": {
+      "status": "exempt_only",
+      "n_fields": 1,
+      "reasons": [
+        "measured wall-clock time"
+      ]
+    },
+    "metrics/framework_comparison.json": {
+      "status": "exempt_only",
+      "n_fields": 4,
+      "reasons": [
+        "measured wall-clock time"
+      ]
+    },
+    "metrics/gold_execution_public.json": {
+      "status": "exempt_only",
+      "n_fields": 359,
+      "reasons": [
+        "measured wall-clock time",
+        "which questions were slowest is a ranking of measured time"
+      ]
+    },
+    "metrics/mcp_security.json": {
+      "status": "exempt_only",
+      "n_fields": 58,
+      "reasons": [
+        "measured wall-clock time",
+        "measured wall-clock time inside a recorded detail",
+        "measured wall-clock time inside a recorded tool reply"
+      ]
+    },
+    "metrics/own_set_gold.json": {
+      "status": "exempt_only",
+      "n_fields": 59,
+      "reasons": [
+        "measured wall-clock time"
+      ]
+    },
+    "metrics/sandbox_security.json": {
+      "status": "exempt_only",
+      "n_fields": 45,
+      "reasons": [
+        "measured wall-clock time",
+        "the ports and container addresses of a socket's repr"
+      ]
+    },
+    "metrics/security_suite.json": {
+      "status": "exempt_only",
+      "n_fields": 159,
+      "reasons": [
+        "measured wall-clock time",
+        "measured wall-clock time inside a recorded detail"
+      ]
+    },
+    "metrics/tool_check.json": {
+      "status": "exempt_only",
+      "n_fields": 13,
+      "reasons": [
+        "measured wall-clock time"
+      ]
+    },
+    "runs/ablation/ablation-d1-claude-haiku-4-5-evidence.jsonl": {
+      "status": "exempt_only",
+      "n_fields": 150,
+      "reasons": [
+        "when the run happened"
+      ]
+    },
+    "runs/ablation/ablation-d1-claude-sonnet-5-evidence.jsonl": {
+      "status": "exempt_only",
+      "n_fields": 150,
+      "reasons": [
+        "when the run happened"
+      ]
+    },
+    "runs/ablation/ablation-d1-qwen2.5_3b-instruct-evidence.jsonl": {
+      "status": "exempt_only",
+      "n_fields": 150,
+      "reasons": [
+        "when the run happened"
+      ]
+    },
+    "runs/ablation/ablation-d2-claude-sonnet-5-evidence.jsonl": {
+      "status": "exempt_only",
+      "n_fields": 204,
+      "reasons": [
+        "measured wall-clock time",
+        "when the run happened"
+      ]
+    },
+    "runs/ablation/ablation-d3-claude-haiku-4-5-evidence.jsonl": {
+      "status": "exempt_only",
+      "n_fields": 300,
+      "reasons": [
+        "measured wall-clock time",
+        "when the run happened"
+      ]
+    },
+    "runs/ablation/ablation-d3-claude-sonnet-5-evidence.jsonl": {
+      "status": "exempt_only",
+      "n_fields": 297,
+      "reasons": [
+        "measured wall-clock time",
+        "when the run happened"
+      ]
+    },
+    "runs/ablation/ablation-d3-qwen2.5_3b-instruct-evidence.jsonl": {
+      "status": "exempt_only",
+      "n_fields": 270,
+      "reasons": [
+        "measured wall-clock time",
+        "when the run happened"
+      ]
+    },
+    "runs/ablation/ablation-d4-claude-sonnet-5-evidence.jsonl": {
+      "status": "exempt_only",
+      "n_fields": 298,
+      "reasons": [
+        "measured wall-clock time",
+        "when the run happened"
+      ]
+    },
+    "runs/ablation/ablation-d5-claude-sonnet-5-evidence.jsonl": {
+      "status": "exempt_only",
+      "n_fields": 299,
+      "reasons": [
+        "measured wall-clock time",
+        "when the run happened"
+      ]
+    },
+    "runs/critic/ablation-critic-claude-sonnet-5.jsonl": {
+      "status": "exempt_only",
+      "n_fields": 150,
+      "reasons": [
+        "when the run happened"
+      ]
+    },
+    "runs/critic/held_out-critic-claude-sonnet-5.jsonl": {
+      "status": "exempt_only",
+      "n_fields": 320,
+      "reasons": [
+        "when the run happened"
+      ]
+    },
+    "runs/critic/pilot-critic-claude-sonnet-5-first10.jsonl": {
+      "status": "exempt_only",
+      "n_fields": 10,
+      "reasons": [
+        "when the run happened"
+      ]
+    },
+    "runs/escalation/ablation-d1-claude-opus-5-5-evidence.jsonl": {
+      "status": "exempt_only",
+      "n_fields": 150,
+      "reasons": [
+        "when the run happened"
+      ]
+    },
+    "runs/escalation/pilot-d1-claude-opus-5-5-evidence-first10.jsonl": {
+      "status": "exempt_only",
+      "n_fields": 10,
+      "reasons": [
+        "when the run happened"
+      ]
+    },
+    "runs/framework/ablation-graph-claude-sonnet-5.jsonl": {
+      "status": "exempt_only",
+      "n_fields": 450,
+      "reasons": [
+        "measured wall-clock time",
+        "when the run happened"
+      ]
+    },
+    "runs/main/ablation-d1-claude-sonnet-5-no-evidence.jsonl": {
+      "status": "exempt_only",
+      "n_fields": 150,
+      "reasons": [
+        "when the run happened"
+      ]
+    },
+    "runs/main/all-d1-claude-sonnet-5-evidence.jsonl": {
+      "status": "exempt_only",
+      "n_fields": 500,
+      "reasons": [
+        "when the run happened"
+      ]
+    },
+    "runs/own/own-d1-claude-sonnet-5-no-evidence.jsonl": {
+      "status": "exempt_only",
+      "n_fields": 60,
+      "reasons": [
+        "when the run happened"
+      ]
+    },
+    "runs/pilot/pilot-d1-claude-haiku-4-5-evidence-first3.jsonl": {
+      "status": "exempt_only",
+      "n_fields": 3,
+      "reasons": [
+        "when the run happened"
+      ]
+    },
+    "runs/pilot/pilot-d1-claude-sonnet-5-evidence.jsonl": {
+      "status": "exempt_only",
+      "n_fields": 30,
+      "reasons": [
+        "when the run happened"
+      ]
+    },
+    "runs/pilot/pilot-d2-claude-haiku-4-5-evidence-first2.jsonl": {
+      "status": "exempt_only",
+      "n_fields": 4,
+      "reasons": [
+        "measured wall-clock time",
+        "when the run happened"
+      ]
+    },
+    "runs/pilot/pilot-d2-claude-sonnet-5-evidence-first5.jsonl": {
+      "status": "exempt_only",
+      "n_fields": 7,
+      "reasons": [
+        "measured wall-clock time",
+        "when the run happened"
+      ]
+    },
+    "runs/pilot/pilot-d3-claude-haiku-4-5-evidence-first3.jsonl": {
+      "status": "exempt_only",
+      "n_fields": 6,
+      "reasons": [
+        "measured wall-clock time",
+        "when the run happened"
+      ]
+    },
+    "runs/pilot/pilot-d3-claude-sonnet-5-evidence.jsonl": {
+      "status": "exempt_only",
+      "n_fields": 59,
+      "reasons": [
+        "measured wall-clock time",
+        "when the run happened"
+      ]
+    },
+    "runs/pilot/pilot-d4-claude-sonnet-5-evidence-first5.jsonl": {
+      "status": "exempt_only",
+      "n_fields": 10,
+      "reasons": [
+        "measured wall-clock time",
+        "when the run happened"
+      ]
+    },
+    "runs/pilot/pilot-d5-claude-sonnet-5-evidence-first5.jsonl": {
+      "status": "exempt_only",
+      "n_fields": 10,
+      "reasons": [
+        "measured wall-clock time",
+        "when the run happened"
+      ]
+    },
+    "runs/router/held_out-d1-claude-opus-5-5-evidence.jsonl": {
+      "status": "exempt_only",
+      "n_fields": 320,
+      "reasons": [
+        "when the run happened"
+      ]
+    }
+  },
+  "baseline_sha256_of_file_list": "320bfc9a5a9abea527f222c743b0fe234f00834bd6ec393a5543bb9f9f49d980"
+}

@@ -1,0 +1,9 @@
+subscription_id = "00000000-0000-0000-0000-000000000000"
+alert_email     = "you@example.com"
+# budget_start  = "2026-11-01T00:00:00Z"   # the first day of the month you deploy in
+
+# A private image in an Azure Container Registry (Basic tier), instead of the public GHCR one:
+# image             = "<registry>.azurecr.io/api:main"
+# registry_server   = "<registry>.azurecr.io"
+# registry_username = "<registry>"
+# registry_password = "<admin password>"

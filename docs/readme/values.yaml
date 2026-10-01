@@ -382,6 +382,60 @@ values:
   smoke_spent: {file: metrics/live_smoke.json, path: phase_spent_usd, fmt: usd4}
   smoke_upper: {file: metrics/live_smoke.json, path: counted_upper_usd, fmt: usd4}
 
+  # operating it: tracing, the registry, the promotion rule, the gate, the canary, drift,
+  # alerts, the load test and the static demo
+  mlflow_runs_logged: {file: metrics/mlflow_runs.json, path: runs_logged, fmt: int}
+  promo_questions: {file: registry/promotions.jsonl, path: -1/questions, fmt: int}
+  promo_routed: {file: registry/promotions.jsonl, path: -1/routed_to_larger_model, fmt: int}
+  promo_ex_diff: {file: registry/promotions.jsonl, path: -1/challenger_minus_champion/execution_accuracy/estimate, fmt: pp1}
+  promo_ex_diff_ci: {file: registry/promotions.jsonl, path: -1/challenger_minus_champion/execution_accuracy, fmt: ppiv1}
+  promo_aurc_diff: {file: registry/promotions.jsonl, path: -1/challenger_minus_champion/aurc/estimate, fmt: sf3}
+  promo_aurc_diff_ci: {file: registry/promotions.jsonl, path: -1/challenger_minus_champion/aurc, fmt: civ3}
+  promo_champion_ex: {file: registry/promotions.jsonl, path: -1/champion_system/execution_accuracy/estimate, fmt: pct1}
+  promo_challenger_ex: {file: registry/promotions.jsonl, path: -1/challenger_system/execution_accuracy/estimate, fmt: pct1}
+  promo_champion_ece: {file: registry/promotions.jsonl, path: -1/champion_system/ece/estimate, fmt: f3}
+  promo_challenger_ece: {file: registry/promotions.jsonl, path: -1/challenger_system/ece/estimate, fmt: f3}
+  promo_champion_cost: {file: registry/promotions.jsonl, path: -1/champion_system/cost_per_question_usd, fmt: usd3}
+  promo_challenger_cost: {file: registry/promotions.jsonl, path: -1/challenger_system/cost_per_question_usd, fmt: usd3}
+  gate_entries: {file: metrics/eval_gate.json, path: regression/entries, fmt: int}
+  gate_unchanged: {file: metrics/eval_gate.json, path: regression/unchanged, fmt: int}
+  canary_calls: {file: metrics/canary_history.json, path: runs/-1/summary/calls, fmt: int}
+  canary_valid: {file: metrics/canary_history.json, path: runs/-1/summary/valid_answers, fmt: pct0}
+  canary_sql_same: {file: metrics/canary_history.json, path: runs/-1/summary/sql_unchanged_rate, fmt: pct0}
+  canary_rows_same: {file: metrics/canary_history.json, path: runs/-1/summary/rows_match_recorded_rate, fmt: pct0}
+  canary_conf_shift: {file: metrics/canary_history.json, path: runs/-1/summary/mean_confidence_shift, fmt: sf3}
+  canary_spent: {file: metrics/canary_history.json, path: runs/-1/spent_usd, fmt: usd2}
+  canary_cap: {file: metrics/canary_history.json, path: runs/-1/cap_usd, fmt: usd2}
+  canary_central: {file: metrics/phase9_dry_run.json, path: central_usd, fmt: usd2}
+  canary_upper: {file: metrics/phase9_dry_run.json, path: upper_usd, fmt: usd2}
+  canary_ceiling: {file: metrics/phase9_dry_run.json, path: ceiling_usd, fmt: usd2}
+  drift_window: {file: metrics/drift_check.json, path: settings/window, fmt: int}
+  drift_min_window: {file: metrics/drift_check.json, path: settings/min_window, fmt: int}
+  drift_warn: {file: metrics/drift_check.json, path: settings/warn, fmt: f2}
+  drift_alert: {file: metrics/drift_check.json, path: settings/alert, fmt: f2}
+  drift_draws: {file: metrics/drift_check.json, path: settings/draws_per_scenario, fmt: int}
+  drift_ref_psi: {file: metrics/drift_check.json, path: "systems/d1-sonnet-5-opus-router/scenarios/held_out (the reference's own population)/psi/mean", fmt: f3}
+  drift_ref_warn: {file: metrics/drift_check.json, path: "systems/d1-sonnet-5-opus-router/scenarios/held_out (the reference's own population)/share_of_windows_above_warn", fmt: pct1}
+  drift_ref_alert: {file: metrics/drift_check.json, path: "systems/d1-sonnet-5-opus-router/scenarios/held_out (the reference's own population)/share_of_windows_above_alert", fmt: pct1}
+  drift_hard_psi: {file: metrics/drift_check.json, path: "systems/d1-sonnet-5-opus-router/scenarios/held_out, challenging questions only/psi/mean", fmt: f2}
+  drift_hard_alert: {file: metrics/drift_check.json, path: "systems/d1-sonnet-5-opus-router/scenarios/held_out, challenging questions only/share_of_windows_above_alert", fmt: pct0}
+  drift_bank_psi: {file: metrics/drift_check.json, path: "systems/d1-sonnet-5/scenarios/banking questions (another domain)/psi/mean", fmt: f2}
+  drift_low_psi: {file: metrics/drift_check.json, path: "systems/d1-sonnet-5/scenarios/synthetic: every stated confidence lowered by 0.25/psi/mean", fmt: f1}
+  alert_answers_before: {file: metrics/alert_check.json, path: before_the_window_is_full/answers, fmt: int}
+  alert_answers: {file: metrics/alert_check.json, path: after_shifted_traffic/answers, fmt: int}
+  alert_psi: {file: metrics/alert_check.json, path: after_shifted_traffic/psi, fmt: f1}
+  load_errors: {file: metrics/load_test.json, path: errors_total, fmt: int}
+  load_requests: {file: metrics/load_test.json, path: requests_per_row, fmt: int}
+  load_memory: {file: metrics/load_test.json, path: container_memory_after, fmt: str}
+  static_runs: {file: metrics/static_site.json, path: runs, fmt: int}
+  static_files: {file: metrics/static_site.json, path: files, fmt: int}
+  phase9_usd: {file: metrics/api_spend.json, path: by_phase/phase9/usd, fmt: usd2}
+
+  repro_files: {file: metrics/reproduction_check.json, path: files_compared, fmt: int}
+  repro_identical: {file: metrics/reproduction_check.json, path: counts/identical, fmt: int}
+  repro_exempt: {file: metrics/reproduction_check.json, path: counts/exempt_only, fmt: int}
+  repro_known: {file: metrics/reproduction_check.json, path: counts/known_nondeterministic, fmt: int}
+
 # Decimals and percentages the templates may contain outside a placeholder: version numbers,
 # never results.
 allowed_literals:

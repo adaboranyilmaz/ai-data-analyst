@@ -1,0 +1,179 @@
+{
+  "note": "the real drift monitor over windows drawn at random with replacement from recorded answers (1,000 windows per scenario, fixed seed); PSI against the held-out table of each system's own meter; one run of recorded answers, so a rate is the share of windows",
+  "settings": {
+    "window": 200,
+    "min_window": 50,
+    "smoothing": 0.5,
+    "warn": 0.1,
+    "alert": 0.25,
+    "draws_per_scenario": 1000,
+    "seed": 20261001
+  },
+  "champion": "d1-sonnet-5-opus-router",
+  "systems": {
+    "d1-sonnet-5": {
+      "decline_threshold": 0.7959,
+      "scenarios": {
+        "held_out (the reference's own population)": {
+          "kind": "reference",
+          "questions": 320,
+          "psi": {
+            "mean": 0.0385,
+            "p5": 0.0131,
+            "p95": 0.0744
+          },
+          "share_of_windows_above_warn": 0.005,
+          "share_of_windows_above_alert": 0.0,
+          "withheld_share_psi_mean": 0.0066,
+          "share_below_threshold": 0.9281,
+          "reference_share_below_threshold": 0.9176
+        },
+        "held_out, simple questions only": {
+          "kind": "subset of the held-out questions",
+          "questions": 97,
+          "psi": {
+            "mean": 0.2415,
+            "p5": 0.1437,
+            "p95": 0.361
+          },
+          "share_of_windows_above_warn": 0.998,
+          "share_of_windows_above_alert": 0.411,
+          "withheld_share_psi_mean": 0.0321,
+          "share_below_threshold": 0.866,
+          "reference_share_below_threshold": 0.9176
+        },
+        "held_out, moderate questions only": {
+          "kind": "subset of the held-out questions",
+          "questions": 157,
+          "psi": {
+            "mean": 0.0927,
+            "p5": 0.0385,
+            "p95": 0.1637
+          },
+          "share_of_windows_above_warn": 0.369,
+          "share_of_windows_above_alert": 0.0,
+          "withheld_share_psi_mean": 0.0211,
+          "share_below_threshold": 0.949,
+          "reference_share_below_threshold": 0.9176
+        },
+        "held_out, challenging questions only": {
+          "kind": "subset of the held-out questions",
+          "questions": 66,
+          "psi": {
+            "mean": 0.3224,
+            "p5": 0.2109,
+            "p95": 0.4575
+          },
+          "share_of_windows_above_warn": 1.0,
+          "share_of_windows_above_alert": 0.844,
+          "withheld_share_psi_mean": 0.0627,
+          "share_below_threshold": 0.9697,
+          "reference_share_below_threshold": 0.9176
+        },
+        "banking questions (another domain)": {
+          "kind": "another domain",
+          "questions": 60,
+          "psi": {
+            "mean": 1.0317,
+            "p5": 0.8027,
+            "p95": 1.2954
+          },
+          "share_of_windows_above_warn": 1.0,
+          "share_of_windows_above_alert": 1.0,
+          "withheld_share_psi_mean": 0.0507,
+          "share_below_threshold": 0.85,
+          "reference_share_below_threshold": 0.9176
+        },
+        "synthetic: every stated confidence lowered by 0.25": {
+          "kind": "synthetic",
+          "questions": 320,
+          "psi": {
+            "mean": 5.2246,
+            "p5": 4.939,
+            "p95": 5.4682
+          },
+          "share_of_windows_above_warn": 1.0,
+          "share_of_windows_above_alert": 1.0,
+          "withheld_share_psi_mean": 0.2922,
+          "share_below_threshold": 1.0,
+          "reference_share_below_threshold": 0.9176
+        },
+        "synthetic: every stated confidence raised by 0.25": {
+          "kind": "synthetic",
+          "questions": 320,
+          "psi": {
+            "mean": 3.8874,
+            "p5": 3.4604,
+            "p95": 4.3684
+          },
+          "share_of_windows_above_warn": 1.0,
+          "share_of_windows_above_alert": 1.0,
+          "withheld_share_psi_mean": 3.0656,
+          "share_below_threshold": 0.1594,
+          "reference_share_below_threshold": 0.9176
+        }
+      }
+    },
+    "d1-sonnet-5-opus-router": {
+      "decline_threshold": 0.8267,
+      "scenarios": {
+        "held_out (the reference's own population)": {
+          "kind": "reference",
+          "questions": 320,
+          "psi": {
+            "mean": 0.0385,
+            "p5": 0.0136,
+            "p95": 0.0735
+          },
+          "share_of_windows_above_warn": 0.006,
+          "share_of_windows_above_alert": 0.0,
+          "withheld_share_psi_mean": 0.0897,
+          "share_below_threshold": 0.7188,
+          "reference_share_below_threshold": 0.5795
+        },
+        "held_out, simple questions only": {
+          "kind": "subset of the held-out questions",
+          "questions": 97,
+          "psi": {
+            "mean": 0.2163,
+            "p5": 0.1282,
+            "p95": 0.3251
+          },
+          "share_of_windows_above_warn": 0.99,
+          "share_of_windows_above_alert": 0.268,
+          "withheld_share_psi_mean": 0.0052,
+          "share_below_threshold": 0.5876,
+          "reference_share_below_threshold": 0.5795
+        },
+        "held_out, moderate questions only": {
+          "kind": "subset of the held-out questions",
+          "questions": 157,
+          "psi": {
+            "mean": 0.0619,
+            "p5": 0.0215,
+            "p95": 0.1206
+          },
+          "share_of_windows_above_warn": 0.11,
+          "share_of_windows_above_alert": 0.0,
+          "withheld_share_psi_mean": 0.128,
+          "share_below_threshold": 0.7452,
+          "reference_share_below_threshold": 0.5795
+        },
+        "held_out, challenging questions only": {
+          "kind": "subset of the held-out questions",
+          "questions": 66,
+          "psi": {
+            "mean": 0.2741,
+            "p5": 0.1895,
+            "p95": 0.3691
+          },
+          "share_of_windows_above_warn": 1.0,
+          "share_of_windows_above_alert": 0.636,
+          "withheld_share_psi_mean": 0.3839,
+          "share_below_threshold": 0.8485,
+          "reference_share_below_threshold": 0.5795
+        }
+      }
+    }
+  }
+}

@@ -28,7 +28,9 @@ from src.llm.backends import Backend, make_backend
 from src.llm.cache import ResponseCache
 from src.llm.ledger import ModelPrice, SpendLedger
 from src.serving import evidence
+from src.serving.champion import Champion
 from src.serving.connections import ConnectionToolbox, Validated
+from src.serving.larger import AutoToolRun, agent_config_with
 from src.serving.live_guardrail import LiveGuardrail
 from src.serving.meter import ROOT, Meter
 from src.serving.replay import done_event
@@ -62,8 +64,11 @@ class LiveRunner:
         ledger: SpendLedger | None = None,
         toolbox: Callable[[str], Toolbox] = Toolbox,
         guardrail: LiveGuardrail | None = None,
+        champion: Champion | None = None,
     ):
         self.guardrail = guardrail
+        self.champion = champion
+        self.router = champion.router if champion is not None else None
         self.cfg = cfg
         self.live = cfg["live"]
         self.meter = meter
@@ -73,10 +78,12 @@ class LiveRunner:
         self.agent_cfg = agent_config()
 
     @classmethod
-    def default(cls, cfg: dict[str, Any], meter: Meter) -> LiveRunner:
+    def default(
+        cls, cfg: dict[str, Any], meter: Meter, champion: Champion | None = None
+    ) -> LiveRunner:
         """The service's runner: the statistical guardrail on, unless the operator turned it off
         (ANALYST_GUARDRAIL=0, as the container does: its sandbox needs Docker)."""
-        runner = cls(cfg, meter)
+        runner = cls(cfg, meter, champion=champion)
         if cfg["live"]["guardrail"] and os.environ.get("ANALYST_GUARDRAIL") != "0":
             runner.guardrail = LiveGuardrail(cfg["live"], runner._ledger())
         return runner
@@ -136,6 +143,56 @@ class LiveRunner:
             }
         return None
 
+    def _drive(self, run: QuestionRun, caller: Caller, first_step: str) -> Iterator[dict[str, Any]]:
+        """A run's model calls, one at a time: a step before the first call and one per step line
+        after each."""
+        seen: dict[int, int] = {}
+        first: str | None = first_step
+        while not run.done:
+            for conv, request in run.pending():
+                if first is not None:
+                    yield {"type": "step", "kind": "model", "text": first, "recorded_ms": None}
+                    first = None
+                started = time.perf_counter()
+                response = caller.one(request)
+                run.feed(conv, request.cache_key, response)
+                took = round((time.perf_counter() - started) * 1000)
+                for line in conv.step_lines[seen.get(id(conv), 0) :]:
+                    kind = "submit" if line.startswith(evidence.SUBMIT_PREFIXES) else "tool"
+                    yield {"type": "step", "kind": kind, "text": line, "recorded_ms": took}
+                seen[id(conv)] = len(conv.step_lines)
+
+    def _routing(self, fin) -> dict[str, Any] | None:
+        """Whether the first model's answer goes to the larger model: its calibrated confidence
+        is under the threshold chosen for routing (a declined answer has confidence 0)."""
+        if self.router is None or self.champion is None:
+            return None
+        threshold = self.champion.config["calibration"]["decline_threshold"]
+        declined = bool(fin.answer.declined)
+        calibrated = 0.0 if declined else self.meter.calibrate(fin.confidence)
+        if calibrated < threshold:
+            model = self.router["model"]
+            return {
+                "calibrated": round(calibrated, 4),
+                "threshold": round(threshold, 4),
+                "text": f"Confidence {calibrated:.0%} is under {threshold:.0%}: asking {model}.",
+            }
+        return None
+
+    def _larger_run(self, q: Question, box: Toolbox, ledger: SpendLedger, cache_dir: Path):
+        cfg = agent_config_with(self.router["model"], self.router["request_settings"])
+        return AutoToolRun(
+            q,
+            self.live["design"],
+            self.router["model"],
+            self.live["evidence"],
+            box,
+            ledger.cost,
+            None,
+            cfg,
+            ClockStore(cache_dir),
+        )
+
     def run(
         self,
         run_id: str,
@@ -169,6 +226,8 @@ class LiveRunner:
             "kind": "live",
         }
         box = None
+        streamed: list[dict[str, Any]] = []
+        routing = None
         try:
             box = self.toolbox_factory(db) if connection is None else ConnectionToolbox(connection)
             run = QuestionRun(
@@ -182,27 +241,26 @@ class LiveRunner:
                 self.agent_cfg,
                 ClockStore(cache_dir) if connection is None else None,
             )
-            seen: dict[int, int] = {}
-            first_call = True
-            while not run.done:
-                for conv, request in run.pending():
-                    if first_call:
-                        yield {
-                            "type": "step",
-                            "kind": "model",
-                            "text": evidence.model_step_text(db),
-                            "recorded_ms": None,
-                        }
-                        first_call = False
-                    started = time.perf_counter()
-                    response = caller.one(request)
-                    run.feed(conv, request.cache_key, response)
-                    took = round((time.perf_counter() - started) * 1000)
-                    for line in conv.step_lines[seen.get(id(conv), 0) :]:
-                        kind = "submit" if line.startswith(evidence.SUBMIT_PREFIXES) else "tool"
-                        yield {"type": "step", "kind": kind, "text": line, "recorded_ms": took}
-                    seen[id(conv)] = len(conv.step_lines)
+            for event in self._drive(run, caller, evidence.model_step_text(db)):
+                streamed.append(event)
+                yield event
             fin = run.finish()
+            final, routing = fin, self._routing(fin) if connection is None else None
+            if routing is not None:
+                note = {
+                    "type": "step",
+                    "kind": "model",
+                    "text": routing["text"],
+                    "recorded_ms": None,
+                }
+                streamed.append(note)
+                yield note
+                second = self._larger_run(q, box, ledger, cache_dir)
+                again = evidence.model_step_text(db).replace("Read", "Read again", 1)
+                for event in self._drive(second, caller, again):
+                    streamed.append(event)
+                    yield event
+                final = second.finish()
         except Exception as e:  # the model or the database failed: the run ends, the page says so
             yield {"type": "error", "kind": type(e).__name__, "message": str(e)[:300]}
             return
@@ -215,16 +273,25 @@ class LiveRunner:
             "difficulty": None,
             "correct": None,
             "score_outcome": None,
-            "cost_usd": fin.cost_usd,
+            "cost_usd": fin.cost_usd + (final.cost_usd if final is not fin else 0.0),
         }
         ev = evidence.from_run(
             run_id=run_id,
             kind="live",
             record=record,
-            trace=fin.trace,
+            trace=final.trace,
             meter=self.meter if connection is None else None,
             source_run="live",
+            larger=final is not fin,
         )
+        if final is not fin:  # both models' steps, in the order they happened
+            ev["steps"] = streamed
+            ev["routed"] = {
+                "from": self.live["model"],
+                "to": self.router["model"],
+                "calibrated_confidence": routing["calibrated"],
+                "threshold": routing["threshold"],
+            }
         if self.guardrail is not None and connection is None:
             self.guardrail.backend = self.guardrail.backend or self._backend()
             extra: list[dict[str, Any]] = []

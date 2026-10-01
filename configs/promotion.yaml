@@ -1,0 +1,22 @@
+# When a challenger agent configuration may replace the champion (src/eval/promotion.py,
+# scripts/87_promotion.py). Fixed before the challenger's AURC was computed; the sha256 of this
+# file is recorded with every decision, and a decision made under another version of it does
+# not count.
+#
+# Both configurations are scored on the same held-out questions, with the confidence each one
+# reports, calibrated on the calibration split only. Intervals are 95% paired bootstrap over the
+# questions (configs/eval.yaml). A challenger is promoted only if every condition holds.
+split: held_out
+
+conditions:
+  # Execution accuracy, challenger minus champion: the interval's lower bound is not below this
+  # (the challenger is not worse, within the interval).
+  ex_difference_lower_bound_at_least: 0.0
+  # AURC (lower is better), challenger minus champion: the interval's upper bound is not above
+  # this (the challenger's ranking of its answers is not worse, within the interval).
+  aurc_difference_upper_bound_at_most: 0.0
+  # The most one question can cost the challenger, at the direct price: it must fit the service's
+  # per-question reserve (worst_case_question_usd in configs/serving.yaml).
+  max_question_cost_usd_at_most: 0.20
+
+# Cost per question and per correct answer are reported with every decision but do not decide it.

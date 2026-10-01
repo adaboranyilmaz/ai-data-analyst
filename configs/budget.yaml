@@ -25,6 +25,10 @@ phase_caps_usd:
   # the product: tests use a scripted model; this covers one live smoke test of the finished
   # service, counted first with the token-counting endpoint.
   phase8: 0.50
+  # release engineering: the canary's live runs (configs/canary.yaml), counted first
+  # (results/metrics/phase9_dry_run.json: 23 calls, central $0.41, upper $0.87). The first run's
+  # cap was $0.75 (it spent $0.35); raised to the phase's ceiling of $1.50 for a second run.
+  phase9: 1.50
 batch_discount: 0.5 # Message Batches: half of every token price
 
 # USD per million tokens, Anthropic first-party list prices from

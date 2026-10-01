@@ -42,6 +42,15 @@ jobs:
         env:
           ANALYST_REQUIRE_DB: "1"
         run: uv run pytest -q -rs
+      - name: Evaluation gate (recorded model calls replayed, the registry checked)
+        run: |
+          uv run python scripts/86_registry.py check
+          uv run python scripts/89_eval_gate.py
+      - name: Alert rules (promtool unit tests) and the compose file
+        run: |
+          docker run --rm --entrypoint promtool -v "$PWD/monitoring:/m:ro" prom/prometheus:latest@sha256:efd719c99d83b060d9daefdcf00360461adf279f45ef5391f8d111892118753e check rules /m/alerts.yml
+          docker run --rm --entrypoint promtool -v "$PWD/monitoring:/m:ro" prom/prometheus:latest@sha256:efd719c99d83b060d9daefdcf00360461adf279f45ef5391f8d111892118753e test rules /m/tests/alerts_test.yml
+          docker compose --profile tracing --profile monitoring config --quiet
       - name: DVC status
         run: uv run dvc status
       - name: README and report match the results files
@@ -116,11 +125,26 @@ jobs:
       - name: Browser tests
         working-directory: ui
         run: npx playwright test
+      - name: The static demo, served from a path with no API behind it
+        run: |
+          (cd ui && npm run build:static)
+          uv run python scripts/95_static_site.py
+          (cd ui && npm run e2e:static)
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: playwright-traces
           path: ui/test-results
+
+  # The cloud deployment's Terraform is formatted and valid (no cloud call: no credentials, no state).
+  infra:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Format and validate
+        run: |
+          docker run --rm --entrypoint sh -v "$PWD/infra:/w" -w /w hashicorp/terraform:1.9@sha256:18f9986038bbaf02cf49db9c09261c778161c51dcc7fb7e355ae8938459428cd             -c "terraform fmt -check -diff && terraform init -backend=false -input=false && terraform validate"
 
   # The service image builds, starts, and serves a recorded run.
   image:

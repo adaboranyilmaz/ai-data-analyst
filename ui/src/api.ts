@@ -65,12 +65,65 @@ export class AskError extends Error {
   }
 }
 
+/** The static demo (built with --mode static) reads the recorded runs from plain files next to
+ *  the page instead of calling the service; it can answer only the recorded questions. */
+export const STATIC = import.meta.env.MODE === "static";
+const DATA = "data/";
+
+async function dataFile<T>(path: string, missing: string): Promise<T> {
+  const res = await fetch(DATA + path);
+  if (!res.ok) throw new AskError(missing, res.status);
+  return res.json();
+}
+
+const normalize = (q: string) => q.toLowerCase().split(/\s+/).filter(Boolean).join(" ");
+
+const sleep = (ms: number, signal?: AbortSignal) =>
+  new Promise<void>((resolve, reject) => {
+    if (signal?.aborted) return reject(new DOMException("aborted", "AbortError"));
+    const t = setTimeout(resolve, ms);
+    signal?.addEventListener("abort", () => {
+      clearTimeout(t);
+      reject(new DOMException("aborted", "AbortError"));
+    });
+  });
+
+/** What the service does in replay mode, from files: the recorded run for a run id or for a
+ *  question word for word, each event after the wait it was recorded with. */
+async function askStatic(
+  body: { question?: string; run_id?: string },
+  onEvent: (e: StreamEvent) => void,
+  signal?: AbortSignal,
+): Promise<void> {
+  let id = body.run_id;
+  if (!id && body.question) {
+    const meta = await getMeta();
+    const want = normalize(body.question);
+    id = meta.suggested.find((r) => normalize(r.question) === want)?.id;
+  }
+  if (!id) {
+    throw new AskError(
+      "This demo serves recorded runs only. Live questions work when the service runs locally with an API key.",
+      404,
+    );
+  }
+  const stream = await dataFile<{ wait_ms: number; event: StreamEvent }[]>(
+    `streams/${encodeURIComponent(id)}.json`,
+    "No such run.",
+  );
+  for (const { wait_ms, event } of stream) {
+    if (wait_ms) await sleep(wait_ms, signal);
+    onEvent(event);
+  }
+}
+
 /** Ask a question (or replay a recorded run by id) and call `onEvent` as the run streams. */
 export async function ask(
   body: { question?: string; run_id?: string },
   onEvent: (e: StreamEvent) => void,
   signal?: AbortSignal,
 ): Promise<void> {
+  if (STATIC) return askStatic(body, onEvent, signal);
   const res = await fetch("/ask", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -98,6 +151,7 @@ export async function ask(
 }
 
 export async function getMeta(): Promise<Meta> {
+  if (STATIC) return dataFile<Meta>("meta.json", "meta: not found");
   const res = await fetch("/api/meta");
   if (!res.ok) throw new Error(`meta: ${res.status}`);
   return res.json();
@@ -105,9 +159,14 @@ export async function getMeta(): Promise<Meta> {
 
 /** A stored run's evidence record, rebuilt into the page's view of a run. */
 export async function getRun(id: string): Promise<RunView> {
-  const res = await fetch(`/runs/${encodeURIComponent(id)}`);
-  if (!res.ok) throw new AskError("No such run.", res.status);
-  const ev = await res.json();
+  let ev: any;
+  if (STATIC) {
+    ev = await dataFile<any>(`runs/${encodeURIComponent(id)}.json`, "No such run.");
+  } else {
+    const res = await fetch(`/runs/${encodeURIComponent(id)}`);
+    if (!res.ok) throw new AskError("No such run.", res.status);
+    ev = await res.json();
+  }
   let run = emptyRun(ev.question);
   const events: StreamEvent[] = [
     { type: "start", id: ev.id, mode: "replay", question: ev.question, hint: ev.hint, db_id: ev.db_id, kind: ev.kind },

@@ -1,0 +1,78 @@
+# Alert rules for the analyst service. Each one names what it watches and why a person should look.
+# Tested with promtool against synthetic series: monitoring/tests/alerts_test.yml.
+groups:
+  - name: analyst-service
+    rules:
+      - alert: AnalystDown
+        expr: up{job="analyst-api"} == 0
+        for: 1m
+        labels: { severity: critical }
+        annotations:
+          summary: The analyst service is not answering its metrics scrape.
+
+      - alert: HighErrorRate
+        expr: >
+          sum(rate(analyst_http_requests_total{status=~"5.."}[5m]))
+          / sum(rate(analyst_http_requests_total[5m])) > 0.05
+        for: 5m
+        labels: { severity: warning }
+        annotations:
+          summary: More than 5% of requests failed with a server error over the last 5 minutes.
+
+      - alert: SlowRuns
+        expr: >
+          histogram_quantile(0.95, sum by (le, mode) (rate(analyst_run_seconds_bucket[10m]))) > 60
+        for: 10m
+        labels: { severity: warning }
+        annotations:
+          summary: The slowest 5% of runs take more than a minute ({{ $labels.mode }} mode).
+
+      - alert: QueryFailures
+        expr: >
+          sum(increase(analyst_sql_results_total{outcome!~"ok|refused"}[15m]))
+          / sum(increase(analyst_sql_results_total[15m])) > 0.2
+          and sum(increase(analyst_sql_results_total[15m])) >= 10
+        for: 5m
+        labels: { severity: warning }
+        annotations:
+          summary: Over 20% of final queries failed (not blocked, failed) in the last 15 minutes.
+
+      - alert: BlockedQueries
+        expr: sum(increase(analyst_sql_results_total{outcome="refused"}[15m])) > 5
+        labels: { severity: warning }
+        annotations:
+          summary: The query guard blocked more than 5 queries in 15 minutes; look at what is being asked.
+
+      - alert: SpendRateHigh
+        expr: increase(analyst_live_spend_usd_total[1h]) > 0.5
+        labels: { severity: warning }
+        annotations:
+          summary: Live model spend over the last hour is above half the deployment's cap.
+
+  - name: analyst-quality
+    rules:
+      - alert: ConfidenceDrift
+        expr: analyst_confidence_psi > 0.25
+        for: 1m
+        labels: { severity: critical }
+        annotations:
+          summary: >-
+            The distribution of calibrated confidence has moved far from the held-out one
+            (population stability index {{ $value | printf "%.2f" }}, above 0.25): the confidence
+            meter's record no longer describes these answers.
+
+      - alert: ConfidenceDriftModerate
+        expr: analyst_confidence_psi > 0.10 and analyst_confidence_psi <= 0.25
+        for: 10m
+        labels: { severity: info }
+        annotations:
+          summary: The distribution of calibrated confidence has shifted moderately (index above 0.10).
+
+      - alert: WithheldShareDrift
+        expr: analyst_withheld_share_psi > 0.25
+        for: 1m
+        labels: { severity: critical }
+        annotations:
+          summary: >-
+            The share of answers withheld or declined has moved far from the held-out share
+            (index {{ $value | printf "%.2f" }}).

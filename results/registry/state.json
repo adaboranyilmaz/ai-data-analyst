@@ -1,0 +1,137 @@
+{
+ "aliases": {
+  "champion": "d1-sonnet-5-opus-router"
+ },
+ "initial_champion": "d1-sonnet-5",
+ "model_name": "analyst-agent",
+ "versions": {
+  "d1-sonnet-5": {
+   "config": {
+    "calibration": {
+     "calibrator": {
+      "intercept": -4.822647983631446,
+      "method": "platt",
+      "slope": 6.721392377321241
+     },
+     "decline_threshold": 0.7959275365580794,
+     "fitted_on_questions": 150,
+     "source": "results/metrics/calibration.json",
+     "target_accuracy": 0.9
+    },
+    "decline_threshold": 0.7959275365580794,
+    "description": "Single-shot SQL from the full schema on Claude Sonnet 5, its stated confidence calibrated by Platt scaling, a decline threshold and the statistical guardrail.",
+    "design": "d1",
+    "evidence": false,
+    "guardrail": true,
+    "model": "claude-sonnet-5",
+    "name": "d1-sonnet-5",
+    "prompts": {
+     "classify_v1": {
+      "file": "prompts/classify_v1.md",
+      "sha256": "e573962645a007f0f22a326654e6b4631a2c8dd8215681534da3880a6e61a610"
+     },
+     "single_shot": {
+      "file": "prompts/single_shot_v3.md",
+      "sha256": "c76d55ca986d5827eeb1dc444dc2b7431330d8651055038f80481ebf5b854a27"
+     },
+     "stat_answer_v1": {
+      "file": "prompts/stat_answer_v1.md",
+      "sha256": "9a8480ef352ef50e158beb769446aca0a8befcc8342659d3aa54131caf38390c"
+     },
+     "stat_plan_v1": {
+      "file": "prompts/stat_plan_v1.md",
+      "sha256": "541d5c518be09a837bf48809d090464583b51cb189d157f532a263a0a23a7aff"
+     }
+    },
+    "request_settings": {
+     "backend": "anthropic",
+     "max_tokens": 2048,
+     "params": {
+      "thinking": {
+       "type": "disabled"
+      }
+     },
+     "prompt_cache": true
+    },
+    "router": null,
+    "samples": 1
+   },
+   "config_sha256": "c7959efd2bd1afbf469ec7cf677dfe4e43ccec842c1c1f8b24be5870a8d82c42",
+   "evaluation": "results/registry/evaluations/d1-sonnet-5.json"
+  },
+  "d1-sonnet-5-opus-router": {
+   "config": {
+    "calibration": {
+     "calibrator": {
+      "intercept": -4.822647983631446,
+      "method": "platt",
+      "slope": 6.721392377321241
+     },
+     "decline_threshold": 0.7959275365580794,
+     "fitted_on_questions": 150,
+     "source": "results/metrics/calibration.json",
+     "target_accuracy": 0.9
+    },
+    "decline_threshold": 0.8267368308,
+    "description": "The champion's design with Claude Opus 5.5 answering the questions Claude Sonnet 5 is not confident about.",
+    "design": "d1",
+    "evidence": false,
+    "guardrail": true,
+    "model": "claude-sonnet-5",
+    "name": "d1-sonnet-5-opus-router",
+    "prompts": {
+     "classify_v1": {
+      "file": "prompts/classify_v1.md",
+      "sha256": "e573962645a007f0f22a326654e6b4631a2c8dd8215681534da3880a6e61a610"
+     },
+     "single_shot": {
+      "file": "prompts/single_shot_v3.md",
+      "sha256": "c76d55ca986d5827eeb1dc444dc2b7431330d8651055038f80481ebf5b854a27"
+     },
+     "stat_answer_v1": {
+      "file": "prompts/stat_answer_v1.md",
+      "sha256": "9a8480ef352ef50e158beb769446aca0a8befcc8342659d3aa54131caf38390c"
+     },
+     "stat_plan_v1": {
+      "file": "prompts/stat_plan_v1.md",
+      "sha256": "541d5c518be09a837bf48809d090464583b51cb189d157f532a263a0a23a7aff"
+     }
+    },
+    "request_settings": {
+     "backend": "anthropic",
+     "max_tokens": 2048,
+     "params": {
+      "thinking": {
+       "type": "disabled"
+      }
+     },
+     "prompt_cache": true
+    },
+    "router": {
+     "calibrator": {
+      "fitted_on": "calibration split",
+      "intercept": -4.8587397679,
+      "method": "platt",
+      "questions": 150,
+      "slope": 7.4391588043
+     },
+     "model": "claude-opus-5-5",
+     "request_settings": {
+      "backend": "anthropic",
+      "max_tokens": 8192,
+      "params": {
+       "output_config": {
+        "effort": "low"
+       }
+      },
+      "prompt_cache": true
+     },
+     "routes_below": "decline_threshold"
+    },
+    "samples": 1
+   },
+   "config_sha256": "3231af1a7a032caf04b36ae775cef6957ae2c037b585f06b7e0561c1dfbfa557",
+   "evaluation": "results/registry/evaluations/d1-sonnet-5-opus-router.json"
+  }
+ }
+}

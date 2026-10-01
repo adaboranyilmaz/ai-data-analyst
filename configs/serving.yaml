@@ -43,6 +43,18 @@ meter:
   # A band with fewer held-out answers than this is shown with a plain "too few to say" note.
   min_band_n: 20
 
+# Whether what the service shows still looks like what it was evaluated on (src/serving/drift.py):
+# the population stability index of the last `window` calibrated confidences, and of the share
+# withheld or declined, against the held-out table. Thresholds follow the usual reading (below 0.10
+# no shift, to 0.25 moderate, above it major) and were fixed before the monitor was tested; the
+# monitor says nothing until it has `min_window` answers.
+drift:
+  window: 200
+  min_window: 50
+  smoothing: 0.5
+  warn: 0.10
+  alert: 0.25
+
 # The curated replay set. The rule was fixed before any run was looked at; the seed picks
 # among the runs that fit a slot, so no run was chosen by what it says. Wrong answers and
 # declined or withheld ones are included on purpose.

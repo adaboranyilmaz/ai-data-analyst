@@ -6,8 +6,10 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
+    "build:static": "tsc --noEmit && vite build --mode static --outDir dist-static",
     "test": "vitest run",
-    "e2e": "playwright test"
+    "e2e": "playwright test",
+    "e2e:static": "playwright test -c playwright.static.config.ts"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",

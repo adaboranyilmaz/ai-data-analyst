@@ -1,0 +1,22 @@
+{
+  "note": "replayed recorded runs stand in for traffic; this checks the pipeline from the service's metric through Prometheus's rule to a firing alert",
+  "alert": "ConfidenceDrift",
+  "shifted_traffic": {
+    "run_id": "bench-782",
+    "calibrated_confidence": 0.8267
+  },
+  "before_the_window_is_full": {
+    "answers": 20,
+    "ready": false,
+    "psi": null,
+    "alert_state": null
+  },
+  "after_shifted_traffic": {
+    "answers": 140,
+    "ready": true,
+    "psi": 6.2624,
+    "reading": "major shift"
+  },
+  "prometheus_alert_fired": true,
+  "alert_cleared_after_restart": true
+}
