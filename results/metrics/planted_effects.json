@@ -1,0 +1,3272 @@
+{
+  "close_reading": {
+    "status": "checked",
+    "reviewed_on": "2026-10-01",
+    "level2_causal_wording": "checked"
+  },
+  "copies": {
+    "level1": 200,
+    "level2": 13
+  },
+  "power": {
+    "small": 0.5,
+    "large": 0.9
+  },
+  "level1": {
+    "cells": [
+      {
+        "template": "A1",
+        "family": "rates",
+        "condition": "large",
+        "plan": "analyst",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 187,
+          "n": 200,
+          "rate": 0.935,
+          "ci": [
+            0.892,
+            0.9616
+          ]
+        },
+        "planted_direction": {
+          "k": 187,
+          "n": 200,
+          "rate": 0.935,
+          "ci": [
+            0.892,
+            0.9616
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": 0.9,
+        "planted_effect": 0.11311331929870123
+      },
+      {
+        "template": "A1",
+        "family": "rates",
+        "condition": "large",
+        "plan": "reference",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 192,
+          "n": 200,
+          "rate": 0.96,
+          "ci": [
+            0.9231,
+            0.9796
+          ]
+        },
+        "planted_direction": {
+          "k": 192,
+          "n": 200,
+          "rate": 0.96,
+          "ci": [
+            0.9231,
+            0.9796
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": 0.9,
+        "planted_effect": 0.11311331929870123
+      },
+      {
+        "template": "A1",
+        "family": "rates",
+        "condition": "none",
+        "plan": "analyst",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 6,
+          "n": 200,
+          "rate": 0.03,
+          "ci": [
+            0.0138,
+            0.0639
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": null,
+        "planted_effect": 0.0
+      },
+      {
+        "template": "A1",
+        "family": "rates",
+        "condition": "none",
+        "plan": "reference",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 6,
+          "n": 200,
+          "rate": 0.03,
+          "ci": [
+            0.0138,
+            0.0639
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": null,
+        "planted_effect": 0.0
+      },
+      {
+        "template": "A1",
+        "family": "rates",
+        "condition": "small",
+        "plan": "analyst",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 82,
+          "n": 200,
+          "rate": 0.41,
+          "ci": [
+            0.3442,
+            0.4792
+          ]
+        },
+        "planted_direction": {
+          "k": 82,
+          "n": 200,
+          "rate": 0.41,
+          "ci": [
+            0.3442,
+            0.4792
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": 0.5,
+        "planted_effect": 0.06324751359317307
+      },
+      {
+        "template": "A1",
+        "family": "rates",
+        "condition": "small",
+        "plan": "reference",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 105,
+          "n": 200,
+          "rate": 0.525,
+          "ci": [
+            0.456,
+            0.5931
+          ]
+        },
+        "planted_direction": {
+          "k": 105,
+          "n": 200,
+          "rate": 0.525,
+          "ci": [
+            0.456,
+            0.5931
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": 0.5,
+        "planted_effect": 0.06324751359317307
+      },
+      {
+        "template": "A2",
+        "family": "rates",
+        "condition": "large",
+        "plan": "analyst",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 149,
+          "n": 200,
+          "rate": 0.745,
+          "ci": [
+            0.6804,
+            0.8004
+          ]
+        },
+        "planted_direction": {
+          "k": 149,
+          "n": 200,
+          "rate": 0.745,
+          "ci": [
+            0.6804,
+            0.8004
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": 0.9,
+        "planted_effect": 0.16329123564768172
+      },
+      {
+        "template": "A2",
+        "family": "rates",
+        "condition": "large",
+        "plan": "reference",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 196,
+          "n": 200,
+          "rate": 0.98,
+          "ci": [
+            0.9497,
+            0.9922
+          ]
+        },
+        "planted_direction": {
+          "k": 196,
+          "n": 200,
+          "rate": 0.98,
+          "ci": [
+            0.9497,
+            0.9922
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": 0.9,
+        "planted_effect": 0.16329123564768172
+      },
+      {
+        "template": "A2",
+        "family": "rates",
+        "condition": "none",
+        "plan": "analyst",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 11,
+          "n": 200,
+          "rate": 0.055,
+          "ci": [
+            0.031,
+            0.0958
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": null,
+        "planted_effect": 0.0
+      },
+      {
+        "template": "A2",
+        "family": "rates",
+        "condition": "none",
+        "plan": "reference",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 8,
+          "n": 200,
+          "rate": 0.04,
+          "ci": [
+            0.0204,
+            0.0769
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": null,
+        "planted_effect": 0.0
+      },
+      {
+        "template": "A2",
+        "family": "rates",
+        "condition": "small",
+        "plan": "analyst",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 59,
+          "n": 200,
+          "rate": 0.295,
+          "ci": [
+            0.2361,
+            0.3616
+          ]
+        },
+        "planted_direction": {
+          "k": 59,
+          "n": 200,
+          "rate": 0.295,
+          "ci": [
+            0.2361,
+            0.3616
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": 0.5,
+        "planted_effect": 0.08928643144350513
+      },
+      {
+        "template": "A2",
+        "family": "rates",
+        "condition": "small",
+        "plan": "reference",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 127,
+          "n": 200,
+          "rate": 0.635,
+          "ci": [
+            0.5663,
+            0.6986
+          ]
+        },
+        "planted_direction": {
+          "k": 127,
+          "n": 200,
+          "rate": 0.635,
+          "ci": [
+            0.5663,
+            0.6986
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": 0.5,
+        "planted_effect": 0.08928643144350513
+      },
+      {
+        "template": "B1",
+        "family": "means",
+        "condition": "large",
+        "plan": "analyst",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 194,
+          "n": 200,
+          "rate": 0.97,
+          "ci": [
+            0.9361,
+            0.9862
+          ]
+        },
+        "planted_direction": {
+          "k": 194,
+          "n": 200,
+          "rate": 0.97,
+          "ci": [
+            0.9361,
+            0.9862
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": 0.9,
+        "planted_effect": 28150.410375955944
+      },
+      {
+        "template": "B1",
+        "family": "means",
+        "condition": "large",
+        "plan": "reference",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 193,
+          "n": 200,
+          "rate": 0.965,
+          "ci": [
+            0.9295,
+            0.9829
+          ]
+        },
+        "planted_direction": {
+          "k": 193,
+          "n": 200,
+          "rate": 0.965,
+          "ci": [
+            0.9295,
+            0.9829
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": 0.9,
+        "planted_effect": 28150.410375955944
+      },
+      {
+        "template": "B1",
+        "family": "means",
+        "condition": "none",
+        "plan": "analyst",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 2,
+          "n": 200,
+          "rate": 0.01,
+          "ci": [
+            0.0027,
+            0.0357
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": null,
+        "planted_effect": 0.0
+      },
+      {
+        "template": "B1",
+        "family": "means",
+        "condition": "none",
+        "plan": "reference",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 2,
+          "n": 200,
+          "rate": 0.01,
+          "ci": [
+            0.0027,
+            0.0357
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": null,
+        "planted_effect": 0.0
+      },
+      {
+        "template": "B1",
+        "family": "means",
+        "condition": "small",
+        "plan": "analyst",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 102,
+          "n": 200,
+          "rate": 0.51,
+          "ci": [
+            0.4412,
+            0.5784
+          ]
+        },
+        "planted_direction": {
+          "k": 102,
+          "n": 200,
+          "rate": 0.51,
+          "ci": [
+            0.4412,
+            0.5784
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": 0.5,
+        "planted_effect": 17020.02434470219
+      },
+      {
+        "template": "B1",
+        "family": "means",
+        "condition": "small",
+        "plan": "reference",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 105,
+          "n": 200,
+          "rate": 0.525,
+          "ci": [
+            0.456,
+            0.5931
+          ]
+        },
+        "planted_direction": {
+          "k": 105,
+          "n": 200,
+          "rate": 0.525,
+          "ci": [
+            0.456,
+            0.5931
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": 0.5,
+        "planted_effect": 17020.02434470219
+      },
+      {
+        "template": "B2",
+        "family": "means",
+        "condition": "large",
+        "plan": "analyst",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 197,
+          "n": 200,
+          "rate": 0.985,
+          "ci": [
+            0.9568,
+            0.9949
+          ]
+        },
+        "planted_direction": {
+          "k": 197,
+          "n": 200,
+          "rate": 0.985,
+          "ci": [
+            0.9568,
+            0.9949
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": 0.9,
+        "planted_effect": 32530.30570248854
+      },
+      {
+        "template": "B2",
+        "family": "means",
+        "condition": "large",
+        "plan": "reference",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 184,
+          "n": 200,
+          "rate": 0.92,
+          "ci": [
+            0.874,
+            0.9502
+          ]
+        },
+        "planted_direction": {
+          "k": 184,
+          "n": 200,
+          "rate": 0.92,
+          "ci": [
+            0.874,
+            0.9502
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": 0.9,
+        "planted_effect": 32530.30570248854
+      },
+      {
+        "template": "B2",
+        "family": "means",
+        "condition": "none",
+        "plan": "analyst",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 12,
+          "n": 200,
+          "rate": 0.06,
+          "ci": [
+            0.0347,
+            0.1019
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": null,
+        "planted_effect": 0.0
+      },
+      {
+        "template": "B2",
+        "family": "means",
+        "condition": "none",
+        "plan": "reference",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 7,
+          "n": 200,
+          "rate": 0.035,
+          "ci": [
+            0.0171,
+            0.0705
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": null,
+        "planted_effect": 0.0
+      },
+      {
+        "template": "B2",
+        "family": "means",
+        "condition": "small",
+        "plan": "analyst",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 132,
+          "n": 200,
+          "rate": 0.66,
+          "ci": [
+            0.5919,
+            0.7221
+          ]
+        },
+        "planted_direction": {
+          "k": 132,
+          "n": 200,
+          "rate": 0.66,
+          "ci": [
+            0.5919,
+            0.7221
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": 0.5,
+        "planted_effect": 19668.153593592426
+      },
+      {
+        "template": "B2",
+        "family": "means",
+        "condition": "small",
+        "plan": "reference",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 68,
+          "n": 200,
+          "rate": 0.34,
+          "ci": [
+            0.2779,
+            0.4081
+          ]
+        },
+        "planted_direction": {
+          "k": 68,
+          "n": 200,
+          "rate": 0.34,
+          "ci": [
+            0.2779,
+            0.4081
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": 0.5,
+        "planted_effect": 19668.153593592426
+      },
+      {
+        "template": "C1",
+        "family": "trend",
+        "condition": "large",
+        "plan": "analyst",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 188,
+          "n": 200,
+          "rate": 0.94,
+          "ci": [
+            0.8981,
+            0.9653
+          ]
+        },
+        "planted_direction": {
+          "k": 188,
+          "n": 200,
+          "rate": 0.94,
+          "ci": [
+            0.8981,
+            0.9653
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": 0.9,
+        "planted_effect": 0.02665431431586587
+      },
+      {
+        "template": "C1",
+        "family": "trend",
+        "condition": "large",
+        "plan": "reference",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 187,
+          "n": 200,
+          "rate": 0.935,
+          "ci": [
+            0.892,
+            0.9616
+          ]
+        },
+        "planted_direction": {
+          "k": 187,
+          "n": 200,
+          "rate": 0.935,
+          "ci": [
+            0.892,
+            0.9616
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": 0.9,
+        "planted_effect": 0.02665431431586587
+      },
+      {
+        "template": "C1",
+        "family": "trend",
+        "condition": "none",
+        "plan": "analyst",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 11,
+          "n": 200,
+          "rate": 0.055,
+          "ci": [
+            0.031,
+            0.0958
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": null,
+        "planted_effect": 0.0
+      },
+      {
+        "template": "C1",
+        "family": "trend",
+        "condition": "none",
+        "plan": "reference",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 11,
+          "n": 200,
+          "rate": 0.055,
+          "ci": [
+            0.031,
+            0.0958
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": null,
+        "planted_effect": 0.0
+      },
+      {
+        "template": "C1",
+        "family": "trend",
+        "condition": "small",
+        "plan": "analyst",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 106,
+          "n": 200,
+          "rate": 0.53,
+          "ci": [
+            0.4609,
+            0.598
+          ]
+        },
+        "planted_direction": {
+          "k": 106,
+          "n": 200,
+          "rate": 0.53,
+          "ci": [
+            0.4609,
+            0.598
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": 0.5,
+        "planted_effect": 0.016115469454571874
+      },
+      {
+        "template": "C1",
+        "family": "trend",
+        "condition": "small",
+        "plan": "reference",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 106,
+          "n": 200,
+          "rate": 0.53,
+          "ci": [
+            0.4609,
+            0.598
+          ]
+        },
+        "planted_direction": {
+          "k": 106,
+          "n": 200,
+          "rate": 0.53,
+          "ci": [
+            0.4609,
+            0.598
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": 0.5,
+        "planted_effect": 0.016115469454571874
+      },
+      {
+        "template": "C2",
+        "family": "trend",
+        "condition": "large",
+        "plan": "analyst",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 181,
+          "n": 200,
+          "rate": 0.905,
+          "ci": [
+            0.8564,
+            0.9383
+          ]
+        },
+        "planted_direction": {
+          "k": 181,
+          "n": 200,
+          "rate": 0.905,
+          "ci": [
+            0.8564,
+            0.9383
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": 0.9,
+        "planted_effect": 0.0030612620800971953
+      },
+      {
+        "template": "C2",
+        "family": "trend",
+        "condition": "large",
+        "plan": "reference",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 184,
+          "n": 200,
+          "rate": 0.92,
+          "ci": [
+            0.874,
+            0.9502
+          ]
+        },
+        "planted_direction": {
+          "k": 184,
+          "n": 200,
+          "rate": 0.92,
+          "ci": [
+            0.874,
+            0.9502
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": 0.9,
+        "planted_effect": 0.0030612620800971953
+      },
+      {
+        "template": "C2",
+        "family": "trend",
+        "condition": "none",
+        "plan": "analyst",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 15,
+          "n": 200,
+          "rate": 0.075,
+          "ci": [
+            0.046,
+            0.12
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": null,
+        "planted_effect": 0.0
+      },
+      {
+        "template": "C2",
+        "family": "trend",
+        "condition": "none",
+        "plan": "reference",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 14,
+          "n": 200,
+          "rate": 0.07,
+          "ci": [
+            0.0422,
+            0.1141
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": null,
+        "planted_effect": 0.0
+      },
+      {
+        "template": "C2",
+        "family": "trend",
+        "condition": "small",
+        "plan": "analyst",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 96,
+          "n": 200,
+          "rate": 0.48,
+          "ci": [
+            0.4118,
+            0.549
+          ]
+        },
+        "planted_direction": {
+          "k": 96,
+          "n": 200,
+          "rate": 0.48,
+          "ci": [
+            0.4118,
+            0.549
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": 0.5,
+        "planted_effect": 0.0018508701803249855
+      },
+      {
+        "template": "C2",
+        "family": "trend",
+        "condition": "small",
+        "plan": "reference",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 102,
+          "n": 200,
+          "rate": 0.51,
+          "ci": [
+            0.4412,
+            0.5784
+          ]
+        },
+        "planted_direction": {
+          "k": 102,
+          "n": 200,
+          "rate": 0.51,
+          "ci": [
+            0.4412,
+            0.5784
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": 0.5,
+        "planted_effect": 0.0018508701803249855
+      },
+      {
+        "template": "D1",
+        "family": "confounded",
+        "condition": "confounded",
+        "plan": "analyst",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 198,
+          "n": 200,
+          "rate": 0.99,
+          "ci": [
+            0.9643,
+            0.9973
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": null,
+        "planted_effect": null
+      },
+      {
+        "template": "D1",
+        "family": "confounded",
+        "condition": "confounded",
+        "plan": "crude",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 200,
+          "n": 200,
+          "rate": 1.0,
+          "ci": [
+            0.9812,
+            1.0
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": null,
+        "planted_effect": null
+      },
+      {
+        "template": "D1",
+        "family": "confounded",
+        "condition": "confounded",
+        "plan": "reference",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 13,
+          "n": 200,
+          "rate": 0.065,
+          "ci": [
+            0.0384,
+            0.108
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": null,
+        "planted_effect": null
+      },
+      {
+        "template": "D1",
+        "family": "confounded",
+        "condition": "none",
+        "plan": "analyst",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 4,
+          "n": 200,
+          "rate": 0.02,
+          "ci": [
+            0.0078,
+            0.0503
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": null,
+        "planted_effect": null
+      },
+      {
+        "template": "D1",
+        "family": "confounded",
+        "condition": "none",
+        "plan": "crude",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 4,
+          "n": 200,
+          "rate": 0.02,
+          "ci": [
+            0.0078,
+            0.0503
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": null,
+        "planted_effect": null
+      },
+      {
+        "template": "D1",
+        "family": "confounded",
+        "condition": "none",
+        "plan": "reference",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 7,
+          "n": 200,
+          "rate": 0.035,
+          "ci": [
+            0.0171,
+            0.0705
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": null,
+        "planted_effect": null
+      },
+      {
+        "template": "D1",
+        "family": "confounded",
+        "condition": "reversed",
+        "plan": "analyst",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 82,
+          "n": 200,
+          "rate": 0.41,
+          "ci": [
+            0.3442,
+            0.4792
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "opposite_direction": {
+          "k": 82,
+          "n": 200,
+          "rate": 0.41,
+          "ci": [
+            0.3442,
+            0.4792
+          ]
+        },
+        "theoretical_power": null,
+        "planted_effect": null
+      },
+      {
+        "template": "D1",
+        "family": "confounded",
+        "condition": "reversed",
+        "plan": "crude",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 179,
+          "n": 200,
+          "rate": 0.895,
+          "ci": [
+            0.8448,
+            0.9303
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "opposite_direction": {
+          "k": 179,
+          "n": 200,
+          "rate": 0.895,
+          "ci": [
+            0.8448,
+            0.9303
+          ]
+        },
+        "theoretical_power": null,
+        "planted_effect": null
+      },
+      {
+        "template": "D1",
+        "family": "confounded",
+        "condition": "reversed",
+        "plan": "reference",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 128,
+          "n": 200,
+          "rate": 0.64,
+          "ci": [
+            0.5714,
+            0.7033
+          ]
+        },
+        "planted_direction": {
+          "k": 128,
+          "n": 200,
+          "rate": 0.64,
+          "ci": [
+            0.5714,
+            0.7033
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": null,
+        "planted_effect": null
+      },
+      {
+        "template": "D2",
+        "family": "confounded",
+        "condition": "confounded",
+        "plan": "analyst",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 200,
+          "n": 200,
+          "rate": 1.0,
+          "ci": [
+            0.9812,
+            1.0
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": null,
+        "planted_effect": null
+      },
+      {
+        "template": "D2",
+        "family": "confounded",
+        "condition": "confounded",
+        "plan": "crude",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 200,
+          "n": 200,
+          "rate": 1.0,
+          "ci": [
+            0.9812,
+            1.0
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": null,
+        "planted_effect": null
+      },
+      {
+        "template": "D2",
+        "family": "confounded",
+        "condition": "confounded",
+        "plan": "reference",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 9,
+          "n": 200,
+          "rate": 0.045,
+          "ci": [
+            0.0239,
+            0.0833
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": null,
+        "planted_effect": null
+      },
+      {
+        "template": "D2",
+        "family": "confounded",
+        "condition": "none",
+        "plan": "analyst",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 7,
+          "n": 200,
+          "rate": 0.035,
+          "ci": [
+            0.0171,
+            0.0705
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": null,
+        "planted_effect": null
+      },
+      {
+        "template": "D2",
+        "family": "confounded",
+        "condition": "none",
+        "plan": "crude",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 8,
+          "n": 200,
+          "rate": 0.04,
+          "ci": [
+            0.0204,
+            0.0769
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": null,
+        "planted_effect": null
+      },
+      {
+        "template": "D2",
+        "family": "confounded",
+        "condition": "none",
+        "plan": "reference",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 6,
+          "n": 200,
+          "rate": 0.03,
+          "ci": [
+            0.0138,
+            0.0639
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": null,
+        "planted_effect": null
+      },
+      {
+        "template": "D2",
+        "family": "confounded",
+        "condition": "reversed",
+        "plan": "analyst",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 160,
+          "n": 200,
+          "rate": 0.8,
+          "ci": [
+            0.7391,
+            0.8495
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "opposite_direction": {
+          "k": 160,
+          "n": 200,
+          "rate": 0.8,
+          "ci": [
+            0.7391,
+            0.8495
+          ]
+        },
+        "theoretical_power": null,
+        "planted_effect": null
+      },
+      {
+        "template": "D2",
+        "family": "confounded",
+        "condition": "reversed",
+        "plan": "crude",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 161,
+          "n": 200,
+          "rate": 0.805,
+          "ci": [
+            0.7446,
+            0.8539
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "opposite_direction": {
+          "k": 161,
+          "n": 200,
+          "rate": 0.805,
+          "ci": [
+            0.7446,
+            0.8539
+          ]
+        },
+        "theoretical_power": null,
+        "planted_effect": null
+      },
+      {
+        "template": "D2",
+        "family": "confounded",
+        "condition": "reversed",
+        "plan": "reference",
+        "copies": 200,
+        "failed": 0,
+        "detected": {
+          "k": 136,
+          "n": 200,
+          "rate": 0.68,
+          "ci": [
+            0.6125,
+            0.7407
+          ]
+        },
+        "planted_direction": {
+          "k": 136,
+          "n": 200,
+          "rate": 0.68,
+          "ci": [
+            0.6125,
+            0.7407
+          ]
+        },
+        "opposite_direction": {
+          "k": 0,
+          "n": 200,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0188
+          ]
+        },
+        "theoretical_power": null,
+        "planted_effect": null
+      }
+    ],
+    "pooled": [
+      {
+        "family": "confounded",
+        "condition": "confounded",
+        "plan": "analyst",
+        "detected": {
+          "k": 398,
+          "n": 400,
+          "rate": 0.995,
+          "ci": [
+            0.982,
+            0.9986
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 400,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0095
+          ]
+        }
+      },
+      {
+        "family": "confounded",
+        "condition": "confounded",
+        "plan": "crude",
+        "detected": {
+          "k": 400,
+          "n": 400,
+          "rate": 1.0,
+          "ci": [
+            0.9905,
+            1.0
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 400,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0095
+          ]
+        }
+      },
+      {
+        "family": "confounded",
+        "condition": "confounded",
+        "plan": "reference",
+        "detected": {
+          "k": 22,
+          "n": 400,
+          "rate": 0.055,
+          "ci": [
+            0.0366,
+            0.0819
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 400,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0095
+          ]
+        }
+      },
+      {
+        "family": "confounded",
+        "condition": "none",
+        "plan": "analyst",
+        "detected": {
+          "k": 11,
+          "n": 400,
+          "rate": 0.0275,
+          "ci": [
+            0.0154,
+            0.0486
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 400,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0095
+          ]
+        }
+      },
+      {
+        "family": "confounded",
+        "condition": "none",
+        "plan": "crude",
+        "detected": {
+          "k": 12,
+          "n": 400,
+          "rate": 0.03,
+          "ci": [
+            0.0172,
+            0.0517
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 400,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0095
+          ]
+        }
+      },
+      {
+        "family": "confounded",
+        "condition": "none",
+        "plan": "reference",
+        "detected": {
+          "k": 13,
+          "n": 400,
+          "rate": 0.0325,
+          "ci": [
+            0.0191,
+            0.0548
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 400,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0095
+          ]
+        }
+      },
+      {
+        "family": "confounded",
+        "condition": "reversed",
+        "plan": "analyst",
+        "detected": {
+          "k": 242,
+          "n": 400,
+          "rate": 0.605,
+          "ci": [
+            0.5563,
+            0.6517
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 400,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0095
+          ]
+        }
+      },
+      {
+        "family": "confounded",
+        "condition": "reversed",
+        "plan": "crude",
+        "detected": {
+          "k": 340,
+          "n": 400,
+          "rate": 0.85,
+          "ci": [
+            0.8117,
+            0.8817
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 400,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0095
+          ]
+        }
+      },
+      {
+        "family": "confounded",
+        "condition": "reversed",
+        "plan": "reference",
+        "detected": {
+          "k": 264,
+          "n": 400,
+          "rate": 0.66,
+          "ci": [
+            0.6123,
+            0.7047
+          ]
+        },
+        "planted_direction": {
+          "k": 264,
+          "n": 400,
+          "rate": 0.66,
+          "ci": [
+            0.6123,
+            0.7047
+          ]
+        }
+      },
+      {
+        "family": "means",
+        "condition": "large",
+        "plan": "analyst",
+        "detected": {
+          "k": 391,
+          "n": 400,
+          "rate": 0.9775,
+          "ci": [
+            0.9578,
+            0.9881
+          ]
+        },
+        "planted_direction": {
+          "k": 391,
+          "n": 400,
+          "rate": 0.9775,
+          "ci": [
+            0.9578,
+            0.9881
+          ]
+        }
+      },
+      {
+        "family": "means",
+        "condition": "large",
+        "plan": "reference",
+        "detected": {
+          "k": 377,
+          "n": 400,
+          "rate": 0.9425,
+          "ci": [
+            0.9152,
+            0.9614
+          ]
+        },
+        "planted_direction": {
+          "k": 377,
+          "n": 400,
+          "rate": 0.9425,
+          "ci": [
+            0.9152,
+            0.9614
+          ]
+        }
+      },
+      {
+        "family": "means",
+        "condition": "none",
+        "plan": "analyst",
+        "detected": {
+          "k": 14,
+          "n": 400,
+          "rate": 0.035,
+          "ci": [
+            0.021,
+            0.0579
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 400,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0095
+          ]
+        }
+      },
+      {
+        "family": "means",
+        "condition": "none",
+        "plan": "reference",
+        "detected": {
+          "k": 9,
+          "n": 400,
+          "rate": 0.0225,
+          "ci": [
+            0.0119,
+            0.0422
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 400,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0095
+          ]
+        }
+      },
+      {
+        "family": "means",
+        "condition": "small",
+        "plan": "analyst",
+        "detected": {
+          "k": 234,
+          "n": 400,
+          "rate": 0.585,
+          "ci": [
+            0.5361,
+            0.6323
+          ]
+        },
+        "planted_direction": {
+          "k": 234,
+          "n": 400,
+          "rate": 0.585,
+          "ci": [
+            0.5361,
+            0.6323
+          ]
+        }
+      },
+      {
+        "family": "means",
+        "condition": "small",
+        "plan": "reference",
+        "detected": {
+          "k": 173,
+          "n": 400,
+          "rate": 0.4325,
+          "ci": [
+            0.3848,
+            0.4815
+          ]
+        },
+        "planted_direction": {
+          "k": 173,
+          "n": 400,
+          "rate": 0.4325,
+          "ci": [
+            0.3848,
+            0.4815
+          ]
+        }
+      },
+      {
+        "family": "rates",
+        "condition": "large",
+        "plan": "analyst",
+        "detected": {
+          "k": 336,
+          "n": 400,
+          "rate": 0.84,
+          "ci": [
+            0.8009,
+            0.8727
+          ]
+        },
+        "planted_direction": {
+          "k": 336,
+          "n": 400,
+          "rate": 0.84,
+          "ci": [
+            0.8009,
+            0.8727
+          ]
+        }
+      },
+      {
+        "family": "rates",
+        "condition": "large",
+        "plan": "reference",
+        "detected": {
+          "k": 388,
+          "n": 400,
+          "rate": 0.97,
+          "ci": [
+            0.9483,
+            0.9828
+          ]
+        },
+        "planted_direction": {
+          "k": 388,
+          "n": 400,
+          "rate": 0.97,
+          "ci": [
+            0.9483,
+            0.9828
+          ]
+        }
+      },
+      {
+        "family": "rates",
+        "condition": "none",
+        "plan": "analyst",
+        "detected": {
+          "k": 17,
+          "n": 400,
+          "rate": 0.0425,
+          "ci": [
+            0.0267,
+            0.067
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 400,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0095
+          ]
+        }
+      },
+      {
+        "family": "rates",
+        "condition": "none",
+        "plan": "reference",
+        "detected": {
+          "k": 14,
+          "n": 400,
+          "rate": 0.035,
+          "ci": [
+            0.021,
+            0.0579
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 400,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0095
+          ]
+        }
+      },
+      {
+        "family": "rates",
+        "condition": "small",
+        "plan": "analyst",
+        "detected": {
+          "k": 141,
+          "n": 400,
+          "rate": 0.3525,
+          "ci": [
+            0.3073,
+            0.4005
+          ]
+        },
+        "planted_direction": {
+          "k": 141,
+          "n": 400,
+          "rate": 0.3525,
+          "ci": [
+            0.3073,
+            0.4005
+          ]
+        }
+      },
+      {
+        "family": "rates",
+        "condition": "small",
+        "plan": "reference",
+        "detected": {
+          "k": 232,
+          "n": 400,
+          "rate": 0.58,
+          "ci": [
+            0.5311,
+            0.6274
+          ]
+        },
+        "planted_direction": {
+          "k": 232,
+          "n": 400,
+          "rate": 0.58,
+          "ci": [
+            0.5311,
+            0.6274
+          ]
+        }
+      },
+      {
+        "family": "trend",
+        "condition": "large",
+        "plan": "analyst",
+        "detected": {
+          "k": 369,
+          "n": 400,
+          "rate": 0.9225,
+          "ci": [
+            0.8921,
+            0.9449
+          ]
+        },
+        "planted_direction": {
+          "k": 369,
+          "n": 400,
+          "rate": 0.9225,
+          "ci": [
+            0.8921,
+            0.9449
+          ]
+        }
+      },
+      {
+        "family": "trend",
+        "condition": "large",
+        "plan": "reference",
+        "detected": {
+          "k": 371,
+          "n": 400,
+          "rate": 0.9275,
+          "ci": [
+            0.8978,
+            0.949
+          ]
+        },
+        "planted_direction": {
+          "k": 371,
+          "n": 400,
+          "rate": 0.9275,
+          "ci": [
+            0.8978,
+            0.949
+          ]
+        }
+      },
+      {
+        "family": "trend",
+        "condition": "none",
+        "plan": "analyst",
+        "detected": {
+          "k": 26,
+          "n": 400,
+          "rate": 0.065,
+          "ci": [
+            0.0447,
+            0.0935
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 400,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0095
+          ]
+        }
+      },
+      {
+        "family": "trend",
+        "condition": "none",
+        "plan": "reference",
+        "detected": {
+          "k": 25,
+          "n": 400,
+          "rate": 0.0625,
+          "ci": [
+            0.0427,
+            0.0906
+          ]
+        },
+        "planted_direction": {
+          "k": 0,
+          "n": 400,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0095
+          ]
+        }
+      },
+      {
+        "family": "trend",
+        "condition": "small",
+        "plan": "analyst",
+        "detected": {
+          "k": 202,
+          "n": 400,
+          "rate": 0.505,
+          "ci": [
+            0.4562,
+            0.5537
+          ]
+        },
+        "planted_direction": {
+          "k": 202,
+          "n": 400,
+          "rate": 0.505,
+          "ci": [
+            0.4562,
+            0.5537
+          ]
+        }
+      },
+      {
+        "family": "trend",
+        "condition": "small",
+        "plan": "reference",
+        "detected": {
+          "k": 208,
+          "n": 400,
+          "rate": 0.52,
+          "ci": [
+            0.4711,
+            0.5685
+          ]
+        },
+        "planted_direction": {
+          "k": 208,
+          "n": 400,
+          "rate": 0.52,
+          "ci": [
+            0.4711,
+            0.5685
+          ]
+        }
+      }
+    ],
+    "power_checks": {
+      "reference_vs_power": [
+        {
+          "template": "A1",
+          "condition": "small",
+          "reference": 0.525,
+          "power": 0.5,
+          "gap": 0.025,
+          "within": true
+        },
+        {
+          "template": "A1",
+          "condition": "large",
+          "reference": 0.96,
+          "power": 0.9,
+          "gap": 0.06,
+          "within": true
+        },
+        {
+          "template": "A2",
+          "condition": "small",
+          "reference": 0.635,
+          "power": 0.5,
+          "gap": 0.135,
+          "within": false
+        },
+        {
+          "template": "A2",
+          "condition": "large",
+          "reference": 0.98,
+          "power": 0.9,
+          "gap": 0.08,
+          "within": true
+        },
+        {
+          "template": "B1",
+          "condition": "small",
+          "reference": 0.525,
+          "power": 0.5,
+          "gap": 0.025,
+          "within": true
+        },
+        {
+          "template": "B1",
+          "condition": "large",
+          "reference": 0.965,
+          "power": 0.9,
+          "gap": 0.065,
+          "within": true
+        },
+        {
+          "template": "B2",
+          "condition": "small",
+          "reference": 0.34,
+          "power": 0.5,
+          "gap": -0.16,
+          "within": false
+        },
+        {
+          "template": "B2",
+          "condition": "large",
+          "reference": 0.92,
+          "power": 0.9,
+          "gap": 0.02,
+          "within": true
+        },
+        {
+          "template": "C1",
+          "condition": "small",
+          "reference": 0.53,
+          "power": 0.5,
+          "gap": 0.03,
+          "within": true
+        },
+        {
+          "template": "C1",
+          "condition": "large",
+          "reference": 0.935,
+          "power": 0.9,
+          "gap": 0.035,
+          "within": true
+        },
+        {
+          "template": "C2",
+          "condition": "small",
+          "reference": 0.51,
+          "power": 0.5,
+          "gap": 0.01,
+          "within": true
+        },
+        {
+          "template": "C2",
+          "condition": "large",
+          "reference": 0.92,
+          "power": 0.9,
+          "gap": 0.02,
+          "within": true
+        }
+      ],
+      "analyst_vs_reference": [
+        {
+          "template": "A1",
+          "condition": "small",
+          "analyst": 0.41,
+          "reference": 0.525,
+          "gap": -0.115,
+          "within": false
+        },
+        {
+          "template": "A1",
+          "condition": "large",
+          "analyst": 0.935,
+          "reference": 0.96,
+          "gap": -0.025,
+          "within": true
+        },
+        {
+          "template": "A2",
+          "condition": "small",
+          "analyst": 0.295,
+          "reference": 0.635,
+          "gap": -0.34,
+          "within": false
+        },
+        {
+          "template": "A2",
+          "condition": "large",
+          "analyst": 0.745,
+          "reference": 0.98,
+          "gap": -0.235,
+          "within": false
+        },
+        {
+          "template": "B1",
+          "condition": "small",
+          "analyst": 0.51,
+          "reference": 0.525,
+          "gap": -0.015,
+          "within": true
+        },
+        {
+          "template": "B1",
+          "condition": "large",
+          "analyst": 0.97,
+          "reference": 0.965,
+          "gap": 0.005,
+          "within": true
+        },
+        {
+          "template": "B2",
+          "condition": "small",
+          "analyst": 0.66,
+          "reference": 0.34,
+          "gap": 0.32,
+          "within": false
+        },
+        {
+          "template": "B2",
+          "condition": "large",
+          "analyst": 0.985,
+          "reference": 0.92,
+          "gap": 0.065,
+          "within": true
+        },
+        {
+          "template": "C1",
+          "condition": "small",
+          "analyst": 0.53,
+          "reference": 0.53,
+          "gap": 0.0,
+          "within": true
+        },
+        {
+          "template": "C1",
+          "condition": "large",
+          "analyst": 0.94,
+          "reference": 0.935,
+          "gap": 0.005,
+          "within": true
+        },
+        {
+          "template": "C2",
+          "condition": "small",
+          "analyst": 0.48,
+          "reference": 0.51,
+          "gap": -0.03,
+          "within": true
+        },
+        {
+          "template": "C2",
+          "condition": "large",
+          "analyst": 0.905,
+          "reference": 0.92,
+          "gap": -0.015,
+          "within": true
+        }
+      ]
+    },
+    "headline": {
+      "false_alarms_none": {
+        "reference": {
+          "k": 48,
+          "n": 1200,
+          "rate": 0.04,
+          "ci": [
+            0.0303,
+            0.0526
+          ]
+        },
+        "analyst": {
+          "k": 57,
+          "n": 1200,
+          "rate": 0.0475,
+          "ci": [
+            0.0368,
+            0.061
+          ]
+        }
+      },
+      "confounded_detected": {
+        "reference": {
+          "k": 22,
+          "n": 400,
+          "rate": 0.055,
+          "ci": [
+            0.0366,
+            0.0819
+          ]
+        },
+        "crude": {
+          "k": 400,
+          "n": 400,
+          "rate": 1.0,
+          "ci": [
+            0.9905,
+            1.0
+          ]
+        },
+        "analyst": {
+          "k": 398,
+          "n": 400,
+          "rate": 0.995,
+          "ci": [
+            0.982,
+            0.9986
+          ]
+        }
+      },
+      "reversed_planted_direction": {
+        "reference": {
+          "k": 264,
+          "n": 400,
+          "rate": 0.66,
+          "ci": [
+            0.6123,
+            0.7047
+          ]
+        },
+        "crude": {
+          "k": 0,
+          "n": 400,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0095
+          ]
+        },
+        "analyst": {
+          "k": 0,
+          "n": 400,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0095
+          ]
+        }
+      },
+      "reversed_opposite_direction": {
+        "reference": {
+          "k": 0,
+          "n": 400,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0095
+          ]
+        },
+        "crude": {
+          "k": 340,
+          "n": 400,
+          "rate": 0.85,
+          "ci": [
+            0.8117,
+            0.8817
+          ]
+        },
+        "analyst": {
+          "k": 242,
+          "n": 400,
+          "rate": 0.605,
+          "ci": [
+            0.5563,
+            0.6517
+          ]
+        }
+      }
+    },
+    "confounder_strata": [
+      {
+        "id": "D1",
+        "stratifies": false,
+        "note": "Strata: the loan amount and the district's average salary; the confounder is a loan of 48 months or longer. The amount is related to the duration but does not carry it: the analyst's plan reports an effect on 99% of the confounded copies, against 6.5% for the reference plan."
+      },
+      {
+        "id": "D2",
+        "stratifies": false,
+        "note": "Strata: the district's average salary and the loan year; the confounder is the loan amount."
+      }
+    ]
+  },
+  "level2": {
+    "arms": {
+      "guarded": {
+        "answers": 312,
+        "failed": [
+          {
+            "template": "A1",
+            "condition": "large",
+            "copy": 9,
+            "errors": [
+              {
+                "kind": "max_tokens",
+                "message": "the reply was cut off at max_tokens"
+              }
+            ]
+          }
+        ],
+        "claims_on_no_effect": {
+          "k": 32,
+          "n": 130,
+          "rate": 0.2462,
+          "ci": [
+            0.1801,
+            0.3268
+          ]
+        },
+        "claims_on_no_effect_by_condition": {
+          "none": {
+            "k": 6,
+            "n": 104,
+            "rate": 0.0577,
+            "ci": [
+              0.0267,
+              0.1202
+            ]
+          },
+          "confounded": {
+            "k": 26,
+            "n": 26,
+            "rate": 1.0,
+            "ci": [
+              0.8713,
+              1.0
+            ]
+          }
+        },
+        "planted_direction_on_effect": {
+          "k": 111,
+          "n": 181,
+          "rate": 0.6133,
+          "ci": [
+            0.5407,
+            0.6812
+          ]
+        },
+        "planted_direction_by_condition": {
+          "small": {
+            "k": 38,
+            "n": 78,
+            "rate": 0.4872,
+            "ci": [
+              0.3795,
+              0.5961
+            ]
+          },
+          "large": {
+            "k": 73,
+            "n": 77,
+            "rate": 0.9481,
+            "ci": [
+              0.8739,
+              0.9796
+            ]
+          },
+          "reversed": {
+            "k": 0,
+            "n": 26,
+            "rate": 0.0,
+            "ci": [
+              0.0,
+              0.1287
+            ]
+          }
+        },
+        "claims_unclear": {
+          "k": 0,
+          "n": 311,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0122
+          ]
+        },
+        "disagrees_with_test": {
+          "k": 0,
+          "n": 311,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0122
+          ]
+        },
+        "direction_mismatch": {
+          "k": 0,
+          "n": 311,
+          "rate": 0.0,
+          "ci": [
+            0.0,
+            0.0122
+          ]
+        },
+        "causal_wording_flagged": {
+          "k": 30,
+          "n": 311,
+          "rate": 0.0965,
+          "ci": [
+            0.0684,
+            0.1344
+          ]
+        },
+        "causal_sentences_flagged": 30,
+        "causal_claims_on_reading": 0
+      },
+      "numbers_only": {
+        "answers": 312,
+        "failed": [],
+        "claims_on_no_effect": {
+          "k": 44,
+          "n": 130,
+          "rate": 0.3385,
+          "ci": [
+            0.2628,
+            0.4234
+          ]
+        },
+        "claims_on_no_effect_by_condition": {
+          "none": {
+            "k": 18,
+            "n": 104,
+            "rate": 0.1731,
+            "ci": [
+              0.1124,
+              0.2571
+            ]
+          },
+          "confounded": {
+            "k": 26,
+            "n": 26,
+            "rate": 1.0,
+            "ci": [
+              0.8713,
+              1.0
+            ]
+          }
+        },
+        "planted_direction_on_effect": {
+          "k": 126,
+          "n": 182,
+          "rate": 0.6923,
+          "ci": [
+            0.6219,
+            0.7548
+          ]
+        },
+        "planted_direction_by_condition": {
+          "small": {
+            "k": 51,
+            "n": 78,
+            "rate": 0.6538,
+            "ci": [
+              0.5433,
+              0.7499
+            ]
+          },
+          "large": {
+            "k": 75,
+            "n": 78,
+            "rate": 0.9615,
+            "ci": [
+              0.8929,
+              0.9868
+            ]
+          },
+          "reversed": {
+            "k": 0,
+            "n": 26,
+            "rate": 0.0,
+            "ci": [
+              0.0,
+              0.1287
+            ]
+          }
+        },
+        "claims_unclear": {
+          "k": 18,
+          "n": 312,
+          "rate": 0.0577,
+          "ci": [
+            0.0368,
+            0.0893
+          ]
+        },
+        "disagrees_with_test": {
+          "k": 48,
+          "n": 312,
+          "rate": 0.1538,
+          "ci": [
+            0.118,
+            0.1981
+          ]
+        },
+        "direction_mismatch": {
+          "k": 4,
+          "n": 312,
+          "rate": 0.0128,
+          "ci": [
+            0.005,
+            0.0325
+          ]
+        },
+        "causal_wording_flagged": {
+          "k": 18,
+          "n": 312,
+          "rate": 0.0577,
+          "ci": [
+            0.0368,
+            0.0893
+          ]
+        },
+        "causal_sentences_flagged": 18,
+        "causal_claims_on_reading": 1
+      }
+    },
+    "primary": {
+      "measure": "claims of an effect on copies without one, guarded minus numbers only",
+      "copies": 130,
+      "guarded": 0.2462,
+      "numbers_only": 0.3385,
+      "difference": {
+        "estimate": -0.09230769230769231,
+        "low": -0.15384615384615383,
+        "high": -0.038461538461538436,
+        "confidence": 0.95,
+        "resamples": 10000,
+        "undefined": 0
+      }
+    },
+    "bootstrap": {
+      "resamples": 10000,
+      "seed": 20260927
+    }
+  },
+  "predictions": [
+    {
+      "id": "G6",
+      "prediction": "Reference plans: false alarms in none (the first three families, pooled)",
+      "range": "3% to 7%",
+      "observed": 0.04,
+      "held": true
+    },
+    {
+      "id": "G7",
+      "prediction": "Reference plans: detection within 8 points of the theoretical power",
+      "range": "12 of 12 cells",
+      "observed": 10,
+      "held": false
+    },
+    {
+      "id": "G8",
+      "prediction": "Analyst plans: detection within 10 points of the reference plan's",
+      "range": "at least 9 of 12 cells",
+      "observed": 8,
+      "held": false
+    },
+    {
+      "id": "G9",
+      "prediction": "The analyst's plan stratifies by the planted confounder, or a variable carrying it",
+      "range": "1 of 2 (1 to 2)",
+      "observed": 0,
+      "held": false
+    },
+    {
+      "id": "G10",
+      "prediction": "Level 2, numbers only: claims of an effect on copies without one",
+      "range": "25% to 60%",
+      "observed": 0.3385,
+      "held": true
+    },
+    {
+      "id": "G11",
+      "prediction": "Level 2, guarded: the same",
+      "range": "3% to 15%",
+      "observed": 0.2462,
+      "held": false
+    },
+    {
+      "id": "G12",
+      "prediction": "Level 2, reversed: claims in the planted direction, numbers only / guarded",
+      "range": "at most 20% / 40% to 75%",
+      "observed": [
+        0.0,
+        0.0
+      ],
+      "held": false
+    },
+    {
+      "id": "G13",
+      "prediction": "Guarded answers whose claim disagrees with the test",
+      "range": "at most 5%",
+      "observed": 0.0,
+      "held": true
+    }
+  ]
+}

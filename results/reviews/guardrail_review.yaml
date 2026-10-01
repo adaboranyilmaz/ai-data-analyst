@@ -1,0 +1,161 @@
+criteria: >-
+  The statistical guardrail's close reading. benchmark_flagged: each benchmark question the
+  classifier flagged, labeled statistical or descriptive by the definition (an honest answer needs
+  an inference about the population the data describes; a count, a lookup or arithmetic on stored
+  numbers is descriptive). banking_f: the banking set's comparative and causal questions, before
+  (the winning design's answer) and after (the guarded answer as delivered), on the three criteria,
+  and the guarded answer read against its frozen check and the gold query's result (reviewed).
+  banking_other: the other banking questions the classifier flagged, and whether what the
+  guardrail added says anything wrong or misleading. confounder_strata: whether the analyst's plan
+  for a confounded planted question stratifies by the planted confounder or a variable carrying it.
+reviewer: project author
+status: checked
+reviewed_on: '2026-10-01'
+benchmark_flagged:
+- id: bird:1486
+  label: descriptive
+  note: Counts SMEs by currency and the difference between the two counts.
+- id: bird:1526
+  label: descriptive
+  note: Arithmetic on one customer's stored consumption in two years.
+- id: bird:1149
+  label: descriptive
+  note: Counts male in- and outpatients and their difference in percent.
+- id: bird:1124
+  label: descriptive
+  note: A lookup of players by a stored attacking-style attribute.
+- id: bird:634
+  label: descriptive
+  note: Compares two users' stored post scores or views.
+- id: bird:255
+  label: descriptive
+  note: A proportion computed from stored bond and molecule labels.
+banking_f:
+- id: own-f01
+  before: { interval: false, no_causal_claim: true, caveat: true, uncertainty: false }
+  causal_claim_after: false
+  reviewed_success: false
+  note: >-
+    Numbers match the gold query (170 of 892 owners with a card have a loan against 512 of 3,608
+    without: 19.1% and 14.2%). The check's named caveat, that most card holders with a loan got
+    the card on or after the loan's date, is not addressed; the answer gives only a generic
+    caveat. Before, the answer said the two rates are about 15% either way, which is wrong.
+- id: own-f02
+  before: { interval: false, no_causal_claim: true, caveat: false, uncertainty: false }
+  causal_claim_after: false
+  reviewed_success: false
+  note: >-
+    Numbers match the gold query (41 of 348 and 35 of 334 bad loans) and the interval includes
+    zero; no causal claim. The check's warning that the counts of bad loans are small is not
+    conveyed (the fixed small-sample rule does not apply to these counts).
+- id: own-f03
+  before: { interval: false, no_causal_claim: false, caveat: true, uncertainty: false }
+  causal_claim_after: false
+  reviewed_success: false
+  note: >-
+    The plan pools the monthly and per-transaction accounts into "not weekly" (251 of 4,260),
+    while the check asks for each frequency: the per-transaction accounts have the highest rate
+    (22 of 93, 23.7%, against 37 of 240 weekly and 229 of 4,167 monthly), which the pooled
+    comparison hides. The weekly rate matches the gold query. The caveat is generic, not that
+    clients choose their statement frequency. Before, the answer said the rates are fairly
+    close, which is wrong, and that the frequency does not cause the overdrafts ("rather than
+    the statement frequency causing overdrafts"), a causal claim.
+- id: own-f04
+  before: { interval: false, no_causal_claim: true, caveat: false, uncertainty: false }
+  causal_claim_after: false
+  reviewed_success: true
+  note: >-
+    A trend of the default rate on district unemployment, +0.27 points per point of
+    unemployment, interval -0.76 to +1.29; the answer and the delivered warning both say that
+    district rates describe districts, not their clients. No causal claim.
+- id: own-f06
+  before: { interval: false, no_causal_claim: true, caveat: false, uncertainty: false }
+  causal_claim_after: false
+  reviewed_success: true
+  note: >-
+    The plan uses each account's average balance where the check uses the highest balance in
+    1998 (stated in its assumptions). Both show older owners keeping lower balances, flat to
+    about 60 and lower after it: the gold rows give a slope of -547 per year of age on the
+    highest balance, the plan -217 on the average. A trend with its interval; association only.
+    Before, the answer said the correlation is near zero, without running it.
+- id: own-f07
+  before: { interval: false, no_causal_claim: true, caveat: true, uncertainty: false }
+  causal_claim_after: false
+  reviewed_success: false
+  note: >-
+    The statistical path did not finish: the plan's query (two correlated subqueries over the
+    transactions for every card) ran past the 30-second limit and was cancelled.
+- id: own-f09
+  before: { interval: false, no_causal_claim: false, caveat: false, uncertainty: false }
+  causal_claim_after: false
+  reviewed_success: false
+  note: >-
+    The statistical path did not finish: the plan's query uses CROSS JOIN, which the query guard
+    refuses. Before, the answer explained the growth by card issuance without showing it.
+- id: own-f10
+  before: { interval: false, no_causal_claim: true, caveat: true, uncertainty: false }
+  causal_claim_after: false
+  reviewed_success: true
+  note: >-
+    Numbers match the gold query (3 of 740 pension accounts overdrawn against 285 of 3,760). The
+    answer names income as a possible explanation and says the 3 overdrawn pension accounts are
+    very few cases. No causal claim. The check names age and income; income is enough, since the
+    pension is the regular income through which age would protect older clients from overdrafts.
+- id: own-f11
+  before: { interval: false, no_causal_claim: false, caveat: false, uncertainty: false }
+  causal_claim_after: false
+  reviewed_success: true
+  note: >-
+    Numbers match the gold query (no bad loans of 145 on accounts with a second user, 76 of 537
+    without), with Newcombe's interval, which holds when a group has none. The answer rejects
+    the question's "because" and names other ways such accounts may differ; the small-sample and
+    all-or-none warnings are delivered. Before, the answer said repayment is very similar in the
+    two groups, which is wrong.
+banking_other:
+- id: own-c05
+  misleading: true
+  note: >-
+    Misleading: what the answer calls 1998 includes months of 1997. The plan fits a trend over
+    all months from 1993 to 1998, and the answer calls the last fifth of the months "just 1998".
+    It does say the growth within 1998 cannot be stated from these results. A descriptive
+    question (the reviewed answer asks whether growth means count or amount).
+- id: own-d02
+  misleading: false
+  note: Declined correctly; the data records no satisfaction.
+- id: own-e04
+  misleading: false
+  note: Declined correctly; there are no platinum cards (classic is the most common class).
+- id: own-e07
+  misleading: false
+  note: Declined correctly; accounts were opened throughout 1996.
+confounder_strata:
+- id: D1
+  stratifies: false
+  note: >-
+    Strata: the loan amount and the district's average salary; the confounder is a loan of 48
+    months or longer. The amount is related to the duration but does not carry it: the analyst's
+    plan reports an effect on 99% of the confounded copies, against 6.5% for the reference plan.
+- id: D2
+  stratifies: false
+  note: >-
+    Strata: the district's average salary and the loan year; the confounder is the loan amount.
+level2_causal_wording:
+  status: checked
+  read: >-
+    Every sentence the wording check flagged in the level-2 answers (30 guarded, 18 numbers
+    only), and every sentence it passed over for a negation that holds a causal word other than
+    "due to" chance (194).
+  causal_claims: { guarded: 0, numbers_only: 1 }
+  rule: >-
+    A claim that one thing does not affect another is a causal claim too: observational data can
+    establish neither. Saying the data do not show an effect is a statement about the evidence,
+    not a causal claim.
+  note: >-
+    One causal claim, in a numbers-only answer (A1, none, copy 2): "having a credit card does not
+    appear to make loans more or less likely to go bad". No flagged sentence claims a cause: 36
+    say a difference could be due to chance (the check reads "due to" as causal); the other 12
+    disclaim a cause in words the check does not take as a negation ("even if a difference
+    existed, it wouldn't necessarily mean gender causes ...", "the underlying cause remains
+    unclear", "rather than proof that location causes ...") or use "because" for a reason
+    ("Because the increase is consistent ..., it is a dependable pattern"). The other 193
+    sentences passed over are disclaimers ("not proof that ... causes ...").

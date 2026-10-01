@@ -41,6 +41,12 @@ bird-eval = [
 langgraph = [
     "langgraph>=1.2",
 ]
+sandbox = [
+    "numpy>=2.5",
+    "pandas>=3.0",
+    "scipy>=1.18",
+    "statsmodels>=0.14",
+]
 
 [tool.uv]
 default-groups = ["pipeline", "dev"]
@@ -58,4 +64,5 @@ pythonpath = ["."]
 markers = [
     "db: needs the compose PostgreSQL (`docker compose up -d --wait`); skipped when it is not running, unless ANALYST_REQUIRE_DB=1",
     "bird: needs the BIRD benchmark loaded and its files in data/raw; skipped without them, unless ANALYST_REQUIRE_BIRD=1",
+    "sandbox: needs Docker and the statistics sandbox's image (scripts/70_build_sandbox.py); skipped without them, unless ANALYST_REQUIRE_SANDBOX=1",
 ]

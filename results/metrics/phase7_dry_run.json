@@ -1,0 +1,142 @@
+{
+  "main": {
+    "counted_at": "2026-10-01T07:57:14+00:00",
+    "note": "prompt tokens counted with the token-counting endpoint ($0); outputs assumed; central: mean prompt, cached prefix read after the first call; upper: largest prompt, no cache hit, upper output, at the price of the run's mode",
+    "runs": {
+      "classify": {
+        "model": "claude-haiku-4-5",
+        "calls": 568,
+        "batch": true,
+        "prompt_tokens": {
+          "counted": 568,
+          "mean": 1150.3,
+          "max": 1196
+        },
+        "cached_prefix_tokens": 0,
+        "output_tokens": {
+          "central": 60,
+          "upper": 200
+        },
+        "central_usd": 0.4119,
+        "upper_usd": 0.6237
+      },
+      "plan": {
+        "model": "claude-sonnet-5",
+        "calls": 22,
+        "batch": false,
+        "prompt_tokens": {
+          "counted": 68,
+          "mean": 11602.9,
+          "max": 11636
+        },
+        "cached_prefix_tokens": 11548,
+        "output_tokens": {
+          "central": 950,
+          "upper": 2048
+        },
+        "central_usd": 0.2888,
+        "upper_usd": 2.9751,
+        "upper_calls": 68
+      },
+      "answer_planted": {
+        "model": "claude-sonnet-5",
+        "calls": 624,
+        "batch": true,
+        "prompt_tokens": {
+          "counted": 48,
+          "mean": 1261.2,
+          "max": 1550
+        },
+        "cached_prefix_tokens": 0,
+        "output_tokens": {
+          "central": 250,
+          "upper": 700
+        },
+        "central_usd": 1.567,
+        "upper_usd": 3.1512
+      },
+      "answer_own": {
+        "model": "claude-sonnet-5",
+        "calls": 44,
+        "batch": false,
+        "prompt_tokens": {
+          "counted": 48,
+          "mean": 1261.2,
+          "max": 1550
+        },
+        "cached_prefix_tokens": 0,
+        "output_tokens": {
+          "central": 250,
+          "upper": 700
+        },
+        "central_usd": 0.221,
+        "upper_usd": 1.3736,
+        "upper_calls": 136
+      }
+    },
+    "central_usd": 2.4887,
+    "upper_usd": 8.1236,
+    "upper_usd_if_all_direct": 11.8985
+  },
+  "probes": {
+    "counted_at": "2026-10-01T07:58:43+00:00",
+    "note": "prompt tokens counted with the token-counting endpoint ($0); outputs assumed; central: mean prompt, cached prefix read after the first call; upper: largest prompt, no cache hit, upper output, at the price of the run's mode",
+    "runs": {
+      "classify": {
+        "model": "claude-haiku-4-5",
+        "calls": 10,
+        "batch": true,
+        "prompt_tokens": {
+          "counted": 10,
+          "mean": 1147.1,
+          "max": 1155
+        },
+        "cached_prefix_tokens": 0,
+        "output_tokens": {
+          "central": 60,
+          "upper": 200
+        },
+        "central_usd": 0.0072,
+        "upper_usd": 0.0108
+      },
+      "plan": {
+        "model": "claude-sonnet-5",
+        "calls": 2,
+        "batch": false,
+        "prompt_tokens": {
+          "counted": 2,
+          "mean": 11600,
+          "max": 11600
+        },
+        "cached_prefix_tokens": 11560,
+        "output_tokens": {
+          "central": 950,
+          "upper": 2048
+        },
+        "central_usd": 0.0504,
+        "upper_usd": 0.0874,
+        "upper_calls": 2
+      },
+      "answer": {
+        "model": "claude-sonnet-5",
+        "calls": 4,
+        "batch": false,
+        "prompt_tokens": {
+          "counted": 48,
+          "mean": 1261.2,
+          "max": 1550
+        },
+        "cached_prefix_tokens": 0,
+        "output_tokens": {
+          "central": 250,
+          "upper": 700
+        },
+        "central_usd": 0.0201,
+        "upper_usd": 0.0404
+      }
+    },
+    "central_usd": 0.0777,
+    "upper_usd": 0.1386,
+    "upper_usd_if_all_direct": 0.1494
+  }
+}

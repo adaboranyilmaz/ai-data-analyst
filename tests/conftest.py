@@ -13,6 +13,10 @@ under data/raw. CI has neither (the data is not in git), so they skip there; loc
 ANALYST_REQUIRE_BIRD=1 turns the skip into a failure. The dictionary tests that CI does run
 check the dictionaries against the committed schema snapshots, and the `bird` tests check
 those snapshots against the loaded database.
+
+Sandbox tests (marker `sandbox`) need Docker and the statistics sandbox's image built from the
+current sources (scripts/70_build_sandbox.py). They skip without them, unless
+ANALYST_REQUIRE_SANDBOX=1 (set in CI's sandbox job, which builds the image first).
 """
 
 from __future__ import annotations
@@ -83,4 +87,22 @@ def bird_ready() -> None:
     if reason:
         if os.environ.get("ANALYST_REQUIRE_BIRD") == "1":
             pytest.fail(f"{reason}; ANALYST_REQUIRE_BIRD=1 requires it")
+        pytest.skip(reason)
+
+
+@pytest.fixture(scope="session")
+def sandbox_ready() -> None:
+    """Docker, and the sandbox image built from the current sources."""
+    from src.stats.sandbox import SandboxUnavailable, docker, image_present, image_tag
+
+    reason = None
+    try:
+        docker()
+        if not image_present():
+            reason = f"the sandbox image {image_tag()} is not built (scripts/70_build_sandbox.py)"
+    except SandboxUnavailable as e:
+        reason = str(e)
+    if reason:
+        if os.environ.get("ANALYST_REQUIRE_SANDBOX") == "1":
+            pytest.fail(f"{reason}; ANALYST_REQUIRE_SANDBOX=1 requires it")
         pytest.skip(reason)

@@ -46,3 +46,25 @@ jobs:
         run: uv run dvc status
       - name: README and report match the results files
         run: uv run python scripts/90_readme.py --check
+
+  # The statistics sandbox: its image built from the lock file's pinned packages, then the tests
+  # of its analyses and its security suite (every attack blocked, every control effective).
+  sandbox:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: ${{ env.UV_VERSION }}
+          enable-cache: true
+      - name: Install (locked)
+        run: uv sync --frozen
+      - name: The sandbox's requirements match the lock file
+        run: uv run python scripts/70_build_sandbox.py --check
+      - name: Build the sandbox image
+        run: uv run python scripts/70_build_sandbox.py
+      - name: Sandbox tests and security suite (they may not skip)
+        env:
+          ANALYST_REQUIRE_SANDBOX: "1"
+        run: uv run pytest -q -rs -m sandbox

@@ -1,0 +1,599 @@
+{
+  "note": "one run; every attack under the guardrail's container flags, with the suite's shorter time limit (the input attack on the largest allowed analysis uses the guardrail's own)",
+  "policy": {
+    "timeout_s": 30,
+    "memory_mb": 512,
+    "cpus": 1,
+    "pids": 64,
+    "scratch_mb": 64,
+    "output_mb": 8,
+    "nofile": 256,
+    "network": "none",
+    "read_only": true,
+    "user": "10001:10001",
+    "drop_capabilities": true,
+    "no_new_privileges": true,
+    "scratch_noexec": true,
+    "env": [],
+    "add_host": [],
+    "suite_timeout_s": 5
+  },
+  "environment": {
+    "docker_server": "29.7.2",
+    "docker_os": "Docker Desktop (containerized)",
+    "runtime": "runc",
+    "cgroup_version": "2",
+    "host": "Windows",
+    "image": "ai-data-analyst-sandbox:00e1825400d6",
+    "image_id": "sha256:e1002d873d7fee37bff21fdd9bbb153771e2be930e04320203ae887f20ee0e87",
+    "base_image": "python:3.12-slim@sha256:f77ac9e44ae96ef2c90b8053ea08c31f8be030f824196b0ae4db6d462c84e51f",
+    "kernel_in_container": "6.18.40.1-microsoft-standard-WSL2",
+    "python_in_container": "3.12.14",
+    "packages": {
+      "numpy": "2.5.3",
+      "pandas": "3.0.6",
+      "patsy": "1.0.3",
+      "scipy": "1.18.1",
+      "statsmodels": "0.15.0"
+    }
+  },
+  "attacks": 47,
+  "outcomes": {
+    "absent": 6,
+    "contained": 11,
+    "denied": 22,
+    "handled": 3,
+    "rejected": 5
+  },
+  "categories": {
+    "file_system": {
+      "absent": 3,
+      "contained": 1,
+      "denied": 8
+    },
+    "input": {
+      "handled": 3,
+      "rejected": 5
+    },
+    "network": {
+      "absent": 1,
+      "denied": 7
+    },
+    "privileges": {
+      "denied": 7
+    },
+    "resources": {
+      "contained": 10
+    },
+    "secrets": {
+      "absent": 2
+    }
+  },
+  "controls": {
+    "run": 11,
+    "achieved": 11
+  },
+  "every_attack_blocked": true,
+  "every_control_achieved": true,
+  "records": [
+    {
+      "id": "net-interfaces",
+      "category": "network",
+      "outcome": "denied",
+      "passed": true,
+      "detail": "interfaces: ['lo']",
+      "seconds": 0.26,
+      "exit_code": 0
+    },
+    {
+      "id": "net-dns",
+      "category": "network",
+      "outcome": "denied",
+      "passed": true,
+      "detail": "gaierror: [Errno -3] Temporary failure in name resolution",
+      "seconds": 0.31,
+      "exit_code": 0
+    },
+    {
+      "id": "net-public-address",
+      "category": "network",
+      "outcome": "denied",
+      "passed": true,
+      "detail": "OSError: [Errno 101] Network is unreachable",
+      "seconds": 0.28,
+      "exit_code": 0
+    },
+    {
+      "id": "net-host-service",
+      "category": "network",
+      "outcome": "denied",
+      "passed": true,
+      "detail": "gaierror: [Errno -3] Temporary failure in name resolution",
+      "seconds": 0.28,
+      "exit_code": 0
+    },
+    {
+      "id": "net-gateway-address",
+      "category": "network",
+      "outcome": "denied",
+      "passed": true,
+      "detail": "OSError: [Errno 101] Network is unreachable",
+      "seconds": 0.28,
+      "exit_code": 0
+    },
+    {
+      "id": "net-database",
+      "category": "network",
+      "outcome": "denied",
+      "passed": true,
+      "detail": "gaierror: [Errno -3] Temporary failure in name resolution",
+      "seconds": 0.29,
+      "exit_code": 0
+    },
+    {
+      "id": "net-raw-socket",
+      "category": "network",
+      "outcome": "denied",
+      "passed": true,
+      "detail": "PermissionError: [Errno 1] Operation not permitted",
+      "seconds": 0.32,
+      "exit_code": 0
+    },
+    {
+      "id": "net-docker-socket",
+      "category": "network",
+      "outcome": "absent",
+      "passed": true,
+      "detail": "FileNotFoundError: [Errno 2] No such file or directory",
+      "seconds": 0.28,
+      "exit_code": 0
+    },
+    {
+      "id": "fs-tamper-code",
+      "category": "file_system",
+      "outcome": "denied",
+      "passed": true,
+      "detail": "PermissionError: [Errno 13] Permission denied: '/opt/sandbox/analysis.py'",
+      "seconds": 0.31,
+      "exit_code": 0
+    },
+    {
+      "id": "fs-write-etc",
+      "category": "file_system",
+      "outcome": "denied",
+      "passed": true,
+      "detail": "PermissionError: [Errno 13] Permission denied: '/etc/passwd'",
+      "seconds": 0.3,
+      "exit_code": 0
+    },
+    {
+      "id": "fs-write-tmp",
+      "category": "file_system",
+      "outcome": "denied",
+      "passed": true,
+      "detail": "OSError: [Errno 30] Read-only file system: '/tmp/planted'",
+      "seconds": 0.3,
+      "exit_code": 0
+    },
+    {
+      "id": "fs-write-usr",
+      "category": "file_system",
+      "outcome": "denied",
+      "passed": true,
+      "detail": "OSError: [Errno 30] Read-only file system: '/usr/local/lib/python3.12/site-packages/planted.py'",
+      "seconds": 0.3,
+      "exit_code": 0
+    },
+    {
+      "id": "fs-exec-scratch",
+      "category": "file_system",
+      "outcome": "denied",
+      "passed": true,
+      "detail": "PermissionError: [Errno 13] Permission denied: '/scratch/run.sh'",
+      "seconds": 0.28,
+      "exit_code": 0
+    },
+    {
+      "id": "fs-fill-scratch",
+      "category": "file_system",
+      "outcome": "contained",
+      "passed": true,
+      "detail": "stopped after 64 MB: [Errno 28] No space left on device",
+      "seconds": 0.33,
+      "exit_code": 0
+    },
+    {
+      "id": "fs-read-shadow",
+      "category": "file_system",
+      "outcome": "denied",
+      "passed": true,
+      "detail": "PermissionError: [Errno 13] Permission denied: '/etc/shadow'",
+      "seconds": 0.3,
+      "exit_code": 0
+    },
+    {
+      "id": "fs-host-paths",
+      "category": "file_system",
+      "outcome": "absent",
+      "passed": true,
+      "detail": "present: []",
+      "seconds": 0.27,
+      "exit_code": 0
+    },
+    {
+      "id": "fs-block-device",
+      "category": "file_system",
+      "outcome": "absent",
+      "passed": true,
+      "detail": "FileNotFoundError: [Errno 2] No such file or directory: '/dev/sda'",
+      "seconds": 0.28,
+      "exit_code": 0
+    },
+    {
+      "id": "fs-kernel-memory",
+      "category": "file_system",
+      "outcome": "absent",
+      "passed": true,
+      "detail": "FileNotFoundError: [Errno 2] No such file or directory: '/dev/mem'",
+      "seconds": 0.29,
+      "exit_code": 0
+    },
+    {
+      "id": "fs-sysrq",
+      "category": "file_system",
+      "outcome": "denied",
+      "passed": true,
+      "detail": "OSError: [Errno 30] Read-only file system: '/proc/sysrq-trigger'",
+      "seconds": 0.29,
+      "exit_code": 0
+    },
+    {
+      "id": "fs-sysctl",
+      "category": "file_system",
+      "outcome": "denied",
+      "passed": true,
+      "detail": "OSError: [Errno 30] Read-only file system: '/proc/sys/kernel/hostname'",
+      "seconds": 0.28,
+      "exit_code": 0
+    },
+    {
+      "id": "priv-root",
+      "category": "privileges",
+      "outcome": "denied",
+      "passed": true,
+      "detail": "uid 10001, euid 10001",
+      "seconds": 0.27,
+      "exit_code": 0
+    },
+    {
+      "id": "priv-capabilities",
+      "category": "privileges",
+      "outcome": "denied",
+      "passed": true,
+      "detail": "{'CapPrm': '0000000000000000', 'CapEff': '0000000000000000', 'CapBnd': '0000000000000000'}",
+      "seconds": 0.26,
+      "exit_code": 0
+    },
+    {
+      "id": "priv-setuid",
+      "category": "privileges",
+      "outcome": "denied",
+      "passed": true,
+      "detail": "PermissionError: [Errno 1] Operation not permitted",
+      "seconds": 0.3,
+      "exit_code": 0
+    },
+    {
+      "id": "priv-no-new-privileges",
+      "category": "privileges",
+      "outcome": "denied",
+      "passed": true,
+      "detail": "NoNewPrivs: ['1']",
+      "seconds": 0.31,
+      "exit_code": 0
+    },
+    {
+      "id": "priv-mount",
+      "category": "privileges",
+      "outcome": "denied",
+      "passed": true,
+      "detail": "Operation not permitted",
+      "seconds": 0.28,
+      "exit_code": 0
+    },
+    {
+      "id": "priv-user-namespace",
+      "category": "privileges",
+      "outcome": "denied",
+      "passed": true,
+      "detail": "PermissionError: [Errno 1] Operation not permitted",
+      "seconds": 0.31,
+      "exit_code": 0
+    },
+    {
+      "id": "priv-chown",
+      "category": "privileges",
+      "outcome": "denied",
+      "passed": true,
+      "detail": "PermissionError: [Errno 1] Operation not permitted: '/scratch'",
+      "seconds": 0.27,
+      "exit_code": 0
+    },
+    {
+      "id": "secret-environment",
+      "category": "secrets",
+      "outcome": "absent",
+      "passed": true,
+      "detail": "not the image's own: []; all: ['GPG_KEY', 'HOME', 'HOSTNAME', 'LANG', 'MKL_NUM_THREADS', 'OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'PATH', 'PYTHON_SHA256', 'PYTHON_VERSION', 'TMPDIR']",
+      "seconds": 0.33,
+      "exit_code": 0
+    },
+    {
+      "id": "secret-files",
+      "category": "secrets",
+      "outcome": "absent",
+      "passed": true,
+      "detail": "present: []",
+      "seconds": 0.27,
+      "exit_code": 0
+    },
+    {
+      "id": "res-cpu-loop",
+      "category": "resources",
+      "outcome": "contained",
+      "passed": true,
+      "detail": "killed at the time limit",
+      "seconds": 5.13,
+      "exit_code": 137
+    },
+    {
+      "id": "res-sleep-past-limit",
+      "category": "resources",
+      "outcome": "contained",
+      "passed": true,
+      "detail": "killed at the time limit",
+      "seconds": 5.11,
+      "exit_code": 137
+    },
+    {
+      "id": "res-fork-count",
+      "category": "resources",
+      "outcome": "contained",
+      "passed": true,
+      "detail": "63 processes started, then [Errno 11] Resource temporarily unavailable",
+      "seconds": 0.3,
+      "exit_code": 0
+    },
+    {
+      "id": "res-fork-bomb",
+      "category": "resources",
+      "outcome": "contained",
+      "passed": true,
+      "detail": "killed at the time limit",
+      "seconds": 5.8,
+      "exit_code": 137
+    },
+    {
+      "id": "res-threads",
+      "category": "resources",
+      "outcome": "contained",
+      "passed": true,
+      "detail": "63 threads started, then can't start new thread",
+      "seconds": 0.26,
+      "exit_code": 0
+    },
+    {
+      "id": "res-memory",
+      "category": "resources",
+      "outcome": "contained",
+      "passed": true,
+      "detail": "killed at the memory limit",
+      "seconds": 0.63,
+      "exit_code": 137
+    },
+    {
+      "id": "res-memory-over-limit",
+      "category": "resources",
+      "outcome": "contained",
+      "passed": true,
+      "detail": "killed at the memory limit",
+      "seconds": 0.59,
+      "exit_code": 137
+    },
+    {
+      "id": "res-output-flood",
+      "category": "resources",
+      "outcome": "contained",
+      "passed": true,
+      "detail": "stopped at the output cap",
+      "seconds": 0.49,
+      "exit_code": 137
+    },
+    {
+      "id": "res-error-flood",
+      "category": "resources",
+      "outcome": "contained",
+      "passed": true,
+      "detail": "stopped at the output cap",
+      "seconds": 0.42,
+      "exit_code": 137
+    },
+    {
+      "id": "res-open-files",
+      "category": "resources",
+      "outcome": "contained",
+      "passed": true,
+      "detail": "253 files open, then [Errno 24] Too many open files: '/dev/null'",
+      "seconds": 0.26,
+      "exit_code": 0
+    },
+    {
+      "id": "input-oversize",
+      "category": "input",
+      "outcome": "rejected",
+      "passed": true,
+      "detail": "input_too_large: the input exceeds 67108864 bytes",
+      "seconds": 7.48,
+      "exit_code": 2
+    },
+    {
+      "id": "input-deep-nesting",
+      "category": "input",
+      "outcome": "rejected",
+      "passed": true,
+      "detail": "invalid_input: not valid JSON: RecursionError",
+      "seconds": 1.65,
+      "exit_code": 2
+    },
+    {
+      "id": "input-nan",
+      "category": "input",
+      "outcome": "rejected",
+      "passed": true,
+      "detail": "invalid_input: not valid JSON: ValueError",
+      "seconds": 1.64,
+      "exit_code": 2
+    },
+    {
+      "id": "input-not-json",
+      "category": "input",
+      "outcome": "rejected",
+      "passed": true,
+      "detail": "invalid_input: not valid JSON: UnicodeDecodeError",
+      "seconds": 1.78,
+      "exit_code": 2
+    },
+    {
+      "id": "input-huge-numbers",
+      "category": "input",
+      "outcome": "handled",
+      "passed": true,
+      "detail": "1 result(s), valid JSON",
+      "seconds": 1.66,
+      "exit_code": 0
+    },
+    {
+      "id": "input-instruction-text",
+      "category": "input",
+      "outcome": "handled",
+      "passed": true,
+      "detail": "1 result(s), valid JSON",
+      "seconds": 1.66,
+      "exit_code": 0
+    },
+    {
+      "id": "input-many-groups",
+      "category": "input",
+      "outcome": "rejected",
+      "passed": true,
+      "detail": "too_many_groups",
+      "seconds": 1.65,
+      "exit_code": 0
+    },
+    {
+      "id": "input-largest-allowed",
+      "category": "input",
+      "outcome": "handled",
+      "passed": true,
+      "detail": "1 result(s), valid JSON",
+      "seconds": 2.69,
+      "exit_code": 0
+    }
+  ],
+  "control_records": [
+    {
+      "id": "net-interfaces",
+      "relaxed": {
+        "network": "bridge"
+      },
+      "achieved": true,
+      "detail": "interfaces: ['eth0', 'lo']"
+    },
+    {
+      "id": "net-host-service",
+      "relaxed": {
+        "network": "bridge",
+        "add_host": [
+          "host.docker.internal:host-gateway"
+        ]
+      },
+      "achieved": true,
+      "detail": "<socket.socket fd=3, family=2, type=1, proto=6, laddr=('172.17.0.2', 33494), raddr=('192.168.65.254', 56109)>; 1 connection(s) reached the listener"
+    },
+    {
+      "id": "fs-write-tmp",
+      "relaxed": {
+        "read_only": false
+      },
+      "achieved": true,
+      "detail": "1"
+    },
+    {
+      "id": "fs-exec-scratch",
+      "relaxed": {
+        "scratch_noexec": false
+      },
+      "achieved": true,
+      "detail": "b'ran\\n'"
+    },
+    {
+      "id": "priv-root",
+      "relaxed": {
+        "user": "0:0"
+      },
+      "achieved": true,
+      "detail": "uid 0, euid 0"
+    },
+    {
+      "id": "priv-capabilities",
+      "relaxed": {
+        "user": "0:0",
+        "drop_capabilities": false
+      },
+      "achieved": true,
+      "detail": "{'CapPrm': '00000000a80425fb', 'CapEff': '00000000a80425fb', 'CapBnd': '00000000a80425fb'}"
+    },
+    {
+      "id": "priv-no-new-privileges",
+      "relaxed": {
+        "no_new_privileges": false
+      },
+      "achieved": true,
+      "detail": "NoNewPrivs: ['0']"
+    },
+    {
+      "id": "secret-environment",
+      "relaxed": {
+        "env": [
+          "ANALYST_CANARY=from-the-host"
+        ]
+      },
+      "achieved": true,
+      "detail": "not the image's own: ['ANALYST_CANARY']; all: ['ANALYST_CANARY', 'GPG_KEY', 'HOME', 'HOSTNAME', 'LANG', 'MKL_NUM_THREADS', 'OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS', 'PATH', 'PYTHON_SHA256', 'PYTHON_VERSION', 'TMPDIR']"
+    },
+    {
+      "id": "res-sleep-past-limit",
+      "relaxed": {
+        "timeout_s": 20
+      },
+      "achieved": true,
+      "detail": "ran past the time limit"
+    },
+    {
+      "id": "res-fork-count",
+      "relaxed": {
+        "pids": 256
+      },
+      "achieved": true,
+      "detail": "100 processes started"
+    },
+    {
+      "id": "res-memory-over-limit",
+      "relaxed": {
+        "memory_mb": 1024
+      },
+      "achieved": true,
+      "detail": "allocated 712 MB"
+    }
+  ]
+}
