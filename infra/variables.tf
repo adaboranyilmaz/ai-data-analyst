@@ -23,7 +23,7 @@ variable "budget_start" {
 variable "location" {
   description = "The Azure region."
   type        = string
-  default     = "westeurope"
+  default     = "northeurope"
 }
 
 variable "name" {

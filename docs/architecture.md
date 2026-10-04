@@ -18,6 +18,7 @@ flowchart LR
         registry --> gate["Evaluation gate<br/>(CI, no key, no database)"]
         gate --> image["Service image<br/>(GHCR, pinned by digest)"]
         results --> pages["Static demo<br/>(GitHub Pages)"]
+        image --> azure["Azure Container Apps<br/>(Terraform, replay mode)"]
     end
 
     subgraph run["Run"]
@@ -42,6 +43,7 @@ flowchart LR
 | The alert rules and the dashboard | `promtool test rules` and a test that every series they use is exposed by the service |
 | The static demo | a test comparing each file with what the service returns, and a browser test with no API behind it |
 | Delivery | images pinned by digest, third-party actions pinned by commit, a publish workflow that runs the gate first |
+| The cloud deployment | `terraform validate` in CI; once deployed, `scripts/98_cloud_check.py` from outside |
 
 ## Traces
 

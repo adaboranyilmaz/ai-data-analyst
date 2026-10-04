@@ -433,6 +433,14 @@ values:
   repro_exempt: {file: metrics/reproduction_check.json, path: counts/exempt_only, fmt: int}
   repro_known: {file: metrics/reproduction_check.json, path: counts/known_nondeterministic, fmt: int}
 
+  cloud_region: {file: metrics/cloud_deploy.json, path: region, fmt: str}
+  cloud_cost: {file: metrics/cloud_deploy.json, path: cost_usd_reported_by_the_portal, fmt: usd2}
+  cloud_runs: {file: metrics/cloud_deploy.json, path: recorded_runs_served, fmt: int}
+  cloud_cold_start: {file: metrics/cloud_deploy.json, path: cold_start/seconds, fmt: s1}
+  cloud_asks: {file: metrics/cloud_deploy.json, path: asks/requests, fmt: int}
+  cloud_ask_p50: {file: metrics/cloud_deploy.json, path: asks/p50_ms, fmt: int}
+  cloud_ask_p95: {file: metrics/cloud_deploy.json, path: asks/p95_ms, fmt: int}
+
 # Decimals and percentages the templates may contain outside a placeholder: version numbers,
 # never results.
 allowed_literals:
