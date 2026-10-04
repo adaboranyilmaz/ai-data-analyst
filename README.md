@@ -200,6 +200,7 @@ The analyst runs as a service, so it is tracked, versioned, tested before releas
 - **A canary:** a manual, capped workflow resends 23 fixed requests to the model. The first run cost $0.35; 100% of the answers were valid and 70% had the same query.
 - **Drift and alerts:** the service compares the confidence of its last 200 answers with the evaluation's. On windows drawn from the held-out questions themselves, it alerted on 0.0%; replayed shifted traffic fired the Prometheus alert, which then cleared.
 - **Load:** the replay service answered every request of a load test with 0 errors.
+- **Cloud:** Terraform deployed the replay service to Azure Container Apps (northeurope), behind a budget alert created first. Checked from outside, it passed every check and served all 20 recorded runs; the first request to the app, scaled to zero, took 48.5 s. The deployment was destroyed the same day; the portal reported a cost of $0.00, within Azure's free allowance.
 
 ![The same recorded run in Langfuse](results/plots/trace_langfuse.png)
 *One recorded run of the self-correcting agent in Langfuse, sent from the stored spans: each model call with its tokens and cost. The same run in MLflow is in `results/plots/trace_mlflow.png`.*

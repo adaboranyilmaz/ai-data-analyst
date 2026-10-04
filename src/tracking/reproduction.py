@@ -120,6 +120,7 @@ SKIP_FILES = {
     "metrics/alert_check.json",
     "metrics/load_test.json",
     "metrics/static_site.json",
+    "metrics/cloud_deploy.json",
     "plots/trace_mlflow.png",
     "plots/trace_langfuse.png",
 }

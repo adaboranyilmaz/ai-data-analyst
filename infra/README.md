@@ -26,7 +26,7 @@ terraform apply tfplan
 Then check it from outside (from the repository root; it writes `results/metrics/cloud_deploy.json`):
 
 ```
-uv run python scripts/98_cloud_check.py --url (terraform -chdir=infra output -raw url) --region westeurope
+uv run python scripts/98_cloud_check.py --url (terraform -chdir=infra output -raw url) --region northeurope
 ```
 
 For the cold start, leave the app idle for about ten minutes before the check: the first request to a scaled-to-zero app starts it, and the check times that request on its own.

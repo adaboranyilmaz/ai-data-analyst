@@ -1,0 +1,26 @@
+{
+  "note": "a deployed replay service, checked from outside; one run from one client; the deployment was destroyed afterwards",
+  "region": "northeurope",
+  "recorded_runs_served": 20,
+  "cold_start": {
+    "status": 200,
+    "seconds": 48.5
+  },
+  "asks": {
+    "requests": 20,
+    "p50_ms": 2909.8,
+    "p95_ms": 2956.1
+  },
+  "checks": {
+    "health": true,
+    "ready": true,
+    "page_served": true,
+    "replay_mode": true,
+    "recorded_run_matches_committed_answer": true,
+    "unrecorded_question_refused": true,
+    "connections_not_available": true
+  },
+  "all_checks_passed": true,
+  "cost_usd_reported_by_the_portal": 0.0,
+  "cost_note": "read by the author from Azure Cost Management for the resource group on 2026-10-04; within Azure's free monthly allowance"
+}
